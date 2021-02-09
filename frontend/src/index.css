@@ -2,6 +2,7 @@
   /* CSS Variables */
   --background-color: #181818;
   --foreground-color: #202020;
+  --top-color: #4d4d4d;
   --header-color: #202020;
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
@@ -25,12 +26,20 @@
   color: var(--text-primary);
 }
 
+::selection {
+  background: var(--secondary-color); /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: var(--secondary-color); /* Gecko Browsers */
+}
+
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background-color);
+  color: var(--text-primary);
 }
 
 hr {
@@ -40,4 +49,31 @@ hr {
   height: 5px;
   border-radius: var(--border-radius);
   border: 0;
+}
+
+/* Custom CSS for Text Inputs */
+input {
+  border-radius: var(--border-radius);
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: var(--top-color);
+  border: none;
+  color: var(--text-primary);
+}
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: var(--text-disabled);
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: var(--text-disabled);
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: var(--text-disabled);
 }
