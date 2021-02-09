@@ -1,0 +1,22 @@
+{
+  "name": "dubbclub",
+  "version": "1.0.0",
+  "description": "<p align=\"center\">\r <img src=\"./DubbClubWordmark.png\" alt=\"Dubb Club Logo\" width=\"70%\" />\r </p>",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hughbromund/DubbClub.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hughbromund/DubbClub/issues"
+  },
+  "homepage": "https://github.com/hughbromund/DubbClub#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
