@@ -1,0 +1,8 @@
+.Card {
+  background: var(--foreground-color);
+  color: var(--text-primary);
+  padding: var(--default-padding);
+  border-radius: var(--border-radius);
+  margin: var(--default-margin);
+  max-width: 50rem;
+}

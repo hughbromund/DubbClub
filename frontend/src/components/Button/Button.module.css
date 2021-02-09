@@ -1,0 +1,16 @@
+.Button {
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius);
+  border: none;
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin: var(--default-margin);
+  color: var(--text-primary);
+  transition: var(--default-transition);
+}
+
+.Button:hover {
+  background-color: var(--primary-color);
+}
