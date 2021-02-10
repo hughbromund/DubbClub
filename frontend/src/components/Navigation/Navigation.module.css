@@ -1,0 +1,7 @@
+.Navigation {
+  background: var(--header-color);
+}
+.NavigationWrapper {
+  background: var(--gradient);
+  padding-bottom: 5px;
+}
