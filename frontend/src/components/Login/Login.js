@@ -1,15 +1,20 @@
 import React, { Component } from "react";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Card from "../Card/Card";
-import Button from "../Button/Button";
-import Form from "react-bootstrap/Form";
+import SmartButton from "../SmartButton/SmartButton";
 import logo from "../../assets/Logo.png";
 
 import classes from "./Login.module.css";
 
 export default class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      password: "",
+    };
+  }
+
   render() {
     return (
       <div>
@@ -23,8 +28,26 @@ export default class Login extends Component {
               </h4>
             </div>
             <Card>
-              <input placeholder="Email"></input>
-              <input placeholder="Password"></input>
+              <input
+                required
+                placeholder="Email or Username"
+                type="text"
+                onChange={(e) => {
+                  this.setState({
+                    username: e.target.value,
+                  });
+                }}
+              ></input>
+              <input
+                required
+                placeholder="Password"
+                type="password"
+                onChange={(e) => {
+                  this.setState({
+                    password: e.target.value,
+                  });
+                }}
+              ></input>
 
               {/* <Form>
                 <Form.Group>
@@ -32,12 +55,30 @@ export default class Login extends Component {
                 </Form.Group>
               </Form> */}
               <br />
+
               <br />
               <div className={classes.ButtonAlign}>
-                <Button>Login</Button>
+                <SmartButton
+                  disabled={
+                    this.state.username === "" || this.state.password === ""
+                  }
+                  runOnClick={async () => {
+                    var res = await fetch(
+                      "https://dubbclub.free.beeceptor.com "
+                    );
+                    console.log(res);
+
+                    return true;
+                  }}
+                >
+                  Login
+                </SmartButton>
               </div>
             </Card>
           </div>
+          {this.state.username}
+          <br />
+          {this.state.password}
         </Container>
       </div>
     );

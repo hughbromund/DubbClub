@@ -16,7 +16,7 @@ export default class Home extends Component {
             return true;
           }}
         >
-          Test
+          Login
         </SmartButton>
         <br />
         <Card>

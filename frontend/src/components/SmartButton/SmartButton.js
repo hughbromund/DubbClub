@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Button from "../Button/Button";
 import Spinner from "react-bootstrap/Spinner";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import classes from "./SmartButton.module.css";
 
@@ -31,7 +32,7 @@ export default class SmartButton extends Component {
     return (
       <Button
         variant={variant}
-        disabled={this.state.status === LOADING}
+        disabled={this.state.status === LOADING || this.props.disabled}
         onClick={async () => {
           this.setState({ status: LOADING });
           var res = await this.props.runOnClick();
@@ -54,7 +55,16 @@ export default class SmartButton extends Component {
         ) : (
           this.props.children
         )}{" "}
-        + {this.state.status}
+        {this.state.status === SUCCESS ? (
+          <FontAwesomeIcon icon={["fas", "check"]} color="white" />
+        ) : (
+          ""
+        )}
+        {this.state.status === ERROR ? (
+          <FontAwesomeIcon icon={["fas", "times"]} color="white" />
+        ) : (
+          ""
+        )}
       </Button>
     );
   }
