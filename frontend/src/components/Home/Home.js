@@ -13,7 +13,7 @@ export default class Home extends Component {
           runOnClick={async () => {
             var res = await fetch("https://dubbclub.free.beeceptor.com ");
             console.log(res);
-            return true;
+            return false;
           }}
         >
           Login
@@ -27,7 +27,7 @@ export default class Home extends Component {
           <h5>Don't Try It</h5>
           <h6>I have the High Ground</h6>
           <hr />
-          <Button>Hello There</Button>
+          <Button variant="outline">Hello There</Button>
           <hr />
           <form>
             <input placeholder="John Smith" />

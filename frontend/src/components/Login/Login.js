@@ -28,57 +28,53 @@ export default class Login extends Component {
               </h4>
             </div>
             <Card>
-              <input
-                required
-                placeholder="Email or Username"
-                type="text"
-                onChange={(e) => {
-                  this.setState({
-                    username: e.target.value,
-                  });
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
                 }}
-              ></input>
-              <input
-                required
-                placeholder="Password"
-                type="password"
-                onChange={(e) => {
-                  this.setState({
-                    password: e.target.value,
-                  });
-                }}
-              ></input>
-
-              {/* <Form>
-                <Form.Group>
-                  <Form.Check type="checkbox" label="Remember Me" />
-                </Form.Group>
-              </Form> */}
-              <br />
-
-              <br />
-              <div className={classes.ButtonAlign}>
-                <SmartButton
-                  disabled={
-                    this.state.username === "" || this.state.password === ""
-                  }
-                  runOnClick={async () => {
-                    var res = await fetch(
-                      "https://dubbclub.free.beeceptor.com "
-                    );
-                    console.log(res);
-
-                    return true;
+              >
+                <input
+                  required
+                  placeholder="Email or Username"
+                  type="text"
+                  onChange={(e) => {
+                    this.setState({
+                      username: e.target.value,
+                    });
                   }}
-                >
-                  Login
-                </SmartButton>
-              </div>
+                ></input>
+                <input
+                  required
+                  placeholder="Password"
+                  type="password"
+                  onChange={(e) => {
+                    this.setState({
+                      password: e.target.value,
+                    });
+                  }}
+                ></input>
+                <br />
+                <br />
+                <div className={classes.ButtonAlign}>
+                  <SmartButton
+                    disabled={
+                      this.state.username === "" || this.state.password === ""
+                    }
+                    runOnClick={async () => {
+                      var res = await fetch(
+                        "https://dubbclub.free.beeceptor.com "
+                      );
+                      console.log(res);
+
+                      return true;
+                    }}
+                  >
+                    Login
+                  </SmartButton>
+                </div>
+              </form>
             </Card>
           </div>
-          {this.state.username}
-          <br />
-          {this.state.password}
         </Container>
       </div>
     );

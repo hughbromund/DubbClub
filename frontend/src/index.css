@@ -11,6 +11,7 @@
   --border-radius: 5px;
   --default-padding: 15px;
   --default-margin: 15px;
+  --default-column-width: 30rem;
 
   --primary-color: #0050dd;
   --secondary-color: #1d6efc;
@@ -20,10 +21,19 @@
     rgba(1, 47, 120, 1) 100%
   );
 
-  --default-transition: 0.8s;
+  --default-transition: 0.5s;
 
   background-color: var(--background-color);
   color: var(--text-primary);
+}
+
+/* Modifications for global CSS on Mobile Devices */
+@media (max-width: 768px) {
+  :root {
+    --default-margin: 10px;
+    --default-padding: 10px;
+    --default-column-width: 100%;
+  }
 }
 
 ::selection {
