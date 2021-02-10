@@ -1,6 +1,6 @@
 .Login {
   margin-top: 50px;
-  max-width: 30rem;
+  max-width: var(--default-column-width);
 }
 .Header {
   margin-top: 10px;
