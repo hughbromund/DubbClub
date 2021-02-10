@@ -4,15 +4,17 @@ import Navigation from "./components/Navigation/Navigation";
 import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
 
-import "./App.css";
+import classes from "./App.module.css";
 
 function App() {
   return (
     <div>
       <Router>
         <Navigation />
-        <Route path="/login" component={Login} />
-        <Route exact path="/" component={Home} />
+        <div className={classes.App}>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/" component={Home} />
+        </div>
       </Router>
     </div>
   );

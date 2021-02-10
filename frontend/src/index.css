@@ -8,7 +8,7 @@
   --text-secondary: rgba(255, 255, 255, 0.7);
   --text-disabled: rgba(255, 255, 255, 0.5);
 
-  --border-radius: 10px;
+  --border-radius: 5px;
   --default-padding: 15px;
   --default-margin: 15px;
 
@@ -40,6 +40,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background-color);
   color: var(--text-primary);
+  line-height: 2;
 }
 
 hr {
@@ -61,6 +62,8 @@ input {
   background-color: var(--top-color);
   border: none;
   color: var(--text-primary);
+  margin-bottom: var(--default-margin);
+  width: 100%;
 }
 ::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */

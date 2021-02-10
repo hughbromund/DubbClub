@@ -11,6 +11,7 @@ export default class Navigation extends Component {
     return (
       <div className={classes.NavigationWrapper}>
         <Navbar
+          collapseOnSelect
           className={classes.Navigation}
           variant="dark"
           expand="lg"

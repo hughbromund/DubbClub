@@ -5,4 +5,5 @@
   border-radius: var(--border-radius);
   margin: var(--default-margin);
   max-width: 50rem;
+  text-align: left;
 }
