@@ -15,3 +15,35 @@
 .Button:hover {
   background-color: var(--primary-color);
 }
+.Button:disabled {
+  color: var(--text-disabled);
+  background-color: var(--top-color);
+}
+
+.ButtonSuccess {
+  background-color: green;
+  border-radius: var(--border-radius);
+  border: none;
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  /* margin: var(--default-margin); */
+  color: var(--text-primary);
+  transition: var(--default-transition);
+  width: 100%;
+}
+
+.ButtonError {
+  background-color: red;
+  border-radius: var(--border-radius);
+  border: none;
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  /* margin: var(--default-margin); */
+  color: var(--text-primary);
+  transition: var(--default-transition);
+  width: 100%;
+}

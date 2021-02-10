@@ -15,7 +15,7 @@
   --primary-color: #0050dd;
   --secondary-color: #1d6efc;
   --gradient: linear-gradient(
-    270deg,
+    90deg,
     rgba(68, 136, 255, 1) 0%,
     rgba(1, 47, 120, 1) 100%
   );

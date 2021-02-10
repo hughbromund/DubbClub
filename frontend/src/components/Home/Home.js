@@ -1,12 +1,23 @@
 import React, { Component } from "react";
 import Card from "../Card/Card";
 import Button from "../Button/Button";
+import SmartButton from "../SmartButton/SmartButton";
 
 export default class Home extends Component {
   render() {
     return (
       <div>
         <h1>Homepage</h1>
+        <br />
+        <SmartButton
+          runOnClick={async () => {
+            var res = await fetch("https://dubbclub.free.beeceptor.com ");
+            console.log(res);
+            return true;
+          }}
+        >
+          Test
+        </SmartButton>
         <br />
         <Card>
           <h1>Hello There</h1>
