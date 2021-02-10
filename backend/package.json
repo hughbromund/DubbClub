@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/hughbromund/DubbClub.git"
   },
-  "author": "",
+  "author": "Peyton, Nate, Aditya, Hugh, Daniel",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/hughbromund/DubbClub/issues"
@@ -18,5 +18,6 @@
   "homepage": "https://github.com/hughbromund/DubbClub#readme",
   "dependencies": {
     "express": "^4.17.1"
-  }
+  },
+  "devDependencies": {}
 }
