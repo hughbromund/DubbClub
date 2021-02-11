@@ -27,6 +27,10 @@
   color: var(--text-primary);
 }
 
+.centered {
+  text-align: center;
+}
+
 /* Modifications for global CSS on Mobile Devices */
 @media (max-width: 768px) {
   :root {
