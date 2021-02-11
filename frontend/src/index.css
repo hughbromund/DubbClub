@@ -1,13 +1,96 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  /* CSS Variables */
+  --background-color: #181818;
+  --foreground-color: #202020;
+  --top-color: #4d4d4d;
+  --header-color: #202020;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-disabled: rgba(255, 255, 255, 0.5);
+
+  --border-radius: 5px;
+  --default-padding: 15px;
+  --default-margin: 15px;
+  --default-column-width: 30rem;
+
+  --primary-color: #0050dd;
+  --secondary-color: #1d6efc;
+  --gradient: linear-gradient(
+    90deg,
+    rgba(68, 136, 255, 1) 0%,
+    rgba(1, 47, 120, 1) 100%
+  );
+
+  --default-transition: 0.5s;
+
+  background-color: var(--background-color);
+  color: var(--text-primary);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.centered {
+  text-align: center;
+}
+
+/* Modifications for global CSS on Mobile Devices */
+@media (max-width: 768px) {
+  :root {
+    --default-margin: 10px;
+    --default-padding: 10px;
+    --default-column-width: 100%;
+  }
+}
+
+::selection {
+  background: var(--secondary-color); /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: var(--secondary-color); /* Gecko Browsers */
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  line-height: 2;
+}
+
+hr {
+  /* background-color: #257af9; */
+  background-color: var(--primary-color);
+  background-image: var(--gradient);
+  height: 5px;
+  border-radius: var(--border-radius);
+  border: 0;
+}
+
+/* Custom CSS for Text Inputs */
+input {
+  border-radius: var(--border-radius);
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: var(--top-color);
+  border: none;
+  color: var(--text-primary);
+  margin-bottom: var(--default-margin);
+  width: 100%;
+}
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: var(--text-disabled);
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: var(--text-disabled);
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: var(--text-disabled);
 }
