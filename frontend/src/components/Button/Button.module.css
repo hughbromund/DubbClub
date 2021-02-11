@@ -1,0 +1,86 @@
+.Button {
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius);
+  border-style: solid;
+  border-width: 4px;
+  border-color: var(--secondary-color);
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  /* margin: var(--default-margin); */
+  color: var(--text-primary);
+  transition: var(--default-transition);
+  width: 100%;
+  font-weight: bold;
+}
+
+.Button:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+.Button:disabled {
+  color: var(--text-disabled);
+  background-color: var(--top-color);
+  border-color: var(--top-color);
+}
+
+.ButtonOutline {
+  background-color: transparent;
+  border-radius: var(--border-radius);
+  border-color: var(--primary-color);
+  border-style: solid;
+  border-width: 4px;
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  /* margin: var(--default-margin); */
+  color: var(--primary-color);
+  transition: var(--default-transition);
+  width: 100%;
+  font-weight: bold;
+}
+.ButtonOutline:hover {
+  background-color: var(--primary-color);
+  color: var(--text-primary);
+}
+.ButtonOutline:disabled {
+  color: var(--text-disabled);
+  border-color: var(--top-color);
+  background-color: transparent;
+}
+
+.ButtonSuccess {
+  background-color: green;
+  border-radius: var(--border-radius);
+  border-style: solid;
+  border-width: 4px;
+  border-color: green;
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  /* margin: var(--default-margin); */
+  color: var(--text-primary);
+  transition: var(--default-transition);
+  width: 100%;
+  font-weight: bold;
+}
+
+.ButtonError {
+  background-color: red;
+  border-radius: var(--border-radius);
+  border-style: solid;
+  border-width: 4px;
+  border-color: red;
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  /* margin: var(--default-margin); */
+  color: var(--text-primary);
+  transition: var(--default-transition);
+  width: 100%;
+  font-weight: bold;
+}
