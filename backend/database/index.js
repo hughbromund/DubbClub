@@ -11,8 +11,6 @@ mongoose.Promise = global.Promise
 //27017 is the default mongoDB port
 const uri = config.databaseURI;
 
-console.log("getting here fine")
-
 mongoose.connect(uri, {
     useNewUrlParser: true}).then(
     () => { 
