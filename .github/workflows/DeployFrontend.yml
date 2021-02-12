@@ -48,7 +48,7 @@ jobs:
           project_id: ${{ secrets.project_id }}
           credentials: ${{ secrets.GCP_SA_KEY }}
           version: "frontend-${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha_short }}"
-        working-directory: ${{env.frontend}}
+          working-directory: ${{env.frontend}}
 
       # Deploy App to App Engine
       # - name: Deploy Fronted
