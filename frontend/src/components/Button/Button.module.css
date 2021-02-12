@@ -52,11 +52,11 @@
 }
 
 .ButtonSuccess {
-  background-color: green;
+  background-color: var(--success-color);
   border-radius: var(--border-radius);
   border-style: solid;
   border-width: 4px;
-  border-color: green;
+  border-color: var(--success-color);
   padding-left: var(--default-padding);
   padding-right: var(--default-padding);
   padding-top: 5px;
@@ -69,11 +69,11 @@
 }
 
 .ButtonError {
-  background-color: red;
+  background-color: var(--error-color);
   border-radius: var(--border-radius);
   border-style: solid;
   border-width: 4px;
-  border-color: red;
+  border-color: var(--error-color);
   padding-left: var(--default-padding);
   padding-right: var(--default-padding);
   padding-top: 5px;

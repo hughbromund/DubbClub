@@ -1,5 +1,5 @@
-.Card {
-  background: var(--foreground-color);
+.Alert {
+  background: var(--error-color);
   color: var(--text-primary);
   padding: var(--default-padding);
   border-radius: var(--border-radius);

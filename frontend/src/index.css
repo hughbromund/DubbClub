@@ -21,6 +21,9 @@
     rgba(1, 47, 120, 1) 100%
   );
 
+  --error-color: red;
+  --success-color: green;
+
   --default-transition: 0.5s;
 
   background-color: var(--background-color);
