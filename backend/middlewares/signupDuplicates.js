@@ -3,7 +3,6 @@ const User = require(path.resolve(__dirname, "../database/models/user"));
 
 checkDuplicateUser = (req, res, next) => {
   // Username
-  console.log("made it")
   User.findOne({
     "$or": [{username: req.body.username}, {email: req.body.email}]
   }).exec((err, user) => {
@@ -17,7 +16,6 @@ checkDuplicateUser = (req, res, next) => {
       return;
     }
   });
-  console.log("finished")
   next();
 };
 
