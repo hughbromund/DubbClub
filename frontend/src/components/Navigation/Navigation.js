@@ -56,6 +56,12 @@ export default class Navigation extends Component {
               >
                 Login
               </Nav.Link>
+              <Nav.Link>
+                Version:{" "}
+                {process.env.REACT_APP_VERSION
+                  ? process.env.REACT_APP_VERSION
+                  : "Local"}
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
