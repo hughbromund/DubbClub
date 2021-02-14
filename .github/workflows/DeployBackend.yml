@@ -36,6 +36,7 @@ jobs:
       - name: Create config.json
         run: |
           touch config.json
+          echo "{}" > config.json
           cat config.json
         working-directory: ${{env.backend}}
 
