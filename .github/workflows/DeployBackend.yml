@@ -37,7 +37,6 @@ jobs:
         run: |
           touch config.json
           echo "{}" > config.json
-          cat config.json
         working-directory: ${{env.backend}}
 
       - name: Set Database Secrets
@@ -53,11 +52,6 @@ jobs:
           file: ./backend/config.json
           field: ${{ secrets.JWT_SECRET_KEY }}
           value: ${{ secrets.JWT_SECRET_VALUE }}
-
-      - name: Print config.json
-        run: |
-          cat config.json
-        working-directory: ${{env.backend}}
 
       # Deploy App to App Engine
       - name: Deploy Backend
