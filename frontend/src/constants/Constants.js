@@ -4,7 +4,7 @@ export const LOGIN_ROUTE = "/login";
 export const REGISTER_ROUTE = "/join";
 
 /* Base URL for Backend */
-export var BASE = "http://api.dubb.club";
+export var BASE = "https://api.dubb.club";
 // console.log("NODE_ENV: " + process.env.NODE_ENV);
 if (process.env.NODE_ENV === "development") {
   BASE = "http://localhost:5000";
