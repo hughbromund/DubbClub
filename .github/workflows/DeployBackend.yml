@@ -37,13 +37,20 @@ jobs:
         run: |
           touch config.json
           cat config.json
+        working-directory: ${{env.backend}}
 
-      - name: Update my-file.json description
+      - name: Update config.json
         uses: jossef/action-set-json-field@v1
         with:
-          file: condig.json
+          file: config.json
           field: description
           value: my custom data
+        working-directory: ${{env.backend}}
+
+      - name: Print config.json
+        run: |
+          cat config.json
+        working-directory: ${{env.backend}}
 
       # Deploy App to App Engine
       # - name: Deploy Backend
