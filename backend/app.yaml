@@ -1,0 +1,3 @@
+service: backend
+env: standard
+runtime: nodejs10
