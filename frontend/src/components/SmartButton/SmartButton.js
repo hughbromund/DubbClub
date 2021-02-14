@@ -57,7 +57,7 @@ export default class SmartButton extends Component {
             this.setState({
               status: DEFAULT,
             });
-          }, 2000);
+          }, 1500);
         }}
       >
         {this.state.status === LOADING ? (
