@@ -40,21 +40,28 @@ jobs:
           cat config.json
         working-directory: ${{env.backend}}
 
-      - name: Update config.json
+      - name: Set Database Secrets
         uses: jossef/action-set-json-field@v1
         with:
           file: ./backend/config.json
-          field: description
-          value: my custom data
+          field: ${{ secrets.DATABASE_KEY }}
+          value: ${{ secrets.DATABASE_VALUE }}
+
+      - name: Set JWT Secrets
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: ./backend/config.json
+          field: ${{ secrets.JWT_SECRET_KEY }}
+          value: ${{ secrets.JWT_SECRET_VALUE }}
 
       - name: Print config.json
         run: |
           cat config.json
         working-directory: ${{env.backend}}
 
-      # Deploy App to App Engine
-      # - name: Deploy Backend
-      #   run: |
-      #     npm ci
-      #     gcloud app deploy --quiet --version="backend-${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha_short }}"
-      #   working-directory: ${{env.backend}}
+      Deploy App to App Engine
+      - name: Deploy Backend
+        run: |
+          npm ci
+          gcloud app deploy --quiet --version="backend-${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha_short }}"
+        working-directory: ${{env.backend}}
