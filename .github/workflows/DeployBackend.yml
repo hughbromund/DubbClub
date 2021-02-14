@@ -42,10 +42,9 @@ jobs:
       - name: Update config.json
         uses: jossef/action-set-json-field@v1
         with:
-          file: config.json
+          file: ./backend/config.json
           field: description
           value: my custom data
-        working-directory: ${{env.backend}}
 
       - name: Print config.json
         run: |
