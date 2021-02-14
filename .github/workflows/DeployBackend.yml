@@ -59,7 +59,7 @@ jobs:
           cat config.json
         working-directory: ${{env.backend}}
 
-      Deploy App to App Engine
+      # Deploy App to App Engine
       - name: Deploy Backend
         run: |
           npm ci
