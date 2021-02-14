@@ -31,7 +31,7 @@ export default class Login extends Component {
               </h4>
             </div>
             <Expand open={this.state.error === "" ? false : true}>
-              <div>
+              <div className={classes.alertDiv}>
                 <Alert>{this.state.error}</Alert>
               </div>
             </Expand>
@@ -77,7 +77,7 @@ export default class Login extends Component {
                         error: "Invalid Username or Password",
                       });
 
-                      return false;
+                      return true;
                     }}
                   >
                     Login

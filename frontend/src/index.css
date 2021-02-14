@@ -21,7 +21,7 @@
     rgba(1, 47, 120, 1) 100%
   );
 
-  --error-color: red;
+  --error-color: #d32f2f;
   --success-color: green;
 
   --default-transition: 0.5s;
