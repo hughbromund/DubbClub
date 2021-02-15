@@ -6,7 +6,6 @@ import Home from "./components/Home/Home";
 import Register from "./components/Register/Register";
 import ExpandedGameInfo from "./components/ExpandedGameInfo/ExpandedGameInfo";
 import "./constants/Constants";
-import { AnimatedSwitch, AnimatedRoute, spring } from "react-router-transition";
 
 import classes from "./App.module.css";
 

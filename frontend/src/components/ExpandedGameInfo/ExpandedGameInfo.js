@@ -23,6 +23,7 @@ export default class ExpandedGameInfo extends Component {
                   awayLogo={BullsLogo}
                   homeLogo={KnicksLogo}
                   onClickHandler={null}
+                  className={classes.mainCard}
                 />
               </div>
             </Col>
@@ -31,21 +32,21 @@ export default class ExpandedGameInfo extends Component {
             <Col>
               <div className={classes.center}>
                 <Card>
-                  <h1>More info here...</h1>
+                  <h1>Line Graph or Pie Graph Will Go Here</h1>
                 </Card>
               </div>
             </Col>
             <Col>
               <div className={classes.center}>
                 <Card>
-                  <h1>More info here...</h1>
+                  <h1>Player Stats Will Go Here...</h1>
                 </Card>
               </div>
             </Col>
             <Col>
               <div className={classes.center}>
                 <Card>
-                  <h1>More info here...</h1>
+                  <h1>Team Standings Will Go Here</h1>
                 </Card>
               </div>
             </Col>
