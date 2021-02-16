@@ -4,6 +4,7 @@ const config = require(path.resolve(__dirname, "../config.json"));
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+const { unsubscribe } = require("../routers/router");
 
 
 const expireSeconds = 86400;
@@ -57,6 +58,7 @@ exports.login = (req, res) => {
   
         res.status(200).send({
           id: user._id,
+          username: user.username,
           accessToken: token,
           expiresIn: expireSeconds
         });
@@ -73,4 +75,52 @@ exports.login = (req, res) => {
       accessToken: token,
       expiresIn: expireSeconds
     });
+  }
+
+  exports.userInfo = (req, res) => {
+    User.findOne({_id: req.userId})
+    .exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      res.status(200).send({username: user.username, email: user.email})
+    })
+  }
+
+  exports.changePassword = (req, res) => {
+    User.updateOne({_id: req.userId}, {password: req.body.password})
+    .exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      res.status(200).send({message: "Successfully Updated Password."})
+    })
+  }
+
+  exports.changeEmail = (req, res) => {
+    User.updateOne({_id: req.userId}, {email: req.body.email})
+    .exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      res.status(200).send({message: "Successfully Updated Email."})
+    })
   }

@@ -22,3 +22,15 @@ exports.test = async function (req, res, next) {
         message: "user is logged in"
     })
 }
+
+exports.userInfo = async function (req, res, next) {
+    UserService.userInfo(req, res);
+}
+
+exports.changePassword = async function (req, res, next) {
+    UserService.changePassword(req, res);
+}
+
+exports.changeEmail = async function (req, res, next) {
+    UserService.changeEmail(req, res);
+}
