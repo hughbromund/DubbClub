@@ -4,7 +4,8 @@
   "description": "<p align=\"center\">\r <img src=\"./DubbClubWordmark.png\" alt=\"Dubb Club Logo\" width=\"70%\" />\r </p>",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -17,9 +18,11 @@
   },
   "homepage": "https://github.com/hughbromund/DubbClub#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "request": "^2.88.2"
-  },
-  "devDependencies": {}
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.15",
+    "path": "^0.12.7"
+  }
 }

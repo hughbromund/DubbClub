@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
 import Card from "../Card/Card";
+import Alert from "../Alert/Alert";
 import SmartButton from "../SmartButton/SmartButton";
 import logo from "../../assets/Logo.png";
+import Expand from "react-expand-animated";
 
 import classes from "./Login.module.css";
 
@@ -12,6 +14,7 @@ export default class Login extends Component {
     this.state = {
       username: "",
       password: "",
+      error: "",
     };
   }
 
@@ -27,6 +30,11 @@ export default class Login extends Component {
                 <b>Sign In to Dubb Club</b>
               </h4>
             </div>
+            <Expand open={this.state.error === "" ? false : true}>
+              <div className={classes.alertDiv}>
+                <Alert>{this.state.error}</Alert>
+              </div>
+            </Expand>
             <Card>
               <form
                 onSubmit={(e) => {
@@ -64,7 +72,10 @@ export default class Login extends Component {
                       var res = await fetch(
                         "https://dubbclub.free.beeceptor.com "
                       );
-                      console.log(res);
+                      // console.log(res);
+                      this.setState({
+                        error: "Invalid Username or Password",
+                      });
 
                       return true;
                     }}

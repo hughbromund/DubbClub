@@ -1,0 +1,3 @@
+dispatch:
+  - url: "api.dubb.club/*"
+    service: backend

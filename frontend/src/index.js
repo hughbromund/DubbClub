@@ -4,10 +4,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import HttpsRedirect from "react-https-redirect";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <HttpsRedirect>
+      <App />
+    </HttpsRedirect>
   </React.StrictMode>,
   document.getElementById("root")
 );
