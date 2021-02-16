@@ -7,6 +7,6 @@ exports.getStub = async function (req, res, next) {
 };
 
 exports.tester = async function (req, res, next) {
-    nbaService.getBasicGameInfo();
-    res.sendStatus(200);
+    var result = await nbaService.getBasicGameInfo();
+    res.json(result);
 };
