@@ -18,4 +18,7 @@ router.use(function timeLog(req, res, next) {
 //stub
 router.get("/stub", nbaController.getStub);
 
+//
+router.get("/tester", nbaController.tester);
+
 module.exports = router;
