@@ -21,13 +21,7 @@ const userController = require(path.resolve(
     "../controllers/userController"
 ))
 
-//User routes
-//NOTE: for any request requiring user auth, must call authJWT.verifyToken first
-router.post("/api/auth/login", userController.login)
-router.post("/api/auth/signup", signupDuplicates.checkDuplicateUser, userController.signup)
-router.get("/api/auth/testlogin", authJWT.verifyToken, userController.test)
-
-ar nbaController = require(path.resolve(
+const nbaController = require(path.resolve(
     __dirname,
     "../controllers/NbaController"
 ));
@@ -37,6 +31,11 @@ router.use(function timeLog(req, res, next) {
     next();
 });
 
+//User routes
+//NOTE: for any request requiring user auth, must call authJWT.verifyToken first
+router.post("/api/auth/login", userController.login)
+router.post("/api/auth/signup", signupDuplicates.checkDuplicateUser, userController.signup)
+router.get("/api/auth/testlogin", authJWT.verifyToken, userController.test)
 
 //stub
 router.get("/stub", nbaController.getStub);
