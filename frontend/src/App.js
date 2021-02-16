@@ -7,6 +7,7 @@ import Navigation from "./components/Navigation/Navigation";
 import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
 import Register from "./components/Register/Register";
+import ExpandedGameInfo from "./components/ExpandedGameInfo/ExpandedGameInfo";
 import Dashboard from "./components/Dashboard/Dashboard";
 import "./constants/Constants";
 
@@ -16,10 +17,14 @@ import classes from "./App.module.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
-import { HOME_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE } from "./constants/Constants";
+import {
+  GAME_INFO_ROUTE,
+  HOME_ROUTE,
+  LOGIN_ROUTE,
+  REGISTER_ROUTE,
+} from "./constants/Constants";
 library.add(fab);
 library.add(fas);
-
 class App extends Component {
   componentDidMount() {
     console.log("App Mounted");
@@ -45,6 +50,11 @@ class App extends Component {
               ) : (
                 ""
               )}
+              <Route
+              exact
+              path={GAME_INFO_ROUTE + "/:id"}
+              component={ExpandedGameInfo}
+              />
               <Route path="*" component={Login} />
             </Switch>
           </div>
