@@ -40,7 +40,7 @@ router.get("/api/auth/testlogin", authJWT.verifyToken, userController.test)
 //stub
 router.get("/stub", nbaController.getStub);
 
-//
-router.get("/tester", nbaController.tester);
+//basic game info
+router.get("/getBasicGameInfo", nbaController.getBasicGameInfo);
 
 module.exports = router;
