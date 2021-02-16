@@ -17,7 +17,7 @@ exports.signup = (req, res) => {
   
     user.save((err, user) => {
       if (err) {
-        console.log(err)
+        //console.log(err)
         return res.status(500).send({ err: err, message: "Database failure." });
       }
 
