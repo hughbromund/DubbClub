@@ -6,6 +6,8 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 
+const expireSeconds = 86400;
+
 exports.signup = (req, res) => {
     const user = new User({
       username: req.body.username,
@@ -50,13 +52,25 @@ exports.login = (req, res) => {
         }
   
         var token = jwt.sign({ id: user.id }, config.secret, {
-          expiresIn: 86400 // 24 hours
+          expiresIn: expireSeconds // 24 hours
         });
   
         res.status(200).send({
           id: user._id,
-          username: user.username,
-          accessToken: token
+          accessToken: token,
+          expiresIn: expireSeconds
         });
       });
   };
+
+  exports.refresh = (req, res) => {
+    var token = jwt.sign({ id: req.userId }, config.secret, {
+      expiresIn: expireSeconds // 24 hours
+    });
+
+    res.status(200).send({
+      id: req.userId,
+      accessToken: token,
+      expiresIn: expireSeconds
+    });
+  }

@@ -13,6 +13,10 @@ exports.login = async function (req, res, next) {
     UserService.login(req, res);
 }
 
+exports.refresh = async function (req, res, next) {
+    UserService.refresh(req, res);
+}
+
 exports.test = async function (req, res, next) {
     res.status(200).json({
         message: "user is logged in"
