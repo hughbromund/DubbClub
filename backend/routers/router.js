@@ -23,6 +23,7 @@ const userController = require(path.resolve(
 //NOTE: for any request requiring user auth, must call authJWT.verifyToken first
 router.post("/api/auth/login", userController.login)
 router.post("/api/auth/signup", signupDuplicates.checkDuplicateUser, userController.signup)
+router.post("/api/auth/refresh", authJWT.verifyToken, userController.refresh)
 router.get("/api/auth/testlogin", authJWT.verifyToken, userController.test)
 
 
