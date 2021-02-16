@@ -53,7 +53,13 @@ export default class Navigation extends Component {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav>
               <Nav.Link>Home</Nav.Link>
-              <Nav.Link>Dashboard</Nav.Link>
+              <Nav.Link
+                onClick={() => this.setExpanded(false)}
+                as={Link}
+                to="/dashboard"
+              >
+                Dashboard
+              </Nav.Link>
               <Nav.Link>Search</Nav.Link>
               <Nav.Link
                 onClick={() => this.setExpanded(false)}

@@ -27,11 +27,17 @@ export default class SmartButton extends Component {
     super(props);
 
     this.SUCCESS = 0;
+    this.timeoutID = null;
 
     this.state = {
       status: DEFAULT,
       clickCount: 0,
     };
+  }
+
+  componentWillUnmount() {
+    // console.log(this.timeoutID);
+    clearTimeout(this.timeoutID);
   }
   render() {
     var variant = this.props.variant;
@@ -53,11 +59,12 @@ export default class SmartButton extends Component {
           } else {
             this.setState({ status: ERROR });
           }
-          setTimeout(() => {
+          this.timeoutID = setTimeout(() => {
             this.setState({
               status: DEFAULT,
             });
           }, 1500);
+          // console.log(this.timeoutID);
         }}
       >
         {this.state.status === LOADING ? (

@@ -13,8 +13,24 @@ exports.login = async function (req, res, next) {
     UserService.login(req, res);
 }
 
+exports.refresh = async function (req, res, next) {
+    UserService.refresh(req, res);
+}
+
 exports.test = async function (req, res, next) {
     res.status(200).json({
         message: "user is logged in"
     })
+}
+
+exports.userInfo = async function (req, res, next) {
+    UserService.userInfo(req, res);
+}
+
+exports.changePassword = async function (req, res, next) {
+    UserService.changePassword(req, res);
+}
+
+exports.changeEmail = async function (req, res, next) {
+    UserService.changeEmail(req, res);
 }

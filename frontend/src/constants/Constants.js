@@ -1,3 +1,5 @@
+export const TOKEN_KEY = "token";
+
 /* Paths for frontend routing */
 export const HOME_ROUTE = "/";
 export const LOGIN_ROUTE = "/login";
@@ -14,3 +16,4 @@ if (process.env.NODE_ENV === "development") {
 /* Paths to Call Backend */
 export const LOGIN = BASE + "/api/auth/login";
 export const SIGNUP = BASE + "/api/auth/signup";
+export const REFRESH_TOKEN = BASE + "/api/auth/refresh";
