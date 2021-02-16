@@ -4,7 +4,6 @@ const config = require(path.resolve(__dirname, "../config.json"));
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-const { unsubscribe } = require("../routers/router");
 
 
 const expireSeconds = 86400;
