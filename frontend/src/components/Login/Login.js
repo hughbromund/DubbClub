@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+
+import AuthContext from "../../contexts/AuthContext.js";
+
 import Container from "react-bootstrap/Container";
 import Card from "../Card/Card";
 import Alert from "../Alert/Alert";
@@ -7,6 +10,8 @@ import logo from "../../assets/Logo.png";
 import Expand from "react-expand-animated";
 
 import classes from "./Login.module.css";
+
+import { LOGIN, TOKEN_KEY } from "../../constants/Constants";
 
 export default class Login extends Component {
   constructor(props) {
@@ -19,6 +24,7 @@ export default class Login extends Component {
   }
 
   render() {
+    // console.log(this.context);
     return (
       <div>
         <Container className={classes.Login}>
@@ -69,14 +75,33 @@ export default class Login extends Component {
                       this.state.username === "" || this.state.password === ""
                     }
                     runOnClick={async () => {
-                      var res = await fetch(
-                        "https://dubbclub.free.beeceptor.com "
-                      );
-                      // console.log(res);
-                      this.setState({
-                        error: "Invalid Username or Password",
+                      var res = await fetch(LOGIN, {
+                        method: "POST",
+                        mode: "cors",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          username: this.state.username,
+                          password: this.state.password,
+                        }),
                       });
 
+                      var body = await res.json();
+                      // console.log(res);
+                      // console.log(body);
+
+                      if (res.status !== 200) {
+                        this.setState({
+                          error: body.message,
+                        });
+                        return false;
+                      }
+                      this.setState({
+                        error: "",
+                      });
+                      localStorage.setItem(TOKEN_KEY, body.accessToken);
+                      this.context.login(body.expiresIn);
                       return true;
                     }}
                   >
@@ -91,3 +116,4 @@ export default class Login extends Component {
     );
   }
 }
+Login.contextType = AuthContext;
