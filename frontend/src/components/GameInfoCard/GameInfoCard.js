@@ -5,6 +5,11 @@ import Button from "../Button/Button";
 import classes from "./GameInfoCard.module.css";
 
 export default class GameInfoCard extends Component {
+  renderButtonConditionally() {
+    return this.props.onClickHandler === null ? null : (
+      <Button onClick={this.props.onClickHandler}>See More</Button>
+    );
+  }
   render() {
     return (
       <div>
@@ -46,7 +51,7 @@ export default class GameInfoCard extends Component {
               </h3>
             </Row>
             <hr />
-            <Button onClick={this.props.onClickHandler}>See More</Button>
+            {this.renderButtonConditionally()}
           </Container>
         </Card>
       </div>

@@ -17,9 +17,10 @@ exports.signup = (req, res) => {
   
     user.save((err, user) => {
       if (err) {
-        //res.status(500).send({ message: err });
-        return;
+        //console.log(err)
+        return res.status(500).send({ err: err, message: "Database failure." });
       }
+
       res.send({ message: "User registered successfully!" });
     });
   
@@ -31,8 +32,7 @@ exports.login = (req, res) => {
     })
       .exec((err, user) => {
         if (err) {
-          res.status(500).send({ message: err });
-          return;
+          return res.status(500).send({ err: err, message: "Database failure." });
         }
   
         if (!user) {
@@ -80,8 +80,7 @@ exports.login = (req, res) => {
     User.findOne({_id: req.userId})
     .exec((err, user) => {
       if (err) {
-        res.status(500).send({ message: err });
-        return;
+        return res.status(500).send({ err: err, message: "Database failure." });
       }
 
       if (!user) {
@@ -93,11 +92,10 @@ exports.login = (req, res) => {
   }
 
   exports.changePassword = (req, res) => {
-    User.updateOne({_id: req.userId}, {password: req.body.password})
+    User.updateOne({_id: req.userId}, {password: bcrypt.hashSync(req.body.password, 8)})
     .exec((err, user) => {
       if (err) {
-        res.status(500).send({ message: err });
-        return;
+        return res.status(500).send({ err: err, message: "Database failure." });
       }
 
       if (!user) {
@@ -111,9 +109,12 @@ exports.login = (req, res) => {
   exports.changeEmail = (req, res) => {
     User.updateOne({_id: req.userId}, {email: req.body.email})
     .exec((err, user) => {
+      if (err.name == "MongoError" && err.code === 11000) {
+        return res.status(422).send({ err: err, message: "Email already exists."});
+      }
+
       if (err) {
-        res.status(500).send({ message: err });
-        return;
+        return res.status(500).send({ err: err, message: "Database failure." });
       }
 
       if (!user) {

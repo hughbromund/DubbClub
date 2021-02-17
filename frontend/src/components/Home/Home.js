@@ -6,6 +6,8 @@ import { Container, CardDeck } from "react-bootstrap";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
 import BullsLogo from "../../assets/BullsLogoTest.png";
 import KnicksLogo from "../../assets/KnicksLogoTest.png";
+import { useHistory } from "react-router-dom";
+import { GAME_INFO_ROUTE } from "../../constants/Constants";
 
 export default class Home extends Component {
   render() {
@@ -20,7 +22,9 @@ export default class Home extends Component {
           predictionConfidence={100.0}
           awayLogo={BullsLogo}
           homeLogo={KnicksLogo}
-          onClickHandler={() => alert("Clicked!")}
+          onClickHandler={() => {
+            this.props.history.push(GAME_INFO_ROUTE + `/${i}`);
+          }}
           key={i}
         />
       );

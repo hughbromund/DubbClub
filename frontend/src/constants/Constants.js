@@ -5,6 +5,7 @@ export const HOME_ROUTE = "/";
 export const LOGIN_ROUTE = "/login";
 export const REGISTER_ROUTE = "/join";
 export const SEARCH_ROUTE = "/search";
+export const GAME_INFO_ROUTE = "/game";
 
 /* Base URL for Backend */
 export var BASE = "https://api.dubb.club";
