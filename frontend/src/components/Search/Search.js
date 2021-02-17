@@ -15,9 +15,9 @@ export default class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchTerm: "",
+      searchTeam: "",
       searchType: "Team",
-      startDate: new Date(),
+      searchDate: new Date(),
     };
   }
   render() {
@@ -38,11 +38,19 @@ export default class Search extends Component {
                   <FormControl
                     placeholder={this.state.searchType}
                     hidden={this.state.searchType !== "Team"}
+                    value={this.state.searchTeam}
+                    onChange={(e) => {
+                      this.setState({ searchTeam: e.target.value });
+                    }}
                   />
                   <FormControl
                     type="date"
                     hidden={this.state.searchType !== "Date"}
                     style={{ display: "block" }}
+                    value={this.state.searchDate}
+                    onChange={(e) => {
+                      this.setState({ searchDate: e.target.value });
+                    }}
                   />
                   <DropdownButton
                     as={InputGroup.Append}
@@ -62,7 +70,19 @@ export default class Search extends Component {
                   </DropdownButton>
                 </InputGroup>
                 <br />
-                <SmartButton runOnClick={() => alert("Search")}>Go</SmartButton>
+                <SmartButton
+                  runOnClick={() =>
+                    this.state.searchType === "Date"
+                      ? alert(
+                          this.state.searchType + " " + this.state.searchDate
+                        )
+                      : alert(
+                          this.state.searchType + " " + this.state.searchTeam
+                        )
+                  }
+                >
+                  Go
+                </SmartButton>
               </div>
             </Col>
           </Row>
