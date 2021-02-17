@@ -11,6 +11,7 @@ import {
   HOME_ROUTE,
   LOGIN_ROUTE,
   REGISTER_ROUTE,
+  SEARCH_ROUTE,
   DASHBOARD_ROUTE,
   ACCOUNT_ROUTE,
 } from "../../constants/Constants";
@@ -65,7 +66,13 @@ export default class Navigation extends Component {
               >
                 Dashboard
               </Nav.Link>
-              <Nav.Link>Search</Nav.Link>
+              <Nav.Link
+                onClick={() => this.setExpanded(false)}
+                as={Link}
+                to={SEARCH_ROUTE}
+              >
+                Search
+              </Nav.Link>
               <Nav.Link>
                 Version:{" "}
                 {process.env.REACT_APP_VERSION

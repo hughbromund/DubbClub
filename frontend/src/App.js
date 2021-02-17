@@ -9,6 +9,7 @@ import Home from "./components/Home/Home";
 import Register from "./components/Register/Register";
 import ExpandedGameInfo from "./components/ExpandedGameInfo/ExpandedGameInfo";
 import Dashboard from "./components/Dashboard/Dashboard";
+import Search from "./components/Search/Search";
 import Account from "./components/Account/Account";
 import "./constants/Constants";
 
@@ -19,10 +20,11 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import {
-  GAME_INFO_ROUTE,
   HOME_ROUTE,
   LOGIN_ROUTE,
   REGISTER_ROUTE,
+  SEARCH_ROUTE,
+  GAME_INFO_ROUTE,
   ACCOUNT_ROUTE,
   DASHBOARD_ROUTE,
 } from "./constants/Constants";
@@ -48,6 +50,7 @@ class App extends Component {
               <Route exact path={HOME_ROUTE} component={Home} />
               <Route path={LOGIN_ROUTE} component={Login} />
               <Route path={REGISTER_ROUTE} component={Register} />
+              <Route path={SEARCH_ROUTE} component={Search} />
               {this.context.isLoggedIn === true ? (
                 <Switch>
                   <Route path={DASHBOARD_ROUTE} component={Dashboard} />
