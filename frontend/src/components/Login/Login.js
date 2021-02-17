@@ -11,11 +11,14 @@ import Expand from "react-expand-animated";
 
 import classes from "./Login.module.css";
 
-import { LOGIN, TOKEN_KEY } from "../../constants/Constants";
+import { LOGIN, LOGIN_ROUTE, ACCOUNT_ROUTE } from "../../constants/Constants";
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
+
+    // this.timeoutID = null;
+
     this.state = {
       username: "",
       password: "",
@@ -24,7 +27,6 @@ export default class Login extends Component {
   }
 
   render() {
-    // console.log(this.context);
     return (
       <div>
         <Container className={classes.Login}>
@@ -97,11 +99,24 @@ export default class Login extends Component {
                         });
                         return false;
                       }
+
+                      this.context.login(
+                        body.expiresIn,
+                        body.username,
+                        body.accessToken
+                      );
+                      // Push the Login Route after the user has successfully made an account
+                      // Only push this route if the user is on the Login Route, otherwise let the router
+                      // put the user back on whatever page they were already on
+                      if (this.props.location.pathname === LOGIN_ROUTE) {
+                        setTimeout(() => {
+                          this.props.history.push(ACCOUNT_ROUTE);
+                        }, 2000);
+                      }
+
                       this.setState({
                         error: "",
                       });
-                      localStorage.setItem(TOKEN_KEY, body.accessToken);
-                      this.context.login(body.expiresIn);
                       return true;
                     }}
                   >
