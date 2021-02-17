@@ -9,6 +9,7 @@ import Home from "./components/Home/Home";
 import Register from "./components/Register/Register";
 import ExpandedGameInfo from "./components/ExpandedGameInfo/ExpandedGameInfo";
 import Dashboard from "./components/Dashboard/Dashboard";
+import Account from "./components/Account/Account";
 import "./constants/Constants";
 
 import classes from "./App.module.css";
@@ -22,6 +23,8 @@ import {
   HOME_ROUTE,
   LOGIN_ROUTE,
   REGISTER_ROUTE,
+  ACCOUNT_ROUTE,
+  DASHBOARD_ROUTE,
 } from "./constants/Constants";
 library.add(fab);
 library.add(fas);
@@ -46,14 +49,17 @@ class App extends Component {
               <Route path={LOGIN_ROUTE} component={Login} />
               <Route path={REGISTER_ROUTE} component={Register} />
               {this.context.isLoggedIn === true ? (
-                <Route path="/dashboard" component={Dashboard} />
+                <Switch>
+                  <Route path={DASHBOARD_ROUTE} component={Dashboard} />
+                  <Route path={ACCOUNT_ROUTE} component={Account} />
+                </Switch>
               ) : (
                 ""
               )}
               <Route
-              exact
-              path={GAME_INFO_ROUTE + "/:id"}
-              component={ExpandedGameInfo}
+                exact
+                path={GAME_INFO_ROUTE + "/:id"}
+                component={ExpandedGameInfo}
               />
               <Route path="*" component={Login} />
             </Switch>

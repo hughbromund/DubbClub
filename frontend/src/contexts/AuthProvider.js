@@ -1,8 +1,7 @@
 import AuthContext from "./AuthContext";
 import React, { Component } from "react";
 
-import { REFRESH_TOKEN, TOKEN_KEY } from "../constants/Constants";
-
+import { REFRESH_TOKEN, TOKEN_KEY, USERNAME_KEY } from "../constants/Constants";
 // Attempt to refresh the token 10000ms (10s) before it expires
 const TOKEN_REFRESH_MARGIN = 10000;
 
@@ -15,6 +14,8 @@ export default class AuthProvider extends Component {
 
     this.state = {
       isLoggedIn: false,
+      username: "",
+      token: null,
     };
     this.refreshToken = this.refreshToken.bind(this);
   }
@@ -22,9 +23,12 @@ export default class AuthProvider extends Component {
   async refreshToken() {
     console.log("Attempting to Refresh Token");
     var token = localStorage.getItem(TOKEN_KEY);
+    var username = localStorage.getItem(USERNAME_KEY);
     if (token === null) {
       this.setState({
         isLoggedIn: false,
+        username: "",
+        token: null,
       });
       return;
     }
@@ -36,14 +40,19 @@ export default class AuthProvider extends Component {
       },
     });
     if (res.status !== 200) {
-      this.setState({ isLoggedIn: false });
+      this.setState({ isLoggedIn: false, username: "", token: null });
       localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USERNAME_KEY);
       return;
     }
     var body = await res.json();
     // localStorage.removeItem(TOKEN_KEY);
     localStorage.setItem(TOKEN_KEY, body.accessToken);
-    this.setState({ isLoggedIn: true });
+    this.setState({
+      isLoggedIn: true,
+      username: username,
+      token: body.accessToken,
+    });
     clearTimeout(this.timeoutID);
     this.timeoutID = setTimeout(() => {
       this.refreshToken();
@@ -56,10 +65,26 @@ export default class AuthProvider extends Component {
       <AuthContext.Provider
         value={{
           isLoggedIn: this.state.isLoggedIn,
-          login: async (expiresIn) => {
+          username: this.state.username,
+          token: this.state.token,
+          logout: () => {
+            localStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem(USERNAME_KEY);
+
+            this.setState({ isLoggedIn: false, username: "", token: null });
+          },
+          login: async (expiresIn, username, accessToken) => {
             // console.log(expiresIn);
             this.tokenExpireTime = expiresIn;
-            this.setState({ isLoggedIn: true });
+            this.setState({
+              isLoggedIn: true,
+              username: username,
+              token: accessToken,
+            });
+
+            localStorage.setItem(TOKEN_KEY, accessToken);
+            localStorage.setItem(USERNAME_KEY, username);
+
             clearTimeout(this.timeoutID);
             this.timeoutID = setTimeout(() => {
               this.refreshToken();
@@ -69,10 +94,13 @@ export default class AuthProvider extends Component {
             console.log("Verifying Login");
 
             var token = localStorage.getItem(TOKEN_KEY);
+            var username = localStorage.getItem(USERNAME_KEY);
             // if there is no token in local storage then the user can't be logged in
             if (token === null) {
               this.setState({
                 isLoggedIn: false,
+                username: "",
+                token: null,
               });
               console.log("No Token Found... User Not Logged In");
               return;
@@ -88,8 +116,9 @@ export default class AuthProvider extends Component {
 
             // We had a token, but it doesn't work
             if (res.status !== 200) {
-              this.setState({ isLoggedIn: false });
+              this.setState({ isLoggedIn: false, username: "" });
               localStorage.removeItem(TOKEN_KEY);
+              localStorage.removeItem(USERNAME_KEY);
               console.log("Bad Token... User Not Logged In");
               return;
             }
@@ -98,7 +127,11 @@ export default class AuthProvider extends Component {
             var body = await res.json();
             // localStorage.removeItem(TOKEN_KEY);
             localStorage.setItem(TOKEN_KEY, body.accessToken);
-            this.setState({ isLoggedIn: true });
+            this.setState({
+              isLoggedIn: true,
+              username: username,
+              token: body.accessToken,
+            });
             clearTimeout(this.timeoutID);
             this.timeoutID = setTimeout(() => {
               this.refreshToken();
