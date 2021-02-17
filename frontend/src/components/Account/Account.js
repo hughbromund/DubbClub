@@ -40,7 +40,7 @@ export default class Account extends Component {
     // console.log(res);
 
     var body = await res.json();
-    console.log(body);
+    // console.log(body);
 
     this.setState({
       username: body.username,
@@ -92,6 +92,7 @@ export default class Account extends Component {
               ></input>
               <Expand open={this.state.email !== this.state.newEmail}>
                 <SmartButton
+                  disabled={this.state.email === this.state.newEmail}
                   runOnClick={async () => {
                     var res = await fetch(UPDATE_EMAIL, {
                       method: "POST",
@@ -155,6 +156,13 @@ export default class Account extends Component {
                 }
               >
                 <SmartButton
+                  disabled={
+                    !(
+                      this.state.newPassword !== "" &&
+                      this.state.newPasswordConfirm !== "" &&
+                      this.state.newPassword === this.state.newPasswordConfirm
+                    )
+                  }
                   runOnClick={async () => {
                     var res = await fetch(UPDATE_PASSWORD, {
                       method: "POST",
