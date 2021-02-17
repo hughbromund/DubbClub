@@ -8,6 +8,7 @@ import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
 import Register from "./components/Register/Register";
 import Dashboard from "./components/Dashboard/Dashboard";
+import Search from "./components/Search/Search";
 import "./constants/Constants";
 
 import classes from "./App.module.css";
@@ -16,7 +17,12 @@ import classes from "./App.module.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
-import { HOME_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE } from "./constants/Constants";
+import {
+  HOME_ROUTE,
+  LOGIN_ROUTE,
+  REGISTER_ROUTE,
+  SEARCH_ROUTE,
+} from "./constants/Constants";
 library.add(fab);
 library.add(fas);
 
@@ -40,6 +46,7 @@ class App extends Component {
               <Route exact path={HOME_ROUTE} component={Home} />
               <Route path={LOGIN_ROUTE} component={Login} />
               <Route path={REGISTER_ROUTE} component={Register} />
+              <Route path={SEARCH_ROUTE} component={Search} />
               {this.context.isLoggedIn === true ? (
                 <Route path="/dashboard" component={Dashboard} />
               ) : (
