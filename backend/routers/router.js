@@ -1,6 +1,8 @@
-const express = require("express");
+var express = require("express");
+var request = require("request");
+var router = express.Router();
+const cors = require("cors");
 const path = require("path");
-const router = express.Router();
 
 const authJWT = require(path.resolve(
     __dirname,
@@ -19,12 +21,28 @@ const userController = require(path.resolve(
     "../controllers/userController"
 ))
 
+const nbaController = require(path.resolve(
+    __dirname,
+    "../controllers/NbaController"
+));
+
+router.use(function timeLog(req, res, next) {
+    console.log("Time: ", Date.now());
+    next();
+});
+
 //User routes
 //NOTE: for any request requiring user auth, must call authJWT.verifyToken first
 router.post("/api/auth/login", userController.login)
 router.post("/api/auth/signup", signupDuplicates.checkDuplicateUser, userController.signup)
 router.post("/api/auth/refresh", authJWT.verifyToken, userController.refresh)
 router.get("/api/auth/testlogin", authJWT.verifyToken, userController.test)
+
+//stub
+router.get("/stub", nbaController.getStub);
+
+//basic game info
+router.get("/getBasicGameInfo", nbaController.getBasicGameInfo);
 
 router.get("/api/user/info", authJWT.verifyToken, userController.userInfo)
 router.post("/api/user/updatepassword", authJWT.verifyToken, userController.changePassword)
