@@ -109,7 +109,7 @@ exports.login = (req, res) => {
   exports.changeEmail = (req, res) => {
     User.updateOne({_id: req.userId}, {email: req.body.email})
     .exec((err, user) => {
-      if (err.name == "MongoError" && err.code === 11000) {
+      if (err && err.name == "MongoError" && err.code === 11000) {
         return res.status(422).send({ err: err, message: "Email already exists."});
       }
 
