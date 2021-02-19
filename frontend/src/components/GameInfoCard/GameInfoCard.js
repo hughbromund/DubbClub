@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import Card from "../Card/Card";
-import { Container, Row, Col, Image } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Image from "react-bootstrap/Image";
 import Button from "../Button/Button";
 import classes from "./GameInfoCard.module.css";
 
@@ -17,38 +20,54 @@ export default class GameInfoCard extends Component {
           <Container>
             <Row>
               <Col>
-                <div class={classes.centered}>
+                <div
+                  className={[
+                    classes.centered,
+                    classes.verticalCenterImage,
+                  ].join(" ")}
+                >
                   <img src={this.props.awayLogo} class={classes.logo} />
-                  <h1>{this.props.awayTeam}</h1>
+                </div>
+                <div className={classes.centered}>
+                  <h2>{this.props.awayTeam}</h2>
                 </div>
               </Col>
               <Col xs={1}>
                 <br />
                 <br />
-                <br />
-                <h1>@</h1>
+                <h2>@</h2>
               </Col>
               <Col>
-                <div class={classes.centered}>
+                <div
+                  className={[
+                    classes.centered,
+                    classes.verticalCenterImage,
+                  ].join(" ")}
+                >
                   <img src={this.props.homeLogo} class={classes.logo} />
-                  <h1>{this.props.homeTeam}</h1>
+                </div>
+                <div className={classes.centered}>
+                  <h2>{this.props.homeTeam}</h2>
                 </div>
               </Col>
             </Row>
             <hr />
             <Row>
-              <h6>Game Time: {this.props.gameTime}</h6>
-              <h2>
-                Predicted Winner:{" "}
-                <b>
-                  {this.props.predictedWinner === "away"
-                    ? this.props.awayTeam
-                    : this.props.homeTeam}
-                </b>
-              </h2>
-              <h3>
-                Prediction Confidence: <b>{this.props.predictionConfidence}%</b>
-              </h3>
+              <div className={classes.centered}>
+                <h6>Game Time: {this.props.gameTime}</h6>
+                <h3>
+                  Predicted Winner:{" "}
+                  <b>
+                    {this.props.predictedWinner === "away"
+                      ? this.props.awayTeam
+                      : this.props.homeTeam}
+                  </b>
+                </h3>
+                <h4>
+                  Prediction Confidence:{" "}
+                  <b>{this.props.predictionConfidence}%</b>
+                </h4>
+              </div>
             </Row>
             <hr />
             {this.renderButtonConditionally()}
