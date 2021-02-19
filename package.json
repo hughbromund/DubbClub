@@ -1,0 +1,25 @@
+{
+  "name": "DubbClub",
+  "version": "1.0.0",
+  "description": "<p align=\"center\"> <img src=\"./DubbClubWordmark.png\" alt=\"Dubb Club Logo\" width=\"70%\" /> </p>",
+  "main": "index.js",
+  "scripts": {
+    "frontend": "cd frontend && npm run local",
+    "backend": "cd backend && nodemon app.js",
+    "start": "concurrently \"npm run frontend\" \"npm run backend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hughbromund/DubbClub.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hughbromund/DubbClub/issues"
+  },
+  "homepage": "https://github.com/hughbromund/DubbClub#readme",
+  "dependencies": {
+    "concurrently": "^5.3.0"
+  }
+}
