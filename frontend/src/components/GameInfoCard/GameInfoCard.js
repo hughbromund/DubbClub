@@ -17,10 +17,15 @@ export default class GameInfoCard extends Component {
           <Container>
             <Row>
               <Col>
-                <div class={classes.centered} style={{ lineHeight: "200px" }}>
+                <div
+                  className={[
+                    classes.centered,
+                    classes.verticalCenterImage,
+                  ].join(" ")}
+                >
                   <img src={this.props.awayLogo} class={classes.logo} />
                 </div>
-                <div class={classes.centered}>
+                <div className={classes.centered}>
                   <h2>{this.props.awayTeam}</h2>
                 </div>
               </Col>
@@ -30,17 +35,22 @@ export default class GameInfoCard extends Component {
                 <h2>@</h2>
               </Col>
               <Col>
-                <div class={classes.centered} style={{ lineHeight: "200px" }}>
+                <div
+                  className={[
+                    classes.centered,
+                    classes.verticalCenterImage,
+                  ].join(" ")}
+                >
                   <img src={this.props.homeLogo} class={classes.logo} />
                 </div>
-                <div class={classes.centered}>
+                <div className={classes.centered}>
                   <h2>{this.props.homeTeam}</h2>
                 </div>
               </Col>
             </Row>
             <hr />
             <Row>
-              <div class={classes.centered}>
+              <div className={classes.centered}>
                 <h6>Game Time: {this.props.gameTime}</h6>
                 <h3>
                   Predicted Winner:{" "}

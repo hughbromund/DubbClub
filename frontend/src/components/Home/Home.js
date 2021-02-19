@@ -2,15 +2,15 @@ import React, { Component } from "react";
 import Card from "../Card/Card";
 import Button from "../Button/Button";
 import SmartButton from "../SmartButton/SmartButton";
-import { Container, CardDeck } from "react-bootstrap";
+import { Container, CardDeck, Spinner } from "react-bootstrap";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
-import BullsLogo from "../../assets/BullsLogoTest.png";
-import KnicksLogo from "../../assets/KnicksLogoTest.png";
 import { useHistory } from "react-router-dom";
 import {
   NEXT_SEVEN_DAYS_BASIC_GAME_INFO,
   GAME_INFO_ROUTE,
 } from "../../constants/Constants";
+import classes from "./Home.module.css";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const DATE_OPTIONS = {
   weekday: "long",
@@ -43,6 +43,13 @@ export default class Home extends Component {
   }
 
   render() {
+    if (this.state.games.length === undefined) {
+      return (
+        <div>
+          <LoadingSpinner />
+        </div>
+      );
+    }
     let cards = [];
     console.log(this.state.games);
     for (let i = 0; i < this.state.games.length; i++) {
