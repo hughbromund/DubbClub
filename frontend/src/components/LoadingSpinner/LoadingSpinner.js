@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Container, Spinner } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
+import Spinner from "react-bootstrap/Spinner";
 import classes from "./LoadingSpinner.module.css";
 
 export default class LoadingSpinner extends Component {

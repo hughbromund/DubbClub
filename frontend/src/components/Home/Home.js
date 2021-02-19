@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import Card from "../Card/Card";
 import Button from "../Button/Button";
 import SmartButton from "../SmartButton/SmartButton";
-import { Container, CardDeck, Spinner } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
+import CardDeck from "react-bootstrap/CardDeck";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
 import { useHistory } from "react-router-dom";
 import {
