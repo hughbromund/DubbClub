@@ -1,5 +1,4 @@
 from flask import Flask
-import config
 import requests
 import pandas as pd
 import pickle
@@ -9,13 +8,17 @@ import math
 
 app = Flask(__name__)
 
+config_dict = {}
+with open('config.json') as f:
+    config_dict = json.load(f)
+
 headers = {
-    'x-rapidapi-key': config.rapid_api_key,
-    'x-rapidapi-host': config.rapid_api_host
+    'x-rapidapi-key': config_dict["nbaApiKey"],
+    'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
 }
 
 # Prepare database
-client = MongoClient(config.mongo_url)
+client = MongoClient(config_dict["databaseURI"])
 db = client["DubbClub-Database"]
 teams_col = db["Teams"]
 
