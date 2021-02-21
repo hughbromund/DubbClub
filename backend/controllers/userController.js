@@ -34,3 +34,15 @@ exports.changePassword = async function (req, res, next) {
 exports.changeEmail = async function (req, res, next) {
     UserService.changeEmail(req, res);
 }
+
+exports.favoriteTeam = async function (req, res, next) {
+    UserService.favoriteTeam(req, res);
+}
+
+exports.unfavoriteTeam = async function (req, res, next) {
+    UserService.unfavoriteTeam(req, res);
+}
+
+exports.favoriteTeamList = async function (req, res, next) {
+    UserService.favoriteTeamList(req, res);
+}
