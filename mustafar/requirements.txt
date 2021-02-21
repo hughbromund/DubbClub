@@ -1,0 +1,7 @@
+Flask
+requests
+pandas
+pickle
+json
+pymongo
+math
