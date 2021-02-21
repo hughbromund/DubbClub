@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Card from "../Card/Card";
-import { Container, Row, Col } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import classes from "./ExpandedGameInfo.module.css";
 import BullsLogo from "../../assets/BullsLogoTest.png";
 import KnicksLogo from "../../assets/KnicksLogoTest.png";

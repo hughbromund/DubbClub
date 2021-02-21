@@ -9,3 +9,4 @@ models/season_data/2019_games.csv
 models/season_data/2020_games.csv
 models/model.pkl
 mustafar/config.py
+node_modules

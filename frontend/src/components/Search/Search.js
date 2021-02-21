@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  InputGroup,
-  Dropdown,
-  DropdownButton,
-  FormControl,
-} from "react-bootstrap";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import InputGroup from "react-bootstrap/InputGroup";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import FormControl from "react-bootstrap/FormControl";
 import classes from "./Search.module.css";
 import SmartButton from "../SmartButton/SmartButton";
 
