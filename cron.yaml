@@ -2,5 +2,5 @@ cron:
   - description: "Test Cron"
     url: /helloworld
     target: mustafar
-    schedule: every Day 01:00
+    schedule: every day 01:00
     timezone: America/New_York
