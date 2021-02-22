@@ -320,5 +320,14 @@ def predict_nba_winner(game_id="6911"):
     return output_dict
 
 
+@app.route("/helloworld")
+def hello_world():
+    output_dict = {
+        "message": "Hello, world!",
+    }
+    output_json = json.dumps(output_dict, indent=4)
+    return output_json
+
+
 if __name__ == "__main__":
     app.run()
