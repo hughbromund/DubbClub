@@ -1,3 +1,4 @@
 service: mustafar
 env: standard
 runtime: python38
+instance_class: F4
