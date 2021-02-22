@@ -83,8 +83,10 @@ Status: working for NBA, NFL, MLB
 
 JSON Result Format:
 {
-  "teamsNBA": ["1234", "234"]
-  "teamsNFL": [],
-  "teamsMLB": ["323", "414"]
+  "favoriteTeams": {
+    "NBA": ["1234", "234"]
+    "NFL": [],
+    "MLB": ["323", "414"]
+  },
   "message": "Success!"
 }

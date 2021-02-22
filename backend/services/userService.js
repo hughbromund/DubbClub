@@ -128,7 +128,7 @@ exports.login = (req, res) => {
   exports.favoriteTeam = (req, res) => {
     //teamId
     //league
-    var listName = "teams" + req.body.league 
+    var listName = "favoriteTeams." + req.body.league 
 
     User.updateOne({_id: req.userId}, {"$push": {[listName]: req.body.teamId}})
     .exec((err, user) => {
@@ -146,7 +146,7 @@ exports.login = (req, res) => {
   }
 
   exports.unfavoriteTeam = (req, res) => {
-    var listName = "teams" + req.body.league 
+    var listName = "favoriteTeams." + req.body.league 
     
     User.updateOne({_id: req.userId}, {"$pull": {[listName]: req.body.teamId}})
     .exec((err, user) => {
@@ -176,6 +176,6 @@ exports.login = (req, res) => {
         return res.status(404).send({ message: "User Not found." });
       }
 
-      res.status(200).send({teamsNBA: user.teamsNBA, teamsNFL: user.teamsNFL, teamsMLB: user.teamsMLB, message: "Successfully returned teams."})
+      res.status(200).send({favoriteTeams: user.favoriteTeams, message: "Successfully returned teams."})
     })
   }

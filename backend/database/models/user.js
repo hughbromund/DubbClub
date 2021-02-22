@@ -7,9 +7,11 @@ const userSchema = new Schema({
     username: { type: String, unique: true, required: true},
     email: { type: String, unique: true, required: true},
     password: { type: String, unique: false, required: true},
-    teamsNBA: {type: Array, unique: false, required: true, default: []},
-    teamsNFL: {type: Array, unique: false, required: true, default: []},
-    teamsMLB: {type: Array, unique: false, required: true, default: []}
+    favoriteTeams: {
+        NBA: {type: Array, unique: false, required: true, default: []},
+        NFL: {type: Array, unique: false, required: true, default: []},
+        MLB: {type: Array, unique: false, required: true, default: []}
+    }
 }, { collection: "User"})
 
 // Define schema methods
