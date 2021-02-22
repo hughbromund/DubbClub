@@ -1,0 +1,5 @@
+cron:
+  - description: "Test Cron"
+    url: /helloworld
+    target: mustafar
+    schedule: every 1 hours
