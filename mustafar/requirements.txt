@@ -1,7 +1,5 @@
 Flask
 requests
 pandas
-pickle
-json
 pymongo
-math
+pymongo[srv]

@@ -1,4 +1,4 @@
-name: Deploy Backend
+name: Deploy Mustafar
 
 on:
   push:
@@ -6,14 +6,14 @@ on:
       - main
       - dev
     paths:
-      - "backend/**"
+      - "mustafar/**"
 
 jobs:
   setup-build-deploy:
     name: Deploy
     runs-on: ubuntu-latest
     env:
-      backend: ./backend
+      mustafar: ./mustafar
 
     steps:
       - name: Checkout
@@ -37,34 +37,34 @@ jobs:
         run: |
           touch config.json
           echo "{}" > config.json
-        working-directory: ${{env.backend}}
+        working-directory: ${{env.mustafar}}
 
       - name: Set Database Secrets
         uses: jossef/action-set-json-field@v1
         with:
-          file: ./backend/config.json
+          file: ./mustafar/config.json
           field: ${{ secrets.DATABASE_KEY }}
           value: ${{ secrets.DATABASE_VALUE }}
 
       - name: Set JWT Secrets
         uses: jossef/action-set-json-field@v1
         with:
-          file: ./backend/config.json
+          file: ./mustafar/config.json
           field: ${{ secrets.JWT_SECRET_KEY }}
           value: ${{ secrets.JWT_SECRET_VALUE }}
 
       - name: Set NBA API Secrets
         uses: jossef/action-set-json-field@v1
         with:
-          file: ./backend/config.json
+          file: ./mustafar/config.json
           field: ${{ secrets.NBA_API_KEY }}
           value: ${{ secrets.NBA_API_VALUE }}
 
-      - name: Deploy Backend
+      - name: Deploy Mustafar
         uses: google-github-actions/deploy-appengine@main
         with:
           deliverables: app.yaml
           project_id: ${{ secrets.project_id }}
           credentials: ${{ secrets.GCP_SA_KEY }}
-          version: "backend-${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha_short }}"
-          working_directory: ${{env.backend}}
+          version: "mustafar-${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha_short }}"
+          working_directory: ${{env.mustafar}}

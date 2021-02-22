@@ -3,9 +3,12 @@ import React, { Component } from "react";
 import AuthContext from "../../contexts/AuthContext.js";
 
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Card from "../Card/Card";
 import Alert from "../Alert/Alert";
 import SmartButton from "../SmartButton/SmartButton";
+import Button from "../Button/Button";
 import logo from "../../assets/Logo.png";
 import Expand from "react-expand-animated";
 
@@ -125,6 +128,16 @@ export default class Login extends Component {
                 </div>
               </form>
             </Card>
+            <div className={classes.buttonGroup}>
+              <Row>
+                <Col>
+                  <Button variant="outline">Forgot Password</Button>
+                </Col>
+                <Col>
+                  <Button variant="outline">Create an Account</Button>
+                </Col>
+              </Row>
+            </div>
           </div>
         </Container>
       </div>
