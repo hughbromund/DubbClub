@@ -1,3 +1,5 @@
 dispatch:
   - url: "api.dubb.club/*"
     service: backend
+  - url: "mustafar.dubb.club/*"
+    service: mustafar

@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          lfs: true
 
       # Setup and configure gcloud CLI
       # - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
@@ -59,6 +61,12 @@ jobs:
           file: ./mustafar/config.json
           field: ${{ secrets.NBA_API_KEY }}
           value: ${{ secrets.NBA_API_VALUE }}
+
+      - name: Fetch LFS Files
+        run: git lfs checkout
+
+      - name: Copy Model for Deployment
+        run: cp models/model.pkl mustafar
 
       - name: Deploy Mustafar
         uses: google-github-actions/deploy-appengine@main
