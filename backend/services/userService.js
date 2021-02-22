@@ -124,3 +124,58 @@ exports.login = (req, res) => {
       res.status(200).send({message: "Successfully Updated Email."})
     })
   }
+
+  exports.favoriteTeam = (req, res) => {
+    //teamId
+    //league
+    var listName = "favoriteTeams." + req.body.league 
+
+    User.updateOne({_id: req.userId}, {"$push": {[listName]: req.body.teamId}})
+    .exec((err, user) => {
+
+      if (err) {
+        return res.status(500).send({ err: err, message: "Database failure." });
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      res.status(200).send({message: "Successfully favorited teams."})
+    })
+  }
+
+  exports.unfavoriteTeam = (req, res) => {
+    var listName = "favoriteTeams." + req.body.league 
+    
+    User.updateOne({_id: req.userId}, {"$pull": {[listName]: req.body.teamId}})
+    .exec((err, user) => {
+
+      if (err) {
+        return res.status(500).send({ err: err, message: "Database failure." });
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      res.status(200).send({message: "Successfully unfavorited teams."})
+    })
+  }
+
+  exports.favoriteTeamList = (req, res) => {
+
+    User.findOne({_id: req.userId})
+    .exec((err, user) => {
+
+      if (err) {
+        return res.status(500).send({ err: err, message: "Database failure." });
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      res.status(200).send({favoriteTeams: user.favoriteTeams, message: "Successfully returned teams."})
+    })
+  }
