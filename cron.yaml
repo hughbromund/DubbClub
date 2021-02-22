@@ -1,0 +1,6 @@
+cron:
+  - description: "Test Cron"
+    url: /helloworld
+    target: mustafar
+    schedule: every day 01:00
+    timezone: America/New_York
