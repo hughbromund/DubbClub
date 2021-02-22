@@ -1,0 +1,3 @@
+service: mustafar
+env: standard
+runtime: python38
