@@ -18,3 +18,6 @@
 .alertDiv {
   padding: var(--default-margin);
 }
+.buttonGroup {
+  padding: var(--default-margin);
+}
