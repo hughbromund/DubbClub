@@ -11,3 +11,4 @@ models/model.pkl
 mustafar/config.py
 node_modules
 mustafar/config.json
+mustafar/model.pkl

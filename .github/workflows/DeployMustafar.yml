@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - dev
+      - large-file-tracking
     paths:
       - "mustafar/**"
 
@@ -59,6 +60,9 @@ jobs:
           file: ./mustafar/config.json
           field: ${{ secrets.NBA_API_KEY }}
           value: ${{ secrets.NBA_API_VALUE }}
+
+      - name: Copy Model for Deployment
+        run: cp models/model.pkl mustafar
 
       - name: Deploy Mustafar
         uses: google-github-actions/deploy-appengine@main
