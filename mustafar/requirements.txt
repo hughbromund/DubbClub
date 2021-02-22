@@ -3,4 +3,4 @@ requests
 pandas
 pymongo
 pymongo[srv]
-sklearn
+scikit-learn
