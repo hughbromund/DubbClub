@@ -6,8 +6,6 @@ import json
 from pymongo import MongoClient
 import math
 
-# making a small change round 2
-
 app = Flask(__name__)
 
 config_dict = {}
