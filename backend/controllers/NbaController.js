@@ -14,3 +14,12 @@ exports.getBasicGameInfo = async function (req, res, next) {
         return res.status(400).json({ status: 400, message: e.message });
     }
 };
+
+exports.getGamesByDate = async function (req, res, next) {
+    try {
+        let result = await nbaService.getGamesByDate(req.params.date);
+        return res.status(200).json(result);
+      } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};

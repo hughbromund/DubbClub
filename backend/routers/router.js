@@ -44,6 +44,9 @@ router.get("/stub", nbaController.getStub);
 //basic game info
 router.get("/getBasicGameInfo", nbaController.getBasicGameInfo);
 
+//games by date
+router.get("/getGamesByDate/:date", nbaController.getGamesByDate);
+
 router.get("/api/user/info", authJWT.verifyToken, userController.userInfo)
 router.post("/api/user/updatepassword", authJWT.verifyToken, userController.changePassword)
 router.post("/api/user/updateemail", authJWT.verifyToken, userController.changeEmail)
