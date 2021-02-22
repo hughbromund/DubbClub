@@ -2,3 +2,4 @@ Flask
 requests
 pandas
 pymongo
+pymongo[srv]
