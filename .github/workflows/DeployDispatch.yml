@@ -25,5 +25,5 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY}}
 
       # Deploy App to App Engine
-      - name: Deploy Backend
+      - name: Deploy Dispatch.yaml
         run: gcloud app deploy dispatch.yaml

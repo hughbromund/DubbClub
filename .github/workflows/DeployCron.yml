@@ -26,5 +26,5 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY}}
 
       # Deploy App to App Engine
-      - name: Deploy Backend
+      - name: Deploy Cron.yml
         run: gcloud app deploy cron.yaml
