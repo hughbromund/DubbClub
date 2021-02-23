@@ -100,7 +100,7 @@ input {
 
 ::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: var(--text-disabled);
+  color: var(--text-disabled) !important;
   opacity: 1; /* Firefox */
 }
 

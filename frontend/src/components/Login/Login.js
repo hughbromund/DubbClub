@@ -41,7 +41,7 @@ export default class Login extends Component {
                 <b>Sign In to Dubb Club</b>
               </h4>
             </div>
-            <Expand open={this.state.error === "" ? false : true}>
+            <Expand open={this.state.error !== ""}>
               <div className={classes.alertDiv}>
                 <Alert>{this.state.error}</Alert>
               </div>
