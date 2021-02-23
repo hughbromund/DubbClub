@@ -52,6 +52,7 @@ router.get("/stub", nbaController.getStub);
 //basic game info
 router.get("/getBasicGameInfo", nbaController.getBasicGameInfo);
 
-
+//games by date
+router.get("/getGamesByDate/:date", nbaController.getGamesByDate);
 
 module.exports = router;

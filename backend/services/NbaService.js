@@ -37,6 +37,37 @@ exports.getBasicGameInfo = async function() {
   return result;
 }
 
+exports.getGamesByDate = async function(date) {
+  let result = [];
+  var options = {
+    method: 'GET',
+    url: "https://api-nba-v1.p.rapidapi.com/games/date/" + date,
+    headers: {
+      'x-rapidapi-key': config.nbaApiKey,
+      'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
+    }
+  };
+  
+  try {
+    let res = await axios.request(options);
+    let games = res.data.api.games
+
+    for(var i = 0; i < games.length; i++) {
+      if (games[i].league === "standard") {
+        let home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
+        let away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
+        let game = {"gameId" : games[i].gameId, "date" : date,
+        "home" : home, "away" : away}
+        result.push(game);
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  return result;
+}
+
 async function getTeamStats(teamId, teamName, teamImage) {
   var options = {
     method: 'GET',
