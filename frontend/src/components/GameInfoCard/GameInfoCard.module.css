@@ -9,3 +9,25 @@
 .verticalCenterImage {
   line-height: 200px;
 }
+
+.background {
+  background-color: white;
+  border-radius: var(--border-radius);
+  transition: var(--default-transition);
+}
+.background:hover {
+  transition: var(--default-transition);
+  background-color: var(--primary-color);
+}
+.outer {
+  margin: 0px;
+}
+.wrapper {
+  margin: var(--default-margin);
+  max-width: var(--default-column-width);
+  background-image: var(--gradient);
+  border-radius: var(--border-radius);
+}
+.gameTime {
+  padding: var(--default-padding);
+}
