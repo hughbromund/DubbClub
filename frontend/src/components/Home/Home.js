@@ -3,6 +3,8 @@ import Card from "../Card/Card";
 import Button from "../Button/Button";
 import SmartButton from "../SmartButton/SmartButton";
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import CardDeck from "react-bootstrap/CardDeck";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
 import { useHistory } from "react-router-dom";
@@ -18,16 +20,28 @@ const DATE_OPTIONS = {
   year: "numeric",
   month: "long",
   day: "numeric",
-  timeZone: "UTC",
+  timeZone: "EST",
+};
+
+const INITIAL_STATE = {
+  games: {},
+  currentDate: new Date().setHours(0, 0, 0, 0),
 };
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      games: {},
-    };
+    if (
+      localStorage.getItem("homepageState") === null ||
+      JSON.parse(localStorage.getItem("homepageState")).currentDate !==
+        new Date().setHours(0, 0, 0, 0)
+    ) {
+      console.log("Here");
+      this.state = INITIAL_STATE;
+    } else {
+      this.state = JSON.parse(localStorage.getItem("homepageState"));
+    }
 
     this.fetchGameData = this.fetchGameData.bind(this);
   }
@@ -35,12 +49,21 @@ export default class Home extends Component {
   async fetchGameData() {
     var res = await fetch(NEXT_SEVEN_DAYS_BASIC_GAME_INFO, {});
     var body = await res.json();
-    this.setState({ games: body });
+    this.setState({
+      games: body,
+      currentDate: new Date().setHours(0, 0, 0, 0),
+    });
     console.log(this.state.games);
   }
 
   async componentDidMount() {
-    this.fetchGameData();
+    if (this.state.games.length === undefined) {
+      this.fetchGameData();
+    }
+  }
+
+  componentWillUnmount() {
+    localStorage.setItem("homepageState", JSON.stringify(this.state));
   }
 
   render() {
@@ -55,24 +78,26 @@ export default class Home extends Component {
     console.log(this.state.games);
     for (let i = 0; i < this.state.games.length; i++) {
       let temp = (
-        <GameInfoCard
-          homeTeam={this.state.games[i].home.teamName}
-          awayTeam={this.state.games[i].away.teamName}
-          gameTime={new Date(this.state.games[i].date).toLocaleDateString(
-            "en-US",
-            DATE_OPTIONS
-          )}
-          predictedWinner={"away"}
-          predictionConfidence={100.0}
-          awayLogo={this.state.games[i].away.teamImage}
-          homeLogo={this.state.games[i].home.teamImage}
-          onClickHandler={() => {
-            this.props.history.push(
-              GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
-            );
-          }}
-          key={i}
-        />
+        <Col>
+          <GameInfoCard
+            homeTeam={this.state.games[i].home.teamName}
+            awayTeam={this.state.games[i].away.teamName}
+            gameTime={new Date(this.state.games[i].date).toLocaleDateString(
+              "en-US",
+              DATE_OPTIONS
+            )}
+            predictedWinner={"away"}
+            predictionConfidence={100.0}
+            awayLogo={this.state.games[i].away.teamImage}
+            homeLogo={this.state.games[i].home.teamImage}
+            onClickHandler={() => {
+              this.props.history.push(
+                GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
+              );
+            }}
+            key={i}
+          />
+        </Col>
       );
       cards.push(temp);
     }
@@ -81,7 +106,9 @@ export default class Home extends Component {
         <Container fluid>
           <h1>Homepage</h1>
           <br />
-          <CardDeck>{cards}</CardDeck>
+          <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+            {cards}
+          </Row>
         </Container>
       </div>
     );
