@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import AuthContext from "../../contexts/AuthContext.js";
 
 import Button from "../Button/Button";
+import Alert from "../Alert/Alert";
 import SmartButton from "../SmartButton/SmartButton";
 import Card from "../Card/Card";
 import Container from "react-bootstrap/Container";
@@ -48,6 +49,7 @@ export default class Account extends Component {
       newEmail: body.email,
       newPassword: "",
       newPasswordConfirm: "",
+      error: "",
     });
   }
 
@@ -65,6 +67,11 @@ export default class Account extends Component {
               <b>{this.state.username}</b>
             </h3>
           </div>
+          <Expand open={this.state.error === "" ? false : true}>
+            <div className={classes.alertDiv}>
+              <Alert>{this.state.error}</Alert>
+            </div>
+          </Expand>
           <Card>
             <div>
               <b>Username</b>
@@ -106,13 +113,17 @@ export default class Account extends Component {
                       }),
                     });
 
+                    var body = await res.json();
+
                     if (res.status !== 200) {
+                      this.setState({ error: body.message });
                       return false;
                     }
-                    // var body = await res.json();
+
                     // console.log(res);
                     // console.log(body);
                     this.fetchUserInfo();
+                    this.setState({ error: "" });
                     return true;
                   }}
                 >
@@ -175,14 +186,17 @@ export default class Account extends Component {
                         password: this.state.newPassword,
                       }),
                     });
+                    var body = await res.json();
 
                     if (res.status !== 200) {
+                      this.setState({ error: body.message });
                       return false;
                     }
-                    // var body = await res.json();
+
                     // console.log(res);
                     // console.log(body);
                     this.fetchUserInfo();
+                    this.setState({ error: "" });
                     return true;
                   }}
                 >

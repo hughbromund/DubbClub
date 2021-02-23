@@ -8,3 +8,6 @@
 .headerAlign {
   text-align: center;
 }
+.alertDiv {
+  padding: var(--default-margin);
+}
