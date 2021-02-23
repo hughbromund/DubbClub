@@ -26,3 +26,13 @@ export const USER_INFO = BASE + "/api/user/info";
 export const UPDATE_EMAIL = BASE + "/api/user/updateemail";
 export const UPDATE_PASSWORD = BASE + "/api/user/updatepassword";
 export const NEXT_SEVEN_DAYS_BASIC_GAME_INFO = BASE + "/getBasicGameInfo";
+export const GET_GAMES_BY_DATE = BASE + "/getGamesByDate";
+
+/* Date options to convert to UTC for Game Cards */
+export const DATE_OPTIONS = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  timeZone: "EST",
+};

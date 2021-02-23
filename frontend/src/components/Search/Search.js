@@ -8,6 +8,13 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import FormControl from "react-bootstrap/FormControl";
 import classes from "./Search.module.css";
 import SmartButton from "../SmartButton/SmartButton";
+import GameInfoCard from "../GameInfoCard/GameInfoCard";
+
+import {
+  GET_GAMES_BY_DATE,
+  DATE_OPTIONS,
+  GAME_INFO_ROUTE,
+} from "../../constants/Constants";
 
 export default class Search extends Component {
   constructor(props) {
@@ -16,9 +23,48 @@ export default class Search extends Component {
       searchTeam: "",
       searchType: "Team",
       searchDate: new Date(),
+      games: {},
     };
+
+    this.fetchGameDataByDate = this.fetchGameDataByDate.bind(this);
   }
+
+  async fetchGameDataByDate() {
+    this.setState({ games: {} });
+    var res = await fetch(GET_GAMES_BY_DATE + `/${this.state.searchDate}`, {});
+    var body = await res.json();
+    this.setState({
+      games: body,
+    });
+  }
+
   render() {
+    let cards = [];
+    for (let i = 0; i < this.state.games.length; i++) {
+      let temp = (
+        <Col>
+          <GameInfoCard
+            homeTeam={this.state.games[i].home.teamName}
+            awayTeam={this.state.games[i].away.teamName}
+            gameTime={new Date(this.state.games[i].date).toLocaleDateString(
+              "en-US",
+              DATE_OPTIONS
+            )}
+            predictedWinner={"away"}
+            predictionConfidence={100.0}
+            awayLogo={this.state.games[i].away.teamImage}
+            homeLogo={this.state.games[i].home.teamImage}
+            onClickHandler={() => {
+              this.props.history.push(
+                GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
+              );
+            }}
+            key={i}
+          />
+        </Col>
+      );
+      cards.push(temp);
+    }
     return (
       <div>
         <Container>
@@ -71,9 +117,7 @@ export default class Search extends Component {
                 <SmartButton
                   runOnClick={() =>
                     this.state.searchType === "Date"
-                      ? alert(
-                          this.state.searchType + " " + this.state.searchDate
-                        )
+                      ? this.fetchGameDataByDate()
                       : alert(
                           this.state.searchType + " " + this.state.searchTeam
                         )
@@ -83,6 +127,11 @@ export default class Search extends Component {
                 </SmartButton>
               </div>
             </Col>
+          </Row>
+        </Container>
+        <Container fluid>
+          <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+            {cards}
           </Row>
         </Container>
       </div>
