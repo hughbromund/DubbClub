@@ -79,9 +79,25 @@ input {
   background-color: var(--top-color);
   border: none;
   color: var(--text-primary);
+  transition: none;
   margin-bottom: var(--default-margin);
   width: 100%;
 }
+
+.form-control {
+  border-radius: var(--border-radius);
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: var(--top-color);
+  border: none;
+  color: var(--text-primary);
+  transition: none;
+  margin-bottom: var(--default-margin);
+  width: 100%;
+}
+
 ::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: var(--text-disabled);

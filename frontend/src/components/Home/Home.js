@@ -11,17 +11,10 @@ import { useHistory } from "react-router-dom";
 import {
   NEXT_SEVEN_DAYS_BASIC_GAME_INFO,
   GAME_INFO_ROUTE,
+  DATE_OPTIONS,
 } from "../../constants/Constants";
 import classes from "./Home.module.css";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
-
-const DATE_OPTIONS = {
-  weekday: "long",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-  timeZone: "EST",
-};
 
 const INITIAL_STATE = {
   games: {},
@@ -37,7 +30,6 @@ export default class Home extends Component {
       JSON.parse(localStorage.getItem("homepageState")).currentDate !==
         new Date().setHours(0, 0, 0, 0)
     ) {
-      console.log("Here");
       this.state = INITIAL_STATE;
     } else {
       this.state = JSON.parse(localStorage.getItem("homepageState"));
@@ -53,7 +45,6 @@ export default class Home extends Component {
       games: body,
       currentDate: new Date().setHours(0, 0, 0, 0),
     });
-    console.log(this.state.games);
   }
 
   async componentDidMount() {
@@ -75,7 +66,6 @@ export default class Home extends Component {
       );
     }
     let cards = [];
-    console.log(this.state.games);
     for (let i = 0; i < this.state.games.length; i++) {
       let temp = (
         <Col>
