@@ -71,14 +71,14 @@ hr {
 
 /* Custom CSS for Text Inputs */
 input {
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius) !important;
   padding-left: var(--default-padding);
   padding-right: var(--default-padding);
   padding-top: 5px;
   padding-bottom: 5px;
-  background-color: var(--top-color);
+  background-color: var(--top-color) !important;
   border: none;
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
   transition: none;
   margin-bottom: var(--default-margin);
   width: 100%;
