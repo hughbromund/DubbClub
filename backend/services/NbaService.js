@@ -50,13 +50,13 @@ exports.getGamesByDate = async function(date) {
   
   try {
     let res = await axios.request(options);
-    var games = res.data.api.games
+    let games = res.data.api.games
 
     for(var i = 0; i < games.length; i++) {
       if (games[i].league === "standard") {
-        var home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
-        var away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
-        var game = {"gameId" : games[i].gameId, "date" : date,
+        let home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
+        let away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
+        let game = {"gameId" : games[i].gameId, "date" : date,
         "home" : home, "away" : away}
         result.push(game);
       }
