@@ -27,6 +27,7 @@ export default class Account extends Component {
       newEmail: "",
       newPassword: "",
       newPasswordConfirm: "",
+      error: "",
     };
 
     this.fetchUserInfo = this.fetchUserInfo.bind(this);
@@ -67,7 +68,7 @@ export default class Account extends Component {
               <b>{this.state.username}</b>
             </h3>
           </div>
-          <Expand open={this.state.error === "" ? false : true}>
+          <Expand open={this.state.error !== ""}>
             <div className={classes.alertDiv}>
               <Alert>{this.state.error}</Alert>
             </div>
