@@ -69,3 +69,59 @@ JSON Format:
     }  
   }  
 ]
+
+##  Endpoints for User Accounts
+
+### api/user/favoriteteam
+
+POST
+Requirements: JWT auth token, league and teamId  
+Returns: success/failure message  
+Status: working for NBA, NFL, MLB
+
+JSON Request Format:
+{
+  "league": "NBA",
+  "teamId": "123"
+}
+
+JSON Result Format:
+{
+  "message": "Successfully favorited team!"
+}
+
+### api/user/unfavoriteteam
+
+POST
+Requirements: JWT auth token, league and teamId  
+Returns: success/failure message  
+Status: working for NBA, NFL, MLB
+
+
+JSON Request Format:
+{
+  "league": "NBA",
+  "teamId": "123"
+}
+
+JSON Result Format:
+{
+  "message": "Successfully unfavorited team!"
+}
+
+### api/user/favoriteteamlist
+
+GET
+Requirements: JWT auth token 
+Returns: list of favorite NBA, NFL, NBA teams, success/failure message  
+Status: working for NBA, NFL, MLB
+
+JSON Result Format:
+{
+  "favoriteTeams": {
+    "NBA": ["1234", "234"]
+    "NFL": [],
+    "MLB": ["323", "414"]
+  },
+  "message": "Success!"
+}

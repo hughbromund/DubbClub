@@ -38,6 +38,14 @@ router.post("/api/auth/signup", signupDuplicates.checkDuplicateUser, userControl
 router.post("/api/auth/refresh", authJWT.verifyToken, userController.refresh)
 router.get("/api/auth/testlogin", authJWT.verifyToken, userController.test)
 
+router.get("/api/user/info", authJWT.verifyToken, userController.userInfo)
+router.post("/api/user/updatepassword", authJWT.verifyToken, userController.changePassword)
+router.post("/api/user/updateemail", authJWT.verifyToken, userController.changeEmail)
+
+router.post("/api/user/favoriteteam", authJWT.verifyToken, userController.favoriteTeam)
+router.post("/api/user/unfavoriteteam", authJWT.verifyToken, userController.unfavoriteTeam)
+router.get("/api/user/favoriteteamlist", authJWT.verifyToken, userController.favoriteTeamList)
+
 //stub
 router.get("/stub", nbaController.getStub);
 
@@ -46,10 +54,5 @@ router.get("/getBasicGameInfo", nbaController.getBasicGameInfo);
 
 //games by date
 router.get("/getGamesByDate/:date", nbaController.getGamesByDate);
-
-router.get("/api/user/info", authJWT.verifyToken, userController.userInfo)
-router.post("/api/user/updatepassword", authJWT.verifyToken, userController.changePassword)
-router.post("/api/user/updateemail", authJWT.verifyToken, userController.changeEmail)
-
 
 module.exports = router;

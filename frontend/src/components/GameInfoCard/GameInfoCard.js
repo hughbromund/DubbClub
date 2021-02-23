@@ -18,7 +18,7 @@ export default class GameInfoCard extends Component {
       <div>
         <Card>
           <Container>
-            <Row>
+            <Row xs={1} sm={2} md={2} lg={2} xl={2}>
               <Col>
                 <div
                   className={[
@@ -31,11 +31,6 @@ export default class GameInfoCard extends Component {
                 <div className={classes.centered}>
                   <h2>{this.props.awayTeam}</h2>
                 </div>
-              </Col>
-              <Col xs={1}>
-                <br />
-                <br />
-                <h2>@</h2>
               </Col>
               <Col>
                 <div
