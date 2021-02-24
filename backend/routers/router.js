@@ -55,4 +55,7 @@ router.get("/getBasicGameInfo", nbaController.getBasicGameInfo);
 //games by date
 router.get("/getGamesByDate/:date", nbaController.getGamesByDate);
 
+//get most recent games by team
+router.get("/getRecentGamesByTeam/:team", nbaController.getRecentGamesByTeam);
+
 module.exports = router;
