@@ -7,11 +7,22 @@
 }
 
 .verticalCenterImage {
-  line-height: 200px;
+  line-height: 150px;
+}
+.speedometer {
+  text-align: center;
+  margin: 0 auto;
+  margin-bottom: -100px;
+}
+.teamNames {
+  text-align: center;
+  font-size: 20px;
+  line-height: 24px;
+  text-transform: capitalize;
 }
 
 .background {
-  background-color: white;
+  background-color: var(--top-color);
   border-radius: var(--border-radius);
   transition: var(--default-transition);
 }
@@ -30,4 +41,5 @@
 }
 .gameTime {
   padding: var(--default-padding);
+  width: 100%;
 }
