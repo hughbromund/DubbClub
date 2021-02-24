@@ -5,7 +5,7 @@ const config = require(path.resolve(__dirname, "../config.json"));
 exports.getBasicGameInfo = async function() {
   var start = new Date();
   let result = [];
-  for (var i = 0; i < 1; i++) {
+  for (var i = 0; i < 3; i++) {
     var options = {
       method: 'GET',
       url: "https://api-nba-v1.p.rapidapi.com/games/date/" + start.toISOString().slice(0,10),
@@ -68,37 +68,38 @@ exports.getGamesByDate = async function(date) {
   return result;
 }
 
-exports.getRecentGamesByTeam = async function() {
+exports.getRecentGamesByTeam = async function(teamId) {
   var start = new Date();
   let result = [];
-  for (var i = 0; i < 1; i++) {
-    var options = {
-      method: 'GET',
-      url: "https://api-nba-v1.p.rapidapi.com/games/date/" + start.toISOString().slice(0,10),
-      headers: {
-        'x-rapidapi-key': config.nbaApiKey,
-        'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
-      }
-    };
+  var options = {
+    method: 'GET',
+    url: "https://api-nba-v1.p.rapidapi.com/games/teamId/" + teamId,
+    headers: {
+      'x-rapidapi-key': config.nbaApiKey,
+      'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
+    }
+  };
 
-    try {
-      let res = await axios.request(options);
-      var games = res.data.api.games
+  try {
+    let res = await axios.request(options);
+    var games = res.data.api.games
+    let foundGames = 0;
 
-      for(var i = 0; i < games.length; i++) {
-        if (games[i].league === "standard") {
-          var home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
-          var away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
-          var game = {"gameId" : games[i].gameId, "date" : start.toISOString().slice(0,10),
-          "home" : home, "away" : away}
-          result.push(game);
+    for(var i = 0; i < games.length; i++) {
+      let gameDate = new Date(games[i].startTimeUTC);
+      if (gameDate >= start) {
+        var home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
+        var away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
+        var game = {"gameId" : games[i].gameId, "date" : start.toISOString().slice(0,10),
+        "home" : home, "away" : away}
+        result.push(game);
+        if (++foundGames == 10) {
+          break;
         }
       }
-    } catch (error) {
-      console.log(error);
     }
-    
-    start.setDate(start.getDate() + 1);
+  } catch (error) {
+    console.log(error);
   }
   return result;
 }
