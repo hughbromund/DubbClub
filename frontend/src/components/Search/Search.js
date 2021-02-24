@@ -115,13 +115,17 @@ export default class Search extends Component {
                 </InputGroup>
                 <br />
                 <SmartButton
-                  runOnClick={() =>
+                  runOnClick={async () => {
                     this.state.searchType === "Date"
-                      ? this.fetchGameDataByDate()
+                      ? await this.fetchGameDataByDate()
                       : alert(
                           this.state.searchType + " " + this.state.searchTeam
-                        )
-                  }
+                        );
+                    if (this.state.games.length === undefined) {
+                      return false;
+                    }
+                    return true;
+                  }}
                 >
                   Go
                 </SmartButton>
