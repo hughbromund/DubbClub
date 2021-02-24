@@ -24,26 +24,15 @@ export default class GameInfoCard extends Component {
   }
   render() {
     var confidenceString = "";
-    if (
-      this.props.predictionConfidence <= 100 &&
-      this.props.predictionConfidence >= 75
-    ) {
-      confidenceString = "Extremely Likely";
-    }
-    if (
-      this.props.predictionConfidence < 75 &&
-      this.props.predictionConfidence >= 50
-    ) {
-      confidenceString = "Very Likely";
-    }
-    if (
-      this.props.predictionConfidence < 50 &&
-      this.props.predictionConfidence > 25
-    ) {
-      confidenceString = "Likely";
-    }
+
     if (this.props.predictionConfidence <= 25) {
       confidenceString = "Leaning";
+    } else if (this.props.predictionConfidence <= 50) {
+      confidenceString = "Likely";
+    } else if (this.props.predictionConfidence <= 75) {
+      confidenceString = "Very Likely";
+    } else if (this.props.predictionConfidence <= 100) {
+      confidenceString = "Extremely Likely";
     }
 
     return (
