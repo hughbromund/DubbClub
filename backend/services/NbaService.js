@@ -23,7 +23,7 @@ exports.getBasicGameInfo = async function() {
         if (games[i].league === "standard") {
           var home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
           var away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
-          var game = {"gameId" : games[i].gameId, "date" : start.toISOString().slice(0,10),
+          var game = {"gameId" : games[i].gameId, "date" : start.toISOString().slice(0,10), "arena" : games[i].arena,
           "home" : home, "away" : away}
           result.push(game);
         }
@@ -56,7 +56,7 @@ exports.getGamesByDate = async function(date) {
       if (games[i].league === "standard") {
         let home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
         let away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
-        let game = {"gameId" : games[i].gameId, "date" : date,
+        let game = {"gameId" : games[i].gameId, "date" : date, "arena" : games[i].arena,
         "home" : home, "away" : away}
         result.push(game);
       }
@@ -85,13 +85,12 @@ exports.getRecentGamesByTeam = async function(teamId) {
     var games = res.data.api.games
     let foundGames = 0;
 
-    for(var i = 0; i < games.length; i++) {
+    for(var i = games.length - 1; i > 0; i--) {
       let gameDate = new Date(games[i].startTimeUTC);
-      if (gameDate >= start) {
-        var home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
-        var away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
-        var game = {"gameId" : games[i].gameId, "date" : start.toISOString().slice(0,10),
-        "home" : home, "away" : away}
+      if (gameDate <= start) {
+        var gameStats = await getPlayedGameStats(games[i].gameId, games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
+        var game = {"gameId" : games[i].gameId, "date" : start.toISOString().slice(0,10), "arena" : games[i].arena,
+        "home" : home, "away" : away, "gameStats" : gameStats}
         result.push(game);
         if (++foundGames == 10) {
           break;
@@ -127,3 +126,29 @@ async function getTeamStats(teamId, teamName, teamImage) {
   return team;
 }
 
+
+async function getPlayedGameStats(gameId) {
+  var options = {
+    method: 'GET',
+    url: "https://api-nba-v1.p.rapidapi.com/gameDetails/" + gameId,
+    headers: {
+      'x-rapidapi-key': config.nbaApiKey,
+      'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
+    }
+  };
+
+  let team = {}
+  let game = {}
+  try {
+    game = await axios.request(options);
+    let home = {"points" : game.api.game.hTeam.score.points, "lineScore" : game.api.game.hTeam.score.points, 
+    "leaders" : game.api.game.hTeam.score.leaders}
+    let away = {"points" : game.api.game.vTeam.score.points, "lineScore" : game.api.game.vTeam.score.points, 
+    "leaders" : game.api.game.vTeam.score.leaders}
+    team = {"home" : home, "away" : away}
+  } catch (error) {
+    console.log(error)
+  }
+
+  return team;
+}
