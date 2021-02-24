@@ -88,6 +88,8 @@ exports.getRecentGamesByTeam = async function(teamId) {
     for(var i = games.length - 1; i > 0; i--) {
       let gameDate = new Date(games[i].startTimeUTC);
       if (gameDate <= start) {
+        var home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
+        var away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
         var gameStats = await getPlayedGameStats(games[i].gameId, games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
         var game = {"gameId" : games[i].gameId, "date" : start.toISOString().slice(0,10), "arena" : games[i].arena,
         "home" : home, "away" : away, "gameStats" : gameStats}
