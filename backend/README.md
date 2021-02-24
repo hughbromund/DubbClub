@@ -13,7 +13,8 @@ JSON Format:
 [  
   {
     "gameId": "8608",  
-    "date": "2021-02-17",  
+    "date": "2021-02-17",
+    "arena": "TD Garden",  
     "home": {  
       "teamId": "2",  
       "teamName": "Boston Celtics",  
@@ -35,7 +36,7 @@ JSON Format:
   }  
 ]
 
-### /getGamesByDate
+### /getGamesByDate/:date
 
 GET  
 gets all games from the NBA from the specified date  
@@ -45,10 +46,23 @@ Status: Working
 Issues: Doesn't currently have start time, uses UTC to find games,
 
 JSON Format:  
+same as above  
+
+### /getRecentGamesByTeam/:team  
+
+GET  
+gets previous 10 games for a team  
+Requirements: some valid teamId (ex: 1, 3 etc..)
+Returns: JSON list of game info and each team's info  
+Status: Working  
+Issues: Doesn't currently have start time, uses UTC to find games,
+
+JSON Format:  
 [  
   {
     "gameId": "8608",  
-    "date": "2021-02-17",  
+    "date": "2021-02-17",
+    "arena": "TD Garden",  
     "home": {  
       "teamId": "2",  
       "teamName": "Boston Celtics",  
@@ -68,7 +82,45 @@ JSON Format:
       "place": "7"  
     }  
   }  
-]
+  "gameStats" : {  
+    "home": {  
+      "score": 100,  
+      "linescore": [  
+        "23",  
+        "40",  
+        "23",  
+        "24"  
+      ],  
+      "leaders": [  
+        {  
+          "points": "7",  
+          "playerId": "727",  
+          "name": "Jarrett Allen"  
+        },  
+        {  
+          "rebounds": "14",  
+          "playerId": "727",  
+          "name": "Jarrett Allen"  
+        },  
+        {  
+          "assists": "11",  
+          "playerId": "142",  
+          "name": "Spencer Dinwiddie"  
+        },  
+        {  
+          "points": "22",  
+          "playerId": "507",  
+          "name": "Garrett Temple"  
+        },  
+        {  
+          "assists": "4",  
+          "playerId": "1013",  
+          "name": "Theo Pinson"  
+        }  
+      ]  
+    }  
+  }  
+]  
 
 ##  Endpoints for User Accounts
 
