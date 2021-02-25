@@ -76,8 +76,8 @@ export default class Home extends Component {
               "en-US",
               DATE_OPTIONS
             )}
-            predictedWinner={"away"}
-            predictionConfidence={Math.floor(Math.random() * 100) + 1}
+            predictedWinner={Math.random() < 0.5 ? "home" : "away"}
+            predictionConfidence={Math.floor(Math.random() * 50) + 50}
             awayLogo={this.state.games[i].away.teamImage}
             homeLogo={this.state.games[i].home.teamImage}
             onClickHandler={() => {
