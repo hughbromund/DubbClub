@@ -90,8 +90,8 @@ exports.getRecentGamesByTeam = async function(teamId) {
       if (gameDate <= start) {
         var home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
         var away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
-        var gameStats = await getPlayedGameStats(games[i].gameId, games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
-        var game = {"gameId" : games[i].gameId, "date" : start.toISOString().slice(0,10), "arena" : games[i].arena,
+        var gameStats = await getPlayedGameStats(games[i].gameId)
+        var game = {"gameId" : games[i].gameId, "date" : gameDate.toISOString().slice(0,10), "arena" : games[i].arena,
         "home" : home, "away" : away, "gameStats" : gameStats}
         result.push(game);
         if (++foundGames == 10) {
@@ -140,13 +140,12 @@ async function getPlayedGameStats(gameId) {
   };
 
   let team = {}
-  let game = {}
   try {
-    game = await axios.request(options);
-    let home = {"points" : game.api.game.hTeam.score.points, "lineScore" : game.api.game.hTeam.score.points, 
-    "leaders" : game.api.game.hTeam.score.leaders}
-    let away = {"points" : game.api.game.vTeam.score.points, "lineScore" : game.api.game.vTeam.score.points, 
-    "leaders" : game.api.game.vTeam.score.leaders}
+    let res = await axios.request(options);
+    let home = {"points" : res.data.api.game[0].hTeam.score.points, "lineScore" : res.data.api.game[0].hTeam.score.linescore, 
+    "leaders" : res.data.api.game[0].hTeam.leaders}
+    let away = {"points" : res.data.api.game[0].vTeam.score.points, "lineScore" : res.data.api.game[0].vTeam.score.linescore, 
+    "leaders" : res.data.api.game[0].vTeam.leaders}
     team = {"home" : home, "away" : away}
   } catch (error) {
     console.log(error)
