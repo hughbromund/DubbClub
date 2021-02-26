@@ -5,7 +5,7 @@ const config = require(path.resolve(__dirname, "../config.json"));
 exports.getBasicGameInfo = async function() {
   var start = new Date();
   let result = [];
-  for (var i = 0; i < 1; i++) {
+  for (var i = 0; i < 3; i++) {
     var options = {
       method: 'GET',
       url: "https://api-nba-v1.p.rapidapi.com/games/date/" + start.toISOString().slice(0,10),
@@ -23,7 +23,7 @@ exports.getBasicGameInfo = async function() {
         if (games[i].league === "standard") {
           var home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
           var away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
-          var game = {"gameId" : games[i].gameId, "date" : start.toISOString().slice(0,10),
+          var game = {"gameId" : games[i].gameId, "date" : start.toISOString().slice(0,10), "arena" : games[i].arena,
           "home" : home, "away" : away}
           result.push(game);
         }
@@ -56,7 +56,7 @@ exports.getGamesByDate = async function(date) {
       if (games[i].league === "standard") {
         let home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
         let away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
-        let game = {"gameId" : games[i].gameId, "date" : date,
+        let game = {"gameId" : games[i].gameId, "date" : date, "arena" : games[i].arena,
         "home" : home, "away" : away}
         result.push(game);
       }
@@ -65,6 +65,43 @@ exports.getGamesByDate = async function(date) {
     console.log(error);
   }
 
+  return result;
+}
+
+exports.getRecentGamesByTeam = async function(teamId) {
+  var start = new Date();
+  let result = [];
+  var options = {
+    method: 'GET',
+    url: "https://api-nba-v1.p.rapidapi.com/games/teamId/" + teamId,
+    headers: {
+      'x-rapidapi-key': config.nbaApiKey,
+      'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
+    }
+  };
+
+  try {
+    let res = await axios.request(options);
+    var games = res.data.api.games
+    let foundGames = 0;
+
+    for(var i = games.length - 1; i > 0; i--) {
+      let gameDate = new Date(games[i].startTimeUTC);
+      if (gameDate <= start) {
+        var home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
+        var away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
+        var gameStats = await getPlayedGameStats(games[i].gameId)
+        var game = {"gameId" : games[i].gameId, "date" : gameDate.toISOString().slice(0,10), "arena" : games[i].arena,
+        "home" : home, "away" : away, "gameStats" : gameStats}
+        result.push(game);
+        if (++foundGames == 10) {
+          break;
+        }
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
   return result;
 }
 
@@ -91,3 +128,28 @@ async function getTeamStats(teamId, teamName, teamImage) {
   return team;
 }
 
+
+async function getPlayedGameStats(gameId) {
+  var options = {
+    method: 'GET',
+    url: "https://api-nba-v1.p.rapidapi.com/gameDetails/" + gameId,
+    headers: {
+      'x-rapidapi-key': config.nbaApiKey,
+      'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
+    }
+  };
+
+  let team = {}
+  try {
+    let res = await axios.request(options);
+    let home = {"points" : res.data.api.game[0].hTeam.score.points, "lineScore" : res.data.api.game[0].hTeam.score.linescore, 
+    "leaders" : res.data.api.game[0].hTeam.leaders}
+    let away = {"points" : res.data.api.game[0].vTeam.score.points, "lineScore" : res.data.api.game[0].vTeam.score.linescore, 
+    "leaders" : res.data.api.game[0].vTeam.leaders}
+    team = {"home" : home, "away" : away}
+  } catch (error) {
+    console.log(error)
+  }
+
+  return team;
+}
