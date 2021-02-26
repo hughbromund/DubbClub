@@ -84,6 +84,58 @@ JSON Format:
   }  
   "gameStats" : {  
     "home": {  
+      "teamId": "15",  
+      "score": 100,  
+      "linescore": [  
+        "23",  
+        "40",  
+        "23",  
+        "24"  
+      ],  
+      "leaders": [  
+        {  
+          "points": "7",  
+          "playerId": "727",  
+          "name": "Jarrett Allen"  
+        },  
+        {  
+          "rebounds": "14",  
+          "playerId": "727",  
+          "name": "Jarrett Allen"  
+        },  
+        {  
+          "assists": "11",  
+          "playerId": "142",  
+          "name": "Spencer Dinwiddie"  
+        },  
+        {  
+          "points": "22",  
+          "playerId": "507",  
+          "name": "Garrett Temple"  
+        },  
+        {  
+          "assists": "4",  
+          "playerId": "1013",  
+          "name": "Theo Pinson"  
+        }  
+      ]  
+    }  
+  }  
+]  
+
+### /getGameDetailsByGameId/:gameId  
+
+GET  
+gets game stats for specific gameId
+Requirements: some valid gameId
+Returns: JSON object with home and away game stats
+Status: Working  
+Issues: Doesn't currently have start time, uses UTC to find games,
+
+JSON Format:  
+  "gameStats" : {  
+    "home": {  
+      "teamId": "15",  
       "score": 100,  
       "linescore": [  
         "23",  
