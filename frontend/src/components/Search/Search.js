@@ -12,9 +12,11 @@ import GameInfoCard from "../GameInfoCard/GameInfoCard";
 
 import {
   GET_GAMES_BY_DATE,
+  GET_GAMES_BY_TEAM,
   DATE_OPTIONS,
   GAME_INFO_ROUTE,
 } from "../../constants/Constants";
+import { getIdByTeam, NBA_TEAM_INFO } from "../../constants/NBAConstants";
 
 export default class Search extends Component {
   constructor(props) {
@@ -27,11 +29,22 @@ export default class Search extends Component {
     };
 
     this.fetchGameDataByDate = this.fetchGameDataByDate.bind(this);
+    this.fetchGameDataByTeam = this.fetchGameDataByTeam.bind(this);
   }
 
   async fetchGameDataByDate() {
     this.setState({ games: {} });
     var res = await fetch(GET_GAMES_BY_DATE + `/${this.state.searchDate}`, {});
+    var body = await res.json();
+    this.setState({
+      games: body,
+    });
+  }
+
+  async fetchGameDataByTeam() {
+    this.setState({ games: {} });
+    const teamID = getIdByTeam(this.state.searchTeam);
+    var res = await fetch(GET_GAMES_BY_TEAM + `/${teamID}`, {});
     var body = await res.json();
     this.setState({
       games: body,
@@ -65,6 +78,16 @@ export default class Search extends Component {
       );
       cards.push(temp);
     }
+    let teams = [];
+    teams.push(
+      <option value="" selected disabled hidden>
+        Select a team...
+      </option>
+    );
+    for (const team in NBA_TEAM_INFO) {
+      let temp = <option>{team}</option>;
+      teams.push(temp);
+    }
     return (
       <div>
         <Container>
@@ -86,7 +109,10 @@ export default class Search extends Component {
                     onChange={(e) => {
                       this.setState({ searchTeam: e.target.value });
                     }}
-                  />
+                    as="select"
+                  >
+                    {teams}
+                  </FormControl>
                   <FormControl
                     type="date"
                     hidden={this.state.searchType !== "Date"}
@@ -118,9 +144,7 @@ export default class Search extends Component {
                   runOnClick={async () => {
                     this.state.searchType === "Date"
                       ? await this.fetchGameDataByDate()
-                      : alert(
-                          this.state.searchType + " " + this.state.searchTeam
-                        );
+                      : await this.fetchGameDataByTeam();
                     if (this.state.games.length === undefined) {
                       return false;
                     }

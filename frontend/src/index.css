@@ -98,6 +98,20 @@ input {
   width: 100%;
 }
 
+select {
+  border-radius: var(--border-radius) !important;
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: var(--top-color) !important;
+  border: none;
+  color: var(--text-primary) !important;
+  transition: none;
+  margin-bottom: var(--default-margin);
+  width: 100%;
+}
+
 ::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: var(--text-disabled) !important;

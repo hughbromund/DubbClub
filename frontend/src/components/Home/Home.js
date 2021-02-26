@@ -15,6 +15,7 @@ import {
 } from "../../constants/Constants";
 import classes from "./Home.module.css";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import { getColorByTeam } from "../../constants/NBAConstants";
 
 const INITIAL_STATE = {
   games: {},
@@ -86,6 +87,8 @@ export default class Home extends Component {
                 GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
               );
             }}
+            homeHex={getColorByTeam(this.state.games[i].home.teamName)}
+            awayHex={getColorByTeam(this.state.games[i].away.teamName)}
             key={i}
           />
         </Col>
