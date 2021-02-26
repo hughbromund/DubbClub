@@ -58,4 +58,7 @@ router.get("/getGamesByDate/:date", nbaController.getGamesByDate);
 //get most recent games by team
 router.get("/getRecentGamesByTeam/:team", nbaController.getRecentGamesByTeam);
 
+//get gem details by gameId
+router.get("/getGameDetailsByGameId/:gameId", nbaController.getGameDetailsByGameId);
+
 module.exports = router;
