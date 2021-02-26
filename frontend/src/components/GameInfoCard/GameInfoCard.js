@@ -210,9 +210,7 @@ export default class GameInfoCard extends Component {
           >
             <b>{this.props.gameTime}</b>
             <Expand open={this.state.expandInfo}>
-              <b>
-                <div>Venue: {this.props.venue}</div>
-              </b>
+              <div>{this.props.venue}</div>
             </Expand>
           </div>
         </div>
