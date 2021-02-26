@@ -17,7 +17,7 @@ export const NBA_TEAM_INFO = {
   },
   "Charlotte Hornets": {
     teamID: 5,
-    hexColor: "#1D1160",
+    hexColor: "#00788C",
   },
   "Chicago Bulls": {
     teamID: 6,
@@ -49,7 +49,7 @@ export const NBA_TEAM_INFO = {
   },
   "Indiana Pacers": {
     teamID: 15,
-    hexColor: "#002D62",
+    hexColor: "#FDBB30",
   },
   "LA Clippers": {
     teamID: 16,
@@ -81,7 +81,7 @@ export const NBA_TEAM_INFO = {
   },
   "New York Knicks": {
     teamID: 24,
-    hexColor: "#006BB6",
+    hexColor: "#F58426",
   },
   "Oklahoma City Thunder": {
     teamID: 25,
@@ -117,7 +117,7 @@ export const NBA_TEAM_INFO = {
   },
   "Utah Jazz": {
     teamID: 40,
-    hexColor: "#002B5C",
+    hexColor: "#00471B",
   },
   "Washington Wizards": {
     teamID: 41,
@@ -129,20 +129,19 @@ export const normalizeTeam = (str) => {
   return str.trim().toUpperCase();
 };
 
-export const getIdByTeam = (str) => {
+const getSomethingByTeam = (str, desiredValue) => {
   str = normalizeTeam(str);
   for (const team in NBA_TEAM_INFO) {
     if (str === team.toUpperCase()) {
-      return NBA_TEAM_INFO[team]["teamID"];
+      return NBA_TEAM_INFO[team][desiredValue];
     }
   }
 };
 
+export const getIdByTeam = (str) => {
+  return getSomethingByTeam(str, "teamID");
+};
+
 export const getColorByTeam = (str) => {
-  str = normalizeTeam(str);
-  for (const team in NBA_TEAM_INFO) {
-    if (str === team.toUpperCase()) {
-      return NBA_TEAM_INFO[team]["hexColor"];
-    }
-  }
+  return getSomethingByTeam(str, "hexColor");
 };
