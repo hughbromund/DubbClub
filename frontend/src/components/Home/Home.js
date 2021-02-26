@@ -92,9 +92,6 @@ export default class Home extends Component {
           />
         </Col>
       );
-      console.log(getColorByTeam(this.state.games[i].home.teamName));
-      console.log(this.state.games[i].away.teamName);
-      console.log(getColorByTeam(this.state.games[i].away.teamName));
       cards.push(temp);
     }
     return (
