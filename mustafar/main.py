@@ -315,7 +315,7 @@ def predict_nba_winner(game_id="6911"):
         output_dict["pred_winner"] = int(a_id)
 
     output_dict["confidence"] = max_conf
-    output_json = json.dumps(output_dict, indent=4)
+    # output_json = json.dumps(output_dict, indent=4)
 
     return output_dict
 
@@ -325,8 +325,8 @@ def hello_world():
     output_dict = {
         "message": "Hello, world!",
     }
-    output_json = json.dumps(output_dict, indent=4)
-    return output_json
+    # output_json = json.dumps(output_dict, indent=4)
+    return output_dict
 
 
 if __name__ == "__main__":
