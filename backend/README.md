@@ -84,6 +84,7 @@ JSON Format:
   }  
   "gameStats" : {  
     "home": {  
+      "teamId": "15",  
       "score": 100,  
       "linescore": [  
         "23",  
@@ -134,6 +135,7 @@ Issues: Doesn't currently have start time, uses UTC to find games,
 JSON Format:  
   "gameStats" : {  
     "home": {  
+      "teamId": "15",  
       "score": 100,  
       "linescore": [  
         "23",  
