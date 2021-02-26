@@ -80,6 +80,7 @@ export default class Home extends Component {
             predictionConfidence={Math.floor(Math.random() * 50) + 50}
             awayLogo={this.state.games[i].away.teamImage}
             homeLogo={this.state.games[i].home.teamImage}
+            venue={this.state.games[i].arena}
             onClickHandler={() => {
               this.props.history.push(
                 GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
