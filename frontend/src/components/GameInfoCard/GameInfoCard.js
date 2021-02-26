@@ -60,9 +60,6 @@ export default class GameInfoCard extends Component {
   }
 
   render() {
-    var homeHex = "#E13A3E";
-    var awayHex = "#008248";
-
     return (
       <div>
         <div className={classes.wrapper}>
@@ -131,16 +128,19 @@ export default class GameInfoCard extends Component {
                       Math.abs(this.props.predictionConfidence) + "% Confidence"
                     }
                     segmentColors={[
-                      this.hexAlphaConverter(awayHex, 1),
-                      this.hexAlphaConverter(awayHex, 0.6),
-                      this.hexAlphaConverter(awayHex, 0.4),
+                      this.hexAlphaConverter(this.props.awayHex, 1),
+                      this.hexAlphaConverter(this.props.awayHex, 0.6),
+                      this.hexAlphaConverter(this.props.awayHex, 0.4),
                       this.hexAlphaConverter(
-                        this.hexMedianValue(homeHex, awayHex),
+                        this.hexMedianValue(
+                          this.props.homeHex,
+                          this.props.awayHex
+                        ),
                         0.2
                       ),
-                      this.hexAlphaConverter(homeHex, 0.4),
-                      this.hexAlphaConverter(homeHex, 0.6),
-                      this.hexAlphaConverter(homeHex, 1),
+                      this.hexAlphaConverter(this.props.homeHex, 0.4),
+                      this.hexAlphaConverter(this.props.homeHex, 0.6),
+                      this.hexAlphaConverter(this.props.homeHex, 1),
                     ]}
                     customSegmentLabels={[
                       {
@@ -210,7 +210,9 @@ export default class GameInfoCard extends Component {
           >
             <b>{this.props.gameTime}</b>
             <Expand open={this.state.expandInfo}>
-              <div>Some more content can go here</div>
+              <b>
+                <div>Venue: {this.props.venue}</div>
+              </b>
             </Expand>
           </div>
         </div>
