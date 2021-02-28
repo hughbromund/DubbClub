@@ -7,6 +7,10 @@ const userSchema = new Schema({
     username: { type: String, unique: true, required: true},
     email: { type: String, unique: true, required: true},
     password: { type: String, unique: false, required: true},
+    resetPassword: {
+        hash: { type: String, unique: false, required: false, default: ""},
+        expireDate: {type: Date, unique: false, required: false, default: new Date()}
+    },
     favoriteTeams: {
         NBA: {type: Array, unique: false, required: true, default: []},
         NFL: {type: Array, unique: false, required: true, default: []},

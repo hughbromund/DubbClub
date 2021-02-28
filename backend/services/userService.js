@@ -4,6 +4,16 @@ const config = require(path.resolve(__dirname, "../config.json"));
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+var crypto = require("crypto")
+var nodemailer = require("nodemailer")
+
+const transporter = nodemailer.createTransport({
+  service: config.email_service,
+  auth: {
+    user: config.email_user,
+    pass: config.email_pass
+  }
+})
 
 
 const expireSeconds = 86400;
@@ -125,12 +135,86 @@ exports.login = (req, res) => {
     })
   }
 
+  exports.resetPasswordEmail = (req, res) => {
+    var username = req.body.username
+
+    var newHash = crypto.randomBytes(20).toString('hex')
+    var expireDate = new Date()
+    expireDate.setHours(expireDate.getHours() + 1)
+
+    User.findOneAndUpdate({"$or": [{username: username}, {email: username}]}, {"resetPassword.hash": newHash, "resetPassword.expireDate": expireDate})
+    .exec((err, user) => {
+      if (err) {
+        return res.status(500).send({ err: err, message: "Database failure." });
+      }
+
+      if (!user) {
+        return res.status(200).send({ message: "If the user exists, the email was sent" });
+      }
+
+      const mailOptions = {
+        from: config.email_user,
+        to: user.email,
+        subject: "Password Reset",
+        text: "Please go to: https://dubb.club/resetPassword/" + newHash + " to reset your password. This link will expire in 1 hour."
+      } 
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          return res.status(500).send({ err: error, message: "Email failure." });
+        }
+
+        return res.status(200).send({ message: "If the user exists, the email was sent" })
+      })
+    })
+  }
+
+  exports.resetPassword = (req, res) => {
+    var hash = req.body.hash
+    var newPassword = req.body.password
+    var expireDate = new Date()
+    var sent = false
+
+    User.findOne({"resetPassword.hash": hash})
+    .exec((err, user) => {
+      if (err) {
+        sent = true;
+        return res.status(500).send({ err: err, message: "Database failure." });
+      }
+
+      if (!user) {
+        sent = true;
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      if(user.resetPassword.expireDate < expireDate) {
+        sent = true;
+        return res.status(401).send({ message: "Reset link expired!" })
+      }
+
+      User.updateOne({"resetPassword.hash": hash}, {password: bcrypt.hashSync(newPassword, 8), "resetPassword.expireDate": expireDate.toISOString()})
+      .exec((err, user) => {
+        if (err) {
+          return res.status(500).send({ err: err, message: "Database failure." });
+        }
+
+        if (!user) {
+          return res.status(404).send({ message: "User Not found." });
+        }
+
+        return res.status(200).send({message: "Successfully Updated Password."})
+      })
+    })
+
+    
+  }
+
   exports.favoriteTeam = (req, res) => {
     //teamId
     //league
     var listName = "favoriteTeams." + req.body.league 
 
-    User.updateOne({_id: req.userId}, {"$push": {[listName]: req.body.teamId}})
+    User.updateOne({_id: req.userId}, {"$addToSet": {[listName]: req.body.teamId}})
     .exec((err, user) => {
 
       if (err) {
