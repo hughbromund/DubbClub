@@ -26,10 +26,10 @@ const nbaController = require(path.resolve(
     "../controllers/NbaController"
 ));
 
-router.use(function timeLog(req, res, next) {
-    console.log("Time: ", Date.now());
-    next();
-});
+const mustafarController = require(path.resolve(
+    __dirname,
+    "../controllers/MustafarController"
+));
 
 //User routes
 //NOTE: for any request requiring user auth, must call authJWT.verifyToken first
@@ -60,7 +60,10 @@ router.get("/getGamesByDate/:date", nbaController.getGamesByDate);
 //get most recent games by team
 router.get("/getRecentGamesByTeam/:team", nbaController.getRecentGamesByTeam);
 
-//get gem details by gameId
+//get game details by gameId
 router.get("/getGameDetailsByGameId/:gameId", nbaController.getGameDetailsByGameId);
+
+//get game details by gameId
+router.get("/updateDbWithPredictions", mustafarController.updateDbWithPredictions);
 
 module.exports = router;

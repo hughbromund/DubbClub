@@ -19,11 +19,11 @@ exports.getBasicGameInfo = async function() {
       let res = await axios.request(options);
       var games = res.data.api.games
 
-      for(var i = 0; i < games.length; i++) {
-        if (games[i].league === "standard") {
-          var home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
-          var away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
-          var game = {"gameId" : games[i].gameId, "date" : start.toISOString().slice(0,10), "arena" : games[i].arena,
+      for(var j = 0; j < games.length; j++) {
+        if (games[j].league === "standard") {
+          var home = await getTeamStats(games[j].hTeam.teamId, games[j].hTeam.fullName, games[j].hTeam.logo)
+          var away = await getTeamStats(games[j].vTeam.teamId, games[j].vTeam.fullName, games[j].vTeam.logo)
+          var game = {"gameId" : games[j].gameId, "date" : start.toISOString().slice(0,10), "arena" : games[j].arena,
           "home" : home, "away" : away}
           result.push(game);
         }
@@ -33,6 +33,35 @@ exports.getBasicGameInfo = async function() {
     }
     
     start.setDate(start.getDate() + 1);
+  }
+  return result;
+}
+
+exports.getUpcomingGameIds = async function() {
+  var start = new Date();
+  let result = [];
+  let requests = [];
+  for (var i = 0; i < 3; i++) {
+    var options = {
+      method: 'GET',
+      url: "https://api-nba-v1.p.rapidapi.com/games/date/" + start.toISOString().slice(0,10),
+      headers: {
+        'x-rapidapi-key': config.nbaApiKey,
+        'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
+      }
+    };
+    requests.push(axios.request(options))
+    start.setDate(start.getDate() + 1);
+  }
+
+  let finishedRequests = await Promise.all(requests)
+
+  for (var i = 0; i < finishedRequests.length; i++) {
+    for (var j = 0; j < finishedRequests[i].data.api.games.length; j++) {
+      if (finishedRequests[i].data.api.games[j].league === "standard") {
+        result.push(finishedRequests[i].data.api.games[j].gameId);
+      }
+    }
   }
   return result;
 }
