@@ -5,9 +5,15 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import Button from "../Button/Button";
+import SmartButton from "../SmartButton/SmartButton";
 import classes from "./GameInfoCard.module.css";
 import Expand from "react-expand-animated";
 import ReactSpeedometer from "react-d3-speedometer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AuthContext from "../../contexts/AuthContext.js";
+
+import { FAVORITE_TEAM, UNFAVORITE_TEAM } from "../../constants/Constants";
+
 const rgbHex = require("rgb-hex");
 const hexRgb = require("hex-rgb");
 
@@ -22,9 +28,10 @@ Number.prototype.map = function (in_min, in_max, out_min, out_max) {
 export default class GameInfoCard extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       expandInfo: false,
+      awayFavorite: false,
+      homeFavorite: false,
     };
 
     this.hexAlphaConverter = this.hexAlphaConverter.bind(this);
@@ -58,6 +65,55 @@ export default class GameInfoCard extends Component {
       )
     );
   }
+  componentDidMount() {
+    // console.log(this.props);
+    // console.log(this.props.awayTeam);
+    // console.log(this.context.isFollowedTeam("NBA", this.props.awayId));
+  }
+
+  async favoriteTeam(teamId) {
+    var res = await fetch(FAVORITE_TEAM, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": this.context.token,
+      },
+      body: JSON.stringify({
+        league: "NBA",
+        teamId: teamId,
+      }),
+    });
+    // console.log(res);
+    if (res.status !== 200) {
+      return false;
+    }
+
+    await this.context.refreshFavoriteTeams();
+    return true;
+  }
+
+  async unFavoriteTeam(teamId) {
+    var res = await fetch(UNFAVORITE_TEAM, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": this.context.token,
+      },
+      body: JSON.stringify({
+        league: "NBA",
+        teamId: teamId,
+      }),
+    });
+    // console.log(res);
+    if (res.status !== 200) {
+      return false;
+    }
+
+    await this.context.refreshFavoriteTeams();
+    return true;
+  }
 
   render() {
     return (
@@ -67,7 +123,15 @@ export default class GameInfoCard extends Component {
             <Container>
               <Row xs={1} sm={2} md={2} lg={2} xl={2}>
                 <Col>
-                  <div className={classes.background}>
+                  <div
+                    className={classes.background}
+                    onMouseEnter={() => {
+                      this.setState({ awayFavorite: true });
+                    }}
+                    onMouseLeave={() => {
+                      this.setState({ awayFavorite: false });
+                    }}
+                  >
                     <div
                       className={[
                         classes.centered,
@@ -76,10 +140,49 @@ export default class GameInfoCard extends Component {
                     >
                       <img src={this.props.awayLogo} class={classes.logo} />
                     </div>
+                    <Expand
+                      open={this.state.awayFavorite && this.context.isLoggedIn}
+                    >
+                      <div
+                        hidden={this.context.isFollowedTeam(
+                          "NBA",
+                          this.props.awayId
+                        )}
+                      >
+                        <SmartButton
+                          runOnClick={() => {
+                            return this.favoriteTeam(this.props.awayId);
+                          }}
+                        >
+                          Favorite
+                        </SmartButton>
+                      </div>
+                      <div
+                        hidden={
+                          !this.context.isFollowedTeam("NBA", this.props.awayId)
+                        }
+                      >
+                        <SmartButton
+                          runOnClick={() => {
+                            return this.unFavoriteTeam(this.props.awayId);
+                          }}
+                        >
+                          Remove Favorite
+                        </SmartButton>
+                      </div>
+                    </Expand>
                   </div>
                 </Col>
                 <Col>
-                  <div className={classes.background}>
+                  <div
+                    className={classes.background}
+                    onMouseEnter={() => {
+                      this.setState({ homeFavorite: true });
+                    }}
+                    onMouseLeave={() => {
+                      this.setState({ homeFavorite: false });
+                    }}
+                  >
                     <div
                       className={[
                         classes.centered,
@@ -88,6 +191,37 @@ export default class GameInfoCard extends Component {
                     >
                       <img src={this.props.homeLogo} class={classes.logo} />
                     </div>
+                    <Expand
+                      open={this.state.homeFavorite && this.context.isLoggedIn}
+                    >
+                      <div
+                        hidden={this.context.isFollowedTeam(
+                          "NBA",
+                          this.props.homeId
+                        )}
+                      >
+                        <SmartButton
+                          runOnClick={() => {
+                            return this.favoriteTeam(this.props.homeId);
+                          }}
+                        >
+                          Favorite
+                        </SmartButton>
+                      </div>
+                      <div
+                        hidden={
+                          !this.context.isFollowedTeam("NBA", this.props.homeId)
+                        }
+                      >
+                        <SmartButton
+                          runOnClick={() => {
+                            return this.unFavoriteTeam(this.props.homeId);
+                          }}
+                        >
+                          Remove Favorite
+                        </SmartButton>
+                      </div>
+                    </Expand>
                   </div>
                 </Col>
               </Row>
@@ -218,3 +352,4 @@ export default class GameInfoCard extends Component {
     );
   }
 }
+GameInfoCard.contextType = AuthContext;

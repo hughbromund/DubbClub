@@ -27,10 +27,10 @@
   border-radius: var(--border-radius);
   transition: var(--default-transition);
 }
-.background:hover {
+/* .background:hover {
   transition: var(--default-transition);
   background-color: var(--primary-color);
-}
+} */
 .outer {
   margin: 0px;
 }

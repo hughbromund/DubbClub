@@ -56,6 +56,7 @@ export default class Login extends Component {
                   required
                   placeholder="Email or Username"
                   type="text"
+                  autoCapitalize="none"
                   onChange={(e) => {
                     this.setState({
                       username: e.target.value,

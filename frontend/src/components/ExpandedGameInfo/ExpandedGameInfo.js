@@ -7,6 +7,7 @@ import classes from "./ExpandedGameInfo.module.css";
 import BullsLogo from "../../assets/BullsLogoTest.png";
 import KnicksLogo from "../../assets/KnicksLogoTest.png";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
+import { getColorByTeam } from "../../constants/NBAConstants";
 
 export default class ExpandedGameInfo extends Component {
   render() {
@@ -26,6 +27,9 @@ export default class ExpandedGameInfo extends Component {
                   homeLogo={KnicksLogo}
                   onClickHandler={null}
                   className={classes.mainCard}
+                  homeHex={"#F58426"}
+                  awayHex={"#F58426"}
+                  venue={"Bankers Life Fieldhouse"}
                 />
               </div>
             </Col>
