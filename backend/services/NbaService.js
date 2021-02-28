@@ -4,6 +4,7 @@ const config = require(path.resolve(__dirname, "../config.json"));
 
 exports.getBasicGameInfo = async function() {
   var start = new Date();
+  var currTime = new Date();
   let result = [];
   for (var i = 0; i < 3; i++) {
     var options = {
@@ -19,8 +20,9 @@ exports.getBasicGameInfo = async function() {
       let res = await axios.request(options);
       var games = res.data.api.games
 
-      for(var j = 0; j < games.length; j++) {
-        if (games[j].league === "standard") {
+      for (var j = 0; j < games.length; j++) {
+        let gameDate = new Date(games[j].startTimeUTC);
+        if (games[j].league === "standard" && gameDate > currTime) {
           var home = await getTeamStats(games[j].hTeam.teamId, games[j].hTeam.fullName, games[j].hTeam.logo)
           var away = await getTeamStats(games[j].vTeam.teamId, games[j].vTeam.fullName, games[j].vTeam.logo)
           var game = {"gameId" : games[j].gameId, "date" : start.toISOString().slice(0,10), "arena" : games[j].arena,
@@ -55,10 +57,13 @@ exports.getUpcomingGameIds = async function() {
   }
 
   let finishedRequests = await Promise.all(requests)
+  start = Date.now()
 
   for (var i = 0; i < finishedRequests.length; i++) {
     for (var j = 0; j < finishedRequests[i].data.api.games.length; j++) {
-      if (finishedRequests[i].data.api.games[j].league === "standard") {
+      let gameDate = new Date(finishedRequests[i].data.api.games[j].startTimeUTC);
+      if (finishedRequests[i].data.api.games[j].league === "standard" &&
+      gameDate > start) {
         result.push(finishedRequests[i].data.api.games[j].gameId);
       }
     }

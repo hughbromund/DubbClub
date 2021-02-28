@@ -1,9 +1,17 @@
 const path = require("path");
 const axios = require("axios");
 
-exports.getMustafarPredictions = async function() {
-    let url = "https://mustafar.dubb.club/predictnbawin/" + 8705
-    let res = await axios.get(url) 
-    console.log(res.data)
-    return res.data   
+//async not working with mustafar
+exports.getMustafarPredictions = async function(gameIds) {
+    let results = []
+
+    for (var i = 0; i < gameIds.length; i++) {
+        let url = "https://mustafar.dubb.club/predictnbawin/" + gameIds[i]
+        console.log(url)
+        let res = await axios.get(url)
+        console.log(res.data)
+        results.push(res.data)
+    }
+
+    return results
 }

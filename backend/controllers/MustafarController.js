@@ -6,13 +6,9 @@ var mustafarService = require(path.resolve(__dirname, "../services/mustafarServi
 
 exports.updateDbWithPredictions = async function (req, res, next) {
     try {
-        var time = new Date().getTime()
         let upcoming = await nbaService.getUpcomingGameIds();
-        var elapsed = new Date().getTime() - time;
-        console.log(elapsed)
-        console.log(upcoming)
         //let result = await mustafarService.getMustafarPredictions(upcoming);
-        return res.status(200).json([]);
+        return res.status(200).json(upcoming);
       } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
