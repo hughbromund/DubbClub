@@ -35,6 +35,14 @@ exports.changeEmail = async function (req, res, next) {
     UserService.changeEmail(req, res);
 }
 
+exports.resetPassword = async function (req, res, next) {
+    UserService.resetPassword(req, res);
+}
+
+exports.resetPasswordEmail = async function (req, res, next) {
+    UserService.resetPasswordEmail(req, res);
+}
+
 exports.favoriteTeam = async function (req, res, next) {
     UserService.favoriteTeam(req, res);
 }

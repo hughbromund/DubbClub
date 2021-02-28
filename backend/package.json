@@ -21,9 +21,11 @@
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.15",
+    "nodemailer": "^6.5.0",
     "path": "^0.12.7",
     "request": "^2.88.2"
   }

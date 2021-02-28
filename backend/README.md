@@ -37,9 +37,48 @@ JSON Format:
 
 ##  Endpoints for User Accounts
 
-### api/user/favoriteteam
+
+### /api/user/resetPasswordEmail
 
 POST
+Sends a reset password email with link
+Requirements: username or email in username field
+Returns: success/failure message  
+Status: Working
+
+JSON Request Format:
+{
+  "username": "peyton",
+}
+
+JSON Result Format:
+{
+  "message": "If the user exists, the email was sent"
+}
+
+### /api/user/resetPassword
+
+POST
+resets user password
+Requirements: hash from link, new password
+Returns: success/failure message  
+Status: Working
+
+JSON Request Format:
+{
+  "hash": "dfsfsdf3234sdf",
+  "password": "supersecret",
+}
+
+JSON Result Format:
+{
+  "message": "Successfully Updated Password!"
+}
+
+### /api/user/favoriteteam
+
+POST
+favorites team for user
 Requirements: JWT auth token, league and teamId  
 Returns: success/failure message  
 Status: working for NBA, NFL, MLB
@@ -55,9 +94,10 @@ JSON Result Format:
   "message": "Successfully favorited team!"
 }
 
-### api/user/unfavoriteteam
+### /api/user/unfavoriteteam
 
 POST
+unfavorites team for user
 Requirements: JWT auth token, league and teamId  
 Returns: success/failure message  
 Status: working for NBA, NFL, MLB
@@ -74,9 +114,10 @@ JSON Result Format:
   "message": "Successfully unfavorited team!"
 }
 
-### api/user/favoriteteamlist
+### /api/user/favoriteteamlist
 
 GET
+Gets list of favorite teams from each league for user
 Requirements: JWT auth token 
 Returns: list of favorite NBA, NFL, NBA teams, success/failure message  
 Status: working for NBA, NFL, MLB
