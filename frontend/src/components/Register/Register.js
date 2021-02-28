@@ -67,6 +67,7 @@ export default class Register extends Component {
                   required
                   placeholder="Username"
                   type="text"
+                  autoCapitalize="none"
                   onChange={(e) => {
                     this.setState({
                       username: e.target.value,

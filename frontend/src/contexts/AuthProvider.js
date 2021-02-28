@@ -1,7 +1,12 @@
 import AuthContext from "./AuthContext";
 import React, { Component } from "react";
 
-import { REFRESH_TOKEN, TOKEN_KEY, USERNAME_KEY } from "../constants/Constants";
+import {
+  REFRESH_TOKEN,
+  TOKEN_KEY,
+  USERNAME_KEY,
+  GET_FAVORITE_TEAMS_LIST,
+} from "../constants/Constants";
 // Attempt to refresh the token 10000ms (10s) before it expires
 const TOKEN_REFRESH_MARGIN = 10000;
 
@@ -16,8 +21,27 @@ export default class AuthProvider extends Component {
       isLoggedIn: false,
       username: "",
       token: null,
+      favoriteTeams: null,
     };
     this.refreshToken = this.refreshToken.bind(this);
+  }
+
+  async getFavoriteTeams(token) {
+    var res = await fetch(GET_FAVORITE_TEAMS_LIST, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "x-access-token": token,
+      },
+    });
+
+    var body = await res.json();
+    // console.log(body.favoriteTeams);
+    this.setState({
+      favoriteTeams: body.favoriteTeams,
+    });
+
+    return;
   }
 
   async refreshToken() {
@@ -67,6 +91,22 @@ export default class AuthProvider extends Component {
           isLoggedIn: this.state.isLoggedIn,
           username: this.state.username,
           token: this.state.token,
+          refreshFavoriteTeams: async () => {
+            await this.getFavoriteTeams(this.state.token);
+            return;
+          },
+          isFollowedTeam: (league, teamId) => {
+            if (this.state.favoriteTeams === null) {
+              return false;
+            }
+            if (this.state.favoriteTeams[league] === undefined) {
+              return false;
+            }
+
+            var teams = this.state.favoriteTeams[league];
+            // console.log(teams);
+            return teams.includes(teamId);
+          },
           logout: () => {
             localStorage.removeItem(TOKEN_KEY);
             localStorage.removeItem(USERNAME_KEY);
@@ -76,6 +116,7 @@ export default class AuthProvider extends Component {
           login: async (expiresIn, username, accessToken) => {
             // console.log(expiresIn);
             this.tokenExpireTime = expiresIn;
+            await this.getFavoriteTeams(accessToken);
             this.setState({
               isLoggedIn: true,
               username: username,
@@ -125,6 +166,8 @@ export default class AuthProvider extends Component {
 
             // We had a token, and it works, but now we refreshed it
             var body = await res.json();
+
+            await this.getFavoriteTeams(body.accessToken);
             // localStorage.removeItem(TOKEN_KEY);
             localStorage.setItem(TOKEN_KEY, body.accessToken);
             this.setState({

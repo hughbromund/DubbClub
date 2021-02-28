@@ -143,5 +143,9 @@ export const getIdByTeam = (str) => {
 };
 
 export const getColorByTeam = (str) => {
-  return getSomethingByTeam(str, "hexColor");
+  var hexColor = getSomethingByTeam(str, "hexColor");
+  if (hexColor === undefined) {
+    return "#000000";
+  }
+  return hexColor;
 };
