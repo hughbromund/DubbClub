@@ -20,10 +20,10 @@ const gameSchema = new Schema({
             leaders: { type: Number, unique: true, required: true}
         },
         away: {
-            teamId: { type: Number, unique: true, required: true},
-            score: { type: Number, unique: true, required: true},
-            lineScore: { any: Object, unique: true, required: true},
-            leaders: { any: Object, unique: true, required: true}
+            teamId: { type: Number, unique: true, required: true, default: []},
+            score: { type: Number, unique: true, required: true, default: []},
+            lineScore: { any: Array, unique: true, required: true, default: []},
+            leaders: { any: Array, unique: true, required: true, default: []}
         }
     }
 }, { collection: "Game"})
