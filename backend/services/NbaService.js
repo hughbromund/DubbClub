@@ -4,8 +4,9 @@ const config = require(path.resolve(__dirname, "../config.json"));
 
 exports.getBasicGameInfo = async function() {
   var start = new Date();
-  var currTime = new Date();
   let result = [];
+
+  let requests = [];
   for (var i = 0; i < 3; i++) {
     var options = {
       method: 'GET',
@@ -15,26 +16,25 @@ exports.getBasicGameInfo = async function() {
         'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
       }
     };
-
-    try {
-      let res = await axios.request(options);
-      var games = res.data.api.games
-
-      for (var j = 0; j < games.length; j++) {
-        let gameDate = new Date(games[j].startTimeUTC);
-        if (games[j].league === "standard" && gameDate > currTime) {
-          var home = await getTeamStats(games[j].hTeam.teamId, games[j].hTeam.fullName, games[j].hTeam.logo)
-          var away = await getTeamStats(games[j].vTeam.teamId, games[j].vTeam.fullName, games[j].vTeam.logo)
-          var game = {"gameId" : games[j].gameId, "date" : games[j].startTimeUTC, "arena" : games[j].arena,
-          "home" : home, "away" : away}
-          result.push(game);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    
+    requests.push(axios.request(options))
     start.setDate(start.getDate() + 1);
+  }
+
+  let finishedRequests = await Promise.all(requests)
+  start = Date.now()
+
+  for (var i = 0; i < finishedRequests.length; i++) {
+    for (var j = 0; j < finishedRequests[i].data.api.games.length; j++) {
+      let currGame = finishedRequests[i].data.api.games[j]
+      let gameDate = new Date(currGame.startTimeUTC);
+      if (currGame.league === "standard" && gameDate > start) {
+        var home = await getTeamStats(currGame.hTeam.teamId, currGame.hTeam.fullName, currGame.hTeam.logo)
+        var away = await getTeamStats(currGame.vTeam.teamId, currGame.vTeam.fullName, currGame.vTeam.logo)
+        var game = {"gameId" : currGame.gameId, "date" : currGame.startTimeUTC, "arena" : currGame.arena,
+        "home" : home, "away" : away}
+        result.push(game);
+      }
+    } 
   }
   return result;
 }

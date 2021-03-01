@@ -1,6 +1,8 @@
 const path = require("path");
 const axios = require("axios");
 
+const config = require(path.resolve(__dirname, "../config.json"));
+
 //async not working with mustafar
 exports.getMustafarPredictions = async function(gameIds) {
     let results = []
@@ -14,4 +16,9 @@ exports.getMustafarPredictions = async function(gameIds) {
     }
 
     return results
+}
+
+exports.getMustafarPredictions = async function(gameIds) {
+    
+  
 }
