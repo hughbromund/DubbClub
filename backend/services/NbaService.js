@@ -25,7 +25,7 @@ exports.getBasicGameInfo = async function() {
         if (games[j].league === "standard" && gameDate > currTime) {
           var home = await getTeamStats(games[j].hTeam.teamId, games[j].hTeam.fullName, games[j].hTeam.logo)
           var away = await getTeamStats(games[j].vTeam.teamId, games[j].vTeam.fullName, games[j].vTeam.logo)
-          var game = {"gameId" : games[j].gameId, "date" : start.toISOString().slice(0,10), "arena" : games[j].arena,
+          var game = {"gameId" : games[j].gameId, "date" : games[j].startTimeUTC, "arena" : games[j].arena,
           "home" : home, "away" : away}
           result.push(game);
         }
@@ -90,7 +90,7 @@ exports.getGamesByDate = async function(date) {
       if (games[i].league === "standard") {
         let home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
         let away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
-        let game = {"gameId" : games[i].gameId, "date" : date, "arena" : games[i].arena,
+        let game = {"gameId" : games[i].gameId, "date" : games[i].startTimeUTC, "arena" : games[i].arena,
         "home" : home, "away" : away}
         result.push(game);
       }
@@ -125,7 +125,7 @@ exports.getRecentGamesByTeam = async function(teamId) {
         var home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
         var away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
         var gameStats = await getPlayedGameStats(games[i].gameId)
-        var game = {"gameId" : games[i].gameId, "date" : gameDate.toISOString().slice(0,10), "arena" : games[i].arena,
+        var game = {"gameId" : games[i].gameId, "date" : games[i].startTimeUTC, "arena" : games[i].arena,
         "home" : home, "away" : away, "gameStats" : gameStats}
         result.push(game);
         if (++foundGames == 10) {
