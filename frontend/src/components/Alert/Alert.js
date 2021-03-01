@@ -4,6 +4,10 @@ import classes from "./Alert.module.css";
 
 export default class Alert extends Component {
   render() {
-    return <div className={classes.Alert}>{this.props.children}</div>;
+    if (this.props.variant === "success") {
+      return <div className={classes.AlertSuccess}>{this.props.children}</div>;
+    } else {
+      return <div className={classes.Alert}>{this.props.children}</div>;
+    }
   }
 }

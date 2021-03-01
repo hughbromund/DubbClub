@@ -14,7 +14,13 @@ import Expand from "react-expand-animated";
 
 import classes from "./Login.module.css";
 
-import { LOGIN, LOGIN_ROUTE, ACCOUNT_ROUTE } from "../../constants/Constants";
+import {
+  LOGIN,
+  LOGIN_ROUTE,
+  ACCOUNT_ROUTE,
+  RESET_PASSWORD_ROUTE,
+  REGISTER_ROUTE,
+} from "../../constants/Constants";
 
 export default class Login extends Component {
   constructor(props) {
@@ -35,7 +41,7 @@ export default class Login extends Component {
         <Container className={classes.Login}>
           <div>
             <div className={classes.logoAlign}>
-              <img alt="" src={logo} width="75" />
+              <img alt="Dubb Club Logo" src={logo} width="75" />
               <br />
               <h4 className={classes.Header}>
                 <b>Sign In to Dubb Club</b>
@@ -132,10 +138,24 @@ export default class Login extends Component {
             <div className={classes.buttonGroup}>
               <Row>
                 <Col>
-                  <Button variant="outline">Forgot Password</Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      this.props.history.push(RESET_PASSWORD_ROUTE);
+                    }}
+                  >
+                    Forgot Password
+                  </Button>
                 </Col>
                 <Col>
-                  <Button variant="outline">Create an Account</Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      this.props.history.push(REGISTER_ROUTE);
+                    }}
+                  >
+                    Create an Account
+                  </Button>
                 </Col>
               </Row>
             </div>
