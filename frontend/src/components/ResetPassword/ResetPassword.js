@@ -71,7 +71,7 @@ export default class ResetPassword extends Component {
 
                   <br />
                   <br />
-                  {this.state.username}
+
                   <div className={classes.ButtonAlign}>
                     <SmartButton
                       disabled={this.state.username === ""}
@@ -175,7 +175,6 @@ export default class ResetPassword extends Component {
 
                     <br />
                     <br />
-                    {this.state.username}
                     <div className={classes.ButtonAlign}>
                       <SmartButton
                         disabled={
