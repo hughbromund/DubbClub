@@ -45,65 +45,66 @@ export default class Speedometer extends Component {
 
   render() {
     return (
-      <div>
-        <ReactSpeedometer
-          value={
-            this.props.predictedWinner === "away"
-              ? this.props.predictionConfidence.map(50, 100, 0, 100) * -1
-              : this.props.predictionConfidence.map(50, 100, 0, 100)
-          }
-          minValue={-100}
-          maxValue={100}
-          segments={7}
-          needleColor={"white"}
-          ringWidth={10}
-          currentValueText={
-            Math.abs(this.props.predictionConfidence) + "% Confidence"
-          }
-          segmentColors={[
-            this.hexAlphaConverter(this.props.awayHex, 1),
-            this.hexAlphaConverter(this.props.awayHex, 0.6),
-            this.hexAlphaConverter(this.props.awayHex, 0.4),
-            this.hexAlphaConverter(
-              this.hexMedianValue(this.props.homeHex, this.props.awayHex),
-              0.2
-            ),
-            this.hexAlphaConverter(this.props.homeHex, 0.4),
-            this.hexAlphaConverter(this.props.homeHex, 0.6),
-            this.hexAlphaConverter(this.props.homeHex, 1),
-          ]}
-          customSegmentLabels={[
-            {
-              text: "100%",
-              position: "OUTSIDE",
-            },
-            {
-              text: "",
-              position: "OUTSIDE",
-            },
-            {
-              text: "",
-              position: "OUTSIDE",
-            },
-            {
-              text: "50%",
-              position: "OUTSIDE",
-            },
-            {
-              text: "",
-              position: "OUTSIDE",
-            },
-            {
-              text: "",
-              position: "OUTSIDE",
-            },
-            {
-              text: "100%",
-              position: "OUTSIDE",
-            },
-          ]}
-        />
-      </div>
+      <ReactSpeedometer
+        value={
+          this.props.predictedWinner === "away"
+            ? this.props.predictionConfidence.map(50, 100, 0, 100) * -1
+            : this.props.predictionConfidence.map(50, 100, 0, 100)
+        }
+        minValue={-100}
+        maxValue={100}
+        segments={7}
+        needleColor={"white"}
+        ringWidth={10}
+        currentValueText={
+          Math.abs(this.props.predictionConfidence) + "% Confidence"
+        }
+        fluidWidth={this.props.fluidWidth}
+        width={this.props.width}
+        height={this.props.height}
+        segmentColors={[
+          this.hexAlphaConverter(this.props.awayHex, 1),
+          this.hexAlphaConverter(this.props.awayHex, 0.6),
+          this.hexAlphaConverter(this.props.awayHex, 0.4),
+          this.hexAlphaConverter(
+            this.hexMedianValue(this.props.homeHex, this.props.awayHex),
+            0.2
+          ),
+          this.hexAlphaConverter(this.props.homeHex, 0.4),
+          this.hexAlphaConverter(this.props.homeHex, 0.6),
+          this.hexAlphaConverter(this.props.homeHex, 1),
+        ]}
+        customSegmentLabels={[
+          {
+            text: "100%",
+            position: "OUTSIDE",
+          },
+          {
+            text: "",
+            position: "OUTSIDE",
+          },
+          {
+            text: "",
+            position: "OUTSIDE",
+          },
+          {
+            text: "50%",
+            position: "OUTSIDE",
+          },
+          {
+            text: "",
+            position: "OUTSIDE",
+          },
+          {
+            text: "",
+            position: "OUTSIDE",
+          },
+          {
+            text: "100%",
+            position: "OUTSIDE",
+          },
+        ]}
+      />
     );
   }
 }

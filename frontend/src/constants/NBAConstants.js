@@ -149,3 +149,12 @@ export const getColorByTeam = (str) => {
   }
   return hexColor;
 };
+
+export const getTeamByID = (id) => {
+  for (const team in NBA_TEAM_INFO) {
+    if (id === NBA_TEAM_INFO[team]["teamID"]) {
+      return team;
+    }
+  }
+  return 0;
+};

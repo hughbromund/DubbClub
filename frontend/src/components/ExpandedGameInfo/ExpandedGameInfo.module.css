@@ -15,3 +15,9 @@
 .bottomCard {
   height: 100%;
 }
+
+.speedometer {
+  text-align: center;
+  margin: 0 auto;
+  margin-bottom: -100px;
+}
