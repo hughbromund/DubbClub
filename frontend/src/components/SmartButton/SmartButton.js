@@ -1,9 +1,7 @@
-import React, { Component } from "react";
-import Button from "../Button/Button";
-import Spinner from "react-bootstrap/Spinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import classes from "./SmartButton.module.css";
+import React, { Component } from "react";
+import Spinner from "react-bootstrap/Spinner";
+import Button from "../Button/Button";
 
 const SUCCESS = 0;
 const ERROR = 1;

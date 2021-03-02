@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import Card from "../Card/Card";
+import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import classes from "./ExpandedGameInfo.module.css";
 import BullsLogo from "../../assets/BullsLogoTest.png";
 import KnicksLogo from "../../assets/KnicksLogoTest.png";
+import Card from "../Card/Card";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
-import { getColorByTeam } from "../../constants/NBAConstants";
+import classes from "./ExpandedGameInfo.module.css";
 
 export default class ExpandedGameInfo extends Component {
   render() {

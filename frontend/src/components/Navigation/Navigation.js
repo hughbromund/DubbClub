@@ -1,21 +1,17 @@
 import React, { Component } from "react";
-
-import AuthContext from "../../contexts/AuthContext.js";
-
-import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 import logo from "../../assets/LogoWordmarkWhite.png";
-
 import {
+  ACCOUNT_ROUTE,
+  DASHBOARD_ROUTE,
   HOME_ROUTE,
   LOGIN_ROUTE,
   REGISTER_ROUTE,
   SEARCH_ROUTE,
-  DASHBOARD_ROUTE,
-  ACCOUNT_ROUTE,
 } from "../../constants/Constants";
-
+import AuthContext from "../../contexts/AuthContext.js";
 import classes from "./Navigation.module.css";
 
 export default class Navigation extends Component {

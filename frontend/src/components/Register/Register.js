@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
-import Card from "../Card/Card";
-import Alert from "../Alert/Alert";
-import SmartButton from "../SmartButton/SmartButton";
-import logo from "../../assets/Logo.png";
 import Expand from "react-expand-animated";
-
-import { SIGNUP, LOGIN_ROUTE } from "../../constants/Constants";
-
+import logo from "../../assets/Logo.png";
+import { LOGIN_ROUTE, SIGNUP } from "../../constants/Constants";
+import Alert from "../Alert/Alert";
+import Card from "../Card/Card";
+import SmartButton from "../SmartButton/SmartButton";
 import classes from "./Register.module.css";
 
 export default class Register extends Component {

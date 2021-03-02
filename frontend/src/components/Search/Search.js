@@ -1,26 +1,25 @@
 import React, { Component } from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import InputGroup from "react-bootstrap/InputGroup";
+import Container from "react-bootstrap/Container";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import FormControl from "react-bootstrap/FormControl";
-import classes from "./Search.module.css";
-import SmartButton from "../SmartButton/SmartButton";
-import GameInfoCard from "../GameInfoCard/GameInfoCard";
-
+import InputGroup from "react-bootstrap/InputGroup";
+import Row from "react-bootstrap/Row";
 import {
-  GET_GAMES_BY_DATE,
-  GET_GAMES_BY_TEAM,
   DATE_OPTIONS,
   GAME_INFO_ROUTE,
+  GET_GAMES_BY_DATE,
+  GET_GAMES_BY_TEAM,
 } from "../../constants/Constants";
 import {
-  getIdByTeam,
   getColorByTeam,
+  getIdByTeam,
   NBA_TEAM_INFO,
 } from "../../constants/NBAConstants";
+import GameInfoCard from "../GameInfoCard/GameInfoCard";
+import SmartButton from "../SmartButton/SmartButton";
+import classes from "./Search.module.css";
 
 export default class Search extends Component {
   constructor(props) {

@@ -1,18 +1,15 @@
 import React, { Component } from "react";
-import Card from "../Card/Card";
+import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Image from "react-bootstrap/Image";
+import ReactSpeedometer from "react-d3-speedometer";
+import Expand from "react-expand-animated";
+import { FAVORITE_TEAM, UNFAVORITE_TEAM } from "../../constants/Constants";
+import AuthContext from "../../contexts/AuthContext.js";
 import Button from "../Button/Button";
+import Card from "../Card/Card";
 import SmartButton from "../SmartButton/SmartButton";
 import classes from "./GameInfoCard.module.css";
-import Expand from "react-expand-animated";
-import ReactSpeedometer from "react-d3-speedometer";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AuthContext from "../../contexts/AuthContext.js";
-
-import { FAVORITE_TEAM, UNFAVORITE_TEAM } from "../../constants/Constants";
 
 const rgbHex = require("rgb-hex");
 const hexRgb = require("hex-rgb");
