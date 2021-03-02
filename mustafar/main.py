@@ -5,6 +5,7 @@ import pickle
 import json
 from pymongo import MongoClient
 import math
+import datetime
 
 app = Flask(__name__)
 
@@ -280,10 +281,38 @@ def predict_nba_winner(game_id="6911"):
     # Make API request for last 10 games per team
     team_game_lists = get_last_10_games(h_id, a_id)
 
+    # Get times for both database last games
+    game_url = "https://api-nba-v1.p.rapidapi.com/games/gameId/" + \
+        str(h_last_game)
+    h_db_last_game_time = requests.request("GET", game_url, headers=headers).json()[
+        "api"]["games"][0]["startTimeUTC"]
+    game_url = "https://api-nba-v1.p.rapidapi.com/games/gameId/" + \
+        str(a_last_game)
+    a_db_last_game_time = requests.request("GET", game_url, headers=headers).json()[
+        "api"]["games"][0]["startTimeUTC"]
+    # TODO: get times for both last games in list
+    game_url = "https://api-nba-v1.p.rapidapi.com/games/gameId/" + \
+        str(team_game_lists[0][0])
+    h_real_last_game_time = requests.request("GET", game_url, headers=headers).json()[
+        "api"]["games"][0]["startTimeUTC"]
+    game_url = "https://api-nba-v1.p.rapidapi.com/games/gameId/" + \
+        str(team_game_lists[1][0])
+    a_real_last_game_time = requests.request("GET", game_url, headers=headers).json()[
+        "api"]["games"][0]["startTimeUTC"]
+
+    h_db_last_game_time = datetime.datetime.strptime(
+        h_db_last_game_time, '%Y-%m-%dT%H:%M:%S.%fZ')
+    a_db_last_game_time = datetime.datetime.strptime(
+        a_db_last_game_time, '%Y-%m-%dT%H:%M:%S.%fZ')
+    h_real_last_game_time = datetime.datetime.strptime(
+        h_real_last_game_time, '%Y-%m-%dT%H:%M:%S.%fZ')
+    a_real_last_game_time = datetime.datetime.strptime(
+        a_real_last_game_time, '%Y-%m-%dT%H:%M:%S.%fZ')
+
     # Update team ELO and last game if necessary
-    if (int(team_game_lists[0][0]) > h_last_game):
+    if (h_real_last_game_time > h_db_last_game_time):
         h_elo = update_team_elo(int(team_game_lists[0][0]), int(h_id))
-    if (int(team_game_lists[1][0]) > a_last_game):
+    if (a_real_last_game_time > a_db_last_game_time):
         a_elo = update_team_elo(int(team_game_lists[1][0]), int(a_id))
 
     # Make API request for last 10 game stats and calculate averages
