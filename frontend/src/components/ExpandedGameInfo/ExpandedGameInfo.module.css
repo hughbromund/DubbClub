@@ -2,3 +2,16 @@
   display: flex;
   justify-content: center;
 }
+
+.card {
+  background-color: var(--foreground-color);
+  border-radius: var(--border-radius);
+  transition: var(--default-transition);
+  color: var(--text-primary);
+  padding: var(--default-padding);
+  border-radius: var(--border-radius);
+  margin: var(--default-margin);
+}
+.bottomCard {
+  height: 100%;
+}

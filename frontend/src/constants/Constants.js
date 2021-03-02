@@ -29,6 +29,7 @@ export const UPDATE_PASSWORD = BASE + "/api/user/updatepassword";
 export const NEXT_SEVEN_DAYS_BASIC_GAME_INFO = BASE + "/getBasicGameInfo";
 export const GET_GAMES_BY_DATE = BASE + "/getGamesByDate";
 export const GET_GAMES_BY_TEAM = BASE + "/getRecentGamesByTeam";
+export const GET_GAME_BY_ID = BASE + "/getGameDetailsByGameId";
 export const GET_FAVORITE_TEAMS_LIST = BASE + "/api/user/favoriteteamlist";
 export const FAVORITE_TEAM = BASE + "/api/user/favoriteteam";
 export const UNFAVORITE_TEAM = BASE + "/api/user/unfavoriteteam";
