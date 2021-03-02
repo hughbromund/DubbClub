@@ -1,31 +1,18 @@
 const mongoose = require('mongoose')
-const Team = require('./team')
+const path = require("path");
+const Team = require(path.resolve(__dirname, "./team")).schema;
 const Schema = mongoose.Schema
 mongoose.promise = Promise
 
 // Define userSchema
 const gameSchema = new Schema({
-    gameId: { type: String, unique: true, required: true},
+    _id: { type: String, unique: false, required: true},
     date: { type: String, unique: false, required: true},
-    arena: { type: String, unique: false, required: false},
-    home: { type: Team, unique: false, required: true},
-    away: { type: Team, unique: false, required: true},
+    arena: { type: String, unique: false, required: false, default: "TBD"},
+    home: [Team],
+    away: [Team],
     predictedWinner: { type: Number, unique: false, required: false},
-    confidence: { type: Number, unique: false, required: false},
-    gameStats: { 
-        home: {
-            teamId: { type: Number, unique: true, required: true},
-            score: { type: Number, unique: true, required: true},
-            lineScore: { type: Number, unique: true, required: true},
-            leaders: { type: Number, unique: true, required: true}
-        },
-        away: {
-            teamId: { type: Number, unique: true, required: true, default: []},
-            score: { type: Number, unique: true, required: true, default: []},
-            lineScore: { any: Array, unique: true, required: true, default: []},
-            leaders: { any: Array, unique: true, required: true, default: []}
-        }
-    }
+    confidence: { type: Number, unique: false, required: false}
 }, { collection: "Game"})
 
 // Define schema methods

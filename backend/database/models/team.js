@@ -4,8 +4,8 @@ mongoose.promise = Promise
 
 // Define userSchema
 const teamSchema = new Schema({
-    teamId: { type: Number, unique: true, required: true},
-    teamName: { type: String, unique: true, required: true},
+    teamId: { type: Number, unique: false, required: true},
+    teamName: { type: String, unique: false, required: true},
     teamImage: { type: String, unique: false, required: false},
     wins: { type: Number, unique: false, required: true},
     losses: { type: Number, unique: false, required: false},

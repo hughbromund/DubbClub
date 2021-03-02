@@ -30,8 +30,6 @@ exports.getBasicGameInfo = async function() {
       if (currGame.league === "standard" && gameDate > start) {
         let [home, away] = await Promise.all([getTeamStats(currGame.hTeam.teamId, currGame.hTeam.fullName, currGame.hTeam.logo),
           getTeamStats(currGame.vTeam.teamId, currGame.vTeam.fullName, currGame.vTeam.logo)]);
-        //var home = await getTeamStats(currGame.hTeam.teamId, currGame.hTeam.fullName, currGame.hTeam.logo)
-        //var away = await getTeamStats(currGame.vTeam.teamId, currGame.vTeam.fullName, currGame.vTeam.logo)
         var game = {"gameId" : currGame.gameId, "date" : currGame.startTimeUTC, "arena" : currGame.arena,
         "home" : home, "away" : away}
         result.push(game);

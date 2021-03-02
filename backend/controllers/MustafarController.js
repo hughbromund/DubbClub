@@ -11,9 +11,9 @@ exports.updateDbWithPredictions = async function (req, res, next) {
         for (var i = 0; i < upcoming.length; i++) {
             gameIds.push(upcoming[i].gameId)
         }
-        //let predictions = await mustafarService.getMustafarPredictions(gameIds);
-        //mustafarService.updateDbWithPredictions(upcoming, predictions)
-        return res.status(200).json(gameIds);
+        let predictions = await mustafarService.getMustafarPredictions(gameIds);
+        mustafarService.updateDbWithPredictions(res, upcoming, predictions)
+        return res.status(200).send({message: "Successfully Updated Game."})
       } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
