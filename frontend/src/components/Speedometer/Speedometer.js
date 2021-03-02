@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ReactSpeedometer from "react-d3-speedometer";
+import classes from "./Speedometer.module.css";
 
 const rgbHex = require("rgb-hex");
 const hexRgb = require("hex-rgb");
@@ -44,7 +45,7 @@ export default class Speedometer extends Component {
 
   render() {
     return (
-      <div className={classes.speedometer}>
+      <div>
         <ReactSpeedometer
           value={
             this.props.predictedWinner === "away"
