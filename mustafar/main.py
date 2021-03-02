@@ -43,6 +43,9 @@ def get_last_10_games(home_id, away_id):
 
 
 def get_past_10_avg_stats(game_list, team_id, prefix):
+
+    prefix = prefix + "last_10_avg_"
+
     game_stats_builder = {
         prefix + "points": [0],
         prefix + "field_goals_attempted": [0],
@@ -290,7 +293,7 @@ def predict_nba_winner(game_id="6911"):
         str(a_last_game)
     a_db_last_game_time = requests.request("GET", game_url, headers=headers).json()[
         "api"]["games"][0]["startTimeUTC"]
-    # TODO: get times for both last games in list
+    # Get times for both last games in list
     game_url = "https://api-nba-v1.p.rapidapi.com/games/gameId/" + \
         str(team_game_lists[0][0])
     h_real_last_game_time = requests.request("GET", game_url, headers=headers).json()[
@@ -322,12 +325,15 @@ def predict_nba_winner(game_id="6911"):
         game_list=team_game_lists[1], team_id=a_id, prefix="a_")
 
     # Form dataframe and predict
-    h_df["h_elo_before"] = h_elo
-    a_df["a_elo_before"] = a_elo
-
+    h_elo_as_arr = [h_elo]
+    a_elo_as_arr = [a_elo]
     final_df = pd.concat([h_df, a_df], axis=1)
+    final_df.insert(loc=0, column='a_elo_before', value=a_elo_as_arr)
+    final_df.insert(loc=0, column='h_elo_before', value=h_elo_as_arr)
 
-    # TODO: change path to model in cloud
+    with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+        print(final_df)
+
     loaded_model = pickle.load(open('./model.pkl', 'rb'))
     y_pred = loaded_model.predict(final_df)
     probability_matrix = loaded_model.predict_proba(final_df)
