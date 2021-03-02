@@ -1,7 +1,7 @@
 const path = require("path");
 
 var nbaService = require(path.resolve(__dirname, "../services/NbaService"));
-var mustafarService = require(path.resolve(__dirname, "../services/mustafarService"));
+var mustafarService = require(path.resolve(__dirname, "../services/MustafarService"));
 
 
 exports.updateDbWithPredictions = async function (req, res, next) {
