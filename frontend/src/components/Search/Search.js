@@ -16,7 +16,11 @@ import {
   DATE_OPTIONS,
   GAME_INFO_ROUTE,
 } from "../../constants/Constants";
-import { getIdByTeam, NBA_TEAM_INFO } from "../../constants/NBAConstants";
+import {
+  getIdByTeam,
+  getColorByTeam,
+  NBA_TEAM_INFO,
+} from "../../constants/NBAConstants";
 
 export default class Search extends Component {
   constructor(props) {
@@ -63,15 +67,20 @@ export default class Search extends Component {
               "en-US",
               DATE_OPTIONS
             )}
-            predictedWinner={"away"}
-            predictionConfidence={100.0}
+            predictedWinner={Math.random() < 0.5 ? "home" : "away"}
+            predictionConfidence={Math.floor(Math.random() * 50) + 50}
             awayLogo={this.state.games[i].away.teamImage}
             homeLogo={this.state.games[i].home.teamImage}
+            venue={this.state.games[i].arena}
             onClickHandler={() => {
               this.props.history.push(
                 GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
               );
             }}
+            homeHex={getColorByTeam(this.state.games[i].home.teamName)}
+            awayHex={getColorByTeam(this.state.games[i].away.teamName)}
+            homeId={this.state.games[i].home.teamId}
+            awayId={this.state.games[i].away.teamId}
             key={i}
           />
         </Col>
