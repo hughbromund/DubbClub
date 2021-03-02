@@ -328,7 +328,7 @@ def predict_nba_winner(game_id="6911"):
     final_df = pd.concat([h_df, a_df], axis=1)
 
     # TODO: change path to model in cloud
-    loaded_model = pickle.load(open('../models/model.pkl', 'rb'))
+    loaded_model = pickle.load(open('./model.pkl', 'rb'))
     y_pred = loaded_model.predict(final_df)
     probability_matrix = loaded_model.predict_proba(final_df)
 
