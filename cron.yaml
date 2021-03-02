@@ -1,6 +1,6 @@
 cron:
-  - description: "Test Cron"
-    url: /helloworld
-    target: mustafar
+  - description: "Update Games and Predictions"
+    url: /updateDbWithPredictions
+    target: backend
     schedule: every day 01:00
     timezone: America/New_York
