@@ -38,7 +38,7 @@ JSON Format:
 
 ### /updateDbWithPredictions
 
-POST  
+GET  
 Gets upcoming games and predictions for those games then  
 uploads them to Mongo  
 Requirements: none  
