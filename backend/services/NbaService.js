@@ -181,9 +181,9 @@ async function getPlayedGameStats(gameId) {
   let team = {}
   try {
     let res = await axios.request(options);
-    let home = {"teamId" : res.data.api.game[0].hTeam.teamId, "points" : res.data.api.game[0].hTeam.score.points,
+    let home = {"teamId" : res.data.api.game[0].hTeam.teamId, "logo" : res.data.api.game[0].hTeam.logo, "points" : res.data.api.game[0].hTeam.score.points,
      "lineScore" : res.data.api.game[0].hTeam.score.linescore, "leaders" : res.data.api.game[0].hTeam.leaders}
-    let away = {"teamId" : res.data.api.game[0].vTeam.teamId, "points" : res.data.api.game[0].vTeam.score.points,
+    let away = {"teamId" : res.data.api.game[0].vTeam.teamId, "logo" : res.data.api.game[0].vTeam.logo, "points" : res.data.api.game[0].vTeam.score.points,
     "lineScore" : res.data.api.game[0].vTeam.score.linescore, "leaders" : res.data.api.game[0].vTeam.leaders}
     team = {"home" : home, "away" : away}
   } catch (error) {

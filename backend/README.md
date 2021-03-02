@@ -13,7 +13,7 @@ JSON Format:
 [  
   {
     "gameId": "8608",  
-    "date": "2021-02-17",
+    "date": "2021-03-02T03:30:00.000Z",
     "arena": "TD Garden",  
     "home": {  
       "teamId": "2",  
@@ -35,6 +35,19 @@ JSON Format:
     }  
   }  
 ]
+
+### /updateDbWithPredictions
+
+POST  
+Gets upcoming games and predictions for those games then  
+uploads them to Mongo  
+Requirements: none  
+Returns: status code and message  
+Status: Working  
+Issues: If the gameIds change on the API side we might have a problem  
+
+Schema Format: Please navigate to Mongo to see the Schema (Game) format  
+
 
 ### /getGamesByDate/:date
 
@@ -61,7 +74,7 @@ JSON Format:
 [  
   {
     "gameId": "8608",  
-    "date": "2021-02-17",
+    "date": "2021-03-02T03:30:00.000Z",
     "arena": "TD Garden",  
     "home": {  
       "teamId": "2",  
@@ -136,6 +149,7 @@ JSON Format:
   "gameStats" : {  
     "home": {  
       "teamId": "15",  
+      "logo": "some link"
       "score": 100,  
       "linescore": [  
         "23",  
