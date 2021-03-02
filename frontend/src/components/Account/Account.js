@@ -1,21 +1,17 @@
 import React, { Component } from "react";
-
-import AuthContext from "../../contexts/AuthContext.js";
-
-import Button from "../Button/Button";
-import Alert from "../Alert/Alert";
-import SmartButton from "../SmartButton/SmartButton";
-import Card from "../Card/Card";
 import Container from "react-bootstrap/Container";
 import Expand from "react-expand-animated";
-
-import classes from "./Account.module.css";
-
 import {
-  USER_INFO,
   UPDATE_EMAIL,
   UPDATE_PASSWORD,
+  USER_INFO,
 } from "../../constants/Constants";
+import AuthContext from "../../contexts/AuthContext.js";
+import Alert from "../Alert/Alert";
+import Button from "../Button/Button";
+import Card from "../Card/Card";
+import SmartButton from "../SmartButton/SmartButton";
+import classes from "./Account.module.css";
 
 export default class Account extends Component {
   constructor(props) {

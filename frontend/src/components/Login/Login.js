@@ -1,26 +1,22 @@
 import React, { Component } from "react";
-
-import AuthContext from "../../contexts/AuthContext.js";
-
+import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Card from "../Card/Card";
-import Alert from "../Alert/Alert";
-import SmartButton from "../SmartButton/SmartButton";
-import Button from "../Button/Button";
-import logo from "../../assets/Logo.png";
 import Expand from "react-expand-animated";
-
-import classes from "./Login.module.css";
-
+import logo from "../../assets/Logo.png";
 import {
+  ACCOUNT_ROUTE,
   LOGIN,
   LOGIN_ROUTE,
-  ACCOUNT_ROUTE,
-  RESET_PASSWORD_ROUTE,
   REGISTER_ROUTE,
+  RESET_PASSWORD_ROUTE,
 } from "../../constants/Constants";
+import AuthContext from "../../contexts/AuthContext.js";
+import Alert from "../Alert/Alert";
+import Button from "../Button/Button";
+import Card from "../Card/Card";
+import SmartButton from "../SmartButton/SmartButton";
+import classes from "./Login.module.css";
 
 export default class Login extends Component {
   constructor(props) {

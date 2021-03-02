@@ -1,21 +1,15 @@
 import React, { Component } from "react";
-import Card from "../Card/Card";
-import Button from "../Button/Button";
-import SmartButton from "../SmartButton/SmartButton";
+import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import CardDeck from "react-bootstrap/CardDeck";
-import GameInfoCard from "../GameInfoCard/GameInfoCard";
-import { useHistory } from "react-router-dom";
 import {
-  NEXT_SEVEN_DAYS_BASIC_GAME_INFO,
-  GAME_INFO_ROUTE,
   DATE_OPTIONS,
+  GAME_INFO_ROUTE,
+  NEXT_SEVEN_DAYS_BASIC_GAME_INFO,
 } from "../../constants/Constants";
-import classes from "./Home.module.css";
-import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { getColorByTeam } from "../../constants/NBAConstants";
+import GameInfoCard from "../GameInfoCard/GameInfoCard";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const INITIAL_STATE = {
   games: {},

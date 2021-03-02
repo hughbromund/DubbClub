@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import classes from "./Alert.module.css";
 
 export default class Alert extends Component {

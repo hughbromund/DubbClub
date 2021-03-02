@@ -1,19 +1,17 @@
 import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
-import Card from "../Card/Card";
-import Alert from "../Alert/Alert";
-import SmartButton from "../SmartButton/SmartButton";
-import Button from "../Button/Button";
-import logo from "../../assets/Logo.png";
 import Expand from "react-expand-animated";
-
-import classes from "./ResetPassword.module.css";
-
+import logo from "../../assets/Logo.png";
 import {
   LOGIN_ROUTE,
   RESET_PASSWORD,
   RESET_PASSWORD_EMAIL,
 } from "../../constants/Constants";
+import Alert from "../Alert/Alert";
+import Button from "../Button/Button";
+import Card from "../Card/Card";
+import SmartButton from "../SmartButton/SmartButton";
+import classes from "./ResetPassword.module.css";
 
 export default class ResetPassword extends Component {
   constructor(props) {
