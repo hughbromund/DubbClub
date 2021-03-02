@@ -331,9 +331,6 @@ def predict_nba_winner(game_id="6911"):
     final_df.insert(loc=0, column='a_elo_before', value=a_elo_as_arr)
     final_df.insert(loc=0, column='h_elo_before', value=h_elo_as_arr)
 
-    with pd.option_context('display.max_rows', None, 'display.max_columns', None):
-        print(final_df)
-
     loaded_model = pickle.load(open('./model.pkl', 'rb'))
     y_pred = loaded_model.predict(final_df)
     probability_matrix = loaded_model.predict_proba(final_df)
