@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 mongoose.promise = Promise
 
 // Define userSchema
-const teamSchema = new Schema({
+const NBAteamSchema = new Schema({
     teamId: { type: Number, unique: false, required: true},
     teamName: { type: String, unique: false, required: true},
     teamImage: { type: String, unique: false, required: false},
@@ -11,11 +11,11 @@ const teamSchema = new Schema({
     losses: { type: Number, unique: false, required: false},
     conferenceName: { type: String, unique: false, required: true},
     place: { type: Number, unique: false, required: false},
-}, { collection: "Team"})
+}, { collection: "NBAteam"})
 
 // Define schema methods
-teamSchema.methods = {}
+NBAteamSchema.methods = {}
 
 
-const Team = mongoose.model('Team', teamSchema)
-module.exports = Team
+const NBAteam = mongoose.model('NBAteam', NBAteamSchema)
+module.exports = NBAteam

@@ -1,7 +1,7 @@
 const path = require("path");
 const axios = require("axios");
-const Team = require("../database/models/team");
-const Game = require("../database/models/game");
+const NBAteam = require("../database/models/NBAteam");
+const NBAgame = require("../database/models/NBAgame");
 
 const config = require(path.resolve(__dirname, "../config.json"));
 
@@ -16,13 +16,13 @@ exports.getMustafarPredictions = async function(gameIds) {
         console.log(res.data)
         results.push(res.data)
     }
-    
+
     return results
 }
 
-exports.updateDbWithPredictions = function(res, upcoming, predictions) {
+exports.updateDbWithPredictions = function(upcoming, predictions) {
     for (var i = 0; i < upcoming.length; i++) {
-        const homeTeam = new Team({
+        const homeTeam = new NBAteam({
             teamId: upcoming[i].home.teamId,
             teamName: upcoming[i].home.teamName,
             teamImage: upcoming[i].home.teamImage,
@@ -32,7 +32,7 @@ exports.updateDbWithPredictions = function(res, upcoming, predictions) {
             place: upcoming[i].home.place,
         });
 
-        const awayTeam = new Team({
+        const awayTeam = new NBAteam({
             teamId: upcoming[i].away.teamId,
             teamName: upcoming[i].away.teamName,
             teamImage: upcoming[i].away.teamImage,
@@ -44,7 +44,7 @@ exports.updateDbWithPredictions = function(res, upcoming, predictions) {
 
         let arena = (upcoming[i].arena === "" || upcoming[i].arena === undefined) ? "TBD" : upcoming[i].arena
 
-        const game = new Game({
+        const game = new NBAgame({
             _id: upcoming[i].gameId,
             date: upcoming[i].date,
             arena: arena,
@@ -54,6 +54,6 @@ exports.updateDbWithPredictions = function(res, upcoming, predictions) {
             confidence: predictions[i].confidence
         });
 
-        Game.updateOne({ "_id" : upcoming[i].gameId }, {$set : game}, {upsert : true}).exec()
+        NBAgame.updateOne({ "_id" : upcoming[i].gameId }, {$set : game}, {upsert : true}).exec()
     }
 }

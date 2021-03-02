@@ -1,23 +1,23 @@
 const mongoose = require('mongoose')
 const path = require("path");
-const Team = require(path.resolve(__dirname, "./team")).schema;
+const NBAteam = require(path.resolve(__dirname, "./NBAteam")).schema;
 const Schema = mongoose.Schema
 mongoose.promise = Promise
 
 // Define userSchema
-const gameSchema = new Schema({
+const NBAgameSchema = new Schema({
     _id: { type: String, unique: false, required: true},
     date: { type: String, unique: false, required: true},
     arena: { type: String, unique: false, required: false, default: "TBD"},
-    home: [Team],
-    away: [Team],
+    home: [NBAteam],
+    away: [NBAteam],
     predictedWinner: { type: Number, unique: false, required: false},
     confidence: { type: Number, unique: false, required: false}
-}, { collection: "Game"})
+}, { collection: "NBAgame"})
 
 // Define schema methods
-gameSchema.methods = {}
+NBAgameSchema.methods = {}
 
 
-const Game = mongoose.model('Game', gameSchema)
-module.exports = Game
+const NBAgame = mongoose.model('NBAgame', NBAgameSchema)
+module.exports = NBAgame
