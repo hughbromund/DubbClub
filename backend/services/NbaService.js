@@ -240,6 +240,7 @@ exports.getGameFromDb = (req, res) => {
     }
 
     res.status(200).send({
+      votedTeam: votedTeamVal,
       game: game,
       message: "Successful!"
     })
