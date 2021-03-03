@@ -199,7 +199,7 @@ Issues: None?
 
 JSON return Format:  
 {  
-  "votedTeam": "none",  
+  "votedTeam": "none", (will be "none", "away", or "home")
   "game": Same as getBasicGameData json format  
   "message": "Successful!"  
 }
