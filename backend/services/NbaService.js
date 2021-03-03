@@ -218,7 +218,7 @@ exports.userVote = (req, res) => {
 
 }
 
-exports.gamePrediction = (req, res) => {
+exports.getGameFromDb = (req, res) => {
   var gameId = req.params.gameId
   NBAgame.findOne({_id: gameId}).exec((err, game) => {
     if (err) {
@@ -240,12 +240,7 @@ exports.gamePrediction = (req, res) => {
     }
 
     res.status(200).send({
-      gameId: game._id,
-      predictedWinner: game.predictedWinner,
-      confidence: game.confidence,
-      homeVoteCount: game.homeVoters.length,
-      awayVoteCount: game.awayVoters.length,
-      votedTeam: votedTeamVal,
+      game: game,
       message: "Successful!"
     })
   })

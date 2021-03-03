@@ -57,9 +57,9 @@ exports.userVote = async function (req, res, next) {
     }
 };
 
-exports.gamePrediction = async function (req, res, next) {
+exports.getGameFromDb = async function (req, res, next) {
     try {
-        nbaService.gamePrediction(req, res);
+        nbaService.getGameFromDb(req, res);
       } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }

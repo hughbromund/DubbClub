@@ -1,6 +1,6 @@
 ##  Endpoints for Game Data
 
-### /getBasicGameData
+### /api/nba/getBasicGameData
 
 GET  
 gets all games from the NBA in the next week  
@@ -36,7 +36,7 @@ JSON Format:
   }  
 ]
 
-### /updateDbWithPredictions
+### /api/nba/updateDbWithPredictions
 
 GET  
 Gets upcoming games and predictions for those games then  
@@ -49,7 +49,7 @@ Issues: If the gameIds change on the API side we might have a problem
 Schema Format: Please navigate to Mongo to see the Schema (Game) format  
 
 
-### /getGamesByDate/:date
+### /api/nba/getGamesByDate/:date
 
 GET  
 gets all games from the NBA from the specified date  
@@ -61,7 +61,7 @@ Issues: Doesn't currently have start time, uses UTC to find games,
 JSON Format:  
 same as above  
 
-### /getRecentGamesByTeam/:team  
+### /api/nba/getRecentGamesByTeam/:team  
 
 GET  
 gets previous 10 games for a team  
@@ -136,7 +136,7 @@ JSON Format:
   }  
 ]  
 
-### /getGameDetailsByGameId/:gameId  
+### /api/nba/getGameDetailsByGameId/:gameId  
 
 GET  
 gets game stats for specific gameId
@@ -188,25 +188,17 @@ JSON Format:
   }  
 ]  
 
-### /api/nba/gamePrediction/:gameId
+### /api/nba/getGameFromDb/:gameId
 
 GET  
-gets game prediction for specified gameId
+gets game for specified gameId from DB
 Requirements: gameId parameter, optional JWT auth token
 Returns: JSON body of revavent data, or message of failure  
 Status: Working  
 Issues: None?
 
 JSON return Format:  
-{
-    "gameId": "8721",
-    "predictedWinner": 21,
-    "confidence": 0.5196092893013851,
-    "homeVoteCount": 0,
-    "awayVoteCount": 1,
-    "votedTeam": "away", (this will be "home", "away", or "none")
-    "message": "Successful!"
-}
+same as schema for game, can be found in Mongo
 
 ### /api/nba/vote
 
