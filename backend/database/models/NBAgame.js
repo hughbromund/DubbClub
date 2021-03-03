@@ -12,7 +12,9 @@ const NBAgameSchema = new Schema({
     home: [NBAteam],
     away: [NBAteam],
     predictedWinner: { type: Number, unique: false, required: false},
-    confidence: { type: Number, unique: false, required: false}
+    confidence: { type: Number, unique: false, required: false},
+    homeVoters: {type: Array, unique: false, required: false, default: []},
+    awayVoters: {type: Array, unique: false, required: false, default: []},
 }, { collection: "NBAgame"})
 
 // Define schema methods

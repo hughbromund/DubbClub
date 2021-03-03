@@ -45,3 +45,22 @@ exports.getGameDetailsByGameId = async function (req, res, next) {
         return res.status(400).json({ status: 400, message: e.message });
     }
 };
+
+exports.userVote = async function (req, res, next) {
+    try {
+        if (req.body.homeAway != "home" && req.body.homeAway != "away") {
+            return res.status(400).json({ status: 400, message: "homeaway was not home or away"});
+        }
+        nbaService.userVote(req, res);
+      } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};
+
+exports.gamePrediction = async function (req, res, next) {
+    try {
+        nbaService.gamePrediction(req, res);
+      } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};

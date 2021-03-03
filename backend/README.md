@@ -188,6 +188,46 @@ JSON Format:
   }  
 ]  
 
+### /api/nba/gamePrediction/:gameId
+
+GET  
+gets game prediction for specified gameId
+Requirements: gameId parameter, optional JWT auth token
+Returns: JSON body of revavent data, or message of failure  
+Status: Working  
+Issues: None?
+
+JSON return Format:  
+{
+    "gameId": "8721",
+    "predictedWinner": 21,
+    "confidence": 0.5196092893013851,
+    "homeVoteCount": 0,
+    "awayVoteCount": 1,
+    "votedTeam": "away", (this will be "home", "away", or "none")
+    "message": "Successful!"
+}
+
+### /api/nba/vote
+
+POST  
+user vote functionality for who they believe will win the NBA game
+Requirements: gameId, home or away team, JWT auth token
+Returns: JSON body message of success or failure  
+Status: Working  
+Issues: None?
+
+JSON Request Format:
+{
+  "gameId": 8701,
+  "homeaway": "home"
+}
+
+JSON return Format:  
+{
+  "message": "Successful!"
+}
+
 ##  Endpoints for User Accounts
 
 
