@@ -1,6 +1,7 @@
 const path = require("path");
 const axios = require("axios");
 const config = require(path.resolve(__dirname, "../config.json"));
+const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
 
 exports.getBasicGameInfo = async function() {
   var start = new Date();
@@ -191,4 +192,61 @@ async function getPlayedGameStats(gameId) {
   }
 
   return team;
+}
+
+
+exports.userVote = (req, res) => {
+  var gameId = req.body.gameId
+  var homeAwayOpposite = "away"
+  if (req.body.homeAway == "away") {
+    var homeAwayOpposite = "home"
+  }
+  var votersVar = req.body.homeAway + "Voters"
+  var votersOpp = homeAwayOpposite + "Voters"
+
+  NBAgame.updateOne({_id: gameId}, {"$addToSet": {[votersVar]: req.userId}, "$pull": {[votersOpp]: req.userId}}).exec((err, game) => {
+    if (err) {
+      return res.status(500).send({ err: err, message: "Database failure." });
+    }
+
+    if (!game) {
+      return res.status(404).send({ message: "Game Not found." });
+    }
+
+    res.status(200).send({message: "Successfully Voted."})
+  })
+
+}
+
+exports.gamePrediction = (req, res) => {
+  var gameId = req.params.gameId
+  NBAgame.findOne({_id: gameId}).exec((err, game) => {
+    if (err) {
+      return res.status(500).send({ err: err, message: "Database failure." });
+    }
+
+    if (!game) {
+      return res.status(404).send({ message: "Game Not found." });
+    }
+    var votedTeamVal = "none"
+
+    if (req.userId) {
+      if (game.homeVoters.includes(req.userId)) {
+        votedTeamVal = "home"
+      }
+      else if (game.awayVoters.includes(req.userId)) {
+        votedTeamVal = "away"
+      }
+    }
+
+    res.status(200).send({
+      gameId: game._id,
+      predictedWinner: game.predictedWinner,
+      confidence: game.confidence,
+      homeVoteCount: game.homeVoters.length,
+      awayVoteCount: game.awayVoters.length,
+      votedTeam: votedTeamVal,
+      message: "Successful!"
+    })
+  })
 }

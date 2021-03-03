@@ -66,4 +66,10 @@ router.get("/getGameDetailsByGameId/:gameId", nbaController.getGameDetailsByGame
 //get game details by gameId
 router.get("/updateDbWithPredictions", mustafarController.updateDbWithPredictions);
 
+//get game prediction by gameId
+router.get("/api/nba/gamePrediction/:gameId", authJWT.verifyTokenOptional, nbaController.gamePrediction)
+
+//user vote on predicted winner of npa game
+router.post("/api/nba/vote", authJWT.verifyToken, nbaController.userVote)
+
 module.exports = router;

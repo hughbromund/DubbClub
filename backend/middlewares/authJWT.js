@@ -19,8 +19,26 @@ verifyToken = (req, res, next) => {
   });
 };
 
+verifyTokenOptional = (req, res, next) => {
+  let token = req.headers["x-access-token"];
+
+  if (!token) {
+    return next();
+  }
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err) {
+      return next();
+    }
+    req.userId = decoded.id;
+    next();
+  });
+};
+
 const authJwt = {
   verifyToken,
+  verifyTokenOptional
 };
+
 
 module.exports = authJwt;
