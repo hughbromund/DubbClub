@@ -220,7 +220,7 @@ Issues: None?
 JSON Request Format:
 {
   "gameId": 8701,
-  "homeaway": "home"
+  "homeAway": "home"
 }
 
 JSON return Format:  
