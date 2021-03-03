@@ -52,22 +52,22 @@ router.get("/api/user/favoriteteamlist", authJWT.verifyToken, userController.fav
 router.get("/stub", nbaController.getStub);
 
 //basic game info
-router.get("/getBasicGameInfo", nbaController.getBasicGameInfo);
+router.get("/api/nba/getBasicGameInfo", nbaController.getBasicGameInfo);
 
 //games by date
-router.get("/getGamesByDate/:date", nbaController.getGamesByDate);
+router.get("/api/nba/getGamesByDate/:date", nbaController.getGamesByDate);
 
 //get most recent games by team
-router.get("/getRecentGamesByTeam/:team", nbaController.getRecentGamesByTeam);
+router.get("/api/nba/getRecentGamesByTeam/:team", nbaController.getRecentGamesByTeam);
 
 //get game details by gameId
-router.get("/getGameDetailsByGameId/:gameId", nbaController.getGameDetailsByGameId);
+router.get("/api/nba/getGameDetailsByGameId/:gameId", nbaController.getGameDetailsByGameId);
 
 //get game details by gameId
-router.get("/updateDbWithPredictions", mustafarController.updateDbWithPredictions);
+router.get("/api/nba/updateDbWithPredictions", mustafarController.updateDbWithPredictions);
 
 //get game prediction by gameId
-router.get("/api/nba/gamePrediction/:gameId", authJWT.verifyTokenOptional, nbaController.gamePrediction)
+router.get("/api/nba/getGameFromDb/:gameId", authJWT.verifyTokenOptional, nbaController.getGameFromDb)
 
 //user vote on predicted winner of npa game
 router.post("/api/nba/vote", authJWT.verifyToken, nbaController.userVote)
