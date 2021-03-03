@@ -198,7 +198,11 @@ Status: Working
 Issues: None?
 
 JSON return Format:  
-same as schema for game, can be found in Mongo
+{  
+  "votedTeam": "none",  
+  "game": Same as getBasicGameData json format  
+  "message": "Successful!"  
+}
 
 ### /api/nba/vote
 
