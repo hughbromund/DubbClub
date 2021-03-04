@@ -135,7 +135,7 @@ export default class GameInfoCard extends Component {
                         classes.verticalCenterImage,
                       ].join(" ")}
                     >
-                      <img src={this.props.awayLogo} class={classes.logo} />
+                      <img src={this.props.awayLogo} className={classes.logo} />
                     </div>
                     <Expand
                       open={this.state.awayFavorite && this.context.isLoggedIn}
@@ -186,7 +186,7 @@ export default class GameInfoCard extends Component {
                         classes.verticalCenterImage,
                       ].join(" ")}
                     >
-                      <img src={this.props.homeLogo} class={classes.logo} />
+                      <img src={this.props.homeLogo} className={classes.logo} />
                     </div>
                     <Expand
                       open={this.state.homeFavorite && this.context.isLoggedIn}
@@ -252,20 +252,18 @@ export default class GameInfoCard extends Component {
                 </div>
                 <div>
                   <h5>
-                    {this.props.predictionConfidence > 60 ? (
+                    {this.props.predictionConfidence > 51 ? (
                       <div>
                         <b>{this.props.predictionConfidence}%</b> confidence
-                        that the{" "}
-                        <b>
-                          {this.props.predictedWinner === "away"
-                            ? this.props.awayTeam
-                            : this.props.homeTeam}
-                        </b>{" "}
-                        win
+                        that the <b>{this.props.predictedWinner}</b> win
+                      </div>
+                    ) : this.props.predictedWinner === "" ? (
+                      <div>
+                        <b>No Prediction Available</b>
                       </div>
                     ) : (
                       <div>
-                        <b>Toss Up</b> Game
+                        <b>Toss Up Game</b>
                       </div>
                     )}
                   </h5>
