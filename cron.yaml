@@ -1,6 +1,6 @@
 cron:
   - description: "Update Games and Predictions"
-    url: /updateDbWithPredictions
+    url: /api/nba/updateDbWithPredictions
     target: backend
     schedule: every day 01:00
     timezone: America/New_York
