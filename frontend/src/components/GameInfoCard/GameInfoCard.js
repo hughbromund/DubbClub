@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Speedometer from "../Speedometer/Speedometer";
 import Expand from "react-expand-animated";
 import { FAVORITE_TEAM, UNFAVORITE_TEAM } from "../../constants/Constants";
 import AuthContext from "../../contexts/AuthContext.js";
 import Button from "../Button/Button";
 import Card from "../Card/Card";
 import SmartButton from "../SmartButton/SmartButton";
+import Speedometer from "../Speedometer/Speedometer";
 import classes from "./GameInfoCard.module.css";
 
 const rgbHex = require("rgb-hex");

@@ -35,7 +35,7 @@ export default class ExpandedGameInfo extends Component {
     this.setState({
       game: body,
     });
-    await this.fetchPrediction(this.state.gameId);
+    await this.fetchPrediction(this.state.gameID);
   }
 
   async fetchPrediction(gameID) {
@@ -51,18 +51,18 @@ export default class ExpandedGameInfo extends Component {
     }
   }
 
-  getPredictionConfidence(gameId) {
-    if (this.state.predictions[gameId] === undefined) {
+  getPredictionConfidence(gameID) {
+    if (this.state.predictions[gameID] === undefined) {
       return 50;
     }
-    return Math.floor(this.state.predictions[gameId].confidence * 100);
+    return Math.floor(this.state.predictions[gameID].confidence * 100);
   }
 
-  getPredictedWinner(gameId) {
-    if (this.state.predictions[gameId] === undefined) {
+  getPredictedWinner(gameID) {
+    if (this.state.predictions[gameID] === undefined) {
       return "";
     }
-    return this.state.predictions[gameId].predictedWinner;
+    return this.state.predictions[gameID].predictedWinner;
   }
 
   async componentDidMount() {
@@ -77,18 +77,87 @@ export default class ExpandedGameInfo extends Component {
         </div>
       );
     }
+    var awayStats = [];
+    for (var i = 0; i < this.state.game.away.leaders.length; i++) {
+      var temp = (
+        <tr>
+          <td>{this.state.game.away.leaders[i].name}</td>
+          {this.state.game.away.leaders[i].points !== undefined ? (
+            <td>{this.state.game.away.leaders[i].points} points</td>
+          ) : (
+            ""
+          )}
+          {this.state.game.away.leaders[i].assists !== undefined ? (
+            <td>{this.state.game.away.leaders[i].assists} assists</td>
+          ) : (
+            ""
+          )}
+          {this.state.game.away.leaders[i].rebounds !== undefined ? (
+            <td>{this.state.game.away.leaders[i].rebounds} rebounds</td>
+          ) : (
+            ""
+          )}
+        </tr>
+      );
+      awayStats.push(temp);
+    }
+    var homeStats = [];
+    for (var i = 0; i < this.state.game.home.leaders.length; i++) {
+      var temp = (
+        <tr>
+          <td>{this.state.game.home.leaders[i].name}</td>
+          {this.state.game.home.leaders[i].points !== undefined ? (
+            <td>{this.state.game.home.leaders[i].points} points</td>
+          ) : (
+            ""
+          )}
+          {this.state.game.home.leaders[i].assists !== undefined ? (
+            <td>{this.state.game.home.leaders[i].assists} assists</td>
+          ) : (
+            ""
+          )}
+          {this.state.game.home.leaders[i].rebounds !== undefined ? (
+            <td>{this.state.game.home.leaders[i].rebounds} rebounds</td>
+          ) : (
+            ""
+          )}
+        </tr>
+      );
+      homeStats.push(temp);
+    }
     return (
       <div>
         <Container fluid>
           <Row>
             <Col>
-              <Container>
+              <Container fluid>
                 <Row>
+                  <Col xs={1}>
+                    <div className={classes.background}>
+                      <div
+                        className={[
+                          classes.centered,
+                          classes.verticalCenterImage,
+                        ].join(" ")}
+                      >
+                        <img
+                          src={this.state.game.away.logo}
+                          className={classes.logo}
+                        />
+                      </div>
+                    </div>
+                  </Col>
                   <Col>
-                    <div style={{ textAlign: "right" }}>
-                      {getTeamByID(Number(this.state.game["away"]["teamId"]))}
-                      {" : "}
-                      {this.state.game.away.points}
+                    <br />
+                    <div className={classes.center}>
+                      <h4>
+                        {getTeamByID(Number(this.state.game["away"]["teamId"]))}
+                      </h4>
+                    </div>
+                    <div className={classes.center}>
+                      <h1>
+                        <b>{this.state.game.away.points}</b>
+                      </h1>
                     </div>
                   </Col>
                   <Col>
@@ -136,9 +205,32 @@ export default class ExpandedGameInfo extends Component {
                     </Table>
                   </Col>
                   <Col>
-                    {this.state.game.home.points}
-                    {" : "}
-                    {getTeamByID(Number(this.state.game["home"]["teamId"]))}
+                    <br />
+                    <div className={classes.center}>
+                      <h4>
+                        {getTeamByID(Number(this.state.game["home"]["teamId"]))}
+                      </h4>
+                    </div>
+                    <div className={classes.center}>
+                      <h1>
+                        <b>{this.state.game.home.points}</b>
+                      </h1>
+                    </div>
+                  </Col>
+                  <Col xs={1}>
+                    <div className={classes.background}>
+                      <div
+                        className={[
+                          classes.centered,
+                          classes.verticalCenterImage,
+                        ].join(" ")}
+                      >
+                        <img
+                          src={this.state.game.home.logo}
+                          className={classes.logo}
+                        />
+                      </div>
+                    </div>
                   </Col>
                 </Row>
               </Container>
@@ -151,11 +243,9 @@ export default class ExpandedGameInfo extends Component {
                 className={[classes.speedometer, classes.bottomCard].join(" ")}
               >
                 <Speedometer
-                  predictedWinner={this.getPredictedWinner(
-                    this.state.game.gameId
-                  )}
+                  predictedWinner={this.getPredictedWinner(this.state.gameID)}
                   predictionConfidence={this.getPredictionConfidence(
-                    this.state.game.gameId
+                    this.state.gameID
                   )}
                   awayHex={getColorByTeam(
                     getTeamByID(Number(this.state.game["away"]["teamId"]))
@@ -168,13 +258,13 @@ export default class ExpandedGameInfo extends Component {
               </div>
               <div>
                 <h5>
-                  {this.getPredictionConfidence(this.state.gameId) > 51 ? (
+                  {this.getPredictionConfidence(this.state.gameID) > 51 ? (
                     <div>
-                      <b>{this.getPredictionConfidence(this.state.gameId)}%</b>{" "}
+                      <b>{this.getPredictionConfidence(this.state.gameID)}%</b>{" "}
                       confidence that the{" "}
-                      <b>{this.getPredictedWinner(this.state.gameId)}</b> win
+                      <b>{this.getPredictedWinner(this.state.gameID)}</b> win
                     </div>
-                  ) : this.getPredictedWinner(this.state.gameId) === "" ? (
+                  ) : this.getPredictedWinner(this.state.gameID) === "" ? (
                     <div>
                       <b>No Prediction Available</b>
                     </div>
@@ -192,56 +282,20 @@ export default class ExpandedGameInfo extends Component {
                 <thead>
                   <tr>
                     <th>Players</th>
-                    <th>Points</th>
-                    <th>Assists</th>
-                    <th>Rebounds</th>
-                    <th>Blocks</th>
+                    <th>Stat</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>John Doe</td>
-                    <td>10</td>
-                    <td>10</td>
-                    <td>10</td>
-                    <td>10</td>
-                  </tr>
-                  <tr>
-                    <td>John Doe</td>
-                    <td>10</td>
-                    <td>10</td>
-                    <td>10</td>
-                    <td>10</td>
-                  </tr>
-                </tbody>
+                <tbody>{homeStats}</tbody>
               </Table>
               <h2>{getTeamByID(Number(this.state.game["away"]["teamId"]))}</h2>
               <Table bordered className={[classes.card].join(" ")}>
                 <thead>
                   <tr>
                     <th>Players</th>
-                    <th>Points</th>
-                    <th>Assists</th>
-                    <th>Rebounds</th>
-                    <th>Blocks</th>
+                    <th>Stat</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>John Doe</td>
-                    <td>10</td>
-                    <td>10</td>
-                    <td>10</td>
-                    <td>10</td>
-                  </tr>
-                  <tr>
-                    <td>John Doe</td>
-                    <td>10</td>
-                    <td>10</td>
-                    <td>10</td>
-                    <td>10</td>
-                  </tr>
-                </tbody>
+                <tbody>{awayStats}</tbody>
               </Table>
             </Col>
           </Row>

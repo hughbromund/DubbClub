@@ -5,8 +5,8 @@ import Row from "react-bootstrap/Row";
 import {
   DATE_OPTIONS,
   GAME_INFO_ROUTE,
-  NEXT_SEVEN_DAYS_BASIC_GAME_INFO,
   GET_GAME_BY_ID_FROM_DB,
+  NEXT_SEVEN_DAYS_BASIC_GAME_INFO,
 } from "../../constants/Constants";
 import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";

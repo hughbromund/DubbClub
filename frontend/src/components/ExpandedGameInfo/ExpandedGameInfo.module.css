@@ -21,3 +21,31 @@
   margin: 0 auto;
   margin-bottom: -100px;
 }
+
+.centered {
+  text-align: center;
+}
+
+.logo {
+  width: 100px;
+}
+
+.verticalCenterImage {
+  line-height: 150px;
+}
+
+.background {
+  background-color: var(--top-color);
+  border-radius: var(--border-radius);
+  transition: var(--default-transition);
+  min-width: 150px;
+  max-width: 25%;
+  display: inline-block;
+}
+
+.team {
+  display: inline-block;
+}
+.right {
+  text-align: right;
+}
