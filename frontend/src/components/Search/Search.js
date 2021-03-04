@@ -11,11 +11,13 @@ import {
   GAME_INFO_ROUTE,
   GET_GAMES_BY_DATE,
   GET_GAMES_BY_TEAM,
+  GET_GAME_BY_ID_FROM_DB,
 } from "../../constants/Constants";
 import {
   getColorByTeam,
   getIdByTeam,
   NBA_TEAM_INFO,
+  getTeamByID,
 } from "../../constants/NBAConstants";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
 import SmartButton from "../SmartButton/SmartButton";
@@ -29,10 +31,14 @@ export default class Search extends Component {
       searchType: "Team",
       searchDate: new Date(),
       games: {},
+      predictions: {},
     };
 
     this.fetchGameDataByDate = this.fetchGameDataByDate.bind(this);
     this.fetchGameDataByTeam = this.fetchGameDataByTeam.bind(this);
+    this.fetchPrediction = this.fetchPrediction.bind(this);
+    this.getPredictedWinner = this.getPredictedWinner.bind(this);
+    this.getPredictionConfidence = this.getPredictionConfidence.bind(this);
   }
 
   async fetchGameDataByDate() {
@@ -42,6 +48,13 @@ export default class Search extends Component {
     this.setState({
       games: body,
     });
+    for (var i = 0; i < body.length; i++) {
+      console.log(body[i]);
+      console.log(body[i].gameId);
+      if (body[i].gameId !== undefined) {
+        await this.fetchPrediction(body[i].gameId);
+      }
+    }
   }
 
   async fetchGameDataByTeam() {
@@ -52,6 +65,41 @@ export default class Search extends Component {
     this.setState({
       games: body,
     });
+    for (var i = 0; i < body.length; i++) {
+      console.log(body[i]);
+      console.log(body[i].gameId);
+      if (body[i].gameId !== undefined) {
+        await this.fetchPrediction(body[i].gameId);
+      }
+    }
+  }
+
+  async fetchPrediction(gameID) {
+    var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
+    var body = await res.json();
+    var temp = this.state.predictions;
+    console.log(body);
+    if (body.game !== undefined) {
+      temp[gameID] = {
+        predictedWinner: getTeamByID(body.game.predictedWinner),
+        confidence: body.game.confidence,
+      };
+      this.setState({ predictions: temp });
+    }
+  }
+
+  getPredictionConfidence(gameId) {
+    if (this.state.predictions[gameId] === undefined) {
+      return 50;
+    }
+    return Math.floor(this.state.predictions[gameId].confidence * 100);
+  }
+
+  getPredictedWinner(gameId) {
+    if (this.state.predictions[gameId] === undefined) {
+      return "";
+    }
+    return this.state.predictions[gameId].predictedWinner;
   }
 
   render() {
@@ -66,8 +114,12 @@ export default class Search extends Component {
               "en-US",
               DATE_OPTIONS
             )}
-            predictedWinner={Math.random() < 0.5 ? "home" : "away"}
-            predictionConfidence={Math.floor(Math.random() * 50) + 50}
+            predictedWinner={this.getPredictedWinner(
+              this.state.games[i].gameId
+            )}
+            predictionConfidence={this.getPredictionConfidence(
+              this.state.games[i].gameId
+            )}
             awayLogo={this.state.games[i].away.teamImage}
             homeLogo={this.state.games[i].home.teamImage}
             venue={this.state.games[i].arena}

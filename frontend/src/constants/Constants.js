@@ -26,10 +26,12 @@ export const REFRESH_TOKEN = BASE + "/api/auth/refresh";
 export const USER_INFO = BASE + "/api/user/info";
 export const UPDATE_EMAIL = BASE + "/api/user/updateemail";
 export const UPDATE_PASSWORD = BASE + "/api/user/updatepassword";
-export const NEXT_SEVEN_DAYS_BASIC_GAME_INFO = BASE + "/getBasicGameInfo";
-export const GET_GAMES_BY_DATE = BASE + "/getGamesByDate";
-export const GET_GAMES_BY_TEAM = BASE + "/getRecentGamesByTeam";
-export const GET_GAME_BY_ID = BASE + "/getGameDetailsByGameId";
+export const NEXT_SEVEN_DAYS_BASIC_GAME_INFO =
+  BASE + "/api/nba/getBasicGameInfo";
+export const GET_GAMES_BY_DATE = BASE + "/api/nba/getGamesByDate";
+export const GET_GAMES_BY_TEAM = BASE + "/api/nba/getRecentGamesByTeam";
+export const GET_GAME_BY_ID_FROM_DB = BASE + "/api/nba/getGameFromDb";
+export const GET_GAME_BY_ID = BASE + "/api/nba/getGameDetailsByGameId";
 export const GET_FAVORITE_TEAMS_LIST = BASE + "/api/user/favoriteteamlist";
 export const FAVORITE_TEAM = BASE + "/api/user/favoriteteam";
 export const UNFAVORITE_TEAM = BASE + "/api/user/unfavoriteteam";

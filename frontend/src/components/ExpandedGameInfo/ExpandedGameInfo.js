@@ -3,7 +3,10 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
-import { GET_GAME_BY_ID } from "../../constants/Constants";
+import {
+  GET_GAME_BY_ID,
+  GET_GAME_BY_ID_FROM_DB,
+} from "../../constants/Constants";
 import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Speedometer from "../Speedometer/Speedometer";
@@ -19,7 +22,11 @@ export default class ExpandedGameInfo extends Component {
       gameID: this.props.location.pathname.substring(
         this.props.location.pathname.lastIndexOf("/") + 1
       ),
+      predictions: {},
     };
+    this.fetchPrediction = this.fetchPrediction.bind(this);
+    this.getPredictedWinner = this.getPredictedWinner.bind(this);
+    this.getPredictionConfidence = this.getPredictionConfidence.bind(this);
   }
 
   async fetchGameData() {
@@ -28,6 +35,35 @@ export default class ExpandedGameInfo extends Component {
     this.setState({
       game: body,
     });
+    await this.fetchPrediction(this.state.gameId);
+  }
+
+  async fetchPrediction(gameID) {
+    var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
+    var body = await res.json();
+    var temp = this.state.predictions;
+    console.log(body);
+    if (body.game !== undefined) {
+      temp[gameID] = {
+        predictedWinner: getTeamByID(body.game.predictedWinner),
+        confidence: body.game.confidence,
+      };
+      this.setState({ predictions: temp });
+    }
+  }
+
+  getPredictionConfidence(gameId) {
+    if (this.state.predictions[gameId] === undefined) {
+      return 50;
+    }
+    return Math.floor(this.state.predictions[gameId].confidence * 100);
+  }
+
+  getPredictedWinner(gameId) {
+    if (this.state.predictions[gameId] === undefined) {
+      return "";
+    }
+    return this.state.predictions[gameId].predictedWinner;
   }
 
   async componentDidMount() {
@@ -42,6 +78,7 @@ export default class ExpandedGameInfo extends Component {
         </div>
       );
     }
+    console.log(this.state.predictions);
     return (
       <div>
         <Container fluid>
@@ -116,33 +153,36 @@ export default class ExpandedGameInfo extends Component {
                 className={[classes.speedometer, classes.bottomCard].join(" ")}
               >
                 <Speedometer
-                  predictedWinner={"Chicago Bulls"}
+                  predictedWinner={this.getPredictedWinner(
+                    this.state.game.gameId
+                  )}
+                  predictionConfidence={this.getPredictionConfidence(
+                    this.state.game.gameId
+                  )}
                   awayHex={getColorByTeam(
                     getTeamByID(Number(this.state.game["away"]["teamId"]))
                   )}
                   homeHex={getColorByTeam(
                     getTeamByID(Number(this.state.game["home"]["teamId"]))
                   )}
-                  predictionConfidence={100}
                   fluidWidth={true}
                 />
               </div>
               <div>
                 <h5>
-                  {this.props.predictionConfidence > 60 ? (
+                  {this.getPredictionConfidence(this.state.gameId) > 51 ? (
                     <div>
-                      <b>{this.props.predictionConfidence}%</b> confidence that
-                      the{" "}
-                      <b>
-                        {this.props.predictedWinner === "away"
-                          ? this.props.awayTeam
-                          : this.props.homeTeam}
-                      </b>{" "}
-                      win
+                      <b>{this.getPredictionConfidence(this.state.gameId)}%</b>{" "}
+                      confidence that the{" "}
+                      <b>{this.getPredictedWinner(this.state.gameId)}</b> win
+                    </div>
+                  ) : this.getPredictedWinner(this.state.gameId) === "" ? (
+                    <div>
+                      <b>No Prediction Available</b>
                     </div>
                   ) : (
                     <div>
-                      <b>Toss Up</b> Game
+                      <b>Toss Up Game</b>
                     </div>
                   )}
                 </h5>

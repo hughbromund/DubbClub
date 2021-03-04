@@ -5,15 +5,17 @@ import Row from "react-bootstrap/Row";
 import {
   DATE_OPTIONS,
   GAME_INFO_ROUTE,
-  NEXT_SEVEN_DAYS_BASIC_GAME_INFO
+  NEXT_SEVEN_DAYS_BASIC_GAME_INFO,
+  GET_GAME_BY_ID_FROM_DB,
 } from "../../constants/Constants";
-import { getColorByTeam } from "../../constants/NBAConstants";
+import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const INITIAL_STATE = {
   games: {},
   currentDate: new Date().setHours(0, 0, 0, 0),
+  predictions: {},
 };
 
 export default class Home extends Component {
@@ -31,6 +33,9 @@ export default class Home extends Component {
     }
 
     this.fetchGameData = this.fetchGameData.bind(this);
+    this.fetchPrediction = this.fetchPrediction.bind(this);
+    this.getPredictedWinner = this.getPredictedWinner.bind(this);
+    this.getPredictionConfidence = this.getPredictionConfidence.bind(this);
   }
 
   async fetchGameData() {
@@ -40,6 +45,41 @@ export default class Home extends Component {
       games: body,
       currentDate: new Date().setHours(0, 0, 0, 0),
     });
+    for (var i = 0; i < body.length; i++) {
+      console.log(body[i]);
+      console.log(body[i].gameId);
+      if (body[i].gameId !== undefined) {
+        await this.fetchPrediction(body[i].gameId);
+      }
+    }
+  }
+
+  async fetchPrediction(gameID) {
+    var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
+    var body = await res.json();
+    var temp = this.state.predictions;
+    console.log(body);
+    if (body.game !== undefined) {
+      temp[gameID] = {
+        predictedWinner: getTeamByID(body.game.predictedWinner),
+        confidence: body.game.confidence,
+      };
+      this.setState({ predictions: temp });
+    }
+  }
+
+  getPredictionConfidence(gameId) {
+    if (this.state.predictions[gameId] === undefined) {
+      return 50;
+    }
+    return Math.floor(this.state.predictions[gameId].confidence * 100);
+  }
+
+  getPredictedWinner(gameId) {
+    if (this.state.predictions[gameId] === undefined) {
+      return "";
+    }
+    return this.state.predictions[gameId].predictedWinner;
   }
 
   async componentDidMount() {
@@ -60,6 +100,7 @@ export default class Home extends Component {
         </div>
       );
     }
+    console.log(this.state.predictions);
     let cards = [];
     for (let i = 0; i < this.state.games.length; i++) {
       let temp = (
@@ -71,8 +112,12 @@ export default class Home extends Component {
               "en-US",
               DATE_OPTIONS
             )}
-            predictedWinner={Math.random() < 0.5 ? "home" : "away"}
-            predictionConfidence={Math.floor(Math.random() * 50) + 50}
+            predictedWinner={this.getPredictedWinner(
+              this.state.games[i].gameId
+            )}
+            predictionConfidence={this.getPredictionConfidence(
+              this.state.games[i].gameId
+            )}
             awayLogo={this.state.games[i].away.teamImage}
             homeLogo={this.state.games[i].home.teamImage}
             venue={this.state.games[i].arena}
