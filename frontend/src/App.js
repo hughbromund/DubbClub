@@ -57,6 +57,11 @@ class App extends Component {
                 path={RESET_PASSWORD_ROUTE + "/:resetHash?"}
                 component={ResetPassword}
               />
+              <Route
+                exact
+                path={GAME_INFO_ROUTE + "/:id"}
+                component={ExpandedGameInfo}
+              />
               {this.context.isLoggedIn === true ? (
                 <Switch>
                   <Route path={DASHBOARD_ROUTE} component={Dashboard} />
@@ -65,11 +70,6 @@ class App extends Component {
               ) : (
                 ""
               )}
-              <Route
-                exact
-                path={GAME_INFO_ROUTE + "/:id"}
-                component={ExpandedGameInfo}
-              />
               <Route path="*" component={Login} />
             </Switch>
           </div>

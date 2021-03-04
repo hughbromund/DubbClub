@@ -15,6 +15,7 @@ import classes from "./ExpandedGameInfo.module.css";
 export default class ExpandedGameInfo extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
 
     this.fetchGameData = this.fetchGameData.bind(this);
     this.state = {
