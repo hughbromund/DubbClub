@@ -126,6 +126,8 @@ export default class Home extends Component {
             awayHex={getColorByTeam(this.state.games[i].away.teamName)}
             homeId={this.state.games[i].home.teamId}
             awayId={this.state.games[i].away.teamId}
+            gameID={this.state.games[i].gameId}
+            history={this.props.history}
             key={i}
           />
         </Col>

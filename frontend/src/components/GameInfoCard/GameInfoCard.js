@@ -3,7 +3,11 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Expand from "react-expand-animated";
-import { FAVORITE_TEAM, UNFAVORITE_TEAM } from "../../constants/Constants";
+import {
+  FAVORITE_TEAM,
+  UNFAVORITE_TEAM,
+  GAME_INFO_ROUTE,
+} from "../../constants/Constants";
 import AuthContext from "../../contexts/AuthContext.js";
 import Button from "../Button/Button";
 import Card from "../Card/Card";
@@ -268,6 +272,7 @@ export default class GameInfoCard extends Component {
                     )}
                   </h5>
                 </div>
+                {this.props.gameId}
               </Row>
 
               {/* {this.renderButtonConditionally()} */}
@@ -285,6 +290,19 @@ export default class GameInfoCard extends Component {
             <b>{this.props.gameTime}</b>
             <Expand open={this.state.expandInfo}>
               <div>{this.props.venue}</div>
+              <br />
+              <Button
+                variant="success"
+                onClick={() => {
+                  if (this.props.gameID !== undefined) {
+                    this.props.history.push(
+                      GAME_INFO_ROUTE + "/" + this.props.gameID
+                    );
+                  }
+                }}
+              >
+                More Info
+              </Button>
             </Expand>
           </div>
         </div>
