@@ -42,7 +42,6 @@ export default class ExpandedGameInfo extends Component {
     var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
     var body = await res.json();
     var temp = this.state.predictions;
-    console.log(body);
     if (body.game !== undefined) {
       temp[gameID] = {
         predictedWinner: getTeamByID(body.game.predictedWinner),
@@ -78,7 +77,6 @@ export default class ExpandedGameInfo extends Component {
         </div>
       );
     }
-    console.log(this.state.predictions);
     return (
       <div>
         <Container fluid>

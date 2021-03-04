@@ -49,8 +49,6 @@ export default class Search extends Component {
       games: body,
     });
     for (var i = 0; i < body.length; i++) {
-      console.log(body[i]);
-      console.log(body[i].gameId);
       if (body[i].gameId !== undefined) {
         await this.fetchPrediction(body[i].gameId);
       }
@@ -66,8 +64,6 @@ export default class Search extends Component {
       games: body,
     });
     for (var i = 0; i < body.length; i++) {
-      console.log(body[i]);
-      console.log(body[i].gameId);
       if (body[i].gameId !== undefined) {
         await this.fetchPrediction(body[i].gameId);
       }
@@ -78,7 +74,6 @@ export default class Search extends Component {
     var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
     var body = await res.json();
     var temp = this.state.predictions;
-    console.log(body);
     if (body.game !== undefined) {
       temp[gameID] = {
         predictedWinner: getTeamByID(body.game.predictedWinner),

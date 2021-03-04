@@ -46,8 +46,6 @@ export default class Home extends Component {
       currentDate: new Date().setHours(0, 0, 0, 0),
     });
     for (var i = 0; i < body.length; i++) {
-      console.log(body[i]);
-      console.log(body[i].gameId);
       if (body[i].gameId !== undefined) {
         await this.fetchPrediction(body[i].gameId);
       }
@@ -58,7 +56,6 @@ export default class Home extends Component {
     var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
     var body = await res.json();
     var temp = this.state.predictions;
-    console.log(body);
     if (body.game !== undefined) {
       temp[gameID] = {
         predictedWinner: getTeamByID(body.game.predictedWinner),
@@ -100,7 +97,6 @@ export default class Home extends Component {
         </div>
       );
     }
-    console.log(this.state.predictions);
     let cards = [];
     for (let i = 0; i < this.state.games.length; i++) {
       let temp = (
