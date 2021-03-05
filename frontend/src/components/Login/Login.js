@@ -40,7 +40,11 @@ export default class Login extends Component {
               <img alt="Dubb Club Logo" src={logo} width="75" />
               <br />
               <h4 className={classes.Header}>
-                <b>Sign In to Dubb Club</b>
+                {this.props.location.pathname === LOGIN_ROUTE ? (
+                  <b>Sign In to Dubb Club</b>
+                ) : (
+                  <b>You Must Sign In To Dubb Club To View This Page</b>
+                )}
               </h4>
             </div>
             <Expand open={this.state.error !== ""}>

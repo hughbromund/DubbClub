@@ -54,7 +54,13 @@ export default class Navigation extends Component {
           />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
-              <Nav.Link>Home</Nav.Link>
+              <Nav.Link
+                onClick={() => this.setExpanded(false)}
+                as={Link}
+                to={HOME_ROUTE}
+              >
+                Home
+              </Nav.Link>
               <Nav.Link
                 onClick={() => this.setExpanded(false)}
                 as={Link}
@@ -72,7 +78,9 @@ export default class Navigation extends Component {
               <Nav.Link>
                 Version:{" "}
                 {process.env.REACT_APP_VERSION
-                  ? process.env.REACT_APP_VERSION
+                  ? process.env.REACT_APP_VERSION.contains("main")
+                    ? ""
+                    : process.env.REACT_APP_VERSION
                   : "Local"}
               </Nav.Link>
             </Nav>
