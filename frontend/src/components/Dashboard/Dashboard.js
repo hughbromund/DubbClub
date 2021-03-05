@@ -106,7 +106,7 @@ export default class Dashboard extends Component {
 
     for (let i = 0; i < followedGames.length; i++) {
       let temp = (
-        <Col>
+        <Col key={"favorite-col-" + i}>
           <GameInfoCard
             homeTeam={followedGames[i].home.teamName}
             awayTeam={followedGames[i].away.teamName}
@@ -155,7 +155,7 @@ export default class Dashboard extends Component {
 
     for (let i = 0; i < otherGames.length; i++) {
       let temp = (
-        <Col>
+        <Col key={"other-col-" + i}>
           <GameInfoCard
             homeTeam={otherGames[i].home.teamName}
             awayTeam={otherGames[i].away.teamName}

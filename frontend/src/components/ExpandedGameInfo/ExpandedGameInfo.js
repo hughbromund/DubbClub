@@ -6,16 +6,23 @@ import Table from "react-bootstrap/Table";
 import {
   GET_GAME_BY_ID,
   GET_GAME_BY_ID_FROM_DB,
+  NBA_VOTE,
 } from "../../constants/Constants";
 import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Speedometer from "../Speedometer/Speedometer";
 import classes from "./ExpandedGameInfo.module.css";
+import AuthContext from "../../contexts/AuthContext.js";
+import Button from "../Button/Button";
+import SmartButton from "../SmartButton/SmartButton";
+
+const USER_PREDICT = "user";
+const ML_PREDICT = "ml";
 
 export default class ExpandedGameInfo extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
+    // console.log(props);
 
     this.fetchGameData = this.fetchGameData.bind(this);
     this.state = {
@@ -24,10 +31,15 @@ export default class ExpandedGameInfo extends Component {
         this.props.location.pathname.lastIndexOf("/") + 1
       ),
       predictions: {},
+      votedTeam: "none",
+      homeVotes: 0,
+      awayVotes: 0,
+      predictionType: ML_PREDICT,
     };
     this.fetchPrediction = this.fetchPrediction.bind(this);
     this.getPredictedWinner = this.getPredictedWinner.bind(this);
     this.getPredictionConfidence = this.getPredictionConfidence.bind(this);
+    this.voteForTeam = this.voteForTeam.bind(this);
   }
 
   async fetchGameData() {
@@ -40,15 +52,27 @@ export default class ExpandedGameInfo extends Component {
   }
 
   async fetchPrediction(gameID) {
-    var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
+    var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {
+      headers: {
+        "x-access-token": this.context.token,
+      },
+    });
     var body = await res.json();
+    // console.log(body);
     var temp = this.state.predictions;
+
     if (body.game !== undefined) {
       temp[gameID] = {
         predictedWinner: getTeamByID(body.game.predictedWinner),
         confidence: body.game.confidence,
       };
-      this.setState({ predictions: temp });
+      this.setState({
+        predictions: temp,
+
+        votedTeam: body.votedTeam,
+        homeVotes: body.game.homeVoters.length,
+        awayVotes: body.game.awayVoters.length,
+      });
     }
   }
 
@@ -64,6 +88,28 @@ export default class ExpandedGameInfo extends Component {
       return "";
     }
     return this.state.predictions[gameID].predictedWinner;
+  }
+
+  async voteForTeam(homeAway) {
+    var res = await fetch(NBA_VOTE, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": this.context.token,
+      },
+      body: JSON.stringify({
+        gameId: this.state.gameID,
+        homeAway: homeAway,
+      }),
+    });
+
+    if (res.status !== 200) {
+      return false;
+    } else {
+      await this.fetchPrediction(this.state.gameID);
+      return true;
+    }
   }
 
   async componentDidMount() {
@@ -126,6 +172,31 @@ export default class ExpandedGameInfo extends Component {
       );
       homeStats.push(temp);
     }
+    // console.log(this.state);
+    var homeAwayWinner = "home";
+
+    if (
+      this.state.predictedWinner === getTeamByID(this.state.game.away.teamId)
+    ) {
+      homeAwayWinner = "away";
+    }
+    // console.log(homeAwayWinner);
+
+    var userConfidence =
+      (100 * Math.abs(this.state.awayVotes - this.state.homeVotes)) /
+      (this.state.awayVotes + this.state.homeVotes);
+
+    if (userConfidence === 0) {
+      userConfidence = 50;
+    }
+
+    // console.log({ userConfidence });
+
+    var userWinner = "home";
+    if (this.state.awayVotes > this.state.homeVotes) {
+      userWinner = "away";
+    }
+
     return (
       <div>
         <Container fluid>
@@ -146,6 +217,23 @@ export default class ExpandedGameInfo extends Component {
                           className={classes.logo}
                         />
                       </div>
+                      {this.context.isLoggedIn ? (
+                        <SmartButton
+                          variant={
+                            this.state.votedTeam === "away" ? "success" : ""
+                          }
+                          disabled={
+                            this.state.votedTeam === "away" ? true : false
+                          }
+                          runOnClick={() => {
+                            return this.voteForTeam("away");
+                          }}
+                        >
+                          {this.state.votedTeam === "away" ? "Voted" : "Vote"}
+                        </SmartButton>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </Col>
                   <Col>
@@ -231,6 +319,23 @@ export default class ExpandedGameInfo extends Component {
                           className={classes.logo}
                         />
                       </div>
+                      {this.context.isLoggedIn ? (
+                        <SmartButton
+                          variant={
+                            this.state.votedTeam === "home" ? "success" : ""
+                          }
+                          disabled={
+                            this.state.votedTeam === "home" ? true : false
+                          }
+                          runOnClick={() => {
+                            return this.voteForTeam("home");
+                          }}
+                        >
+                          {this.state.votedTeam === "home" ? "Voted" : "Vote"}
+                        </SmartButton>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </Col>
                 </Row>
@@ -243,36 +348,96 @@ export default class ExpandedGameInfo extends Component {
               <div
                 className={[classes.speedometer, classes.bottomCard].join(" ")}
               >
-                <Speedometer
-                  predictedWinner={this.getPredictedWinner(this.state.gameID)}
-                  predictionConfidence={this.getPredictionConfidence(
-                    this.state.gameID
-                  )}
-                  awayHex={getColorByTeam(
-                    getTeamByID(Number(this.state.game["away"]["teamId"]))
-                  )}
-                  homeHex={getColorByTeam(
-                    getTeamByID(Number(this.state.game["home"]["teamId"]))
-                  )}
-                  fluidWidth={true}
-                />
+                <Row>
+                  <Col>
+                    <Button
+                      variant={
+                        this.state.predictionType === ML_PREDICT
+                          ? ""
+                          : "outline"
+                      }
+                      onClick={() => {
+                        this.setState({ predictionType: ML_PREDICT });
+                      }}
+                    >
+                      Dubb Club Prediction
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button
+                      variant={
+                        this.state.predictionType === USER_PREDICT
+                          ? ""
+                          : "outline"
+                      }
+                      onClick={() => {
+                        this.setState({ predictionType: USER_PREDICT });
+                      }}
+                    >
+                      User Prediction
+                    </Button>
+                  </Col>
+                </Row>
+
+                <br />
+                {this.state.predictionType === ML_PREDICT ? (
+                  <Speedometer
+                    predictedWinner={homeAwayWinner}
+                    predictionConfidence={this.getPredictionConfidence(
+                      this.state.gameID
+                    )}
+                    awayHex={getColorByTeam(
+                      getTeamByID(Number(this.state.game["away"]["teamId"]))
+                    )}
+                    homeHex={getColorByTeam(
+                      getTeamByID(Number(this.state.game["home"]["teamId"]))
+                    )}
+                    fluidWidth={true}
+                  />
+                ) : (
+                  <Speedometer
+                    predictedWinner={userWinner}
+                    predictionConfidence={userConfidence}
+                    awayHex={getColorByTeam(
+                      getTeamByID(Number(this.state.game["away"]["teamId"]))
+                    )}
+                    homeHex={getColorByTeam(
+                      getTeamByID(Number(this.state.game["home"]["teamId"]))
+                    )}
+                    fluidWidth={true}
+                  />
+                )}
               </div>
               <div>
                 <h5>
-                  {this.getPredictionConfidence(this.state.gameID) > 51 ? (
-                    <div>
-                      <b>{this.getPredictionConfidence(this.state.gameID)}%</b>{" "}
-                      confidence that the{" "}
-                      <b>{this.getPredictedWinner(this.state.gameID)}</b> win
-                    </div>
-                  ) : this.getPredictedWinner(this.state.gameID) === "" ? (
-                    <div>
-                      <b>No Prediction Available</b>
-                    </div>
+                  {this.state.predictionType === ML_PREDICT ? (
+                    this.getPredictionConfidence(this.state.gameID) > 51 ? (
+                      <div>
+                        Dubb Club is{" "}
+                        <b>
+                          {this.getPredictionConfidence(this.state.gameID)}%
+                        </b>{" "}
+                        confidence that the{" "}
+                        <b>{this.getPredictedWinner(this.state.gameID)}</b> win
+                      </div>
+                    ) : this.getPredictedWinner(this.state.gameID) === "" ? (
+                      <div>
+                        <b>No Prediction Available</b>
+                      </div>
+                    ) : (
+                      <div>
+                        <b>Toss Up Game</b>
+                      </div>
+                    )
                   ) : (
-                    <div>
-                      <b>Toss Up Game</b>
-                    </div>
+                    this.state.awayVotes +
+                    " user(s) think that " +
+                    getTeamByID(Number(this.state.game["away"]["teamId"])) +
+                    " will win and " +
+                    this.state.homeVotes +
+                    " user(s) think that " +
+                    getTeamByID(Number(this.state.game["home"]["teamId"])) +
+                    " will win."
                   )}
                 </h5>
               </div>
@@ -305,3 +470,4 @@ export default class ExpandedGameInfo extends Component {
     );
   }
 }
+ExpandedGameInfo.contextType = AuthContext;

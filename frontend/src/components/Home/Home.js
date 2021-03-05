@@ -100,7 +100,7 @@ export default class Home extends Component {
     let cards = [];
     for (let i = 0; i < this.state.games.length; i++) {
       let temp = (
-        <Col>
+        <Col key={"col-" + i}>
           <GameInfoCard
             homeTeam={this.state.games[i].home.teamName}
             awayTeam={this.state.games[i].away.teamName}
