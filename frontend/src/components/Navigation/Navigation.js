@@ -78,9 +78,7 @@ export default class Navigation extends Component {
               <Nav.Link>
                 Version:{" "}
                 {process.env.REACT_APP_VERSION
-                  ? process.env.REACT_APP_VERSION.contains("main")
-                    ? ""
-                    : process.env.REACT_APP_VERSION
+                  ? process.env.REACT_APP_VERSION
                   : "Local"}
               </Nav.Link>
             </Nav>
