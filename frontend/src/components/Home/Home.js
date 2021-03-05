@@ -98,7 +98,14 @@ export default class Home extends Component {
       );
     }
     let cards = [];
+    // console.log(this.state.games);
     for (let i = 0; i < this.state.games.length; i++) {
+      if (
+        this.state.games[i].home.teamName === undefined ||
+        this.state.games[i].away.teamName === undefined
+      ) {
+        continue;
+      }
       let temp = (
         <Col key={"col-" + i}>
           <GameInfoCard

@@ -105,6 +105,12 @@ export default class Dashboard extends Component {
     var followedCards = [];
 
     for (let i = 0; i < followedGames.length; i++) {
+      if (
+        followedGames[i].home.teamName === undefined ||
+        followedGames[i].away.teamName === undefined
+      ) {
+        continue;
+      }
       let temp = (
         <Col key={"favorite-col-" + i}>
           <GameInfoCard
@@ -154,6 +160,12 @@ export default class Dashboard extends Component {
     var otherCards = [];
 
     for (let i = 0; i < otherGames.length; i++) {
+      if (
+        otherGames[i].home.teamName === undefined ||
+        otherGames[i].away.teamName === undefined
+      ) {
+        continue;
+      }
       let temp = (
         <Col key={"other-col-" + i}>
           <GameInfoCard
