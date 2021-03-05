@@ -1,0 +1,52 @@
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  background-color: var(--foreground-color);
+  border-radius: var(--border-radius);
+  transition: var(--default-transition);
+  color: var(--text-primary);
+  padding: var(--default-padding);
+  border-radius: var(--border-radius);
+  margin: var(--default-margin);
+}
+.bottomCard {
+  height: 100%;
+}
+
+.speedometer {
+  text-align: center;
+  margin: 0 auto;
+  margin-bottom: -100px;
+  min-height: 40rem;
+}
+
+.centered {
+  text-align: center;
+}
+
+.logo {
+  width: 100px;
+}
+
+.verticalCenterImage {
+  line-height: 150px;
+}
+
+.background {
+  background-color: var(--top-color);
+  border-radius: var(--border-radius);
+  transition: var(--default-transition);
+  min-width: 150px;
+  max-width: 25%;
+  display: inline-block;
+}
+
+.team {
+  display: inline-block;
+}
+.right {
+  text-align: right;
+}

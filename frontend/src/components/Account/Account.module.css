@@ -1,0 +1,13 @@
+.Account {
+  margin-top: 50px;
+  max-width: calc(var(--default-column-width));
+}
+.usernameInput {
+  cursor: not-allowed;
+}
+.headerAlign {
+  text-align: center;
+}
+.alertDiv {
+  padding: var(--default-margin);
+}

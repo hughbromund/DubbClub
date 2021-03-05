@@ -1,0 +1,91 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - "backend/**"
+
+jobs:
+  setup-build-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    env:
+      backend: ./backend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Setup and configure gcloud CLI
+      # - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      #   with:
+      #     version: "290.0.1"
+      #     project_id: ${{ secrets.project_id }}
+      #     service_account_key: ${{ secrets.GCP_SA_KEY}}
+
+      - name: Declare GitHub Hash and Branch
+        id: vars
+        shell: bash
+        run: |
+          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: Create config.json
+        run: |
+          touch config.json
+          echo "{}" > config.json
+        working-directory: ${{env.backend}}
+
+      - name: Set Database Secrets
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: ./backend/config.json
+          field: ${{ secrets.DATABASE_KEY }}
+          value: ${{ secrets.DATABASE_VALUE }}
+
+      - name: Set JWT Secrets
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: ./backend/config.json
+          field: ${{ secrets.JWT_SECRET_KEY }}
+          value: ${{ secrets.JWT_SECRET_VALUE }}
+
+      - name: Set NBA API Secrets
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: ./backend/config.json
+          field: ${{ secrets.NBA_API_KEY }}
+          value: ${{ secrets.NBA_API_VALUE }}
+
+      - name: Set Service Secrets
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: ./backend/config.json
+          field: ${{ secrets.SERVICE_KEY }}
+          value: ${{ secrets.SERVICE_VALUE }}
+
+      - name: Set User Secrets
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: ./backend/config.json
+          field: ${{ secrets.USER_KEY }}
+          value: ${{ secrets.USER_VALUE }}
+
+      - name: Set Email Pass Secrets
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: ./backend/config.json
+          field: ${{ secrets.EMAIL_PASS_KEY }}
+          value: ${{ secrets.EMAIL_PASS_VALUE }}
+
+      - name: Deploy Backend
+        uses: google-github-actions/deploy-appengine@main
+        with:
+          deliverables: app.yaml
+          project_id: ${{ secrets.project_id }}
+          credentials: ${{ secrets.GCP_SA_KEY }}
+          version: "backend-${{ steps.vars.outputs.branch }}-${{ steps.vars.outputs.sha_short }}"
+          working_directory: ${{env.backend}}

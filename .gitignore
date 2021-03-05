@@ -1,1 +1,14 @@
 .DS_Store
+models/config.py
+__pycache__/
+models/season_data/2015_games.csv
+models/season_data/2016_games.csv
+models/season_data/2017_games.csv
+models/season_data/2018_games.csv
+models/season_data/2019_games.csv
+models/season_data/2020_games.csv
+models/model.pkl
+mustafar/config.py
+node_modules
+mustafar/config.json
+mustafar/model.pkl

@@ -1,9 +1,17 @@
 import React, { Component } from "react";
-import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 import logo from "../../assets/LogoWordmarkWhite.png";
-
+import {
+  ACCOUNT_ROUTE,
+  DASHBOARD_ROUTE,
+  HOME_ROUTE,
+  LOGIN_ROUTE,
+  REGISTER_ROUTE,
+  SEARCH_ROUTE,
+} from "../../constants/Constants";
+import AuthContext from "../../contexts/AuthContext.js";
 import classes from "./Navigation.module.css";
 
 export default class Navigation extends Component {
@@ -34,7 +42,7 @@ export default class Navigation extends Component {
           <Navbar.Brand
             onClick={() => this.setExpanded(false)}
             as={Link}
-            to="/"
+            to={HOME_ROUTE}
           >
             <img alt="" src={logo} width="200" />
           </Navbar.Brand>
@@ -45,17 +53,62 @@ export default class Navigation extends Component {
             aria-controls="responsive-navbar-nav"
           />
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav>
-              <Nav.Link>Home</Nav.Link>
-              <Nav.Link>Dashboard</Nav.Link>
-              <Nav.Link>Search</Nav.Link>
+            <Nav className="mr-auto">
               <Nav.Link
                 onClick={() => this.setExpanded(false)}
                 as={Link}
-                to="/login"
+                to={HOME_ROUTE}
               >
-                Login
+                Home
               </Nav.Link>
+              <Nav.Link
+                onClick={() => this.setExpanded(false)}
+                as={Link}
+                to={DASHBOARD_ROUTE}
+              >
+                Dashboard
+              </Nav.Link>
+              <Nav.Link
+                onClick={() => this.setExpanded(false)}
+                as={Link}
+                to={SEARCH_ROUTE}
+              >
+                Search
+              </Nav.Link>
+              <Nav.Link>
+                Version:{" "}
+                {process.env.REACT_APP_VERSION
+                  ? process.env.REACT_APP_VERSION
+                  : "Local"}
+              </Nav.Link>
+            </Nav>
+            <Nav>
+              {this.context.isLoggedIn === true ? (
+                <Nav.Link
+                  onClick={() => this.setExpanded(false)}
+                  as={Link}
+                  to={ACCOUNT_ROUTE}
+                >
+                  Account: <b>{this.context.username}</b>
+                </Nav.Link>
+              ) : (
+                <Nav>
+                  <Nav.Link
+                    onClick={() => this.setExpanded(false)}
+                    as={Link}
+                    to={LOGIN_ROUTE}
+                  >
+                    Login
+                  </Nav.Link>
+                  <Nav.Link
+                    onClick={() => this.setExpanded(false)}
+                    as={Link}
+                    to={REGISTER_ROUTE}
+                  >
+                    Sign Up
+                  </Nav.Link>
+                </Nav>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -63,3 +116,4 @@ export default class Navigation extends Component {
     );
   }
 }
+Navigation.contextType = AuthContext;

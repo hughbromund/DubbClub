@@ -21,6 +21,9 @@
     rgba(1, 47, 120, 1) 100%
   );
 
+  --error-color: #d32f2f;
+  --success-color: green;
+
   --default-transition: 0.5s;
 
   background-color: var(--background-color);
@@ -68,6 +71,20 @@ hr {
 
 /* Custom CSS for Text Inputs */
 input {
+  border-radius: var(--border-radius) !important;
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: var(--top-color) !important;
+  border: none;
+  color: var(--text-primary) !important;
+  transition: none;
+  margin-bottom: var(--default-margin);
+  width: 100%;
+}
+
+.form-control {
   border-radius: var(--border-radius);
   padding-left: var(--default-padding);
   padding-right: var(--default-padding);
@@ -76,12 +93,28 @@ input {
   background-color: var(--top-color);
   border: none;
   color: var(--text-primary);
+  transition: none;
   margin-bottom: var(--default-margin);
   width: 100%;
 }
+
+select {
+  border-radius: var(--border-radius) !important;
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: var(--top-color) !important;
+  border: none;
+  color: var(--text-primary) !important;
+  transition: none;
+  margin-bottom: var(--default-margin);
+  width: 100%;
+}
+
 ::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: var(--text-disabled);
+  color: var(--text-disabled) !important;
   opacity: 1; /* Firefox */
 }
 

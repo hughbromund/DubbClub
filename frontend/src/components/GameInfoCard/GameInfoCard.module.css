@@ -5,3 +5,41 @@
 .logo {
   width: 100px;
 }
+
+.verticalCenterImage {
+  line-height: 150px;
+}
+.speedometer {
+  text-align: center;
+  margin: 0 auto;
+  margin-bottom: -100px;
+  width: var(--default-column-width);
+}
+.teamNames {
+  text-align: center;
+  font-size: 20px;
+  line-height: 24px;
+  text-transform: capitalize;
+}
+
+.background {
+  background-color: var(--top-color);
+  border-radius: var(--border-radius);
+  transition: var(--default-transition);
+}
+/* .background:hover {
+  transition: var(--default-transition);
+  background-color: var(--primary-color);
+} */
+.outer {
+  margin: 0px;
+}
+.wrapper {
+  margin: var(--default-margin);
+  max-width: var(--default-column-width);
+  background-image: var(--gradient);
+  border-radius: var(--border-radius);
+}
+.gameTime {
+  padding: var(--default-padding);
+}

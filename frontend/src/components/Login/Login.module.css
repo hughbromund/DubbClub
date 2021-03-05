@@ -15,3 +15,9 @@
 .labelWrapper {
   min-width: 100%;
 }
+.alertDiv {
+  padding: var(--default-margin);
+}
+.buttonGroup {
+  padding: var(--default-margin);
+}

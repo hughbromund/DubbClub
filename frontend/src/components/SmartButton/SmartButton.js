@@ -1,9 +1,7 @@
-import React, { Component } from "react";
-import Button from "../Button/Button";
-import Spinner from "react-bootstrap/Spinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import classes from "./SmartButton.module.css";
+import React, { Component } from "react";
+import Spinner from "react-bootstrap/Spinner";
+import Button from "../Button/Button";
 
 const SUCCESS = 0;
 const ERROR = 1;
@@ -27,11 +25,17 @@ export default class SmartButton extends Component {
     super(props);
 
     this.SUCCESS = 0;
+    this.timeoutID = null;
 
     this.state = {
       status: DEFAULT,
       clickCount: 0,
     };
+  }
+
+  componentWillUnmount() {
+    // console.log(this.timeoutID);
+    clearTimeout(this.timeoutID);
   }
   render() {
     var variant = this.props.variant;
@@ -53,11 +57,12 @@ export default class SmartButton extends Component {
           } else {
             this.setState({ status: ERROR });
           }
-          setTimeout(() => {
+          this.timeoutID = setTimeout(() => {
             this.setState({
               status: DEFAULT,
             });
-          }, 2000);
+          }, 1500);
+          // console.log(this.timeoutID);
         }}
       >
         {this.state.status === LOADING ? (
