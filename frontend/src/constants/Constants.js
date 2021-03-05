@@ -37,6 +37,7 @@ export const FAVORITE_TEAM = BASE + "/api/user/favoriteteam";
 export const UNFAVORITE_TEAM = BASE + "/api/user/unfavoriteteam";
 export const RESET_PASSWORD_EMAIL = BASE + "/api/user/resetPasswordEmail";
 export const RESET_PASSWORD = BASE + "/api/user/resetPassword";
+export const NBA_VOTE = BASE + "/api/nba/vote";
 
 /* Date options to convert to UTC for Game Cards */
 export const DATE_OPTIONS = {

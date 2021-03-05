@@ -67,6 +67,8 @@ export default class GameInfoCard extends Component {
     );
   }
   componentDidMount() {
+    // console.log(this.props.predictedWinner);
+    // console.log(this.props);
     // console.log(this.props);
     // console.log(this.props.awayTeam);
     // console.log(this.context.isFollowedTeam("NBA", this.props.awayId));
@@ -117,6 +119,12 @@ export default class GameInfoCard extends Component {
   }
 
   render() {
+    var homeAwayWinner = "home";
+
+    if (this.props.predictedWinner === this.props.awayTeam) {
+      homeAwayWinner = "away";
+    }
+
     return (
       <div>
         <div className={classes.wrapper}>
@@ -248,7 +256,7 @@ export default class GameInfoCard extends Component {
               <Row>
                 <div className={classes.speedometer}>
                   <Speedometer
-                    predictedWinner={this.props.predictedWinner}
+                    predictedWinner={homeAwayWinner}
                     awayHex={this.props.awayHex}
                     homeHex={this.props.homeHex}
                     predictionConfidence={this.props.predictionConfidence}
