@@ -144,8 +144,15 @@ export default class Home extends Component {
     return (
       <div>
         <Container fluid>
-          <h1>Homepage</h1>
+          <h1>
+            Welcome to <b>DUBB CLUB</b>!
+          </h1>
+          <h3>
+            Dubb Club lets you see game predictions for all the sports you love
+          </h3>
           <br />
+          <h3>Upcoming Games with Predictions</h3>
+          <hr />
           <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
             {cards}
           </Row>
