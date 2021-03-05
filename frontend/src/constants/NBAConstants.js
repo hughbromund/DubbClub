@@ -123,6 +123,14 @@ export const NBA_TEAM_INFO = {
     teamID: 41,
     hexColor: "#002B5C",
   },
+  "Team LeBron": {
+    teamID: 35,
+    hexColor: "#000000",
+  },
+  "Team Durant": {
+    teamID: 34,
+    hexColor: "#ffffff",
+  },
 };
 
 export const normalizeTeam = (str) => {
