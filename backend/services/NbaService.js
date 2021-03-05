@@ -8,7 +8,7 @@ exports.getBasicGameInfo = async function() {
   let result = [];
 
   let requests = [];
-  for (var i = 0; i < 7; i++) {
+  for (var i = 0; i < 3; i++) {
     var options = {
       method: 'GET',
       url: "https://api-nba-v1.p.rapidapi.com/games/date/" + start.toISOString().slice(0,10),
@@ -44,7 +44,7 @@ exports.getUpcomingGameIds = async function() {
   var start = new Date();
   let result = [];
   let requests = [];
-  for (var i = 0; i < 3; i++) {
+  for (var i = 0; i < 7; i++) {
     var options = {
       method: 'GET',
       url: "https://api-nba-v1.p.rapidapi.com/games/date/" + start.toISOString().slice(0,10),
