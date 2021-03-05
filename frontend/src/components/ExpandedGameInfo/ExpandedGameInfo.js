@@ -183,19 +183,22 @@ export default class ExpandedGameInfo extends Component {
     // console.log(homeAwayWinner);
 
     var userConfidence =
-      (100 * Math.abs(this.state.awayVotes - this.state.homeVotes)) /
+      (100 * this.state.homeVotes) /
       (this.state.awayVotes + this.state.homeVotes);
 
-    if (userConfidence === 0) {
+    var userWinner = "home";
+    if (this.state.awayVotes > this.state.homeVotes) {
+      userConfidence =
+        (100 * this.state.awayVotes) /
+        (this.state.awayVotes + this.state.homeVotes);
+      userWinner = "away";
+    }
+
+    if (userConfidence === 0 || isNaN(userConfidence)) {
       userConfidence = 50;
     }
 
     // console.log({ userConfidence });
-
-    var userWinner = "home";
-    if (this.state.awayVotes > this.state.homeVotes) {
-      userWinner = "away";
-    }
 
     return (
       <div>
