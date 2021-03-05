@@ -262,11 +262,52 @@ def predict_nba_winner(game_id="6911"):
     Returns a tuple in the form (<winnning team id>, confidence)
     """
 
+    list_of_teams = [
+        "Atlanta Hawks",
+        "Boston Celtics",
+        "Brooklyn Nets",
+        "Charlotte Hornets",
+        "Chicago Bulls",
+        "Cleveland Cavaliers",
+        "Dallas Mavericks",
+        "Denver Nuggets",
+        "Detroit Pistons",
+        "Golden State Warriors",
+        "Houston Rockets",
+        "Indiana Pacers",
+        "LA Clippers",
+        "Los Angeles Lakers",
+        "Memphis Grizzlies",
+        "Miami Heat",
+        "Milwaukee Bucks",
+        "Minnesota Timberwolves",
+        "New Orleans Pelicans",
+        "New York Knicks",
+        "Oklahoma City Thunder",
+        "Orlando Magic",
+        "Philadelphia 76ers",
+        "Phoenix Suns",
+        "Portland Trail Blazers",
+        "Sacramento Kings",
+        "San Antonio Spurs",
+        "Toronto Raptors",
+        "Utah Jazz",
+        "Washington Wizards"
+    ]
+
     game_id = str(game_id)
 
     # Make API request to get the teams/team ID's
     game_url = "https://api-nba-v1.p.rapidapi.com/games/gameId/" + game_id
     response = requests.request("GET", game_url, headers=headers).json()
+
+    # Fix for all-star game/break
+    if response["api"]["games"][0]["hTeam"]["fullName"] not in list_of_teams or response["api"]["games"][0]["vTeam"]["fullName"] not in list_of_teams:
+        output_dict = {
+            "pred_winner": int(response["api"]["games"][0]["hTeam"]["teamId"]),
+            "confidence": 0.5
+        }
+        return output_dict
 
     season = response["api"]["games"][0]["seasonYear"]
     h_id = response["api"]["games"][0]["hTeam"]["teamId"]
