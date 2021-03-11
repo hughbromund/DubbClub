@@ -89,8 +89,8 @@ exports.getGamesByDate = async function(date) {
 
     for(var i = 0; i < games.length; i++) {
       if (games[i].league === "standard") {
-        let home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
-        let away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
+        let [home, away] = await Promise.all([getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo),
+          getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)]);
         let game = {"gameId" : games[i].gameId, "date" : games[i].startTimeUTC, "arena" : games[i].arena,
         "home" : home, "away" : away}
         result.push(game);
@@ -123,9 +123,8 @@ exports.getRecentGamesByTeam = async function(teamId) {
     for(var i = games.length - 1; i > 0; i--) {
       let gameDate = new Date(games[i].startTimeUTC);
       if (gameDate <= start) {
-        var home = await getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo)
-        var away = await getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo)
-        var gameStats = await getPlayedGameStats(games[i].gameId)
+        let [home, away, gameStats] = await Promise.all([getTeamStats(games[i].hTeam.teamId, games[i].hTeam.fullName, games[i].hTeam.logo),
+          getTeamStats(games[i].vTeam.teamId, games[i].vTeam.fullName, games[i].vTeam.logo), getPlayedGameStats(games[i].gameId)]);
         var game = {"gameId" : games[i].gameId, "date" : games[i].startTimeUTC, "arena" : games[i].arena,
         "home" : home, "away" : away, "gameStats" : gameStats}
         result.push(game);
