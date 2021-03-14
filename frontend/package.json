@@ -21,6 +21,7 @@
     "react-https-redirect": "^1.1.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
+    "react-share": "^4.4.0",
     "rgb-hex": "^3.0.0",
     "serve": "^11.3.2",
     "web-vitals": "^1.1.0"
