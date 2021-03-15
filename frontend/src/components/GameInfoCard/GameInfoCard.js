@@ -8,6 +8,14 @@ import {
   UNFAVORITE_TEAM,
   GAME_INFO_ROUTE,
 } from "../../constants/Constants";
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  TwitterIcon,
+  RedditShareButton,
+  RedditIcon,
+} from "react-share";
 import AuthContext from "../../contexts/AuthContext.js";
 import Button from "../Button/Button";
 import Card from "../Card/Card";
@@ -119,6 +127,8 @@ export default class GameInfoCard extends Component {
   }
 
   render() {
+    const shareURL = "https://www.dubb.club";
+    const shareText = `Dubb Club has predicted that ${this.props.predictedWinner} will win today with a confidence of ${this.props.predictionConfidence}`;
     var homeAwayWinner = "home";
 
     if (this.props.predictedWinner === this.props.awayTeam) {
@@ -311,6 +321,21 @@ export default class GameInfoCard extends Component {
               >
                 More Info
               </Button>
+              <br />
+              <br />
+              <FacebookShareButton
+                url={shareURL}
+                title={shareText}
+                quote={shareText}
+              >
+                <FacebookIcon size={32} round />
+              </FacebookShareButton>
+              <TwitterShareButton url={shareURL} title={shareText}>
+                <TwitterIcon size={32} round />
+              </TwitterShareButton>
+              <RedditShareButton url={shareURL} title={shareText}>
+                <RedditIcon size={32} round />
+              </RedditShareButton>
             </Expand>
           </div>
         </div>
