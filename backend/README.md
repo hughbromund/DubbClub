@@ -264,6 +264,43 @@ JSON Result Format:
   "message": "Successfully Updated Password!"
 }
 
+### /api/user/updatePhoneNumber
+
+POST
+updates user's phone number
+Requirements: phoneNumber field
+Returns: success/failure message  
+Status: Working
+
+JSON Request Format:
+{
+  "phoneNumber": "1234567890",
+}
+
+JSON Result Format:
+{
+  "message": "Successfully updated phone number!"
+}
+
+### /api/user/updateNotifications
+
+POST
+updates user's notification settings
+Requirements: sms and email field, booleans
+Returns: success/failure message  
+Status: Working
+
+JSON Request Format:
+{
+  "sms": true,
+  "email": false
+}
+
+JSON Result Format:
+{
+  "message": "Successfully updated notification settings"
+}
+
 ### /api/user/favoriteteam
 
 POST
