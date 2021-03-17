@@ -1,6 +1,7 @@
 const path = require("path");
 
 var nbaService = require(path.resolve(__dirname, "../services/NbaService"));
+var nbaUpdateService = require(path.resolve(__dirname, "../services/NbaUpdateService"));
 
 exports.getStub = async function (req, res, next) {
     res.sendStatus(200);
@@ -60,6 +61,14 @@ exports.userVote = async function (req, res, next) {
 exports.getGameFromDb = async function (req, res, next) {
     try {
         nbaService.getGameFromDb(req, res);
+      } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};
+
+exports.refresh = async function (req, res, next) {
+    try {
+        nbaUpdateService.refresh();
       } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
