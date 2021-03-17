@@ -6,7 +6,7 @@ const NBAgame = require("../database/models/NBAgame");
 //async not working with mustafar
 exports.getMustafarPredictions = async function(gameIds) {
     let results = []
-/*
+
     for (var i = 0; i < gameIds.length; i++) {
         let url = "https://mustafar.dubb.club/predictnbawin/" + gameIds[i]
         console.log(url)
@@ -14,40 +14,8 @@ exports.getMustafarPredictions = async function(gameIds) {
         console.log(res.data)
         results.push(res.data)
     }
-*/
-    //return results
 
-    return [
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17},
-        {"confidence": 0.50, "pred_winner": 17}
-    ]
+    return results
 }
 
 exports.updateDbWithPredictions = function(upcoming, predictions) {

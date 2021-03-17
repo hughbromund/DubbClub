@@ -68,7 +68,8 @@ exports.getGameFromDb = async function (req, res, next) {
 
 exports.refresh = async function (req, res, next) {
     try {
-        nbaUpdateService.refresh();
+        let result = await nbaUpdateService.refresh();
+        return res.status(200).json({"message":"Successful Refresh.", "updated Ids": result});
       } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
