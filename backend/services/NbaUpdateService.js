@@ -17,7 +17,6 @@ exports.refresh = async function refresh() {
 
       //fix gameId if necessary
       if (gameInDb === null) {
-         console.log(upcoming[i])
          gameInDb = await NBAgame.findOne({ "away.teamName" : upcoming[i].vTeam.fullName,
           "home.teamName" : upcoming[i].hTeam.fullName, date : upcoming[i].startTimeUTC}).exec()
          let foundId = gameInDb.id
