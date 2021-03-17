@@ -37,7 +37,7 @@
 /* Modifications for global CSS on Mobile Devices */
 @media (max-width: 768px) {
   :root {
-    --default-margin: 10px;
+    /* --default-margin: 5px; */
     --default-padding: 10px;
     --default-column-width: 100%;
   }

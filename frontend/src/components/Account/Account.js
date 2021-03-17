@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
 import Expand from "react-expand-animated";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   UPDATE_EMAIL,
   UPDATE_PASSWORD,
@@ -38,7 +40,7 @@ export default class Account extends Component {
     // console.log(res);
 
     var body = await res.json();
-    // console.log(body);
+    console.log(body);
 
     this.setState({
       username: body.username,
@@ -73,11 +75,20 @@ export default class Account extends Component {
             <div>
               <b>Username</b>
             </div>
-            <input
-              className={classes.usernameInput}
-              readOnly
-              defaultValue={this.state.username}
-            ></input>
+            <div className={classes.InputAddOn}>
+              <span className={classes.InputAddOnitem}>
+                <FontAwesomeIcon icon={["fas", "user"]} />
+              </span>
+              <input
+                className={classes.usernameInput}
+                readOnly
+                defaultValue={this.state.username}
+                className={classes.InputAddOnfield}
+              ></input>
+            </div>
+            <div className={classes.descriptionText}>
+              Your username is unique to you and can't be changed.
+            </div>
             <div>
               <b>Email</b>
             </div>
@@ -86,14 +97,24 @@ export default class Account extends Component {
                 e.preventDefault();
               }}
             >
-              <input
-                value={this.state.newEmail}
-                onChange={(e) => {
-                  this.setState({
-                    newEmail: e.target.value,
-                  });
-                }}
-              ></input>
+              <div className={classes.InputAddOn}>
+                <span className={classes.InputAddOnitem}>
+                  <FontAwesomeIcon icon={["fas", "envelope"]} />
+                </span>
+                <input
+                  value={this.state.newEmail}
+                  className={classes.InputAddOnfield}
+                  onChange={(e) => {
+                    this.setState({
+                      newEmail: e.target.value,
+                    });
+                  }}
+                ></input>
+              </div>
+              <div className={classes.descriptionText}>
+                Your email is used to reset your password and send you
+                notifications. You can disable notifications at any time.
+              </div>
               <Expand open={this.state.email !== this.state.newEmail}>
                 <SmartButton
                   disabled={this.state.email === this.state.newEmail}
@@ -127,6 +148,31 @@ export default class Account extends Component {
                   Save Changes
                 </SmartButton>
               </Expand>
+            </form>
+            <div>
+              <b>Phone Number</b>
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+              }}
+            >
+              <div className={classes.InputAddOn}>
+                <span className={classes.InputAddOnitem}>
+                  <b>+1</b>
+                </span>
+                <input
+                  type="tel"
+                  pattern="[0-9]{10}"
+                  placeholder="1234567890"
+                  className={classes.InputAddOnfield}
+                ></input>
+              </div>
+              <div className={classes.descriptionText}>
+                Your phone number is used to send notifications about upcoming
+                games. You can disable notifications at any time. Only +1
+                Country Codes are currently supported.
+              </div>
             </form>
             <div>
               <b>Password</b>

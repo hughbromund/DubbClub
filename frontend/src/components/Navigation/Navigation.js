@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import logo from "../../assets/LogoWordmarkWhite.png";
 import {
   ACCOUNT_ROUTE,
@@ -89,7 +91,8 @@ export default class Navigation extends Component {
                   as={Link}
                   to={ACCOUNT_ROUTE}
                 >
-                  Account: <b>{this.context.username}</b>
+                  <b>{this.context.username}</b>{" "}
+                  <FontAwesomeIcon icon={["fas", "user"]} />
                 </Nav.Link>
               ) : (
                 <Nav>
