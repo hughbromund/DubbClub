@@ -193,7 +193,7 @@ JSON Format:
 GET  
 gets game for specified gameId from DB
 Requirements: gameId parameter, optional JWT auth token
-Returns: JSON body of revavent data, or message of failure  
+Returns: JSON body of relavent data, or message of failure  
 Status: Working  
 Issues: None?
 
@@ -203,6 +203,18 @@ JSON return Format:
   "game": Same as getBasicGameData json format  
   "message": "Successful!"  
 }
+
+### /api/nba/refresh
+
+GET  
+fixes gameId if necessary, handles transition between status, handles calling live game functions  
+Requirements: nothing  
+Returns: JSON list of changed ids plus error/success message  
+Status: Working  
+Issues: None  
+
+JSON return Format:  
+{"message":"Successful Refresh.","updated Ids":["Updated 8600 to 8844"]}  
 
 ### /api/nba/vote
 

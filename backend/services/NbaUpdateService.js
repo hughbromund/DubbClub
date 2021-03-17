@@ -32,12 +32,16 @@ exports.refresh = async function refresh() {
 
       //transition to live game
       if (gameInDb.status === "Scheduled" && upcoming[i].statusGame === "In Play") {
-         //do the thing
+         //do Peyton's thing
       }
 
       //transition to finished game
       if (gameInDb.status === "In Play" && upcoming[i].statusGame === "Finished") {
-         //do the other thing
+         //do the other thing (Daniel)
+      }
+
+      if (gameInDb.status === "In Play") {
+         //live game shit
       }
    }
 
