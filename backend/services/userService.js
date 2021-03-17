@@ -97,7 +97,29 @@ exports.login = (req, res) => {
         return res.status(404).send({ message: "User Not found." });
       }
 
-      res.status(200).send({username: user.username, email: user.email})
+      var retObj = {
+        username: user.username,
+        email: user.email,
+        message: "Success!",
+      }
+
+      if (user.phoneNumber) {
+        retObj.phoneNumber = user.phoneNumber
+      }
+      else {
+        retObj.phoneNumber = "none";
+      }
+
+      if (user.notifications) {
+        retObj.notifications = user.notifications
+      }
+      else {
+        retObj.notifications.SMS = false;
+        retObj.notifications.email = false;
+      }
+
+
+      res.status(200).send(retObj)
     })
   }
 
@@ -263,3 +285,49 @@ exports.login = (req, res) => {
       res.status(200).send({favoriteTeams: user.favoriteTeams, message: "Successfully returned teams."})
     })
   }
+
+  exports.changePhoneNumber = (req, res) => {
+    var re = new RegExp("[0-9]{10}")
+    phoneNumberVal = req.body.phoneNumber
+    if (!re.test(phoneNumberVal)) {
+      return res.status(400).send({message: "Invalid phone number format"})
+    }
+    phoneNumberVal = "+1" + phoneNumberVal
+
+    User.updateOne({_id: req.userId}, {phoneNumber: phoneNumberVal})
+    .exec((err, user) => {
+      if (err && err.name == "MongoError" && err.code === 11000) {
+        return res.status(422).send({ err: err, message: "Phone number already exists."});
+      }
+
+      if (err) {
+        return res.status(500).send({ err: err, message: "Database failure." });
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      res.status(200).send({message: "Successfully updated phone number."})
+    })
+  }
+
+  exports.changeNotifications = (req, res) => {
+
+    smsVal = req.body.sms;
+    emailVal = req.body.email;
+
+    User.updateOne({_id: req.userId}, {"notifications.SMS": smsVal, "notifications.email": emailVal})
+    .exec((err, user) => {
+      if (err) {
+        return res.status(500).send({ err: err, message: "Database failure." });
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      res.status(200).send({message: "Successfully updated notification preferences."})
+    })
+  }
+

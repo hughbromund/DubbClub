@@ -226,6 +226,24 @@ JSON return Format:
 
 ##  Endpoints for User Accounts
 
+### /api/user/info
+
+GET
+gets all basic user info
+Requirements: JWT
+Returns: failure message or relevant user info
+Status: Working
+
+JSON Result Format:
+{
+  "username": "datboi",
+  "email": "firemonkey@gmail.com"
+  "phoneNumber": "1234567890"
+  "notifications": {
+    "SMS": true,
+    "email" true
+  }
+}
 
 ### /api/user/resetPasswordEmail
 
@@ -262,6 +280,43 @@ JSON Request Format:
 JSON Result Format:
 {
   "message": "Successfully Updated Password!"
+}
+
+### /api/user/updatePhoneNumber
+
+POST
+updates user's phone number
+Requirements: phoneNumber field
+Returns: success/failure message  
+Status: Working
+
+JSON Request Format:
+{
+  "phoneNumber": "1234567890",
+}
+
+JSON Result Format:
+{
+  "message": "Successfully updated phone number!"
+}
+
+### /api/user/updateNotifications
+
+POST
+updates user's notification settings
+Requirements: sms and email field, booleans
+Returns: success/failure message  
+Status: Working
+
+JSON Request Format:
+{
+  "sms": true,
+  "email": false
+}
+
+JSON Result Format:
+{
+  "message": "Successfully updated notification settings"
 }
 
 ### /api/user/favoriteteam

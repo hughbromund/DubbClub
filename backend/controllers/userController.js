@@ -54,3 +54,11 @@ exports.unfavoriteTeam = async function (req, res, next) {
 exports.favoriteTeamList = async function (req, res, next) {
     UserService.favoriteTeamList(req, res);
 }
+
+exports.changePhoneNumber = async function (req, res, next) {
+    UserService.changePhoneNumber(req, res);
+}
+
+exports.changeNotifications = async function (req, res, next) {
+    UserService.changeNotifications(req, res);
+}
