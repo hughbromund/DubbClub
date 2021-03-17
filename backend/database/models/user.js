@@ -6,7 +6,6 @@ mongoose.promise = Promise
 const userSchema = new Schema({
     username: { type: String, unique: true, required: true},
     email: { type: String, unique: true, required: true},
-    phoneNumber: {type: String, unique: true, required: false},
     password: { type: String, unique: false, required: true},
     resetPassword: {
         hash: { type: String, unique: false, required: false, default: ""},
@@ -20,7 +19,8 @@ const userSchema = new Schema({
     notifications: {
         email: { type: Boolean, unique: false, required: true, default: false},
         SMS: { type: Boolean, unique: false, required: true, default: false},
-    }
+    },
+    phoneNumber: {type: String, unique: true, required: false}
 }, { collection: "User"})
 
 // Define schema methods

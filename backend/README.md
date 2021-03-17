@@ -226,6 +226,24 @@ JSON return Format:
 
 ##  Endpoints for User Accounts
 
+### /api/user/info
+
+GET
+gets all basic user info
+Requirements: JWT
+Returns: failure message or relevant user info
+Status: Working
+
+JSON Result Format:
+{
+  "username": "datboi",
+  "email": "firemonkey@gmail.com"
+  "phoneNumber": "1234567890"
+  "notifications": {
+    "SMS": true,
+    "email" true
+  }
+}
 
 ### /api/user/resetPasswordEmail
 

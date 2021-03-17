@@ -97,7 +97,29 @@ exports.login = (req, res) => {
         return res.status(404).send({ message: "User Not found." });
       }
 
-      res.status(200).send({username: user.username, email: user.email})
+      var retObj = {
+        username: user.username,
+        email: user.email,
+        message: "Success!",
+      }
+
+      if (user.phoneNumber) {
+        retObj.phoneNumber = user.phoneNumber
+      }
+      else {
+        retObj.phoneNumber = "none";
+      }
+
+      if (user.notifications) {
+        retObj.notifications = user.notifications
+      }
+      else {
+        retObj.notifications.SMS = false;
+        retObj.notifications.email = false;
+      }
+
+
+      res.status(200).send(retObj)
     })
   }
 
