@@ -6,7 +6,7 @@ mongoose.promise = Promise
 
 // Define userSchema
 const NBAgameSchema = new Schema({
-    _id: { type: String, unique: false, required: true},
+    id: { type: Number, unique: false, required: true},
     date: { type: String, unique: false, required: true},
     arena: { type: String, unique: false, required: false, default: "TBD"},
     home: [NBAteam],
@@ -15,6 +15,7 @@ const NBAgameSchema = new Schema({
     confidence: { type: Number, unique: false, required: false},
     homeVoters: {type: Array, unique: false, required: false, default: []},
     awayVoters: {type: Array, unique: false, required: false, default: []},
+    status: {type: String, unique : false, required: true}
 }, { collection: "NBAgame"})
 
 // Define schema methods

@@ -8,7 +8,7 @@ exports.getBasicGameInfo = async function() {
   let result = [];
 
   let requests = [];
-  for (var i = 0; i < 7; i++) {
+  for (var i = 0; i < 4; i++) {
     var options = {
       method: 'GET',
       url: "https://api-nba-v1.p.rapidapi.com/games/date/" + start.toISOString().slice(0,10),
@@ -34,6 +34,39 @@ exports.getBasicGameInfo = async function() {
         var game = {"gameId" : currGame.gameId, "date" : currGame.startTimeUTC, "arena" : currGame.arena,
         "home" : home, "away" : away}
         result.push(game);
+      }
+    } 
+  }
+  return result;
+}
+
+exports.getLightGameInfo = async function() {
+  var start = new Date();
+  let result = [];
+
+  let requests = [];
+  for (var i = 0; i < 4; i++) {
+    var options = {
+      method: 'GET',
+      url: "https://api-nba-v1.p.rapidapi.com/games/date/" + start.toISOString().slice(0,10),
+      headers: {
+        'x-rapidapi-key': config.nbaApiKey,
+        'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
+      }
+    };
+    requests.push(axios.request(options))
+    start.setDate(start.getDate() + 1);
+  }
+
+  let finishedRequests = await Promise.all(requests)
+  start = Date.now()
+
+  for (var i = 0; i < finishedRequests.length; i++) {
+    for (var j = 0; j < finishedRequests[i].data.api.games.length; j++) {
+      let currGame = finishedRequests[i].data.api.games[j]
+      let gameDate = new Date(currGame.startTimeUTC);
+      if (currGame.league === "standard" && gameDate > start) {
+        result.push(currGame);
       }
     } 
   }
@@ -203,7 +236,7 @@ exports.userVote = (req, res) => {
   var votersVar = req.body.homeAway + "Voters"
   var votersOpp = homeAwayOpposite + "Voters"
 
-  NBAgame.updateOne({_id: gameId}, {"$addToSet": {[votersVar]: req.userId}, "$pull": {[votersOpp]: req.userId}}).exec((err, game) => {
+  NBAgame.updateOne({id: gameId}, {"$addToSet": {[votersVar]: req.userId}, "$pull": {[votersOpp]: req.userId}}).exec((err, game) => {
     if (err) {
       return res.status(500).send({ err: err, message: "Database failure." });
     }
@@ -219,7 +252,7 @@ exports.userVote = (req, res) => {
 
 exports.getGameFromDb = (req, res) => {
   var gameId = req.params.gameId
-  NBAgame.findOne({_id: gameId}).exec((err, game) => {
+  NBAgame.findOne({id: gameId}).exec((err, game) => {
     if (err) {
       return res.status(500).send({ err: err, message: "Database failure." });
     }
