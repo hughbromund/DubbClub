@@ -207,7 +207,10 @@ export default class ExpandedGameInfo extends Component {
             <Col>
               <Container fluid>
                 <Row>
-                  <Col xs={1}>
+                  <Col
+                    xs={{ span: 6, order: "first" }}
+                    lg={{ span: 2, order: "first" }}
+                  >
                     <div className={classes.background}>
                       <div
                         className={[
@@ -239,7 +242,7 @@ export default class ExpandedGameInfo extends Component {
                       )}
                     </div>
                   </Col>
-                  <Col>
+                  <Col xs={6} lg={2}>
                     <br />
                     <div className={classes.center}>
                       <h4>
@@ -252,7 +255,7 @@ export default class ExpandedGameInfo extends Component {
                       </h1>
                     </div>
                   </Col>
-                  <Col>
+                  <Col xs={12} lg={4}>
                     <Table
                       bordered
                       size="sm"
@@ -296,20 +299,20 @@ export default class ExpandedGameInfo extends Component {
                       </tbody>
                     </Table>
                   </Col>
-                  <Col>
+                  <Col xs={6} lg={2}>
                     <br />
-                    <div className={classes.center}>
+                    <div className={classes.centered}>
                       <h4>
                         {getTeamByID(Number(this.state.game["home"]["teamId"]))}
                       </h4>
                     </div>
-                    <div className={classes.center}>
+                    <div className={classes.centered}>
                       <h1>
                         <b>{this.state.game.home.points}</b>
                       </h1>
                     </div>
                   </Col>
-                  <Col xs={1}>
+                  <Col xs={6} lg={2}>
                     <div className={classes.background}>
                       <div
                         className={[
@@ -349,7 +352,7 @@ export default class ExpandedGameInfo extends Component {
           <Row>
             <Col>
               <div
-                className={[classes.speedometer, classes.bottomCard].join(" ")}
+                className={[classes.centered, classes.speedometer].join(" ")}
               >
                 <Row>
                   <Col>
@@ -395,7 +398,6 @@ export default class ExpandedGameInfo extends Component {
                     homeHex={getColorByTeam(
                       getTeamByID(Number(this.state.game["home"]["teamId"]))
                     )}
-                    fluidWidth={true}
                   />
                 ) : (
                   <Speedometer
@@ -407,7 +409,6 @@ export default class ExpandedGameInfo extends Component {
                     homeHex={getColorByTeam(
                       getTeamByID(Number(this.state.game["home"]["teamId"]))
                     )}
-                    fluidWidth={true}
                   />
                 )}
               </div>
@@ -420,7 +421,7 @@ export default class ExpandedGameInfo extends Component {
                         <b>
                           {this.getPredictionConfidence(this.state.gameID)}%
                         </b>{" "}
-                        confidence that the{" "}
+                        confident that the{" "}
                         <b>{this.getPredictedWinner(this.state.gameID)}</b> win
                       </div>
                     ) : this.getPredictedWinner(this.state.gameID) === "" ? (
