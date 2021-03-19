@@ -11,3 +11,37 @@
 .alertDiv {
   padding: var(--default-margin);
 }
+.InputAddOn {
+  display: flex;
+}
+.InputAddOnfield {
+  flex: 1;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+
+  /* field styles */
+}
+
+.InputAddOnitem {
+  /* item styles */
+  border-radius: var(--border-radius);
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  padding-left: var(--default-padding);
+  padding-right: var(--default-padding);
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  border: none;
+  color: var(--text-primary) !important;
+  transition: none;
+  margin-bottom: var(--default-margin);
+  background-color: var(--text-disabled);
+}
+.descriptionText {
+  color: var(--text-secondary);
+  margin-top: calc(-0.5 * var(--default-margin));
+  padding-top: calc(-0.5 * var(--default-margin));
+  line-height: normal;
+  font-size: 14px;
+}

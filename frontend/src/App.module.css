@@ -1,3 +1,8 @@
 .App {
   margin: var(--default-margin);
 }
+@media (max-width: 768px) {
+  .App {
+    margin: calc(0.1 * var(--default-margin));
+  }
+}

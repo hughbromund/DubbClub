@@ -1,3 +1,5 @@
 service: backend
 env: standard
 runtime: nodejs10
+env_variables:
+  REACT_APP_RUNTIME: "production"
