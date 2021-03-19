@@ -7,6 +7,7 @@ import {
   UPDATE_EMAIL,
   UPDATE_PASSWORD,
   USER_INFO,
+  UPDATE_PHONE_NUMBER,
 } from "../../constants/Constants";
 import AuthContext from "../../contexts/AuthContext.js";
 import Alert from "../Alert/Alert";
@@ -25,7 +26,10 @@ export default class Account extends Component {
       newEmail: "",
       newPassword: "",
       newPasswordConfirm: "",
+      phoneNumber: "",
+      newPhoneNumber: "",
       error: "",
+      warning: "",
     };
 
     this.fetchUserInfo = this.fetchUserInfo.bind(this);
@@ -42,13 +46,28 @@ export default class Account extends Component {
     var body = await res.json();
     console.log(body);
 
+    var warning = "";
+    var tempPhoneNumber = "";
+
+    if (body.phoneNumber === "none") {
+      warning =
+        "No Phone Number Set. Please add a Phone Number to your account. ";
+    } else {
+      tempPhoneNumber = body.phoneNumber.substring(
+        body.phoneNumber.length - 10
+      );
+    }
+
     this.setState({
       username: body.username,
       email: body.email,
       newEmail: body.email,
+      phoneNumber: tempPhoneNumber,
+      newPhoneNumber: tempPhoneNumber,
       newPassword: "",
       newPasswordConfirm: "",
       error: "",
+      warning: warning,
     });
   }
 
@@ -69,6 +88,11 @@ export default class Account extends Component {
           <Expand open={this.state.error !== ""}>
             <div className={classes.alertDiv}>
               <Alert>{this.state.error}</Alert>
+            </div>
+          </Expand>
+          <Expand open={this.state.warning !== ""}>
+            <div className={classes.alertDiv}>
+              <Alert variant="warning">{this.state.warning}</Alert>
             </div>
           </Expand>
           <Card>
@@ -163,8 +187,11 @@ export default class Account extends Component {
                 </span>
                 <input
                   type="tel"
-                  pattern="[0-9]{10}"
                   placeholder="1234567890"
+                  value={this.state.newPhoneNumber}
+                  onChange={(e) => {
+                    this.setState({ newPhoneNumber: e.target.value });
+                  }}
                   className={classes.InputAddOnfield}
                 ></input>
               </div>
@@ -173,6 +200,43 @@ export default class Account extends Component {
                 games. You can disable notifications at any time. Only +1
                 Country Codes are currently supported.
               </div>
+              <Expand
+                open={this.state.phoneNumber !== this.state.newPhoneNumber}
+              >
+                <SmartButton
+                  disabled={
+                    this.state.phoneNumber === this.state.newPhoneNumber
+                  }
+                  runOnClick={async () => {
+                    var res = await fetch(UPDATE_PHONE_NUMBER, {
+                      method: "POST",
+                      mode: "cors",
+                      headers: {
+                        "Content-Type": "application/json",
+                        "x-access-token": this.context.token,
+                      },
+                      body: JSON.stringify({
+                        phoneNumber: this.state.newPhoneNumber,
+                      }),
+                    });
+
+                    var body = await res.json();
+
+                    if (res.status !== 200) {
+                      this.setState({ error: body.message });
+                      return false;
+                    }
+
+                    // console.log(res);
+                    // console.log(body);
+                    this.fetchUserInfo();
+                    this.setState({ error: "" });
+                    return true;
+                  }}
+                >
+                  Save Changes
+                </SmartButton>
+              </Expand>
             </form>
             <div>
               <b>Password</b>
