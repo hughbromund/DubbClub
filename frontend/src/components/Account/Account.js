@@ -2,12 +2,15 @@ import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
 import Expand from "react-expand-animated";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 import {
   UPDATE_EMAIL,
   UPDATE_PASSWORD,
   USER_INFO,
   UPDATE_PHONE_NUMBER,
+  UPDATE_NOTIFICATIONS,
 } from "../../constants/Constants";
 import AuthContext from "../../contexts/AuthContext.js";
 import Alert from "../Alert/Alert";
@@ -30,6 +33,8 @@ export default class Account extends Component {
       newPhoneNumber: "",
       error: "",
       warning: "",
+      emailNotifications: false,
+      smsNotifications: false,
     };
 
     this.fetchUserInfo = this.fetchUserInfo.bind(this);
@@ -44,7 +49,7 @@ export default class Account extends Component {
     // console.log(res);
 
     var body = await res.json();
-    console.log(body);
+    // console.log(body);
 
     var warning = "";
     var tempPhoneNumber = "";
@@ -66,6 +71,8 @@ export default class Account extends Component {
       newPhoneNumber: tempPhoneNumber,
       newPassword: "",
       newPasswordConfirm: "",
+      emailNotifications: body.notifications.email,
+      smsNotifications: body.notifications["SMS"],
       error: "",
       warning: warning,
     });
@@ -311,8 +318,82 @@ export default class Account extends Component {
                 </SmartButton>
               </Expand>
             </form>
-            <br />
+            <hr />
+            <div>
+              <b>Notification Settings</b>
+            </div>
+            <Row>
+              <Col>
+                <SmartButton
+                  variant={this.state.emailNotifications ? "" : "outline"}
+                  runOnClick={async () => {
+                    var res = await fetch(UPDATE_NOTIFICATIONS, {
+                      method: "POST",
+                      mode: "cors",
+                      headers: {
+                        "Content-Type": "application/json",
+                        "x-access-token": this.context.token,
+                      },
+                      body: JSON.stringify({
+                        sms: this.state.smsNotifications,
+                        email: !this.state.emailNotifications,
+                      }),
+                    });
 
+                    var body = await res.json();
+
+                    if (res.status !== 200) {
+                      this.setState({ error: body.message });
+                      return false;
+                    }
+
+                    // console.log(res);
+                    // console.log(body);
+                    this.fetchUserInfo();
+                    this.setState({ error: "" });
+                    return true;
+                  }}
+                >
+                  Email
+                </SmartButton>
+              </Col>
+              <Col>
+                <SmartButton
+                  variant={this.state.smsNotifications ? "" : "outline"}
+                  runOnClick={async () => {
+                    var res = await fetch(UPDATE_NOTIFICATIONS, {
+                      method: "POST",
+                      mode: "cors",
+                      headers: {
+                        "Content-Type": "application/json",
+                        "x-access-token": this.context.token,
+                      },
+                      body: JSON.stringify({
+                        sms: !this.state.smsNotifications,
+                        email: this.state.emailNotifications,
+                      }),
+                    });
+
+                    var body = await res.json();
+
+                    if (res.status !== 200) {
+                      this.setState({ error: body.message });
+                      return false;
+                    }
+
+                    // console.log(res);
+                    // console.log(body);
+                    this.fetchUserInfo();
+                    this.setState({ error: "" });
+                    return true;
+                  }}
+                >
+                  Text Message
+                </SmartButton>
+              </Col>
+            </Row>
+
+            <br />
             <Button
               variant="error"
               onClick={() => {
