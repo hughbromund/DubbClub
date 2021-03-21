@@ -278,3 +278,75 @@ exports.getGameFromDb = (req, res) => {
     })
   })
 }
+
+exports.getHighVoteGames = (req, res) => {
+  let currdate = new Date()
+
+//"voteCount" : {"$add": ["homeCount", "awayCount"]}
+//"expr": {"$addfields": { "homeCount" : {"$size": "homeVoters"}, "awayCount" : {"$size": "awayVoters"}}}
+  NBAgame.find({"date": {"$gte": currdate}}).exec((err, game) => {
+    if (err) {
+      return res.status(500).send({ err: err, message: "Database failure." });
+    }
+
+    if (!game) {
+      return res.status(404).send({ message: "Games Not found." });
+    }
+
+    for (var i = 0; i < game.length; i++) {
+      homeCount = game[i].homeVoters.length
+      awayCount = game[i].awayVoters.length
+      game[i].voteCount = homeCount + awayCount
+
+      var votedTeamVal = "none"
+
+      if (req.userId) {
+        if (game[i].homeVoters.includes(req.userId)) {
+          votedTeamVal = "home"
+        }
+        else if (game.awayVoters[i].includes(req.userId)) {
+          votedTeamVal = "away"
+        }
+      }
+      game[i].votedTeam = votedTeamVal
+    }
+
+    game.sort((a, b) => (a.voteCount > b.voteCount ? 1 : -1)) //sort by vote count
+
+
+    /*
+    
+    */
+
+    res.status(200).send(game)
+  })
+
+}
+
+exports.getHighPredictDiffGames = (req, res) => {
+  let currdate = new Date()
+
+
+  NBAgame.find({"date": {"gte": currdate}}).exec((err, game) => {
+    if (err) {
+      return res.status(500).send({ err: err, message: "Database failure." });
+    }
+
+    if (!game) {
+      return res.status(404).send({ message: "Game Not found." });
+    }
+    /*
+    var votedTeamVal = "none"
+
+    if (req.userId) {
+      if (game.homeVoters.includes(req.userId)) {
+        votedTeamVal = "home"
+      }
+      else if (game.awayVoters.includes(req.userId)) {
+        votedTeamVal = "away"
+      }
+    }
+    */
+  })
+
+}

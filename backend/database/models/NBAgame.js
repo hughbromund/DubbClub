@@ -7,7 +7,7 @@ mongoose.promise = Promise
 // Define userSchema
 const NBAgameSchema = new Schema({
     id: { type: Number, unique: false, required: true},
-    date: { type: String, unique: false, required: true},
+    date: { type: Date, unique: false, required: true},
     arena: { type: String, unique: false, required: false, default: "TBD"},
     home: [NBAteam],
     away: [NBAteam],

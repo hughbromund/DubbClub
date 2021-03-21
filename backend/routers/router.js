@@ -77,4 +77,10 @@ router.get("/api/nba/getGameFromDb/:gameId", authJWT.verifyTokenOptional, nbaCon
 //user vote on predicted winner of npa game
 router.post("/api/nba/vote", authJWT.verifyToken, nbaController.userVote)
 
+//get high vote count game
+router.get("/api/nba/getHighVoteGames", nbaController.getHighVoteGames)
+
+//get high prediction difference games
+router.get("/api/nba/getHighPredictDiffGames", nbaController.getHighPredictDiffGames)
+
 module.exports = router;

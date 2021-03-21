@@ -44,7 +44,7 @@ exports.updateDbWithPredictions = function(upcoming, predictions) {
 
         const game = new NBAgame({
             id: upcoming[i].gameId,
-            date: upcoming[i].date,
+            date: new Date(upcoming[i].date),
             arena: arena,
             home: homeTeam,
             away: awayTeam,
