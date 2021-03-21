@@ -7,7 +7,9 @@ import {
   FAVORITE_TEAM,
   UNFAVORITE_TEAM,
   GAME_INFO_ROUTE,
+  GET_GAME_BY_ID_FROM_DB,
 } from "../../constants/Constants";
+import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -37,14 +39,33 @@ Number.prototype.map = function (in_min, in_max, out_min, out_max) {
 export default class GameInfoCard extends Component {
   constructor(props) {
     super(props);
+
+    console.log(props);
+    var tempHomeHex = "#000000";
+    if (props.homeTeam !== undefined) {
+      tempHomeHex = getColorByTeam(props.homeTeam);
+    }
+    var tempAwayHex = "#ffffff";
+    if (props.awayHex !== undefined) {
+      tempAwayHex = getColorByTeam(props.awayTeam);
+    }
+
     this.state = {
       expandInfo: false,
       awayFavorite: false,
       homeFavorite: false,
+      homeHex: tempHomeHex,
+      awayHex: tempAwayHex,
+      predictionConfidence: 50,
+      predictedWinner: "home",
+      homeTeam: "Loading",
+      awayTeam: "Loading",
+      arena: "Loading",
     };
 
     this.hexAlphaConverter = this.hexAlphaConverter.bind(this);
     this.hexMedianValue = this.hexMedianValue.bind(this);
+    this.fetchGameData = this.fetchGameData.bind(this);
   }
   renderButtonConditionally() {
     return this.props.onClickHandler === null ? null : (
@@ -74,12 +95,47 @@ export default class GameInfoCard extends Component {
       )
     );
   }
-  componentDidMount() {
+  async componentDidMount() {
     // console.log(this.props.predictedWinner);
-    // console.log(this.props);
+    console.log(this.props);
     // console.log(this.props);
     // console.log(this.props.awayTeam);
     // console.log(this.context.isFollowedTeam("NBA", this.props.awayId));
+    // var tempHomeHex = getColorByTeam(this.props.homeTeam);
+    // var tempAwayHex = getColorByTeam(this.props.awayTeam);
+    // this.setState({
+    //   homeHex: tempHomeHex,
+    //   awayHex: tempAwayHex,
+    // });
+    await this.fetchGameData(this.props.gameID);
+  }
+
+  async fetchGameData(gameID) {
+    var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
+    var body = await res.json();
+    // console.log(body.game);
+
+    if (res.status === 200) {
+      var predictedWinner = body.game.home[0].teamName;
+      if (body.game.away[0].teamId === body.game.predictedWinner) {
+        predictedWinner = body.game.away[0].teamName;
+      }
+
+      this.setState({
+        arena: body.game.arena,
+        predictedWinner: predictedWinner,
+        predictionConfidence: Number((body.game.confidence * 100).toFixed(2)),
+        homeTeam: body.game.home[0].teamName,
+        awayTeam: body.game.away[0].teamName,
+        homeHex: getColorByTeam(body.game.home[0].teamName),
+        awayHex: getColorByTeam(body.game.away[0].teamName),
+        homeLogo: body.game.home[0].teamImage,
+        awayLogo: body.game.away[0].teamImage,
+        gameTime: body.game.date,
+        homeId: body.game.home[0].teamId,
+        awayId: body.game.away[0].teamId,
+      });
+    }
   }
 
   async favoriteTeam(teamId) {
@@ -128,12 +184,14 @@ export default class GameInfoCard extends Component {
 
   render() {
     const shareURL = "https://www.dubb.club";
-    const shareText = `Dubb Club has predicted that ${this.props.predictedWinner} will win today with a confidence of ${this.props.predictionConfidence}`;
+    const shareText = `Dubb Club has predicted that ${this.state.predictedWinner} will win today with a confidence of ${this.state.predictionConfidence}`;
     var homeAwayWinner = "home";
 
-    if (this.props.predictedWinner === this.props.awayTeam) {
+    if (this.state.predictedWinner === this.state.awayTeam) {
       homeAwayWinner = "away";
     }
+
+    // console.log(this.state);
 
     return (
       <div>
@@ -157,7 +215,7 @@ export default class GameInfoCard extends Component {
                         classes.verticalCenterImage,
                       ].join(" ")}
                     >
-                      <img src={this.props.awayLogo} className={classes.logo} />
+                      <img src={this.state.awayLogo} className={classes.logo} />
                     </div>
                     <Expand
                       open={this.state.awayFavorite && this.context.isLoggedIn}
@@ -165,12 +223,12 @@ export default class GameInfoCard extends Component {
                       <div
                         hidden={this.context.isFollowedTeam(
                           "NBA",
-                          this.props.awayId
+                          this.state.awayId
                         )}
                       >
                         <SmartButton
                           runOnClick={() => {
-                            return this.favoriteTeam(this.props.awayId);
+                            return this.favoriteTeam(this.state.awayId);
                           }}
                         >
                           Favorite
@@ -178,12 +236,12 @@ export default class GameInfoCard extends Component {
                       </div>
                       <div
                         hidden={
-                          !this.context.isFollowedTeam("NBA", this.props.awayId)
+                          !this.context.isFollowedTeam("NBA", this.state.awayId)
                         }
                       >
                         <SmartButton
                           runOnClick={() => {
-                            return this.unFavoriteTeam(this.props.awayId);
+                            return this.unFavoriteTeam(this.state.awayId);
                           }}
                         >
                           Remove Favorite
@@ -208,7 +266,7 @@ export default class GameInfoCard extends Component {
                         classes.verticalCenterImage,
                       ].join(" ")}
                     >
-                      <img src={this.props.homeLogo} className={classes.logo} />
+                      <img src={this.state.homeLogo} className={classes.logo} />
                     </div>
                     <Expand
                       open={this.state.homeFavorite && this.context.isLoggedIn}
@@ -216,12 +274,12 @@ export default class GameInfoCard extends Component {
                       <div
                         hidden={this.context.isFollowedTeam(
                           "NBA",
-                          this.props.homeId
+                          this.state.homeId
                         )}
                       >
                         <SmartButton
                           runOnClick={() => {
-                            return this.favoriteTeam(this.props.homeId);
+                            return this.favoriteTeam(this.state.homeId);
                           }}
                         >
                           Favorite
@@ -229,12 +287,12 @@ export default class GameInfoCard extends Component {
                       </div>
                       <div
                         hidden={
-                          !this.context.isFollowedTeam("NBA", this.props.homeId)
+                          !this.context.isFollowedTeam("NBA", this.state.homeId)
                         }
                       >
                         <SmartButton
                           runOnClick={() => {
-                            return this.unFavoriteTeam(this.props.homeId);
+                            return this.unFavoriteTeam(this.state.homeId);
                           }}
                         >
                           Remove Favorite
@@ -248,7 +306,7 @@ export default class GameInfoCard extends Component {
               <Row noGutters>
                 <Col>
                   <div className={classes.teamNames}>
-                    <b>{this.props.awayTeam}</b>
+                    <b>{this.state.awayTeam}</b>
                   </div>
                 </Col>
                 <Col sm={1}>
@@ -258,7 +316,7 @@ export default class GameInfoCard extends Component {
                 </Col>
                 <Col>
                   <div className={classes.teamNames}>
-                    <b>{this.props.homeTeam}</b>
+                    <b>{this.state.homeTeam}</b>
                   </div>
                 </Col>
               </Row>
@@ -267,19 +325,19 @@ export default class GameInfoCard extends Component {
                 <div className={classes.speedometer}>
                   <Speedometer
                     predictedWinner={homeAwayWinner}
-                    awayHex={this.props.awayHex}
-                    homeHex={this.props.homeHex}
-                    predictionConfidence={this.props.predictionConfidence}
+                    awayHex={this.state.awayHex}
+                    homeHex={this.state.homeHex}
+                    predictionConfidence={this.state.predictionConfidence}
                   />
                 </div>
                 <div>
                   <h5>
-                    {this.props.predictionConfidence > 51 ? (
+                    {this.state.predictionConfidence > 51 ? (
                       <div>
-                        <b>{this.props.predictionConfidence}%</b> confidence
-                        that the <b>{this.props.predictedWinner}</b> win
+                        <b>{this.state.predictionConfidence}%</b> confidence
+                        that the <b>{this.state.predictedWinner}</b> win
                       </div>
-                    ) : this.props.predictedWinner === "" ? (
+                    ) : this.state.predictedWinner === "" ? (
                       <div>
                         <b>No Prediction Available</b>
                       </div>
@@ -290,7 +348,7 @@ export default class GameInfoCard extends Component {
                     )}
                   </h5>
                 </div>
-                {this.props.gameId}
+                {this.state.gameId}
               </Row>
 
               {/* {this.renderButtonConditionally()} */}
@@ -305,16 +363,16 @@ export default class GameInfoCard extends Component {
               this.setState({ expandInfo: false });
             }}
           >
-            <b>{this.props.gameTime}</b>
+            <b>{this.state.gameTime}</b>
             <Expand open={this.state.expandInfo}>
-              <div>{this.props.venue}</div>
+              <div>{this.state.arena}</div>
               <br />
               <Button
                 variant="success"
                 onClick={() => {
-                  if (this.props.gameID !== undefined) {
+                  if (this.state.gameId !== undefined) {
                     this.props.history.push(
-                      GAME_INFO_ROUTE + "/" + this.props.gameID
+                      GAME_INFO_ROUTE + "/" + this.state.gameId
                     );
                   }
                 }}

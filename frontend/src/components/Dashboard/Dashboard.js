@@ -27,48 +27,16 @@ export default class Dashboard extends Component {
 
     this.state = INITIAL_STATE;
     this.fetchGameData = this.fetchGameData.bind(this);
-    this.fetchPrediction = this.fetchPrediction.bind(this);
-    this.getPredictionConfidence = this.getPredictionConfidence.bind(this);
-    this.getPredictedWinner = this.getPredictedWinner.bind(this);
   }
 
-  async fetchPrediction(gameID) {
-    var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
-    var body = await res.json();
-    var temp = this.state.predictions;
-    if (body.game !== undefined) {
-      temp[gameID] = {
-        predictedWinner: getTeamByID(body.game.predictedWinner),
-        confidence: body.game.confidence,
-      };
-      this.setState({ predictions: temp });
-    }
-  }
   async fetchGameData() {
     var res = await fetch(NEXT_SEVEN_DAYS_BASIC_GAME_INFO, {});
     var body = await res.json();
+    console.log(body);
     this.setState({
       games: body,
       currentDate: new Date().setHours(0, 0, 0, 0),
     });
-    for (var i = 0; i < body.length; i++) {
-      if (body[i].gameId !== undefined) {
-        await this.fetchPrediction(body[i].gameId);
-      }
-    }
-  }
-  getPredictionConfidence(gameId) {
-    if (this.state.predictions[gameId] === undefined) {
-      return 50;
-    }
-    return Math.floor(this.state.predictions[gameId].confidence * 100);
-  }
-
-  getPredictedWinner(gameId) {
-    if (this.state.predictions[gameId] === undefined) {
-      return "";
-    }
-    return this.state.predictions[gameId].predictedWinner;
   }
 
   async componentDidMount() {
@@ -114,28 +82,11 @@ export default class Dashboard extends Component {
       let temp = (
         <Col key={"favorite-col-" + i}>
           <GameInfoCard
-            homeTeam={followedGames[i].home.teamName}
-            awayTeam={followedGames[i].away.teamName}
-            gameTime={new Date(this.state.games[i].date).toLocaleDateString(
-              "en-US",
-              DATE_OPTIONS
-            )}
-            predictedWinner={this.getPredictedWinner(followedGames[i].gameId)}
-            predictionConfidence={this.getPredictionConfidence(
-              followedGames[i].gameId
-            )}
-            awayLogo={followedGames[i].away.teamImage}
-            homeLogo={followedGames[i].home.teamImage}
-            venue={followedGames[i].arena}
             onClickHandler={() => {
               this.props.history.push(
                 GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
               );
             }}
-            homeHex={getColorByTeam(followedGames[i].home.teamName)}
-            awayHex={getColorByTeam(followedGames[i].away.teamName)}
-            homeId={followedGames[i].home.teamId}
-            awayId={followedGames[i].away.teamId}
             gameID={followedGames[i].gameId}
             history={this.props.history}
             key={"favorite-" + i}
@@ -169,28 +120,11 @@ export default class Dashboard extends Component {
       let temp = (
         <Col key={"other-col-" + i}>
           <GameInfoCard
-            homeTeam={otherGames[i].home.teamName}
-            awayTeam={otherGames[i].away.teamName}
-            gameTime={new Date(this.state.games[i].date).toLocaleDateString(
-              "en-US",
-              DATE_OPTIONS
-            )}
-            predictedWinner={this.getPredictedWinner(otherGames[i].gameId)}
-            predictionConfidence={this.getPredictionConfidence(
-              otherGames[i].gameId
-            )}
-            awayLogo={otherGames[i].away.teamImage}
-            homeLogo={otherGames[i].home.teamImage}
-            venue={otherGames[i].arena}
             onClickHandler={() => {
               this.props.history.push(
                 GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
               );
             }}
-            homeHex={getColorByTeam(otherGames[i].home.teamName)}
-            awayHex={getColorByTeam(otherGames[i].away.teamName)}
-            homeId={otherGames[i].home.teamId}
-            awayId={otherGames[i].away.teamId}
             gameID={otherGames[i].gameId}
             history={this.props.history}
             key={"other-" + i}

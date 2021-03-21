@@ -17,6 +17,11 @@ Number.prototype.map = function (in_min, in_max, out_min, out_max) {
 export default class Speedometer extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      forceRender: false,
+    };
+
     this.hexAlphaConverter = this.hexAlphaConverter.bind(this);
     this.hexMedianValue = this.hexMedianValue.bind(this);
   }
@@ -43,9 +48,26 @@ export default class Speedometer extends Component {
     );
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props !== prevProps) {
+      if (
+        this.props.homeHex !== prevProps.homeHex ||
+        this.props.awayHex !== prevProps.awayHex
+      ) {
+        this.setState({ forceRender: true });
+      } else {
+        this.setState({ forceRender: false });
+      }
+    }
+
+    // console.log(this.props);
+  }
+
   render() {
+    // console.log(this.props);
     return (
       <ReactSpeedometer
+        forceRender={this.state.forceRender}
         value={
           this.props.predictedWinner === "away"
             ? this.props.predictionConfidence.map(50, 100, 0, 100) * -1
