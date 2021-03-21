@@ -236,6 +236,38 @@ JSON return Format:
   "message": "Successful!"
 }
 
+### /api/nba/getHighVoteGames
+
+GET  
+gets upcoming games sorted by highest vote count descending
+Requirements: optional JWT auth token
+Returns: JSON body of relavent data, or message of failure  
+Status: Working  
+Issues: None?
+
+JSON return Format:  
+{  
+  "games": array of game objects, each object similar to getBasicGameData json format. Also includes the following fields on each game:
+   {"voteCount"}
+  "message": "Successful!"  
+}
+
+### /api/nba/getHighPredictDiffGames
+
+GET  
+gets upcoming games sorted by highest vote count descending
+Requirements: optional JWT auth token
+Returns: JSON body of relavent data, or message of failure  
+Status: Working  
+Issues: None?
+
+JSON return Format:  
+{  
+  "games": array of game objects, each object similar to getBasicGameData json format. Also includes the following fields on each game:
+   {"predictedWinnerVote", "confidenceVote", "confidenceDifference"}
+  "message": "Successful!"  
+}
+
 ##  Endpoints for User Accounts
 
 ### /api/user/info
