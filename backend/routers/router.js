@@ -74,6 +74,9 @@ router.get("/api/nba/refresh", nbaController.refresh);
 //get game prediction by gameId
 router.get("/api/nba/getGameFromDb/:gameId", authJWT.verifyTokenOptional, nbaController.getGameFromDb)
 
+//does the same thing as getBasicGameInfo but from the DB, and a lot faster :) 
+router.get("/api/nba/getUpcomingGamesFromDb", authJWT.verifyTokenOptional, nbaController.getUpcomingGamesFromDb)
+
 //user vote on predicted winner of npa game
 router.post("/api/nba/vote", authJWT.verifyToken, nbaController.userVote)
 

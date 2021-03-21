@@ -279,6 +279,35 @@ exports.getGameFromDb = (req, res) => {
   })
 }
 
+exports.getUpcomingGamesFromDb = (req, res) => {
+  var gameId = req.params.gameId
+  NBAgame.findOne({id: gameId}).exec((err, game) => {
+    if (err) {
+      return res.status(500).send({ err: err, message: "Database failure." });
+    }
+
+    if (!game) {
+      return res.status(404).send({ message: "Game Not found." });
+    }
+    var votedTeamVal = "none"
+
+    if (req.userId) {
+      if (game.homeVoters.includes(req.userId)) {
+        votedTeamVal = "home"
+      }
+      else if (game.awayVoters.includes(req.userId)) {
+        votedTeamVal = "away"
+      }
+    }
+
+    res.status(200).send({
+      votedTeam: votedTeamVal,
+      game: game,
+      message: "Successful!"
+    })
+  })
+}
+
 exports.getHighVoteGames = (req, res) => {
   let currdate = new Date()
 
