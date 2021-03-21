@@ -1,5 +1,6 @@
 name: Deploy Mustafar
 
+on: workflow_dispatch
 on:
   push:
     branches:
@@ -64,9 +65,6 @@ jobs:
 
       - name: Fetch LFS Files
         run: git lfs checkout
-
-      - name: Copy Model for Deployment
-        run: cp models/model.pkl mustafar
 
       - name: Deploy Mustafar
         uses: google-github-actions/deploy-appengine@main
