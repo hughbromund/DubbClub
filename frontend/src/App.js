@@ -8,6 +8,7 @@ import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
 import Register from "./components/Register/Register";
 import ExpandedGameInfo from "./components/ExpandedGameInfo/ExpandedGameInfo";
+import GameInfoCard from "./components/GameInfoCard/GameInfoCard";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Search from "./components/Search/Search";
 import Account from "./components/Account/Account";
@@ -44,6 +45,7 @@ class App extends Component {
     // console.log(this.context.isLoggedIn);
     return (
       <div>
+        {/* <GameInfoCard gameID={8348} /> */}
         <Router>
           <Navigation />
 

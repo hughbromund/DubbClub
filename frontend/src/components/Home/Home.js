@@ -45,11 +45,11 @@ export default class Home extends Component {
       games: body,
       currentDate: new Date().setHours(0, 0, 0, 0),
     });
-    for (var i = 0; i < body.length; i++) {
-      if (body[i].gameId !== undefined) {
-        await this.fetchPrediction(body[i].gameId);
-      }
-    }
+    // for (var i = 0; i < body.length; i++) {
+    //   if (body[i].gameId !== undefined) {
+    //     await this.fetchPrediction(body[i].gameId);
+    //   }
+    // }
   }
 
   async fetchPrediction(gameID) {
@@ -109,30 +109,11 @@ export default class Home extends Component {
       let temp = (
         <Col key={"col-" + i}>
           <GameInfoCard
-            homeTeam={this.state.games[i].home.teamName}
-            awayTeam={this.state.games[i].away.teamName}
-            gameTime={new Date(this.state.games[i].date).toLocaleDateString(
-              "en-US",
-              DATE_OPTIONS
-            )}
-            predictedWinner={this.getPredictedWinner(
-              this.state.games[i].gameId
-            )}
-            predictionConfidence={this.getPredictionConfidence(
-              this.state.games[i].gameId
-            )}
-            awayLogo={this.state.games[i].away.teamImage}
-            homeLogo={this.state.games[i].home.teamImage}
-            venue={this.state.games[i].arena}
             onClickHandler={() => {
               this.props.history.push(
                 GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
               );
             }}
-            homeHex={getColorByTeam(this.state.games[i].home.teamName)}
-            awayHex={getColorByTeam(this.state.games[i].away.teamName)}
-            homeId={this.state.games[i].home.teamId}
-            awayId={this.state.games[i].away.teamId}
             gameID={this.state.games[i].gameId}
             history={this.props.history}
             key={i}
