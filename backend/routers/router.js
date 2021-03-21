@@ -68,6 +68,9 @@ router.get("/api/nba/getGameDetailsByGameId/:gameId", nbaController.getGameDetai
 //get game details by gameId
 router.get("/api/nba/updateDbWithPredictions", mustafarController.updateDbWithPredictions);
 
+//heartbeat for live game handling
+router.get("/api/nba/refresh", nbaController.refresh);
+
 //get game prediction by gameId
 router.get("/api/nba/getGameFromDb/:gameId", authJWT.verifyTokenOptional, nbaController.getGameFromDb)
 

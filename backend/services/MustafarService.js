@@ -3,8 +3,6 @@ const axios = require("axios");
 const NBAteam = require("../database/models/NBAteam");
 const NBAgame = require("../database/models/NBAgame");
 
-const config = require(path.resolve(__dirname, "../config.json"));
-
 //async not working with mustafar
 exports.getMustafarPredictions = async function(gameIds) {
     let results = []
@@ -45,15 +43,16 @@ exports.updateDbWithPredictions = function(upcoming, predictions) {
         let arena = (upcoming[i].arena === "" || upcoming[i].arena === undefined) ? "TBD" : upcoming[i].arena
 
         const game = new NBAgame({
-            _id: upcoming[i].gameId,
+            id: upcoming[i].gameId,
             date: upcoming[i].date,
             arena: arena,
             home: homeTeam,
             away: awayTeam,
             predictedWinner: predictions[i].pred_winner,
-            confidence: predictions[i].confidence
+            confidence: predictions[i].confidence,
+            status: "Scheduled"
         });
 
-        NBAgame.updateOne({ "_id" : upcoming[i].gameId }, {$set : game}, {upsert : true}).exec()
+        NBAgame.updateOne({ id : upcoming[i].gameId }, {$set : game}, {upsert : true}).exec()
     }
 }
