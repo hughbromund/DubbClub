@@ -4,3 +4,8 @@ cron:
     target: backend
     schedule: every day 01:00
     timezone: America/New_York
+  - description: "Refresh Game Status"
+    url: /api/nba/refresh
+    target: backend
+    schedule: every 1 hours
+    timezone: America/New_York
