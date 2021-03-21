@@ -248,7 +248,7 @@ Issues: None?
 JSON return Format:  
 {  
   "games": array of game objects, each object similar to getBasicGameData json format. Also includes the following fields on each game:
-   {"voteCount"}
+   {"voteCount", "votedTeam"}
   "message": "Successful!"  
 }
 
@@ -264,7 +264,7 @@ Issues: None?
 JSON return Format:  
 {  
   "games": array of game objects, each object similar to getBasicGameData json format. Also includes the following fields on each game:
-   {"predictedWinnerVote", "confidenceVote", "confidenceDifference"}
+   {"votedTeam", "predictedWinnerVote", "confidenceVote", "confidenceDifference"}
   "message": "Successful!"  
 }
 
