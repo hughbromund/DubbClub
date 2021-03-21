@@ -278,3 +278,127 @@ exports.getGameFromDb = (req, res) => {
     })
   })
 }
+
+exports.getHighVoteGames = (req, res) => {
+  let currdate = new Date()
+
+  NBAgame.find({"date": {"$gte": currdate}}).exec((err, game) => {
+    if (err) {
+      return res.status(500).send({ err: err, message: "Database failure." });
+    }
+
+    if (!game) {
+      return res.status(404).send({ message: "Games Not found." });
+    }
+
+    for (var i = 0; i < game.length; i++) {
+      game[i] = game[i].toObject()
+
+      homeCount = game[i].homeVoters.length
+      awayCount = game[i].awayVoters.length
+      game[i].voteCount = homeCount + awayCount
+      //console.log(game[i])
+
+      var votedTeamVal = "none"
+
+      if (req.userId) {
+        if (game[i].homeVoters.includes(req.userId)) {
+          votedTeamVal = "home"
+        }
+        else if (game[i].awayVoters.includes(req.userId)) {
+          votedTeamVal = "away"
+        }
+      }
+      game[i].votedTeam = votedTeamVal
+    }
+
+    console.log(game[0])
+
+    game.sort((a, b) => (a.voteCount > b.voteCount ? -1 : 1)) //sort by vote count
+    //console.log(game)
+
+    /*
+    
+    */
+
+    res.status(200).send({
+      games: game,
+      message: "Successful!"
+    })
+  })
+
+}
+
+exports.getHighPredictDiffGames = (req, res) => {
+  let currdate = new Date()
+
+  NBAgame.find({"date": {"$gte": currdate}}).exec((err, game) => {
+    if (err) {
+      return res.status(500).send({ err: err, message: "Database failure." });
+    }
+
+    if (!game) {
+      return res.status(404).send({ message: "Games Not found." });
+    }
+
+    for (var i = 0; i < game.length; i++) {
+      game[i] = game[i].toObject()
+
+      homeCount = game[i].homeVoters.length
+      awayCount = game[i].awayVoters.length
+
+      if (homeCount == 0 && awayCount == 0) {
+        game[i].predictedWinnerVote = game[i].home[0].teamId
+        game[i].confidenceVote = .5
+      }
+      else {
+        if (homeCount >= awayCount) {
+          game[i].predictedWinnerVote = game[i].home[0].teamId
+          game[i].confidenceVote = homeCount / (homeCount + awayCount)
+        }
+        else {
+          game[i].predictedWinnerVote = game[i].away[0].teamId
+          game[i].confidenceVote = awayCount / (homeCount + awayCount)
+        }
+      }
+
+
+      if (game[i].predictedWinnerVote == game[i].predictedWinner) {
+        game[i].confidenceDifference = Math.abs(game[i].confidence - game[i].confidenceVote)
+      }
+      else {
+        game[i].confidenceDifference = ((game[i].confidence - .5) + (game[i].confidenceVote - .5))
+      }
+
+
+      //console.log(game[i])
+
+      var votedTeamVal = "none"
+
+      if (req.userId) {
+        if (game[i].homeVoters.includes(req.userId)) {
+          votedTeamVal = "home"
+        }
+        else if (game[i].awayVoters.includes(req.userId)) {
+          votedTeamVal = "away"
+        }
+      }
+      game[i].votedTeam = votedTeamVal
+    }
+
+    console.log(game[0])
+
+    game.sort((a, b) => (a.confidenceDifference > b.confidenceDifference ? -1 : 1)) //sort by vote count
+    //console.log(game)
+
+    /*
+    
+    */
+
+    res.status(200).send({
+      games: game,
+      message: "Successful!"
+    })
+  })
+
+}

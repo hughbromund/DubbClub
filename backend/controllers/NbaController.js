@@ -74,3 +74,19 @@ exports.refresh = async function (req, res, next) {
         return res.status(400).json({ status: 400, message: e.message });
     }
 };
+
+exports.getHighVoteGames = async function (req, res, next) {
+    try {
+        nbaService.getHighVoteGames(req, res);
+      } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};
+
+exports.getHighPredictDiffGames = async function (req, res, next) {
+    try {
+        nbaService.getHighPredictDiffGames(req, res);
+      } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};
