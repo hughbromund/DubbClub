@@ -10,6 +10,7 @@ export const SEARCH_ROUTE = "/search";
 export const GAME_INFO_ROUTE = "/game";
 export const ACCOUNT_ROUTE = "/account";
 export const DASHBOARD_ROUTE = "/dashboard";
+export const VOTING_ROUTE = "/voting";
 export const RESET_PASSWORD_ROUTE = "/resetPassword";
 
 /* Base URL for Backend */
@@ -40,6 +41,8 @@ export const UNFAVORITE_TEAM = BASE + "/api/user/unfavoriteteam";
 export const RESET_PASSWORD_EMAIL = BASE + "/api/user/resetPasswordEmail";
 export const RESET_PASSWORD = BASE + "/api/user/resetPassword";
 export const NBA_VOTE = BASE + "/api/nba/vote";
+export const GET_HIGH_VOTE_GAMES = BASE + "/api/nba/getHighVoteGames";
+export const GET_VOTE_DIFF_GAMES = BASE + "/api/nba/getHighPredictDiffGames";
 
 /* Date options to convert to UTC for Game Cards */
 export const DATE_OPTIONS = {

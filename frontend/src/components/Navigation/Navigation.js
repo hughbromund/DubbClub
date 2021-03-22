@@ -12,6 +12,7 @@ import {
   LOGIN_ROUTE,
   REGISTER_ROUTE,
   SEARCH_ROUTE,
+  VOTING_ROUTE,
 } from "../../constants/Constants";
 import AuthContext from "../../contexts/AuthContext.js";
 import classes from "./Navigation.module.css";
@@ -76,6 +77,13 @@ export default class Navigation extends Component {
                 to={SEARCH_ROUTE}
               >
                 Search
+              </Nav.Link>
+              <Nav.Link
+                onClick={() => this.setExpanded(false)}
+                as={Link}
+                to={VOTING_ROUTE}
+              >
+                Voting
               </Nav.Link>
               <Nav.Link>
                 Version:{" "}

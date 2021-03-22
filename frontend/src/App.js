@@ -6,6 +6,7 @@ import AuthContext from "./contexts/AuthContext";
 import Navigation from "./components/Navigation/Navigation";
 import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
+import Voting from "./components/Voting/Voting";
 import Register from "./components/Register/Register";
 import ExpandedGameInfo from "./components/ExpandedGameInfo/ExpandedGameInfo";
 import GameInfoCard from "./components/GameInfoCard/GameInfoCard";
@@ -30,6 +31,7 @@ import {
   ACCOUNT_ROUTE,
   DASHBOARD_ROUTE,
   RESET_PASSWORD_ROUTE,
+  VOTING_ROUTE,
 } from "./constants/Constants";
 library.add(fab);
 library.add(fas);
@@ -55,6 +57,7 @@ class App extends Component {
               <Route path={LOGIN_ROUTE} component={Login} />
               <Route path={REGISTER_ROUTE} component={Register} />
               <Route path={SEARCH_ROUTE} component={Search} />
+              <Route path={VOTING_ROUTE} component={Voting} />
               <Route
                 path={RESET_PASSWORD_ROUTE + "/:resetHash?"}
                 component={ResetPassword}
