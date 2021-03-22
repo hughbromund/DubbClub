@@ -9,4 +9,3 @@ pytest
 attrs==19.1.0
 pytest-flask
 nba_api
-datetime
