@@ -18,7 +18,7 @@ exports.getMustafarPredictions = async function(gameIds) {
     return results
 }
 
-exports.updateDbWithPredictions = function(upcoming, predictions) {
+exports.updateDbWithPredictions = async function(upcoming, predictions) {
     for (var i = 0; i < upcoming.length; i++) {
 
         gameInDb = await NBAgame.findOne({ id : upcoming[i].gameId }).exec()

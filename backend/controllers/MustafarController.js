@@ -13,7 +13,7 @@ exports.updateDbWithPredictions = async function (req, res, next) {
         }
         let predictions = await mustafarService.getMustafarPredictions(gameIds);
         mustafarService.updateDbWithPredictions(upcoming, predictions)
-        return res.status(200).send({message: "Successfully Updated Game."})
+        return res.status(200).send({message: "Successfully Updated Games."})
       } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
