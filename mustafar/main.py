@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import requests
 import pandas as pd
 import pickle
@@ -389,6 +389,18 @@ def predict_nba_winner(game_id="6911"):
 
     output_dict["confidence"] = max_conf
     # output_json = json.dumps(output_dict, indent=4)
+
+    return output_dict
+
+
+@app.route("/predictnbalivewin")
+def predict_nba_live_win():
+    arguments = request.args.to_dict()
+
+    output_dict = {
+        "pred_winner": "Boston Celtics",
+        "confidence": 0.6
+    }
 
     return output_dict
 
