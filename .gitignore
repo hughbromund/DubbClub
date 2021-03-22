@@ -19,3 +19,4 @@ models/nba_pregame_win_prediction/season_data/season_2017.json
 models/nba_pregame_win_prediction/season_data/season_2016.json
 models/nba_pregame_win_prediction/season_data/season_2015.jso
 models/nba_pregame_win_prediction/season_data/season_2015.json
+models/nba_pregame_win_prediction/config.py
