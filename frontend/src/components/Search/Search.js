@@ -37,8 +37,6 @@ export default class Search extends Component {
     this.fetchGameDataByDate = this.fetchGameDataByDate.bind(this);
     this.fetchGameDataByTeam = this.fetchGameDataByTeam.bind(this);
     this.fetchPrediction = this.fetchPrediction.bind(this);
-    this.getPredictedWinner = this.getPredictedWinner.bind(this);
-    this.getPredictionConfidence = this.getPredictionConfidence.bind(this);
   }
 
   async fetchGameDataByDate() {
@@ -48,11 +46,6 @@ export default class Search extends Component {
     this.setState({
       games: body,
     });
-    for (var i = 0; i < body.length; i++) {
-      if (body[i].gameId !== undefined) {
-        await this.fetchPrediction(body[i].gameId);
-      }
-    }
   }
 
   async fetchGameDataByTeam() {
@@ -63,11 +56,6 @@ export default class Search extends Component {
     this.setState({
       games: body,
     });
-    for (var i = 0; i < body.length; i++) {
-      if (body[i].gameId !== undefined) {
-        await this.fetchPrediction(body[i].gameId);
-      }
-    }
   }
 
   async fetchPrediction(gameID) {
@@ -83,50 +71,17 @@ export default class Search extends Component {
     }
   }
 
-  getPredictionConfidence(gameId) {
-    if (this.state.predictions[gameId] === undefined) {
-      return 50;
-    }
-    return Math.floor(this.state.predictions[gameId].confidence * 100);
-  }
-
-  getPredictedWinner(gameId) {
-    if (this.state.predictions[gameId] === undefined) {
-      return "";
-    }
-    return this.state.predictions[gameId].predictedWinner;
-  }
-
   render() {
     let cards = [];
     for (let i = 0; i < this.state.games.length; i++) {
       let temp = (
         <Col>
           <GameInfoCard
-            homeTeam={this.state.games[i].home.teamName}
-            awayTeam={this.state.games[i].away.teamName}
-            gameTime={new Date(this.state.games[i].date).toLocaleDateString(
-              "en-US",
-              DATE_OPTIONS
-            )}
-            predictedWinner={this.getPredictedWinner(
-              this.state.games[i].gameId
-            )}
-            predictionConfidence={this.getPredictionConfidence(
-              this.state.games[i].gameId
-            )}
-            awayLogo={this.state.games[i].away.teamImage}
-            homeLogo={this.state.games[i].home.teamImage}
-            venue={this.state.games[i].arena}
             onClickHandler={() => {
               this.props.history.push(
                 GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
               );
             }}
-            homeHex={getColorByTeam(this.state.games[i].home.teamName)}
-            awayHex={getColorByTeam(this.state.games[i].away.teamName)}
-            homeId={this.state.games[i].home.teamId}
-            awayId={this.state.games[i].away.teamId}
             gameID={this.state.games[i].gameId}
             history={this.props.history}
             key={i}
