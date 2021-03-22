@@ -1,9 +1,9 @@
 ##  Endpoints for Game Data
 
-### /api/nba/getBasicGameData
+### /api/nba/getBasicGameData DEPRECATED - PLEASE USE getUpcomingGamesFromDb
 
 GET  
-gets all games from the NBA in the next week  
+gets all games from the NBA in the next three days  
 Requirements: none 
 Returns: JSON list of game info and each team's info  
 Status: Working  
@@ -35,6 +35,56 @@ JSON Format:
     }  
   }  
 ]
+
+### /api/nba/getUpcomingGamesFromDb
+
+GET  
+gets all games from the NBA in the next three days  
+Requirements: none  
+Returns: JSON list of game info and each team's info  
+Status: Working  
+Issues: Doesn't currently have start time, uses UTC to find games,  
+
+JSON Format:  
+[  
+  "arena": "TBD",  
+      "homeVoters": [],  
+      "awayVoters": [  
+        "603adbd83534d306ece241ce"  
+      ],  
+      "_id": "60578abc7a3c4a0429a4f348",  
+      "id": 8880,  
+      "__v": 0,  
+      "away": [  
+        {  
+          "_id": "60578abc7a3c4a0429a4f347",  
+          "teamId": 8,  
+          "teamName": "Dallas Mavericks",  
+          "teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/b/b8/Mavericks_de_Dallas_logo.svg/150px-Mavericks_de_Dallas_logo.svg.png",  
+          "wins": 21,  
+          "losses": 19,  
+          "conferenceName": "west",  
+          "place": 8  
+        }  
+      ],  
+      "confidence": 0.5371316492657674,  
+      "date": "2021-03-22T02:00:00.000Z",  
+      "home": [  
+        {  
+          "_id": "60578abc7a3c4a0429a4f346",  
+          "teamId": 29,  
+          "teamName": "Portland Trail Blazers",  
+          "teamImage": "https://upload.wikimedia.org/wikipedia/en/thumb/2/21/Portland_Trail_Blazers_logo.svg/1200px-Portland_Trail_Blazers_logo.svg.png",  
+          "wins": 25,  
+          "losses": 16,  
+          "conferenceName": "west",  
+          "place": 6  
+        }  
+      ],  
+      "predictedWinner": 8,  
+      "status": "Scheduled"  
+    }  
+]  
 
 ### /api/nba/updateDbWithPredictions
 
