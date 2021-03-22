@@ -1,6 +1,5 @@
 name: Deploy Mustafar
 
-on: workflow_dispatch
 on:
   push:
     branches:
