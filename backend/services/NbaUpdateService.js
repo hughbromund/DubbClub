@@ -32,15 +32,17 @@ exports.refresh = async function refresh() {
 
       //transition to live game
       if (gameInDb.status === "Scheduled" && upcoming[i].statusGame === "In Play") {
-         //do Peyton's thing
+         await NBAgame.findOneAndUpdate({id : gameId}, {status: "In Play"}).exec()
+         console.log("Updated game " + gameId + " to In Play.")
       }
 
       //transition to finished game
       if (gameInDb.status === "In Play" && upcoming[i].statusGame === "Finished") {
-         //do the other thing (Daniel)
+         await NBAgame.findOneAndUpdate({id : gameId}, {status: "Finished"}).exec()
+         console.log("Updated game " + gameId + " to Finished.")
       }
 
-      if (gameInDb.status === "In Play") {
+      if (upcoming[i].statusGame === "In Play") {
          //live game shit
       }
    }
