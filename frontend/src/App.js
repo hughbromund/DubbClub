@@ -47,7 +47,6 @@ class App extends Component {
     // console.log(this.context.isLoggedIn);
     return (
       <div>
-        {/* <GameInfoCard gameID={8348} /> */}
         <Router>
           <Navigation />
 

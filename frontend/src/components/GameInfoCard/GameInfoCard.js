@@ -8,6 +8,7 @@ import {
   UNFAVORITE_TEAM,
   GAME_INFO_ROUTE,
   GET_GAME_BY_ID_FROM_DB,
+  DATE_OPTIONS,
 } from "../../constants/Constants";
 import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
 import {
@@ -97,7 +98,7 @@ export default class GameInfoCard extends Component {
   }
   async componentDidMount() {
     // console.log(this.props.predictedWinner);
-    console.log(this.props);
+    // console.log(this.props);
     // console.log(this.props);
     // console.log(this.props.awayTeam);
     // console.log(this.context.isFollowedTeam("NBA", this.props.awayId));
@@ -121,6 +122,11 @@ export default class GameInfoCard extends Component {
         predictedWinner = body.game.away[0].teamName;
       }
 
+      var date = new Date(body.game.date).toLocaleDateString(
+        "en-US",
+        DATE_OPTIONS
+      );
+
       this.setState({
         arena: body.game.arena,
         predictedWinner: predictedWinner,
@@ -131,7 +137,7 @@ export default class GameInfoCard extends Component {
         awayHex: getColorByTeam(body.game.away[0].teamName),
         homeLogo: body.game.home[0].teamImage,
         awayLogo: body.game.away[0].teamImage,
-        gameTime: body.game.date,
+        gameTime: date,
         homeId: body.game.home[0].teamId,
         awayId: body.game.away[0].teamId,
       });
@@ -370,9 +376,10 @@ export default class GameInfoCard extends Component {
               <Button
                 variant="success"
                 onClick={() => {
-                  if (this.state.gameId !== undefined) {
+                  console.log(this.props.gameID);
+                  if (this.props.gameID !== undefined) {
                     this.props.history.push(
-                      GAME_INFO_ROUTE + "/" + this.state.gameId
+                      GAME_INFO_ROUTE + "/" + this.props.gameID
                     );
                   }
                 }}
