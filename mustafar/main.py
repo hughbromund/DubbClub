@@ -388,7 +388,6 @@ def predict_nba_winner(game_id="6911"):
         output_dict["pred_winner"] = int(a_id)
 
     output_dict["confidence"] = max_conf
-    # output_json = json.dumps(output_dict, indent=4)
 
     return output_dict
 
@@ -397,10 +396,56 @@ def predict_nba_winner(game_id="6911"):
 def predict_nba_live_win():
     arguments = request.args.to_dict()
 
+    # Get data from API/caller
+    period = int(arguments["period"])
+    clock_str = arguments["clock"]
+    h_score = int(arguments["homeScore"])
+    a_score = int(arguments["awayScore"])
+    h_elo = float(arguments["homeELO"])
+    a_elo = float(arguments["awayELO"])
+    h_id = int(arguments["homeID"])
+    a_id = int(arguments["awayID"])
+
+    # Calculate point differential
+    point_diff = h_score - a_score
+
+    # Calculate time remaining in seconds
+    clock_arr = clock_str.split(":")
+    clock_in_sec = int(clock_arr[0]) * 60 + int(clock_arr[1])
+
+    total_time_sec = 720 * 4
+    SECONDS_PER_QUARTER = 720
+
+    if period <= 4:
+        total_time_sec -= SECONDS_PER_QUARTER * (int(period) - 1)
+        total_time_sec -= SECONDS_PER_QUARTER - clock_in_sec
+    else:
+        total_time_sec = clock_in_sec
+
+    # Form dataframe from data
+    final_df = pd.DataFrame()
+    final_df.insert(loc=0, column='time_left', value=[total_time_sec])
+    final_df.insert(loc=0, column='point_diff', value=[point_diff])
+    final_df.insert(loc=0, column='a_elo', value=[a_elo])
+    final_df.insert(loc=0, column='h_elo', value=[h_elo])
+
+    # Make prediction
+    loaded_model = pickle.load(open('./live_prediction_model.pkl', 'rb'))
+    y_pred = loaded_model.predict(final_df)
+    probability_matrix = loaded_model.predict_proba(final_df)
+
     output_dict = {
-        "pred_winner": "Boston Celtics",
-        "confidence": 0.6
+        "pred_winner": 0,
+        "confidence": 0.0
     }
+
+    max_conf = max(probability_matrix[0])
+    if y_pred[0] == 1:
+        output_dict["pred_winner"] = int(h_id)
+    else:
+        output_dict["pred_winner"] = int(a_id)
+
+    output_dict["confidence"] = max_conf
 
     return output_dict
 
@@ -410,7 +455,6 @@ def hello_world():
     output_dict = {
         "message": "Hello, world!",
     }
-    # output_json = json.dumps(output_dict, indent=4)
     return output_dict
 
 
