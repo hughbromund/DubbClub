@@ -435,17 +435,26 @@ def predict_nba_live_win():
     probability_matrix = loaded_model.predict_proba(final_df)
 
     output_dict = {
-        "pred_winner": 0,
-        "confidence": 0.0
+        "homeConfidence": 0.0,
+        "awayConfidence": 0.0,
+        "timeElapsed": 0,
+        "period": 1
     }
+
+    if period <= 4:
+        output_dict["timeElapsed"] = 720 - clock_in_sec
+    else:
+        output_dict["timeElapsed"] = 300 - clock_in_sec
+
+    output_dict["period"] = period
 
     max_conf = max(probability_matrix[0])
     if y_pred[0] == 1:
-        output_dict["pred_winner"] = int(h_id)
+        output_dict["homeConfidence"] = max_conf
+        output_dict["awayConfidence"] = 1.0 - max_conf
     else:
-        output_dict["pred_winner"] = int(a_id)
-
-    output_dict["confidence"] = max_conf
+        output_dict["homeConfidence"] = 1.0 - max_conf
+        output_dict["awayConfidence"] = max_conf
 
     return output_dict
 

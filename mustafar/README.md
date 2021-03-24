@@ -19,9 +19,9 @@ JSON Result Format:
 GET  
 gets the prediction for the winner of a game and the associated confidence for the given live game status
 Requirements: the period, clock string, and the score, ELO and ID of both the home and way teams
-Returns: JSON containing the predicted winning team ID and the confidence
+Returns: JSON containing the confidence for the home and away teams as well as the period and the elapsed time for the period
 Status: Working
-Issues: Unimplemented
+Issues: None
 
 JSON Request Format:
 {
@@ -37,8 +37,10 @@ JSON Request Format:
 
 JSON Result Format:
 {
-    "confidence": 0.5142857142857142,  
-    "pred_winner": 25
+    "homeConfidence": 0.5142857142857142,
+    "awayConfidence": 0.48571428571428577,
+    "period": 4,
+    "timeElapsed": 660
 }
 
 ### /helloworld
