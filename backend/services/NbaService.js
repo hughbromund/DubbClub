@@ -77,7 +77,7 @@ exports.getUpcomingGameIds = async function() {
   var start = new Date();
   let result = [];
   let requests = [];
-  for (var i = 0; i < 7; i++) {
+  for (var i = 0; i < 4; i++) {
     var options = {
       method: 'GET',
       url: "https://api-nba-v1.p.rapidapi.com/games/date/" + start.toISOString().slice(0,10),
@@ -251,6 +251,7 @@ exports.userVote = (req, res) => {
 }
 
 exports.getGameFromDb = (req, res) => {
+  var start = new Date();
   var gameId = req.params.gameId
   NBAgame.findOne({id: gameId}).exec((err, game) => {
     if (err) {
@@ -277,6 +278,28 @@ exports.getGameFromDb = (req, res) => {
       message: "Successful!"
     })
   })
+}
+
+exports.getUpcomingGamesFromDb = async function() {
+  let start = new Date()
+  let end = new Date()
+  end.setDate(end.getDate() + 4)
+  
+  let results = await NBAgame.find({date: {$gt: start, $lt:end}})
+  return results
+}
+
+exports.getUpcomingGameIdsFromDb = async function() {
+  let start = new Date()
+  let end = new Date()
+  end.setDate(end.getDate() + 4)
+  
+  let results = await NBAgame.find({date: {$gt: start, $lt:end}})
+  ids = []
+  for (let i = 0; i < results.length; i++) {
+    ids.push(results[i].id)
+  }
+  return ids
 }
 
 exports.getHighVoteGames = (req, res) => {
