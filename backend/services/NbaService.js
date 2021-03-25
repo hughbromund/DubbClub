@@ -280,13 +280,26 @@ exports.getGameFromDb = (req, res) => {
   })
 }
 
-exports.getUpcomingGamesFromDb = async function(gameId) {
+exports.getUpcomingGamesFromDb = async function() {
   let start = new Date()
   let end = new Date()
   end.setDate(end.getDate() + 4)
   
   let results = await NBAgame.find({date: {$gt: start, $lt:end}})
   return results
+}
+
+exports.getUpcomingGameIdsFromDb = async function() {
+  let start = new Date()
+  let end = new Date()
+  end.setDate(end.getDate() + 4)
+  
+  let results = await NBAgame.find({date: {$gt: start, $lt:end}})
+  ids = []
+  for (let i = 0; i < results.length; i++) {
+    ids.push(results[i].id)
+  }
+  return ids
 }
 
 exports.getHighVoteGames = (req, res) => {
