@@ -31,6 +31,8 @@ export const UPDATE_PHONE_NUMBER = BASE + "/api/user/updatePhoneNumber";
 export const UPDATE_NOTIFICATIONS = BASE + "/api/user/updateNotifications";
 export const NEXT_SEVEN_DAYS_BASIC_GAME_INFO =
   BASE + "/api/nba/getBasicGameInfo";
+export const UPCOMING_GAMES_ID = BASE + "/api/nba/getUpcomingGameIdsFromDb";
+export const UPCOMING_GAMES_INFO = BASE + "/api/nba/getUpcomingGamesFromDb";
 export const GET_GAMES_BY_DATE = BASE + "/api/nba/getGamesByDate";
 export const GET_GAMES_BY_TEAM = BASE + "/api/nba/getRecentGamesByTeam";
 export const GET_GAME_BY_ID_FROM_DB = BASE + "/api/nba/getGameFromDb";

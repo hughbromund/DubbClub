@@ -41,7 +41,7 @@ export default class GameInfoCard extends Component {
   constructor(props) {
     super(props);
 
-    console.log(props);
+    // console.log(props);
     var tempHomeHex = "#000000";
     if (props.homeTeam !== undefined) {
       tempHomeHex = getColorByTeam(props.homeTeam);
