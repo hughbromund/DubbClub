@@ -36,6 +36,18 @@ JSON Format:
   }  
 ]
 
+### /api/nba/getUpcomingGameIdsFromDb
+
+GET  
+gets all game IDs from the NBA in the next three days  
+Requirements: none  
+Returns: JSON list of gameIds  
+Status: Working  
+Issues: Doesn't currently have start time, uses UTC to find games,  
+
+JSON Format:  
+[8188,8187,8908,8909,8910,8911,8912,8913,8914,8915,8916,8917,8918,8919,8920,8921] 
+
 ### /api/nba/getUpcomingGamesFromDb
 
 GET  
