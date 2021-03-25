@@ -5,20 +5,14 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
 import {
-  DATE_OPTIONS,
   GAME_INFO_ROUTE,
-  NEXT_SEVEN_DAYS_BASIC_GAME_INFO,
-  GET_GAME_BY_ID_FROM_DB,
+  UPCOMING_GAMES_INFO,
 } from "../../constants/Constants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Card from "../Card/Card";
 
-import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
-
 const INITIAL_STATE = {
   games: {},
-  currentDate: new Date().setHours(0, 0, 0, 0),
-  predictions: {},
 };
 
 export default class Dashboard extends Component {
@@ -30,9 +24,9 @@ export default class Dashboard extends Component {
   }
 
   async fetchGameData() {
-    var res = await fetch(NEXT_SEVEN_DAYS_BASIC_GAME_INFO, {});
+    var res = await fetch(UPCOMING_GAMES_INFO, {});
     var body = await res.json();
-    console.log(body);
+    // console.log(body);
     this.setState({
       games: body,
       currentDate: new Date().setHours(0, 0, 0, 0),
@@ -58,8 +52,11 @@ export default class Dashboard extends Component {
 
     for (var i = 0; i < this.state.games.length; i++) {
       if (
-        this.context.isFollowedTeam("NBA", this.state.games[i].away.teamId) ||
-        this.context.isFollowedTeam("NBA", this.state.games[i].home.teamId)
+        this.context.isFollowedTeam(
+          "NBA",
+          this.state.games[i].away[0].teamId
+        ) ||
+        this.context.isFollowedTeam("NBA", this.state.games[i].home[0].teamId)
       ) {
         followedGames.push(this.state.games[i]);
       } else {
@@ -73,21 +70,15 @@ export default class Dashboard extends Component {
     var followedCards = [];
 
     for (let i = 0; i < followedGames.length; i++) {
-      if (
-        followedGames[i].home.teamName === undefined ||
-        followedGames[i].away.teamName === undefined
-      ) {
-        continue;
-      }
       let temp = (
         <Col key={"favorite-col-" + i}>
           <GameInfoCard
             onClickHandler={() => {
               this.props.history.push(
-                GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
+                GAME_INFO_ROUTE + `/${this.state.games[i].id}`
               );
             }}
-            gameID={followedGames[i].gameId}
+            gameID={followedGames[i].id}
             history={this.props.history}
             key={"favorite-" + i}
           />
@@ -111,21 +102,15 @@ export default class Dashboard extends Component {
     var otherCards = [];
 
     for (let i = 0; i < otherGames.length; i++) {
-      if (
-        otherGames[i].home.teamName === undefined ||
-        otherGames[i].away.teamName === undefined
-      ) {
-        continue;
-      }
       let temp = (
         <Col key={"other-col-" + i}>
           <GameInfoCard
             onClickHandler={() => {
               this.props.history.push(
-                GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
+                GAME_INFO_ROUTE + `/${this.state.games[i].id}`
               );
             }}
-            gameID={otherGames[i].gameId}
+            gameID={otherGames[i].id}
             history={this.props.history}
             key={"other-" + i}
           />
