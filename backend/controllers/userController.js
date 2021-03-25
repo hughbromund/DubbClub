@@ -62,3 +62,7 @@ exports.changePhoneNumber = async function (req, res, next) {
 exports.changeNotifications = async function (req, res, next) {
     UserService.changeNotifications(req, res);
 }
+
+exports.updateSpoilers = async function (req, res, next) {
+    UserService.updateSpoilers(req, res);
+}
