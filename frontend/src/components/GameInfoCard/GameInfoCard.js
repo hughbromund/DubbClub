@@ -28,6 +28,7 @@ import classes from "./GameInfoCard.module.css";
 
 const rgbHex = require("rgb-hex");
 const hexRgb = require("hex-rgb");
+var classNames = require("classnames");
 
 /**
  * This maps the value of a number from one range to a new one.
@@ -216,10 +217,10 @@ export default class GameInfoCard extends Component {
                     }}
                   >
                     <div
-                      className={[
+                      className={classNames(
                         classes.centered,
-                        classes.verticalCenterImage,
-                      ].join(" ")}
+                        classes.verticalCenterImage
+                      )}
                     >
                       <img src={this.state.awayLogo} className={classes.logo} />
                     </div>
@@ -267,10 +268,10 @@ export default class GameInfoCard extends Component {
                     }}
                   >
                     <div
-                      className={[
+                      className={classNames(
                         classes.centered,
-                        classes.verticalCenterImage,
-                      ].join(" ")}
+                        classes.verticalCenterImage
+                      )}
                     >
                       <img src={this.state.homeLogo} className={classes.logo} />
                     </div>
