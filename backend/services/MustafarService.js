@@ -9,9 +9,7 @@ exports.getMustafarPredictions = async function(gameIds) {
 
     for (var i = 0; i < gameIds.length; i++) {
         let url = "https://mustafar.dubb.club/predictnbawin/" + gameIds[i]
-        console.log(url)
         let res = await axios.get(url)
-        console.log(res.data)
         results.push(res.data)
     }
 
@@ -65,4 +63,33 @@ exports.updateDbWithPredictions = async function(upcoming, predictions) {
 
         
     }
+}
+
+exports.updateDbWithLivePredictions = async function(upcoming, liveGames) {
+
+    home = await teams.findOne({ id : upcoming.home.teamId }).exec()
+    away = await teams.findOne({ id : upcoming.away.teamId }).exec()
+
+    liveGame = {}
+
+    for (let i = 0; i < liveGames.length; i++) {
+        if (liveGames[i].gameId === upcoming.id) {
+            liveGame = liveGames[i]
+            break
+        }
+    }
+
+    let request = {
+        "period": liveGame.slice(0,1),
+        "clock": liveGame.clock,
+        "homeScore": liveGame.hTeam.score.points,
+        "awayScore": liveGame.vTeam.score.points,
+        "homeELO": home.elo,
+        "awayELO": away.elo,
+        "homeID": liveGame.hTeam.teamId,
+        "awayID": liveGame.vTeam.teamId
+    }
+
+    let url = "https://mustafar.dubb.club//predictnbalivewin/"
+    let res = await axios.get(url)
 }
