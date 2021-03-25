@@ -18,21 +18,29 @@ JSON Result Format:
 ### /predictnbalivewin
 GET  
 gets the prediction for the winner of a game and the associated confidence for the given live game status
-Requirements: the two team names of the live game prediction requested
-Returns: JSON containing the predicted winning team name and the confidence  
-Status: Working   
-Issues: Unimplemented
+Requirements: the period, clock string, and the score, ELO and ID of both the home and way teams
+Returns: JSON containing the confidence for the home and away teams as well as the period and the elapsed time for the period
+Status: Working
+Issues: None
 
 JSON Request Format:
 {
-    "team1": "Boston Celtics",
-    "team2": "Los Angeles Lakers"
+    "period": 4
+    "clock": "1:00"
+    "homeScore": 60
+    "awayScore": 60
+    "homeELO": 1486.412
+    "awayELO": 1567.32
+    "homeID": 22
+    "awayID": 19
 }
 
 JSON Result Format:
 {
-    "confidence": 0.5168772078615828,  
-    "pred_winner": "Boston Celtics"
+    "homeConfidence": 0.5142857142857142,
+    "awayConfidence": 0.48571428571428577,
+    "period": 4,
+    "timeElapsed": 660
 }
 
 ### /helloworld
