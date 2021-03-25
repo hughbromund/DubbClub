@@ -19,6 +19,8 @@ import Card from "../Card/Card";
 import SmartButton from "../SmartButton/SmartButton";
 import classes from "./Account.module.css";
 
+var classNames = require("classnames");
+
 export default class Account extends Component {
   constructor(props) {
     super(props);
@@ -111,10 +113,12 @@ export default class Account extends Component {
                 <FontAwesomeIcon icon={["fas", "user"]} />
               </span>
               <input
-                className={classes.usernameInput}
+                className={classNames(
+                  classes.usernameInput,
+                  classes.InputAddOnfield
+                )}
                 readOnly
                 defaultValue={this.state.username}
-                className={classes.InputAddOnfield}
               ></input>
             </div>
             <div className={classes.descriptionText}>
