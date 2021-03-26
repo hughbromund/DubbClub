@@ -21,7 +21,7 @@ headers = {
 # Prepare database
 client = MongoClient(config_dict["databaseURI"])
 db = client["DubbClub-Database"]
-teams_col = db["Teams"]
+teams_col = db["NBAteam"]
 
 
 def get_last_10_games(home_id, away_id):
@@ -203,11 +203,11 @@ def update_team_elo(last_game_id, target_team_id):
     h_points = int(response["api"]["games"][0]["hTeam"]["score"]["points"])
     a_points = int(response["api"]["games"][0]["vTeam"]["score"]["points"])
 
-    h_team_data = list(teams_col.find({"tid": int(h_id)}))[0]
+    h_team_data = list(teams_col.find({"teamId": int(h_id)}))[0]
     h_elo_before = h_team_data["elo"]
     h_last_game_id = h_team_data["lastGameID"]
 
-    a_team_data = list(teams_col.find({"tid": int(a_id)}))[0]
+    a_team_data = list(teams_col.find({"teamId": int(a_id)}))[0]
     a_elo_before = a_team_data["elo"]
     a_last_game_id = a_team_data["lastGameID"]
 
@@ -234,7 +234,7 @@ def update_team_elo(last_game_id, target_team_id):
 
     if int(h_last_game_id) < int(last_game_id):
         teams_col.update_one({
-            'tid': int(h_id)
+            'teamId': int(h_id)
         }, {
             '$set': {
                 'elo': h_elo_after,
@@ -243,7 +243,7 @@ def update_team_elo(last_game_id, target_team_id):
         }, upsert=False)
     if int(a_last_game_id) < int(last_game_id):
         teams_col.update_one({
-            'tid': int(a_id)
+            'teamId': int(a_id)
         }, {
             '$set': {
                 'elo': a_elo_after,
@@ -314,8 +314,8 @@ def predict_nba_winner(game_id="6911"):
     a_id = response["api"]["games"][0]["vTeam"]["teamId"]
 
     # Query DB for last game and ELO
-    h_team_data = list(teams_col.find({"tid": int(h_id)}))[0]
-    a_team_data = list(teams_col.find({"tid": int(a_id)}))[0]
+    h_team_data = list(teams_col.find({"teamId": int(h_id)}))[0]
+    a_team_data = list(teams_col.find({"teamId": int(a_id)}))[0]
 
     h_elo = h_team_data["elo"]
     a_elo = a_team_data["elo"]
