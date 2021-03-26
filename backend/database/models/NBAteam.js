@@ -11,6 +11,8 @@ const NBAteamSchema = new Schema({
     losses: { type: Number, unique: false, required: false},
     conferenceName: { type: String, unique: false, required: true},
     place: { type: Number, unique: false, required: false},
+    elo: {type: Number, unique: false, required: true},
+    lastGameID: {type: Number, unique: false, required: true}
 }, { collection: "NBAteam"})
 
 // Define schema methods
