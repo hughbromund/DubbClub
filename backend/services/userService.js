@@ -118,6 +118,13 @@ exports.login = (req, res) => {
         retObj.notifications.email = false;
       }
 
+      if (user.hideSpoilers) {
+        retObj.hideSpoilers = user.hideSpoilers;
+      }
+      else {
+        retObj.hideSpoilers = false;
+      }
+
 
       res.status(200).send(retObj)
     })
@@ -328,6 +335,23 @@ exports.login = (req, res) => {
       }
 
       res.status(200).send({message: "Successfully updated notification preferences."})
+    })
+  }
+
+  exports.updateSpoilers = (req, res) => {
+    spoilersVal = req.body.hideSpoilers
+
+    User.updateOne({_id: req.userId}, {"hideSpoilers": spoilersVal})
+    .exec((err, user) => {
+      if (err) {
+        return res.status(500).send({ err: err, message: "Database failure." });
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      res.status(200).send({message: "Successfully updated hiding spoilers."})
     })
   }
 

@@ -20,7 +20,8 @@ const userSchema = new Schema({
         email: { type: Boolean, unique: false, required: true, default: false},
         SMS: { type: Boolean, unique: false, required: true, default: false},
     },
-    phoneNumber: {type: String, unique: true, required: false}
+    phoneNumber: {type: String, unique: true, required: false},
+    hideSpoilers: { type: Boolean, unique: false, required: true, default: false},
 }, { collection: "User"})
 
 // Define schema methods

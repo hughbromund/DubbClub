@@ -349,6 +349,7 @@ JSON Result Format:
     "SMS": true,
     "email" true
   }
+  "hideSpoilers": true
 }
 
 ### /api/user/resetPasswordEmail
@@ -423,6 +424,25 @@ JSON Request Format:
 JSON Result Format:
 {
   "message": "Successfully updated notification settings"
+}
+
+
+### /api/user/updateSpoilers
+
+POST
+updates users spoiler toggle
+Requirements: hideSpoilers field
+Returns: success/failure message  
+Status: Working
+
+JSON Request Format:
+{
+  "hideSpoilers": true,
+}
+
+JSON Result Format:
+{
+  "message": "Successfully updated hiding spoilers!"
 }
 
 ### /api/user/favoriteteam

@@ -45,6 +45,7 @@ router.post("/api/user/resetPassword", userController.resetPassword)
 router.post("/api/user/resetPasswordEmail", userController.resetPasswordEmail)
 router.post("/api/user/updateNotifications", authJWT.verifyToken, userController.changeNotifications)
 router.post("/api/user/updatePhoneNumber", authJWT.verifyToken, userController.changePhoneNumber)
+router.post("/api/user/updateSpoilers", authJWT.verifyToken, userController.updateSpoilers)
 
 router.post("/api/user/favoriteteam", authJWT.verifyToken, userController.favoriteTeam)
 router.post("/api/user/unfavoriteteam", authJWT.verifyToken, userController.unfavoriteTeam)
