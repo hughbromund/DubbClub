@@ -330,6 +330,46 @@ JSON return Format:
   "message": "Successful!"  
 }
 
+### /api/nba/updateTeamStandings
+
+GET  
+updates each team's standing based on the information provided by the API
+Requirements: nothing
+Returns: status and message
+Status: Working  
+Issues: None  
+
+JSON return Format: 
+{
+    "status": 200,
+    "message": "Team standings updated successfully!"
+}
+
+### /api/nba/getTeamStandings
+
+GET
+gets a list of each team, their conference and standing
+Requirements: nothing
+Returns: a list of team ID's with the associated information
+Status: Working  
+Issues: None  
+
+JSON return Format:
+{
+  "teams": [
+    {
+        "teamId": 1,
+        "conference": "east",
+        "standing": 6
+    },
+    {
+        "teamId": 8,
+        "conference": "west",
+        "standing": 7
+    }
+  ]
+}
+
 ##  Endpoints for User Accounts
 
 ### /api/user/info
