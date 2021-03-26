@@ -93,4 +93,7 @@ router.get("/api/nba/getHighPredictDiffGames", authJWT.verifyTokenOptional, nbaC
 //update team standings based on conference
 router.get("/api/nba/updateTeamStandings", nbaController.updateTeamStandings)
 
+//get a list of teams, their conferences and standings
+router.get("/api/nba/getTeamStandings", nbaController.getTeamStandings)
+
 module.exports = router;

@@ -457,11 +457,34 @@ exports.updateTeamStandings = async function(res, ) {
     for (var i = 0; i < teamList.length; i++) {
       team = teamList[i]
       var standings_dict = {standing: parseInt(team.conference.rank, 10), conference: team.conference.name}
-      teamInDb = await NBAteam.findOneAndUpdate({ teamId : team.teamId }, {$set : standings_dict}, {upsert : true}).exec()
+      teamInDb = await NBAteam.updateOne({ teamId : team.teamId }, {$set : standings_dict}, {upsert : true}).exec()
     }
   } catch (error) {
     console.log(error)
   }
 
   return teamList
+}
+
+exports.getTeamStandings = (req, res) => {
+
+  NBAteam.find().exec((err, teams) => {
+
+    if (err) {
+      return res.status(500).send({ err: err, message: "Database failure." });
+    }
+
+    retArr = []
+
+    for (var i = 0; i < teams.length; i++) {
+      team = teams[i]
+      teams[i] = {teamId: team.teamId, conference: team.conference, standing: team.standing}
+      // retArr.push(toAppend)
+    }
+
+    res.status(200).send({
+      teams: teams,
+      message: "Successful!"
+    })
+  });
 }

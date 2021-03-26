@@ -112,7 +112,15 @@ exports.getHighPredictDiffGames = async function (req, res, next) {
 exports.updateTeamStandings = async function (req, res, next) {
     try {
         let result = await nbaService.updateTeamStandings(req, res);
-        res.status(200).json(result);
+        res.status(200).json({ status: 200, message: "Team standings updated successfully!" });
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+exports.getTeamStandings = async function (req, res, next) {
+    try {
+        nbaService.getTeamStandings(req, res);
     } catch(e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
