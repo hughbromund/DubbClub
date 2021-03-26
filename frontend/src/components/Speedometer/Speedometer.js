@@ -82,7 +82,7 @@ export default class Speedometer extends Component {
         maxValue={100}
         segments={7}
         needleColor={"white"}
-        ringWidth={10}
+        ringWidth={20}
         needleTransitionDuration={0}
         currentValueText={
           Math.abs(this.props.predictionConfidence) + "% Confidence"
