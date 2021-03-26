@@ -89,4 +89,7 @@ router.get("/api/nba/getHighVoteGames", authJWT.verifyTokenOptional, nbaControll
 //get high prediction difference games
 router.get("/api/nba/getHighPredictDiffGames", authJWT.verifyTokenOptional, nbaController.getHighPredictDiffGames)
 
+//update team standings based on conference
+router.get("/api/nba/updateTeamStandings", nbaController.updateTeamStandings)
+
 module.exports = router;

@@ -2,6 +2,7 @@ const path = require("path");
 const axios = require("axios");
 const config = require(path.resolve(__dirname, "../config.json"));
 const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
+const NBAteam = require(path.resolve(__dirname, "../database/models/NBAteam"));
 
 exports.getBasicGameInfo = async function() {
   var start = new Date();
@@ -424,4 +425,43 @@ exports.getHighPredictDiffGames = (req, res) => {
     })
   })
 
+}
+
+exports.updateTeamStandings = async function(res, ) {
+  var options = {
+    method: 'GET',
+    url: "https://api-nba-v1.p.rapidapi.com/seasons/",
+    headers: {
+      'x-rapidapi-key': config.nbaApiKey,
+      'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
+    }
+  };
+
+  var latest_season = ""
+
+  try {
+    let result1 = await axios.request(options);
+
+    var seasonList = result1.data.api.seasons
+    latest_season = seasonList[seasonList.length - 1]
+  } catch (error) {
+    console.log(error)
+  }
+
+  options.url = "https://api-nba-v1.p.rapidapi.com/standings/standard/" + latest_season
+
+  try {
+    let result2 = await axios.request(options);
+    var teamList = result2.data.api.standings
+    
+    for (var i = 0; i < teamList.length; i++) {
+      team = teamList[i]
+      var standings_dict = {standing: parseInt(team.conference.rank, 10), conference: team.conference.name}
+      teamInDb = await NBAteam.findOneAndUpdate({ teamId : team.teamId }, {$set : standings_dict}, {upsert : true}).exec()
+    }
+  } catch (error) {
+    console.log(error)
+  }
+
+  return teamList
 }

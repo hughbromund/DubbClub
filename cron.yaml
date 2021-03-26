@@ -9,3 +9,8 @@ cron:
     target: backend
     schedule: every 1 hours
     timezone: America/New_York
+  - description: "Update Team Standings and Conferences"
+    url: /api/nba/updateTeamStandings
+    target: backend
+    schedule: every day 01:00
+    timezone: America/New_York
