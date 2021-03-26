@@ -125,3 +125,11 @@ exports.getTeamStandings = async function (req, res, next) {
         return res.status(400).json({ status: 400, message: e.message });
     }
 }
+
+exports.getLiveGamePreds = async function (req, res, next) {
+    try {
+        nbaService.getLiveGamePreds(req, res);
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}

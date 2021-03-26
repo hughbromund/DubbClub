@@ -427,7 +427,7 @@ exports.getHighPredictDiffGames = (req, res) => {
 
 }
 
-exports.updateTeamStandings = async function(res, ) {
+exports.updateTeamStandings = async function() {
   var options = {
     method: 'GET',
     url: "https://api-nba-v1.p.rapidapi.com/seasons/",
@@ -487,4 +487,81 @@ exports.getTeamStandings = (req, res) => {
       message: "Successful!"
     })
   });
+}
+
+exports.getLiveGamePreds = (req, res) => {
+
+  console.log(req.params)
+
+  var league = req.params.league
+  league = league.toUpperCase()
+  var gameId = parseInt(req.params.gameId, 10)
+
+  periodHeader = {}
+  if (league === "NBA") {
+    periodHeader = {1: 720, 2: 720, 3: 720, 4: 720, "other": 300}
+  }
+
+  // TODO query DB for actual live game info based on game ID
+  tempData = [
+    {
+      "homeConfidence": 0.5,
+      "awayConfidence": 0.5,
+      "period": 1,
+      "timeElapsed": 10
+    },
+    {
+      "homeConfidence": 0.6,
+      "awayConfidence": 0.4,
+      "period": 1,
+      "timeElapsed": 300
+    },
+    {
+      "homeConfidence": 0.7,
+      "awayConfidence": 0.4,
+      "period": 1,
+      "timeElapsed": 700
+    },
+    {
+      "homeConfidence": 0.5,
+      "awayConfidence": 0.5,
+      "period": 2,
+      "timeElapsed": 10
+    },
+    {
+      "homeConfidence": 0.6,
+      "awayConfidence": 0.4,
+      "period": 2,
+      "timeElapsed": 300
+    },
+    {
+      "homeConfidence": 0.7,
+      "awayConfidence": 0.4,
+      "period": 2,
+      "timeElapsed": 700
+    },
+    {
+      "homeConfidence": 0.5,
+      "awayConfidence": 0.5,
+      "period": 3,
+      "timeElapsed": 10
+    },
+    {
+      "homeConfidence": 0.6,
+      "awayConfidence": 0.4,
+      "period": 3,
+      "timeElapsed": 300
+    },
+    {
+      "homeConfidence": 0.7,
+      "awayConfidence": 0.4,
+      "period": 3,
+      "timeElapsed": 700
+    }
+  ]
+
+  res.status(200).send({
+    data: {"periodLengths": periodHeader, "predictions": tempData},
+    message: "Successful!"
+  })
 }
