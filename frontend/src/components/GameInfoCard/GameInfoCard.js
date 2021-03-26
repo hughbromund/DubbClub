@@ -25,6 +25,7 @@ import Card from "../Card/Card";
 import SmartButton from "../SmartButton/SmartButton";
 import Speedometer from "../Speedometer/Speedometer";
 import classes from "./GameInfoCard.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const rgbHex = require("rgb-hex");
 const hexRgb = require("hex-rgb");
@@ -123,6 +124,11 @@ export default class GameInfoCard extends Component {
         DATE_OPTIONS
       );
 
+      var time = new Date(body.game.date).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
       this.setState({
         arena: body.game.arena,
         predictedWinner: predictedWinner,
@@ -133,7 +139,8 @@ export default class GameInfoCard extends Component {
         awayHex: getColorByTeam(body.game.away[0].teamName),
         homeLogo: body.game.home[0].teamImage,
         awayLogo: body.game.away[0].teamImage,
-        gameTime: date,
+        gameDate: date,
+        gameTime: time,
         homeId: body.game.home[0].teamId,
         awayId: body.game.away[0].teamId,
       });
@@ -219,6 +226,7 @@ export default class GameInfoCard extends Component {
                     onMouseLeave={() => {
                       this.setState({ awayFavorite: false });
                     }}
+                    style={{ boxShadow: "10px 10px " + this.state.awayHex }}
                   >
                     <div
                       className={classNames(
@@ -270,6 +278,7 @@ export default class GameInfoCard extends Component {
                     onMouseLeave={() => {
                       this.setState({ homeFavorite: false });
                     }}
+                    style={{ boxShadow: "10px 10px " + this.state.homeHex }}
                   >
                     <div
                       className={classNames(
@@ -341,7 +350,7 @@ export default class GameInfoCard extends Component {
                     predictionConfidence={this.state.predictionConfidence}
                   />
                 </div>
-                <div>
+                <div className={classes.predictionLine}>
                   <h5>
                     {this.state.predictionConfidence > 51 ? (
                       <div>
@@ -359,7 +368,6 @@ export default class GameInfoCard extends Component {
                     )}
                   </h5>
                 </div>
-                {this.state.gameId}
               </Row>
 
               {/* {this.renderButtonConditionally()} */}
@@ -374,7 +382,10 @@ export default class GameInfoCard extends Component {
               this.setState({ expandInfo: false });
             }}
           >
-            <b>{this.state.gameTime}</b>
+            <b>{this.state.gameDate}</b> <b>{this.state.gameTime}</b>
+            <span className={classes.rightAlignSpan}>
+              <FontAwesomeIcon size="2x" icon={["fas", "basketball-ball"]} />
+            </span>
             <Expand open={this.state.expandInfo}>
               <div>{this.state.arena}</div>
               <br />

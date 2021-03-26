@@ -26,7 +26,7 @@ export default class Dashboard extends Component {
   async fetchGameData() {
     var res = await fetch(UPCOMING_GAMES_INFO, {});
     var body = await res.json();
-    // console.log(body);
+    console.log(body);
     this.setState({
       games: body,
       currentDate: new Date().setHours(0, 0, 0, 0),

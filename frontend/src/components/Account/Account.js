@@ -25,6 +25,9 @@ export default class Account extends Component {
   constructor(props) {
     super(props);
 
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(tz);
+
     this.state = {
       username: "",
       email: "",
@@ -37,6 +40,7 @@ export default class Account extends Component {
       warning: "",
       emailNotifications: false,
       smsNotifications: false,
+      userTimeZone: tz,
     };
 
     this.fetchUserInfo = this.fetchUserInfo.bind(this);
@@ -396,6 +400,17 @@ export default class Account extends Component {
                 </SmartButton>
               </Col>
             </Row>
+            <br />
+            <div>
+              <b>Time Zone Information</b>
+            </div>
+            <div>
+              Your Time Zone is <b>{this.state.userTimeZone}</b>
+            </div>
+            <div className={classes.descriptionText}>
+              Your Time Zone is determined by your computers local time zone
+              information.
+            </div>
 
             <br />
             <Button
