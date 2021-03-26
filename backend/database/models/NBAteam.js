@@ -12,7 +12,9 @@ const NBAteamSchema = new Schema({
     conferenceName: { type: String, unique: false, required: true},
     place: { type: Number, unique: false, required: false},
     elo: {type: Number, unique: false, required: true},
-    lastGameID: {type: Number, unique: false, required: true}
+    lastGameID: {type: Number, unique: false, required: true},
+    standing: {type: Number, unique: false, required: false},
+    conference: {type: String, unique: false, required: false}
 }, { collection: "NBAteam"})
 
 // Define schema methods
