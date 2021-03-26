@@ -370,6 +370,43 @@ JSON return Format:
   ]
 }
 
+### /api/nba/getLiveGamePreds/:league/:gameId
+
+GET
+gets a list of predictions for a live game
+Requirements: the game ID and the league
+Returns: a list of predictions and a header for the length of each quarter
+Status: Stubbed  
+Issues: Need to implement dynamic live game predictions
+
+JSON return Format:
+{
+  "data": {
+    "periodLengths": {
+      "1": 720,
+      "2": 720,
+      "3": 720,
+      "4": 720,
+      "other": 300
+    },
+    "predictions": [
+      {
+        "homeConfidence": 0.5,
+        "awayConfidence": 0.5,
+        "period": 1,
+        "timeElapsed": 10
+      },
+      {
+        "homeConfidence": 0.6,
+        "awayConfidence": 0.4,
+        "period": 1,
+        "timeElapsed": 300
+      }
+    ]
+  }
+}
+
+
 ##  Endpoints for User Accounts
 
 ### /api/user/info
