@@ -463,7 +463,8 @@ exports.updateTeamStandings = async function() {
         losses: parseInt(team.loss, 10),
         lastTenWins: parseInt(team.lastTenWin, 10),
         lastTenLosses: parseInt(team.lastTenLoss, 10),
-        winStreak: parseInt(team.streak, 10),
+        streak: parseInt(team.streak, 10),
+        winStreak: parseInt(team.winStreak, 10),
         gamesBehind: parseInt(team.gamesBehind, 10)
       }
 
