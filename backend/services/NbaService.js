@@ -463,7 +463,8 @@ exports.updateTeamStandings = async function() {
         losses: parseInt(team.loss, 10),
         lastTenWins: parseInt(team.lastTenWin, 10),
         lastTenLosses: parseInt(team.lastTenLoss, 10),
-        winStreak: parseInt(team.streak, 10),
+        streak: parseInt(team.streak, 10),
+        winStreak: parseInt(team.winStreak, 10),
         gamesBehind: parseInt(team.gamesBehind, 10)
       }
 
@@ -509,78 +510,33 @@ exports.getTeamStandings = (req, res) => {
 }
 
 exports.getLiveGamePreds = (req, res) => {
+  // console.log(req.params);
 
-  console.log(req.params)
+  var league = req.params.league;
+  league = league.toUpperCase();
+  var gameId = parseInt(req.params.gameId, 10);
 
-  var league = req.params.league
-  league = league.toUpperCase()
-  var gameId = parseInt(req.params.gameId, 10)
-
-  periodHeader = {}
+  periodHeader = {};
   if (league === "NBA") {
-    periodHeader = {1: 720, 2: 720, 3: 720, 4: 720, "other": 300}
+    periodHeader = { 1: 720, 2: 720, 3: 720, 4: 720, 5: 300 };
   }
 
-  // TODO query DB for actual live game info based on game ID
-  tempData = [
-    {
-      "homeConfidence": 0.5,
-      "awayConfidence": 0.5,
-      "period": 1,
-      "timeElapsed": 10
-    },
-    {
-      "homeConfidence": 0.6,
-      "awayConfidence": 0.4,
-      "period": 1,
-      "timeElapsed": 300
-    },
-    {
-      "homeConfidence": 0.7,
-      "awayConfidence": 0.4,
-      "period": 1,
-      "timeElapsed": 700
-    },
-    {
-      "homeConfidence": 0.5,
-      "awayConfidence": 0.5,
-      "period": 2,
-      "timeElapsed": 10
-    },
-    {
-      "homeConfidence": 0.6,
-      "awayConfidence": 0.4,
-      "period": 2,
-      "timeElapsed": 300
-    },
-    {
-      "homeConfidence": 0.7,
-      "awayConfidence": 0.4,
-      "period": 2,
-      "timeElapsed": 700
-    },
-    {
-      "homeConfidence": 0.5,
-      "awayConfidence": 0.5,
-      "period": 3,
-      "timeElapsed": 10
-    },
-    {
-      "homeConfidence": 0.6,
-      "awayConfidence": 0.4,
-      "period": 3,
-      "timeElapsed": 300
-    },
-    {
-      "homeConfidence": 0.7,
-      "awayConfidence": 0.4,
-      "period": 3,
-      "timeElapsed": 700
+  var tempData = [];
+  var segments = 5;
+  for (var i = 1; i < 6; i++) {
+    for (var j = 0; j < segments; j++) {
+      var prediction = Math.random();
+      tempData.push({
+        homeConfidence: prediction,
+        awayConfidence: 1 - prediction,
+        period: i,
+        timeElapsed: (periodHeader[i] * j) / segments,
+      });
     }
-  ]
+  }
 
   res.status(200).send({
-    data: {"periodLengths": periodHeader, "predictions": tempData},
-    message: "Successful!"
-  })
-}
+    data: { periodLengths: periodHeader, predictions: tempData },
+    message: "Successful!",
+  });
+};
