@@ -456,7 +456,17 @@ exports.updateTeamStandings = async function() {
     
     for (var i = 0; i < teamList.length; i++) {
       team = teamList[i]
-      var standings_dict = {standing: parseInt(team.conference.rank, 10), conference: team.conference.name}
+      var standings_dict = {
+        standing: parseInt(team.conference.rank, 10), 
+        conference: team.conference.name,
+        wins: parseInt(team.win, 10),
+        losses: parseInt(team.loss, 10),
+        lastTenWins: parseInt(team.lastTenWin, 10),
+        lastTenLosses: parseInt(team.lastTenLoss, 10),
+        winStreak: parseInt(team.streak, 10),
+        gamesBehind: parseInt(team.gamesBehind, 10)
+      }
+
       teamInDb = await NBAteam.updateOne({ teamId : team.teamId }, {$set : standings_dict}, {upsert : true}).exec()
     }
   } catch (error) {
@@ -478,8 +488,17 @@ exports.getTeamStandings = (req, res) => {
 
     for (var i = 0; i < teams.length; i++) {
       team = teams[i]
-      teams[i] = {teamId: team.teamId, conference: team.conference, standing: team.standing}
-      // retArr.push(toAppend)
+      teams[i] = {
+        teamId: team.teamId, 
+        conference: team.conference, 
+        standing: team.standing,
+        wins: team.win,
+        losses: team.losses,
+        lastTenWins: team.lastTenWins,
+        lastTenLosses: team.lastTenLosses,
+        winStreak: team.winStreak,
+        gamesBehind: team.gamesBehind
+      }
     }
 
     res.status(200).send({
