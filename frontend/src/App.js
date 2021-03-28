@@ -9,6 +9,7 @@ import Home from "./components/Home/Home";
 import Voting from "./components/Voting/Voting";
 import Register from "./components/Register/Register";
 import ExpandedGameInfo from "./components/ExpandedGameInfo/ExpandedGameInfo";
+import NBAStandings from "./components/NBAStandings/NBAStandings";
 import GameInfoCard from "./components/GameInfoCard/GameInfoCard";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Search from "./components/Search/Search";
@@ -33,6 +34,7 @@ import {
   DASHBOARD_ROUTE,
   RESET_PASSWORD_ROUTE,
   VOTING_ROUTE,
+  NBA_STANDINGS_ROUTE,
   GRAPH_TEST,
 } from "./constants/Constants";
 library.add(fab);
@@ -59,6 +61,7 @@ class App extends Component {
               <Route path={REGISTER_ROUTE} component={Register} />
               <Route path={SEARCH_ROUTE} component={Search} />
               <Route path={VOTING_ROUTE} component={Voting} />
+              <Route path={NBA_STANDINGS_ROUTE} component={NBAStandings} />
               <Route
                 path={RESET_PASSWORD_ROUTE + "/:resetHash?"}
                 component={ResetPassword}
