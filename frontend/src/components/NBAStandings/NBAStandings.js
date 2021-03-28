@@ -5,6 +5,8 @@ import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Table from "react-bootstrap/Table";
+import classes from "./NBAStandings.module.css";
 
 export default class NBAStandings extends Component {
   constructor(props) {
@@ -65,22 +67,34 @@ export default class NBAStandings extends Component {
     }
     let renderedEast = [];
     for (let i = 0; i < this.state.east.length; i++) {
-      var temp = <p>{getTeamByID(this.state.east[i].teamId)}</p>;
+      var temp = <tr>{getTeamByID(this.state.east[i].teamId)}</tr>;
       renderedEast.push(temp);
     }
     let renderedWest = [];
     for (let i = 0; i < this.state.west.length; i++) {
-      var temp = <p>{getTeamByID(this.state.west[i].teamId)}</p>;
+      var temp = <tr>{getTeamByID(this.state.west[i].teamId)}</tr>;
       renderedWest.push(temp);
     }
     return (
       <div>
-        <Container>
+        <Container fluid>
           <h1>NBA Standings</h1>
           <Row>
             <Col>
               <h2>East</h2>
-              {renderedEast}
+              <Table className={classes.table}>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>W</th>
+                    <th>L</th>
+                    <th>GB</th>
+                    <th>Q4</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>{renderedEast}</tbody>
+              </Table>
             </Col>
             <Col>
               <h2>West</h2>
