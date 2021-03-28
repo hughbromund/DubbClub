@@ -29,6 +29,7 @@ export const UPDATE_EMAIL = BASE + "/api/user/updateemail";
 export const UPDATE_PASSWORD = BASE + "/api/user/updatepassword";
 export const UPDATE_PHONE_NUMBER = BASE + "/api/user/updatePhoneNumber";
 export const UPDATE_NOTIFICATIONS = BASE + "/api/user/updateNotifications";
+export const UPDATE_SPOILERS = BASE + "/api/user/updateSpoilers";
 export const NEXT_SEVEN_DAYS_BASIC_GAME_INFO =
   BASE + "/api/nba/getBasicGameInfo";
 export const UPCOMING_GAMES_ID = BASE + "/api/nba/getUpcomingGameIdsFromDb";
