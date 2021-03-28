@@ -67,12 +67,28 @@ export default class NBAStandings extends Component {
     }
     let renderedEast = [];
     for (let i = 0; i < this.state.east.length; i++) {
-      var temp = <tr>{getTeamByID(this.state.east[i].teamId)}</tr>;
+      var temp = (
+        <tr>
+          <td>{getTeamByID(this.state.east[i].teamId)}</td>
+          <td>{this.state.east[i].wins}</td>
+          <td>{this.state.east[i].losses}</td>
+          <td>{this.state.east[i].gamesBehind}</td>
+          <td>{`${this.state.east[i].lastTenWins}-${this.state.east[i].lastTenLosses}`}</td>
+        </tr>
+      );
       renderedEast.push(temp);
     }
     let renderedWest = [];
     for (let i = 0; i < this.state.west.length; i++) {
-      var temp = <tr>{getTeamByID(this.state.west[i].teamId)}</tr>;
+      var temp = (
+        <tr>
+          <td>{getTeamByID(this.state.west[i].teamId)}</td>
+          <td>{this.state.west[i].wins}</td>
+          <td>{this.state.west[i].losses}</td>
+          <td>{this.state.west[i].gamesBehind}</td>
+          <td>{`${this.state.west[i].lastTenWins}-${this.state.west[i].lastTenLosses}`}</td>
+        </tr>
+      );
       renderedWest.push(temp);
     }
     return (
@@ -85,12 +101,11 @@ export default class NBAStandings extends Component {
               <Table className={classes.table}>
                 <thead>
                   <tr>
-                    <th></th>
+                    <th>Team</th>
                     <th>W</th>
                     <th>L</th>
                     <th>GB</th>
-                    <th>Q4</th>
-                    <th>Total</th>
+                    <th>L10</th>
                   </tr>
                 </thead>
                 <tbody>{renderedEast}</tbody>
@@ -98,7 +113,18 @@ export default class NBAStandings extends Component {
             </Col>
             <Col>
               <h2>West</h2>
-              {renderedWest}
+              <Table className={classes.table}>
+                <thead>
+                  <tr>
+                    <th>Team</th>
+                    <th>W</th>
+                    <th>L</th>
+                    <th>GB</th>
+                    <th>L10</th>
+                  </tr>
+                </thead>
+                <tbody>{renderedWest}</tbody>
+              </Table>
             </Col>
           </Row>
         </Container>

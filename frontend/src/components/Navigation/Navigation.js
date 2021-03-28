@@ -10,6 +10,7 @@ import {
   DASHBOARD_ROUTE,
   HOME_ROUTE,
   LOGIN_ROUTE,
+  NBA_STANDINGS_ROUTE,
   REGISTER_ROUTE,
   SEARCH_ROUTE,
   VOTING_ROUTE,
@@ -77,6 +78,13 @@ export default class Navigation extends Component {
                 to={SEARCH_ROUTE}
               >
                 Search
+              </Nav.Link>
+              <Nav.Link
+                onClick={() => this.setExpanded(false)}
+                as={Link}
+                to={NBA_STANDINGS_ROUTE}
+              >
+                Standings
               </Nav.Link>
               <Nav.Link
                 onClick={() => this.setExpanded(false)}
