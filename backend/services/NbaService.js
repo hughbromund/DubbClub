@@ -492,7 +492,7 @@ exports.getTeamStandings = (req, res) => {
         teamId: team.teamId, 
         conference: team.conference, 
         standing: team.standing,
-        wins: team.win,
+        wins: team.wins,
         losses: team.losses,
         lastTenWins: team.lastTenWins,
         lastTenLosses: team.lastTenLosses,
