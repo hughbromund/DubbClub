@@ -47,7 +47,7 @@ export default class Navigation extends Component {
             as={Link}
             to={HOME_ROUTE}
           >
-            <img alt="" src={logo} width="200" />
+            <img alt="Dubb Club Logo" src={logo} width="200" />
           </Navbar.Brand>
           <Navbar.Toggle
             onClick={() =>

@@ -20,6 +20,7 @@ export default class Speedometer extends Component {
 
     this.state = {
       forceRender: false,
+      predictionConfidence: props.predictionConfidence,
     };
 
     this.hexAlphaConverter = this.hexAlphaConverter.bind(this);
@@ -52,9 +53,13 @@ export default class Speedometer extends Component {
     if (this.props !== prevProps) {
       if (
         this.props.homeHex !== prevProps.homeHex ||
-        this.props.awayHex !== prevProps.awayHex
+        this.props.awayHex !== prevProps.awayHex ||
+        this.props.predictionConfidence !== prevProps.predictionConfidence
       ) {
-        this.setState({ forceRender: true });
+        this.setState({
+          predictionConfidence: this.props.predictionConfidence,
+          forceRender: true,
+        });
       } else {
         this.setState({ forceRender: false });
       }
@@ -70,14 +75,15 @@ export default class Speedometer extends Component {
         forceRender={this.state.forceRender}
         value={
           this.props.predictedWinner === "away"
-            ? this.props.predictionConfidence.map(50, 100, 0, 100) * -1
-            : this.props.predictionConfidence.map(50, 100, 0, 100)
+            ? this.state.predictionConfidence.map(50, 100, 0, 100) * -1
+            : this.state.predictionConfidence.map(50, 100, 0, 100)
         }
         minValue={-100}
         maxValue={100}
         segments={7}
         needleColor={"white"}
-        ringWidth={10}
+        ringWidth={20}
+        needleTransitionDuration={0}
         currentValueText={
           Math.abs(this.props.predictionConfidence) + "% Confidence"
         }

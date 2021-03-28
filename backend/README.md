@@ -330,6 +330,83 @@ JSON return Format:
   "message": "Successful!"  
 }
 
+### /api/nba/updateTeamStandings
+
+GET  
+updates each team's standing based on the information provided by the API
+Requirements: nothing
+Returns: status and message
+Status: Working  
+Issues: None  
+
+JSON return Format: 
+{
+    "status": 200,
+    "message": "Team standings updated successfully!"
+}
+
+### /api/nba/getTeamStandings
+
+GET
+gets a list of each team, their conference and standing
+Requirements: nothing
+Returns: a list of team ID's with the associated information
+Status: Working  
+Issues: None  
+
+JSON return Format:
+{
+  "teams": [
+    {
+        "teamId": 1,
+        "conference": "east",
+        "standing": 6
+    },
+    {
+        "teamId": 8,
+        "conference": "west",
+        "standing": 7
+    }
+  ]
+}
+
+### /api/nba/getLiveGamePreds/:league/:gameId
+
+GET
+gets a list of predictions for a live game
+Requirements: the game ID and the league
+Returns: a list of predictions and a header for the length of each quarter
+Status: Stubbed  
+Issues: Need to implement dynamic live game predictions
+
+JSON return Format:
+{
+  "data": {
+    "periodLengths": {
+      "1": 720,
+      "2": 720,
+      "3": 720,
+      "4": 720,
+      "other": 300
+    },
+    "predictions": [
+      {
+        "homeConfidence": 0.5,
+        "awayConfidence": 0.5,
+        "period": 1,
+        "timeElapsed": 10
+      },
+      {
+        "homeConfidence": 0.6,
+        "awayConfidence": 0.4,
+        "period": 1,
+        "timeElapsed": 300
+      }
+    ]
+  }
+}
+
+
 ##  Endpoints for User Accounts
 
 ### /api/user/info
@@ -349,6 +426,7 @@ JSON Result Format:
     "SMS": true,
     "email" true
   }
+  "hideSpoilers": true
 }
 
 ### /api/user/resetPasswordEmail
@@ -425,6 +503,25 @@ JSON Result Format:
   "message": "Successfully updated notification settings"
 }
 
+
+### /api/user/updateSpoilers
+
+POST
+updates users spoiler toggle
+Requirements: hideSpoilers field
+Returns: success/failure message  
+Status: Working
+
+JSON Request Format:
+{
+  "hideSpoilers": true,
+}
+
+JSON Result Format:
+{
+  "message": "Successfully updated hiding spoilers!"
+}
+
 ### /api/user/favoriteteam
 
 POST
@@ -480,4 +577,41 @@ JSON Result Format:
     "MLB": ["323", "414"]
   },
   "message": "Success!"
+}
+
+### /api/user/verifyEmail
+
+POST
+verify's user's email
+Requirements: hash from link
+Returns: success/failure message  
+Status: Working
+
+JSON Request Format:
+{
+  "hash": "dfsfsdf3234sdf",
+
+}
+
+JSON Result Format:
+{
+  "message": "Successfully Verified Email!"
+}
+
+### /api/user/sendVerifyEmail
+
+POST
+sends verification email
+Requirements: JWT auth token
+Returns: success/failure message  
+Status: Working
+
+JSON Request Format:
+{
+  empty
+}
+
+JSON Result Format:
+{
+  "message": "Email Sent!"
 }

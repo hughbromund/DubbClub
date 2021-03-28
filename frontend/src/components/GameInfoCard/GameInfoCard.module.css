@@ -19,7 +19,12 @@
   text-align: center;
   font-size: 20px;
   line-height: 24px;
-  text-transform: capitalize;
+  height: 48px;
+}
+.predictionLine {
+  font-size: 14px;
+  height: 28px;
+  margin-bottom: var(--default-margin);
 }
 
 .background {
@@ -42,4 +47,12 @@
 }
 .gameTime {
   padding: var(--default-padding);
+}
+.rightAlignSpan {
+  float: right;
+}
+@media (max-width: 768px) {
+  .background {
+    margin-bottom: var(--default-margin);
+  }
 }

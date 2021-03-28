@@ -22,7 +22,11 @@ exports.signup = (req, res) => {
     const user = new User({
       username: req.body.username,
       email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, 8)
+      password: bcrypt.hashSync(req.body.password, 8),
+      verify: {
+        email: false,
+        emailHash: crypto.randomBytes(20).toString('hex')
+      }
     });
   
     user.save((err, user) => {
@@ -116,6 +120,22 @@ exports.login = (req, res) => {
       else {
         retObj.notifications.SMS = false;
         retObj.notifications.email = false;
+      }
+
+      if (user.hideSpoilers) {
+        retObj.hideSpoilers = user.hideSpoilers;
+      }
+      else {
+        retObj.hideSpoilers = false;
+      }
+
+      retObj.verify = {}
+
+      if (user.verify.email) {
+        retObj.verify.email = user.verify.email;
+      }
+      else {
+        retObj.verify.email = false;
       }
 
 
@@ -331,3 +351,76 @@ exports.login = (req, res) => {
     })
   }
 
+  exports.updateSpoilers = (req, res) => {
+    spoilersVal = req.body.hideSpoilers
+
+    User.updateOne({_id: req.userId}, {"hideSpoilers": spoilersVal})
+    .exec((err, user) => {
+      if (err) {
+        return res.status(500).send({ err: err, message: "Database failure." });
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      res.status(200).send({message: "Successfully updated hiding spoilers."})
+    })
+  }
+
+  exports.verifyEmail = (req, res) => {
+    var hash = req.body.hash
+
+    User.findOne({"verify.emailHash": hash})
+    .exec((err, user) => {
+      if (err) {
+        return res.status(500).send({ err: err, message: "Database failure." });
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+
+      User.updateOne({"verify.emailHash": hash}, {"verify.email": true})
+      .exec((err, user) => {
+        if (err) {
+          return res.status(500).send({ err: err, message: "Database failure." });
+        }
+
+        if (!user) {
+          return res.status(404).send({ message: "User Not found." });
+        }
+
+        return res.status(200).send({message: "Successfully Verified Email."})
+      })
+    })
+  }
+
+  exports.verifyEmailEmail = (req, res) => {
+    User.findOne({_id: req.userId})
+    .exec((err, user) => {
+      if (err) {
+        return res.status(500).send({ err: err, message: "Database failure." });
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      const mailOptions = {
+        from: config.email_user,
+        to: user.email,
+        subject: "Email Verification",
+        text: "Please go to: https://dubb.club/verifyEmail/" + user.verify.emailHash + " to verify your email."
+      } 
+  
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          return res.status(500).send({ err: error, message: "Email failure." });
+        }
+  
+        return res.status(200).send({ message: "Email sent!" });
+      })
+    })
+  }

@@ -25,9 +25,11 @@ import Card from "../Card/Card";
 import SmartButton from "../SmartButton/SmartButton";
 import Speedometer from "../Speedometer/Speedometer";
 import classes from "./GameInfoCard.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const rgbHex = require("rgb-hex");
 const hexRgb = require("hex-rgb");
+var classNames = require("classnames");
 
 /**
  * This maps the value of a number from one range to a new one.
@@ -37,32 +39,27 @@ const hexRgb = require("hex-rgb");
 Number.prototype.map = function (in_min, in_max, out_min, out_max) {
   return ((this - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
 };
+
+const INITIAL_STATE = {
+  expandInfo: false,
+  awayFavorite: false,
+  homeFavorite: false,
+  homeHex: "#000000",
+  awayHex: "#ffffff",
+  predictionConfidence: 50,
+  predictedWinner: "home",
+  homeTeam: "Loading",
+  awayTeam: "Loading",
+  arena: "Loading",
+};
+
 export default class GameInfoCard extends Component {
   constructor(props) {
     super(props);
 
-    console.log(props);
-    var tempHomeHex = "#000000";
-    if (props.homeTeam !== undefined) {
-      tempHomeHex = getColorByTeam(props.homeTeam);
-    }
-    var tempAwayHex = "#ffffff";
-    if (props.awayHex !== undefined) {
-      tempAwayHex = getColorByTeam(props.awayTeam);
-    }
+    // console.log(props);
 
-    this.state = {
-      expandInfo: false,
-      awayFavorite: false,
-      homeFavorite: false,
-      homeHex: tempHomeHex,
-      awayHex: tempAwayHex,
-      predictionConfidence: 50,
-      predictedWinner: "home",
-      homeTeam: "Loading",
-      awayTeam: "Loading",
-      arena: "Loading",
-    };
+    this.state = INITIAL_STATE;
 
     this.hexAlphaConverter = this.hexAlphaConverter.bind(this);
     this.hexMedianValue = this.hexMedianValue.bind(this);
@@ -108,7 +105,7 @@ export default class GameInfoCard extends Component {
     //   homeHex: tempHomeHex,
     //   awayHex: tempAwayHex,
     // });
-    await this.fetchGameData(this.props.gameID);
+    this.fetchGameData(this.props.gameID);
   }
 
   async fetchGameData(gameID) {
@@ -127,6 +124,11 @@ export default class GameInfoCard extends Component {
         DATE_OPTIONS
       );
 
+      var time = new Date(body.game.date).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
       this.setState({
         arena: body.game.arena,
         predictedWinner: predictedWinner,
@@ -137,10 +139,20 @@ export default class GameInfoCard extends Component {
         awayHex: getColorByTeam(body.game.away[0].teamName),
         homeLogo: body.game.home[0].teamImage,
         awayLogo: body.game.away[0].teamImage,
-        gameTime: date,
+        gameDate: date,
+        gameTime: time,
         homeId: body.game.home[0].teamId,
         awayId: body.game.away[0].teamId,
       });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props !== prevProps) {
+      if (this.props.gameID !== prevProps.gameID) {
+        this.setState(INITIAL_STATE);
+        this.fetchGameData(this.props.gameID);
+      }
     }
   }
 
@@ -214,12 +226,13 @@ export default class GameInfoCard extends Component {
                     onMouseLeave={() => {
                       this.setState({ awayFavorite: false });
                     }}
+                    style={{ boxShadow: "10px 10px " + this.state.awayHex }}
                   >
                     <div
-                      className={[
+                      className={classNames(
                         classes.centered,
-                        classes.verticalCenterImage,
-                      ].join(" ")}
+                        classes.verticalCenterImage
+                      )}
                     >
                       <img src={this.state.awayLogo} className={classes.logo} />
                     </div>
@@ -265,12 +278,13 @@ export default class GameInfoCard extends Component {
                     onMouseLeave={() => {
                       this.setState({ homeFavorite: false });
                     }}
+                    style={{ boxShadow: "10px 10px " + this.state.homeHex }}
                   >
                     <div
-                      className={[
+                      className={classNames(
                         classes.centered,
-                        classes.verticalCenterImage,
-                      ].join(" ")}
+                        classes.verticalCenterImage
+                      )}
                     >
                       <img src={this.state.homeLogo} className={classes.logo} />
                     </div>
@@ -336,7 +350,7 @@ export default class GameInfoCard extends Component {
                     predictionConfidence={this.state.predictionConfidence}
                   />
                 </div>
-                <div>
+                <div className={classes.predictionLine}>
                   <h5>
                     {this.state.predictionConfidence > 51 ? (
                       <div>
@@ -354,7 +368,6 @@ export default class GameInfoCard extends Component {
                     )}
                   </h5>
                 </div>
-                {this.state.gameId}
               </Row>
 
               {/* {this.renderButtonConditionally()} */}
@@ -369,7 +382,10 @@ export default class GameInfoCard extends Component {
               this.setState({ expandInfo: false });
             }}
           >
-            <b>{this.state.gameTime}</b>
+            <b>{this.state.gameDate}</b> <b>{this.state.gameTime}</b>
+            <span className={classes.rightAlignSpan}>
+              <FontAwesomeIcon size="2x" icon={["fas", "basketball-ball"]} />
+            </span>
             <Expand open={this.state.expandInfo}>
               <div>{this.state.arena}</div>
               <br />

@@ -45,6 +45,9 @@ router.post("/api/user/resetPassword", userController.resetPassword)
 router.post("/api/user/resetPasswordEmail", userController.resetPasswordEmail)
 router.post("/api/user/updateNotifications", authJWT.verifyToken, userController.changeNotifications)
 router.post("/api/user/updatePhoneNumber", authJWT.verifyToken, userController.changePhoneNumber)
+router.post("/api/user/updateSpoilers", authJWT.verifyToken, userController.updateSpoilers)
+router.post("/api/user/verifyEmail", userController.verifyEmail)
+router.post("/api/user/sendVerifyEmail", authJWT.verifyToken, userController.verifyEmailEmail)
 
 router.post("/api/user/favoriteteam", authJWT.verifyToken, userController.favoriteTeam)
 router.post("/api/user/unfavoriteteam", authJWT.verifyToken, userController.unfavoriteTeam)
@@ -88,5 +91,14 @@ router.get("/api/nba/getHighVoteGames", authJWT.verifyTokenOptional, nbaControll
 
 //get high prediction difference games
 router.get("/api/nba/getHighPredictDiffGames", authJWT.verifyTokenOptional, nbaController.getHighPredictDiffGames)
+
+//update team standings based on conference
+router.get("/api/nba/updateTeamStandings", nbaController.updateTeamStandings)
+
+//get a list of teams, their conferences and standings
+router.get("/api/nba/getTeamStandings", nbaController.getTeamStandings)
+
+//get a list of predictions for a live game
+router.get("/api/nba/getLiveGamePreds/:league/:gameId", nbaController.getLiveGamePreds)
 
 module.exports = router;

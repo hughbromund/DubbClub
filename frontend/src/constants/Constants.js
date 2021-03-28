@@ -12,6 +12,7 @@ export const ACCOUNT_ROUTE = "/account";
 export const DASHBOARD_ROUTE = "/dashboard";
 export const VOTING_ROUTE = "/voting";
 export const RESET_PASSWORD_ROUTE = "/resetPassword";
+export const GRAPH_TEST = "/graph";
 
 /* Base URL for Backend */
 export var BASE = "https://api.dubb.club";
@@ -29,8 +30,11 @@ export const UPDATE_EMAIL = BASE + "/api/user/updateemail";
 export const UPDATE_PASSWORD = BASE + "/api/user/updatepassword";
 export const UPDATE_PHONE_NUMBER = BASE + "/api/user/updatePhoneNumber";
 export const UPDATE_NOTIFICATIONS = BASE + "/api/user/updateNotifications";
+export const UPDATE_SPOILERS = BASE + "/api/user/updateSpoilers";
 export const NEXT_SEVEN_DAYS_BASIC_GAME_INFO =
   BASE + "/api/nba/getBasicGameInfo";
+export const UPCOMING_GAMES_ID = BASE + "/api/nba/getUpcomingGameIdsFromDb";
+export const UPCOMING_GAMES_INFO = BASE + "/api/nba/getUpcomingGamesFromDb";
 export const GET_GAMES_BY_DATE = BASE + "/api/nba/getGamesByDate";
 export const GET_GAMES_BY_TEAM = BASE + "/api/nba/getRecentGamesByTeam";
 export const GET_GAME_BY_ID_FROM_DB = BASE + "/api/nba/getGameFromDb";
@@ -43,6 +47,7 @@ export const RESET_PASSWORD = BASE + "/api/user/resetPassword";
 export const NBA_VOTE = BASE + "/api/nba/vote";
 export const GET_HIGH_VOTE_GAMES = BASE + "/api/nba/getHighVoteGames";
 export const GET_VOTE_DIFF_GAMES = BASE + "/api/nba/getHighPredictDiffGames";
+export const GET_LIVE_GAME_PREDS = BASE + "/api/nba/getLiveGamePreds";
 
 /* Date options to convert to UTC for Game Cards */
 export const DATE_OPTIONS = {

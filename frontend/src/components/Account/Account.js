@@ -11,6 +11,7 @@ import {
   USER_INFO,
   UPDATE_PHONE_NUMBER,
   UPDATE_NOTIFICATIONS,
+  UPDATE_SPOILERS,
 } from "../../constants/Constants";
 import AuthContext from "../../contexts/AuthContext.js";
 import Alert from "../Alert/Alert";
@@ -19,9 +20,14 @@ import Card from "../Card/Card";
 import SmartButton from "../SmartButton/SmartButton";
 import classes from "./Account.module.css";
 
+var classNames = require("classnames");
+
 export default class Account extends Component {
   constructor(props) {
     super(props);
+
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(tz);
 
     this.state = {
       username: "",
@@ -35,6 +41,8 @@ export default class Account extends Component {
       warning: "",
       emailNotifications: false,
       smsNotifications: false,
+      hideSpoilers: false,
+      userTimeZone: tz,
     };
 
     this.fetchUserInfo = this.fetchUserInfo.bind(this);
@@ -67,6 +75,7 @@ export default class Account extends Component {
       username: body.username,
       email: body.email,
       newEmail: body.email,
+      hideSpoilers: body.hideSpoilers,
       phoneNumber: tempPhoneNumber,
       newPhoneNumber: tempPhoneNumber,
       newPassword: "",
@@ -111,10 +120,12 @@ export default class Account extends Component {
                 <FontAwesomeIcon icon={["fas", "user"]} />
               </span>
               <input
-                className={classes.usernameInput}
+                className={classNames(
+                  classes.usernameInput,
+                  classes.InputAddOnfield
+                )}
                 readOnly
                 defaultValue={this.state.username}
-                className={classes.InputAddOnfield}
               ></input>
             </div>
             <div className={classes.descriptionText}>
@@ -392,6 +403,57 @@ export default class Account extends Component {
                 </SmartButton>
               </Col>
             </Row>
+            <br />
+            <div>
+              <b>Spoiler Settings</b>
+            </div>
+            <div className={classes.descriptionText}>
+              If this option is enabled, Dubb Club will automatically blur live
+              games updates as they happen.
+            </div>
+            <SmartButton
+              variant={this.state.hideSpoilers ? "" : "outline"}
+              runOnClick={async () => {
+                var res = await fetch(UPDATE_SPOILERS, {
+                  method: "POST",
+                  mode: "cors",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "x-access-token": this.context.token,
+                  },
+                  body: JSON.stringify({
+                    hideSpoilers: !this.state.hideSpoilers,
+                  }),
+                });
+
+                var body = await res.json();
+
+                if (res.status !== 200) {
+                  this.setState({ error: body.message });
+                  return false;
+                }
+
+                // console.log(res);
+                // console.log(body);
+                this.fetchUserInfo();
+                this.setState({ error: "" });
+                return true;
+              }}
+            >
+              {this.state.hideSpoilers ? "On" : "Off"}
+            </SmartButton>
+            <br />
+            <br />
+            <div>
+              <b>Time Zone Information</b>
+            </div>
+            <div>
+              Your Time Zone is <b>{this.state.userTimeZone}</b>
+            </div>
+            <div className={classes.descriptionText}>
+              Your Time Zone is determined by your computers local time zone
+              information.
+            </div>
 
             <br />
             <Button

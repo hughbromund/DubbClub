@@ -2,6 +2,7 @@ const path = require("path");
 const axios = require("axios");
 const config = require(path.resolve(__dirname, "../config.json"));
 const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
+const NBAteam = require(path.resolve(__dirname, "../database/models/NBAteam"));
 
 exports.getBasicGameInfo = async function() {
   var start = new Date();
@@ -425,3 +426,116 @@ exports.getHighPredictDiffGames = (req, res) => {
   })
 
 }
+
+exports.updateTeamStandings = async function() {
+  var options = {
+    method: 'GET',
+    url: "https://api-nba-v1.p.rapidapi.com/seasons/",
+    headers: {
+      'x-rapidapi-key': config.nbaApiKey,
+      'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
+    }
+  };
+
+  var latest_season = ""
+
+  try {
+    let result1 = await axios.request(options);
+
+    var seasonList = result1.data.api.seasons
+    latest_season = seasonList[seasonList.length - 1]
+  } catch (error) {
+    console.log(error)
+  }
+
+  options.url = "https://api-nba-v1.p.rapidapi.com/standings/standard/" + latest_season
+
+  try {
+    let result2 = await axios.request(options);
+    var teamList = result2.data.api.standings
+    
+    for (var i = 0; i < teamList.length; i++) {
+      team = teamList[i]
+      var standings_dict = {
+        standing: parseInt(team.conference.rank, 10), 
+        conference: team.conference.name,
+        wins: parseInt(team.win, 10),
+        losses: parseInt(team.loss, 10),
+        lastTenWins: parseInt(team.lastTenWin, 10),
+        lastTenLosses: parseInt(team.lastTenLoss, 10),
+        winStreak: parseInt(team.streak, 10),
+        gamesBehind: parseInt(team.gamesBehind, 10)
+      }
+
+      teamInDb = await NBAteam.updateOne({ teamId : team.teamId }, {$set : standings_dict}, {upsert : true}).exec()
+    }
+  } catch (error) {
+    console.log(error)
+  }
+
+  return teamList
+}
+
+exports.getTeamStandings = (req, res) => {
+
+  NBAteam.find().exec((err, teams) => {
+
+    if (err) {
+      return res.status(500).send({ err: err, message: "Database failure." });
+    }
+
+    retArr = []
+
+    for (var i = 0; i < teams.length; i++) {
+      team = teams[i]
+      teams[i] = {
+        teamId: team.teamId, 
+        conference: team.conference, 
+        standing: team.standing,
+        wins: team.wins,
+        losses: team.losses,
+        lastTenWins: team.lastTenWins,
+        lastTenLosses: team.lastTenLosses,
+        winStreak: team.winStreak,
+        gamesBehind: team.gamesBehind
+      }
+    }
+
+    res.status(200).send({
+      teams: teams,
+      message: "Successful!"
+    })
+  });
+}
+
+exports.getLiveGamePreds = (req, res) => {
+  // console.log(req.params);
+
+  var league = req.params.league;
+  league = league.toUpperCase();
+  var gameId = parseInt(req.params.gameId, 10);
+
+  periodHeader = {};
+  if (league === "NBA") {
+    periodHeader = { 1: 720, 2: 720, 3: 720, 4: 720, 5: 300 };
+  }
+
+  var tempData = [];
+  var segments = 5;
+  for (var i = 1; i < 6; i++) {
+    for (var j = 0; j < segments; j++) {
+      var prediction = Math.random();
+      tempData.push({
+        homeConfidence: prediction,
+        awayConfidence: 1 - prediction,
+        period: i,
+        timeElapsed: (periodHeader[i] * j) / segments,
+      });
+    }
+  }
+
+  res.status(200).send({
+    data: { periodLengths: periodHeader, predictions: tempData },
+    message: "Successful!",
+  });
+};
