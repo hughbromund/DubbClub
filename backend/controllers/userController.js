@@ -66,3 +66,11 @@ exports.changeNotifications = async function (req, res, next) {
 exports.updateSpoilers = async function (req, res, next) {
     UserService.updateSpoilers(req, res);
 }
+
+exports.verifyEmail = async function (req, res, next) {
+    UserService.verifyEmail(req, res);
+}
+
+exports.verifyEmailEmail = async function (req, res, next) {
+    UserService.verifyEmailEmail(req, res);
+}
