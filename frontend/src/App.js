@@ -14,6 +14,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Search from "./components/Search/Search";
 import Account from "./components/Account/Account";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
+import PredictionGraph from "./components/PredictionGraph/PredictionGraph";
 import "./constants/Constants";
 
 import classes from "./App.module.css";
@@ -32,6 +33,7 @@ import {
   DASHBOARD_ROUTE,
   RESET_PASSWORD_ROUTE,
   VOTING_ROUTE,
+  GRAPH_TEST,
 } from "./constants/Constants";
 library.add(fab);
 library.add(fas);
@@ -66,6 +68,7 @@ class App extends Component {
                 path={GAME_INFO_ROUTE + "/:id"}
                 component={ExpandedGameInfo}
               />
+              <Route path={GRAPH_TEST} component={PredictionGraph} />
               {this.context.isLoggedIn === true ? (
                 <Switch>
                   <Route path={DASHBOARD_ROUTE} component={Dashboard} />
