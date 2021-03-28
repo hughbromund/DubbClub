@@ -578,3 +578,40 @@ JSON Result Format:
   },
   "message": "Success!"
 }
+
+### /api/user/verifyEmail
+
+POST
+verify's user's email
+Requirements: hash from link
+Returns: success/failure message  
+Status: Working
+
+JSON Request Format:
+{
+  "hash": "dfsfsdf3234sdf",
+
+}
+
+JSON Result Format:
+{
+  "message": "Successfully Verified Email!"
+}
+
+### /api/user/sendVerifyEmail
+
+POST
+sends verification email
+Requirements: JWT auth token
+Returns: success/failure message  
+Status: Working
+
+JSON Request Format:
+{
+  empty
+}
+
+JSON Result Format:
+{
+  "message": "Email Sent!"
+}
