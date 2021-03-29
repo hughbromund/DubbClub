@@ -3,6 +3,9 @@ const axios = require("axios");
 const NBAteam = require("../database/models/NBAteam");
 const NBAgame = require("../database/models/NBAgame");
 
+const pistonsLogo = "https://upload.wikimedia.org/wikipedia/commons/6/6a/Detroit_Pistons_primary_logo_2017.png"
+const cavsLogo = "https://upload.wikimedia.org/wikipedia/commons/0/04/Cleveland_Cavaliers_secondary_logo.svg"
+
 //async not working with mustafar
 exports.getMustafarPredictions = async function(gameIds) {
     let results = []
@@ -31,6 +34,12 @@ exports.updateDbWithPredictions = async function(upcoming, predictions) {
                 conferenceName: upcoming[i].home.conferenceName,
                 place: upcoming[i].home.place,
             });
+
+            if (homeTeam.teamId === 7) {
+                homeTeam.teamImage = cavsLogo
+            } else if (homeTeam.teamId === 10) {
+                homeTeam.teamId = pistonsLogo
+            }
     
             const awayTeam = new NBAteam({
                 teamId: upcoming[i].away.teamId,
@@ -41,6 +50,12 @@ exports.updateDbWithPredictions = async function(upcoming, predictions) {
                 conferenceName: upcoming[i].away.conferenceName,
                 place: upcoming[i].away.place,
             });
+
+            if (awayTeam.teamId === 7) {
+                awayTeam.teamImage = cavsLogo
+            } else if (awayTeam.teamId === 10) {
+                awayTeam.teamId = pistonsLogo
+            }
     
             let arena = (upcoming[i].arena === "" || upcoming[i].arena === undefined) ? "TBD" : upcoming[i].arena
     
