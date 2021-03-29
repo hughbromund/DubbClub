@@ -34,7 +34,7 @@ export default class NBAStandings extends Component {
       var tempEast = [];
       var tempWest = [];
 
-      for (let [key, value] of Object.entries(body["teams"])) {
+      for (let [key, value] of Object.entries(body)) {
         if (value["conference"] === "east") {
           tempEast.push(value);
         } else {
@@ -72,6 +72,7 @@ export default class NBAStandings extends Component {
       var temp = (
         <tr>
           <td>
+            <img width="25" src={this.state.east[i].teamImage} />{" "}
             <Link
               className={classes.table}
               to={SEARCH_ROUTE + `/${this.state.east[i].teamId}`}
@@ -92,6 +93,7 @@ export default class NBAStandings extends Component {
       var temp = (
         <tr>
           <td>
+            <img width="25" src={this.state.west[i].teamImage} />{" "}
             <Link
               className={classes.table}
               to={SEARCH_ROUTE + `/${this.state.west[i].teamId}`}
