@@ -547,11 +547,8 @@ exports.getTeamStandings = (req, res) => {
 }
 
 exports.getLiveGamePreds = (req, res) => {
-  // console.log(req.params);
 
   var gameId = parseInt(req.params.gameId, 10);
-
-  console.log(gameId)
 
   periodHeader = { 1: 720, 2: 720, 3: 720, 4: 720, 5: 300 };
 
