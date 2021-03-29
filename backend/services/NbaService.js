@@ -563,8 +563,6 @@ exports.getLiveGamePreds = (req, res) => {
 
     predArr = team.livePredictions
 
-    console.log(predArr)
-
     res.status(200).send({
       data: { periodLengths: periodHeader, predictions: predArr },
       message: "Successful!",
