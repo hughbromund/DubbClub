@@ -1,6 +1,5 @@
 .PredictionGraph {
-  height: 800px;
-  width: 1500px;
+  height: 100%;
   color: black;
 }
 .tooltip {

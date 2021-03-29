@@ -26,17 +26,19 @@ export default class PredictionGraph extends Component {
     this.state = {
       data: initData,
       length: initLength,
-      homeHex: "#FDBB30",
-      awayHex: "#CE1141",
-      homeTeamName: "Indiana Pacers",
-      awayTeamName: "Chicago Bulls",
+      homeHex: this.props.homeHex,
+      awayHex: this.props.awayHex,
+      homeTeamName: this.props.homeTeam,
+      awayTeamName: this.props.awayTeam,
+      gameID: this.props.gameID,
     };
 
     this.getColor = this.getColor.bind(this);
+    this.fetchData = this.fetchData.bind(this);
   }
 
-  async componentDidMount() {
-    var res = await fetch(GET_LIVE_GAME_PREDS + "/NBA/00");
+  async fetchData() {
+    var res = await fetch(GET_LIVE_GAME_PREDS + "/" + this.state.gameID);
 
     var body = await res.json();
 
@@ -84,7 +86,13 @@ export default class PredictionGraph extends Component {
       tempLength = tempLength + periodLengths[key];
     });
 
+    console.log(tempLength);
+
     this.setState({ data: tempData, length: tempLength });
+  }
+
+  async componentDidMount() {
+    this.fetchData();
   }
 
   getColor(object) {
@@ -112,6 +120,9 @@ export default class PredictionGraph extends Component {
           pointSize={12}
           pointLabelYOffset={-12}
           useMesh={true}
+          gridXValues={4}
+          gridYValues={4}
+          margin={{ top: 100, right: 100, bottom: 100, left: 100 }}
           tooltip={(point) => {
             var team = this.state.homeTeamName;
             if (point.point.serieId === AWAY_VALUE) {
