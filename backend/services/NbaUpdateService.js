@@ -5,15 +5,16 @@ const config = require(path.resolve(__dirname, "../config.json"));
 const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
 
 const nbaService = require(path.resolve(__dirname, "../services/NbaService.js"));
+const mustafarService = require(path.resolve(__dirname, "../services/MustafarService.js"));
 
 
 exports.refresh = async function refresh() {
-   let upcoming = await nbaService.getLightGameInfo()
+   let upcoming = await nbaService.getLightGameInfoPlusCurr()
    updatedIds = []
 
    var options = {
       method: 'GET',
-      url: "https://api-nba-v1.p.rapidapi.com/live/",
+      url: "https://api-nba-v1.p.rapidapi.com/games/live/",
       headers: {
         'x-rapidapi-key': config.nbaApiKey,
         'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
@@ -54,7 +55,7 @@ exports.refresh = async function refresh() {
       }
 
       if (upcoming[i].statusGame === "In Play") {
-         updateDbWithLivePredictions(upcoming[i], liveGames)
+         await mustafarService.updateDbWithLivePredictions(upcoming[i], liveGames.data)
       }
    }
 
