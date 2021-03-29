@@ -14,10 +14,15 @@ var initData = [
     ],
   },
 ];
-var initLength = 10000;
+var initLength = 2880;
 
 const HOME_VALUE = "Home";
 const AWAY_VALUE = "Away";
+
+const theme = {
+  textColor: "#ffffff",
+  fontSize: 12,
+};
 
 export default class PredictionGraph extends Component {
   constructor(props) {
@@ -26,6 +31,7 @@ export default class PredictionGraph extends Component {
     this.state = {
       data: initData,
       length: initLength,
+      periods: [],
       homeHex: this.props.homeHex,
       awayHex: this.props.awayHex,
       homeTeamName: this.props.homeTeam,
@@ -45,8 +51,11 @@ export default class PredictionGraph extends Component {
     var periodLengths = body.data.periodLengths;
     periodLengths[0] = 0;
 
+    console.log(periodLengths);
+
     var predictions = body.data.predictions;
 
+    console.log(predictions);
     var tempData = [];
     var homeData = [];
     var awayData = [];
@@ -69,7 +78,6 @@ export default class PredictionGraph extends Component {
         period: prediction.period,
       });
     });
-    console.log(homeData);
 
     tempData.push({
       id: HOME_VALUE,
@@ -82,13 +90,23 @@ export default class PredictionGraph extends Component {
     });
 
     var tempLength = 0;
+    var periods = [];
     Object.keys(periodLengths).forEach(function (key, index) {
-      tempLength = tempLength + periodLengths[key];
+      /**
+       * Keys are sequential and we don't want the total length to be longer than the quarters that were played
+       * If period 4 is the last period we have data for, we only want the total time to go to period 4.
+       * Since predictions are in order of time, we can look at the last prediction and see which period it happened in
+       */
+      if (key <= predictions[predictions.length - 1].period) {
+        tempLength = tempLength + periodLengths[key];
+        periods.push(tempLength);
+      }
     });
 
     console.log(tempLength);
+    console.log(periods);
 
-    this.setState({ data: tempData, length: tempLength });
+    this.setState({ data: tempData, length: tempLength, periods: periods });
   }
 
   async componentDidMount() {
@@ -96,7 +114,7 @@ export default class PredictionGraph extends Component {
   }
 
   getColor(object) {
-    console.log(object);
+    // console.log(object);
 
     if (object.id === HOME_VALUE) {
       return this.state.homeHex;
@@ -120,8 +138,27 @@ export default class PredictionGraph extends Component {
           pointSize={12}
           pointLabelYOffset={-12}
           useMesh={true}
-          gridXValues={4}
-          gridYValues={4}
+          gridXValues={this.state.periods}
+          theme={theme}
+          axisBottom={{
+            legend: "Game Time",
+            legendOffset: 36,
+            legendPosition: "middle",
+            format: function (value) {
+              var minutes = Math.floor(value / 60);
+              var seconds = value - minutes * 60;
+              return minutes + ":" + seconds;
+            },
+          }}
+          axisLeft={{
+            legend: "Win Percentage",
+            legendOffset: -50,
+            legendPosition: "middle",
+            format: function (value) {
+              return value + "%";
+            },
+          }}
+          gridYValues={[0, 50, 100]}
           margin={{ top: 100, right: 100, bottom: 100, left: 100 }}
           tooltip={(point) => {
             var team = this.state.homeTeamName;
