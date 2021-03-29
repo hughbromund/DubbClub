@@ -99,6 +99,6 @@ router.get("/api/nba/updateTeamStandings", nbaController.updateTeamStandings)
 router.get("/api/nba/getTeamStandings", nbaController.getTeamStandings)
 
 //get a list of predictions for a live game
-router.get("/api/nba/getLiveGamePreds/:league/:gameId", nbaController.getLiveGamePreds)
+router.get("/api/nba/getLiveGamePreds/:gameId", nbaController.getLiveGamePreds)
 
 module.exports = router;

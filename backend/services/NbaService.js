@@ -549,31 +549,26 @@ exports.getTeamStandings = (req, res) => {
 exports.getLiveGamePreds = (req, res) => {
   // console.log(req.params);
 
-  var league = req.params.league;
-  league = league.toUpperCase();
   var gameId = parseInt(req.params.gameId, 10);
 
-  periodHeader = {};
-  if (league === "NBA") {
-    periodHeader = { 1: 720, 2: 720, 3: 720, 4: 720, 5: 300 };
-  }
+  console.log(gameId)
 
-  var tempData = [];
-  var segments = 5;
-  for (var i = 1; i < 6; i++) {
-    for (var j = 0; j < segments; j++) {
-      var prediction = Math.random();
-      tempData.push({
-        homeConfidence: prediction,
-        awayConfidence: 1 - prediction,
-        period: i,
-        timeElapsed: (periodHeader[i] * j) / segments,
-      });
+  periodHeader = { 1: 720, 2: 720, 3: 720, 4: 720, 5: 300 };
+
+  NBAgame.findOne({id: gameId}).exec((err, team) => {
+
+    if (err) {
+      return res.status(500).send({ err: err, message: "Database failure." });
     }
-  }
 
-  res.status(200).send({
-    data: { periodLengths: periodHeader, predictions: tempData },
-    message: "Successful!",
+    predArr = team.livePredictions
+
+    console.log(predArr)
+
+    res.status(200).send({
+      data: { periodLengths: periodHeader, predictions: predArr },
+      message: "Successful!",
+    });
   });
+
 };
