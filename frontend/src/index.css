@@ -51,6 +51,17 @@
   background: var(--secondary-color); /* Gecko Browsers */
 }
 
+a {
+  color: var(--text-primary);
+}
+
+a:onhover {
+  color: var(--text-primary);
+}
+a:active {
+  color: var(--text-primary);
+}
+
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;

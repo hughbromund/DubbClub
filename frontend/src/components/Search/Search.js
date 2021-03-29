@@ -20,14 +20,25 @@ import {
   getTeamByID,
 } from "../../constants/NBAConstants";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import SmartButton from "../SmartButton/SmartButton";
 import classes from "./Search.module.css";
 
 export default class Search extends Component {
   constructor(props) {
     super(props);
+    console.log(this.props.match.params.id);
+    const id = this.props.match.params.id;
+    let team = "Atlanta Hawks";
+    console.log(NBA_TEAM_INFO);
+    console.log(id);
+    if (id !== undefined) {
+      console.log(id);
+      team = getTeamByID(Number(id));
+    }
+
     this.state = {
-      searchTeam: "",
+      searchTeam: team,
       searchType: "Team",
       searchDate: new Date(),
       games: {},
@@ -37,6 +48,13 @@ export default class Search extends Component {
     this.fetchGameDataByDate = this.fetchGameDataByDate.bind(this);
     this.fetchGameDataByTeam = this.fetchGameDataByTeam.bind(this);
     this.fetchPrediction = this.fetchPrediction.bind(this);
+  }
+
+  async componentDidMount() {
+    if (this.state.searchTeam !== "") {
+      // await this.fetchGameDataByTeam();
+      console.log(this.state.searchTeam);
+    }
   }
 
   async fetchGameDataByDate() {
@@ -91,11 +109,6 @@ export default class Search extends Component {
       cards.push(temp);
     }
     let teams = [];
-    teams.push(
-      <option value="" selected disabled hidden>
-        Select a team...
-      </option>
-    );
     for (const team in NBA_TEAM_INFO) {
       let temp = <option>{team}</option>;
       teams.push(temp);
@@ -120,6 +133,7 @@ export default class Search extends Component {
                     value={this.state.searchTeam}
                     onChange={(e) => {
                       this.setState({ searchTeam: e.target.value });
+                      console.log(this.state.searchTeam);
                     }}
                     as="select"
                   >
@@ -170,9 +184,16 @@ export default class Search extends Component {
           </Row>
         </Container>
         <Container fluid>
-          <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
-            {cards}
-          </Row>
+          {cards.length !== 0 || this.props.match.params.id === undefined ? (
+            <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+              {cards}
+            </Row>
+          ) : (
+            <Col>
+              <br />
+              <LoadingSpinner />
+            </Col>
+          )}
         </Container>
       </div>
     );
