@@ -51,11 +51,11 @@ export default class PredictionGraph extends Component {
     var periodLengths = body.data.periodLengths;
     periodLengths[0] = 0;
 
-    console.log(periodLengths);
+    // console.log(periodLengths);
 
     var predictions = body.data.predictions;
 
-    console.log(predictions);
+    // console.log(predictions);
     var tempData = [];
     var homeData = [];
     var awayData = [];
@@ -103,8 +103,8 @@ export default class PredictionGraph extends Component {
       }
     });
 
-    console.log(tempLength);
-    console.log(periods);
+    // console.log(tempLength);
+    // console.log(periods);
 
     this.setState({ data: tempData, length: tempLength, periods: periods });
   }
