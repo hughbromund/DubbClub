@@ -9,9 +9,7 @@ exports.getMustafarPredictions = async function(gameIds) {
 
     for (var i = 0; i < gameIds.length; i++) {
         let url = "https://mustafar.dubb.club/predictnbawin/" + gameIds[i]
-        console.log(url)
         let res = await axios.get(url)
-        console.log(res.data)
         results.push(res.data)
     }
 
@@ -65,4 +63,44 @@ exports.updateDbWithPredictions = async function(upcoming, predictions) {
 
         
     }
+}
+
+exports.updateDbWithLivePredictions = async function(upcoming, liveGames) {
+
+    home = await NBAteam.findOne({ teamId : parseInt(upcoming.hTeam.teamId, 10) }).exec()
+    away = await NBAteam.findOne({ teamId : parseInt(upcoming.vTeam.teamId, 10) }).exec()
+    
+    liveGame = {}
+
+    gamesList = liveGames.api.games
+
+    for (let i = 0; i < gamesList.length; i++) {
+        if (parseInt(gamesList[i].gameId, 10) === parseInt(upcoming.gameId, 10)) {
+            liveGame = gamesList[i]
+            break
+        }
+    }
+
+    let request = {
+        "period": liveGame.currentPeriod.slice(0,1),
+        "clock": liveGame.clock,
+        "homeScore": liveGame.hTeam.score.points,
+        "awayScore": liveGame.vTeam.score.points,
+        "homeELO": home.elo,
+        "awayELO": away.elo,
+        "homeID": liveGame.hTeam.teamId,
+        "awayID": liveGame.vTeam.teamId
+    }
+
+    let url = "https://mustafar.dubb.club/predictnbalivewin"
+    res = await axios.get(url, {params: request})
+
+    console.log(res.data)
+
+    NBAgame.updateOne(
+        { id: parseInt(upcoming.gameId, 10) },
+        { "$push": {livePredictions: res.data }}
+     ).exec()
+
+     return res.data
 }

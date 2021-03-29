@@ -59,7 +59,7 @@ Issues: Doesn't currently have start time, uses UTC to find games,
 
 JSON Format:  
 [  
-  "arena": "TBD",  
+      "arena": "TBD",  
       "homeVoters": [],  
       "awayVoters": [  
         "603adbd83534d306ece241ce"  
