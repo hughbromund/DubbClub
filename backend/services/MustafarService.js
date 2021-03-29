@@ -81,6 +81,10 @@ exports.updateDbWithLivePredictions = async function(upcoming, liveGames) {
         }
     }
 
+    if (liveGame.clock === "") {
+        return {}
+    }
+
     let request = {
         "period": liveGame.currentPeriod.slice(0,1),
         "clock": liveGame.clock,
