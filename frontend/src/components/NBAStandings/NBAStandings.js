@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import { GET_NBA_STANDINGS } from "../../constants/Constants";
+import { GET_NBA_STANDINGS, SEARCH_ROUTE } from "../../constants/Constants";
 import { getTeamByID } from "../../constants/NBAConstants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
+import { Link } from "react-router-dom";
+
 import classes from "./NBAStandings.module.css";
 
 export default class NBAStandings extends Component {
@@ -69,7 +71,14 @@ export default class NBAStandings extends Component {
     for (let i = 0; i < this.state.east.length; i++) {
       var temp = (
         <tr>
-          <td>{getTeamByID(this.state.east[i].teamId)}</td>
+          <td>
+            <Link
+              className={classes.table}
+              to={SEARCH_ROUTE + `/${this.state.east[i].teamId}`}
+            >
+              {getTeamByID(this.state.east[i].teamId)}
+            </Link>
+          </td>
           <td>{this.state.east[i].wins}</td>
           <td>{this.state.east[i].losses}</td>
           <td>{this.state.east[i].gamesBehind}</td>
@@ -82,7 +91,14 @@ export default class NBAStandings extends Component {
     for (let i = 0; i < this.state.west.length; i++) {
       var temp = (
         <tr>
-          <td>{getTeamByID(this.state.west[i].teamId)}</td>
+          <td>
+            <Link
+              className={classes.table}
+              to={SEARCH_ROUTE + `/${this.state.west[i].teamId}`}
+            >
+              {getTeamByID(this.state.west[i].teamId)}
+            </Link>
+          </td>
           <td>{this.state.west[i].wins}</td>
           <td>{this.state.west[i].losses}</td>
           <td>{this.state.west[i].gamesBehind}</td>
