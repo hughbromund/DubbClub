@@ -16,6 +16,7 @@ import Search from "./components/Search/Search";
 import Account from "./components/Account/Account";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import PredictionGraph from "./components/PredictionGraph/PredictionGraph";
+import VerifyEmail from "./components/VerifyEmail/VerifyEmail";
 import "./constants/Constants";
 
 import classes from "./App.module.css";
@@ -36,6 +37,7 @@ import {
   VOTING_ROUTE,
   NBA_STANDINGS_ROUTE,
   GRAPH_TEST,
+  VERIFY_EMAIL_ROUTE,
 } from "./constants/Constants";
 library.add(fab);
 library.add(fas);
@@ -72,6 +74,10 @@ class App extends Component {
                 component={ExpandedGameInfo}
               />
               <Route path={GRAPH_TEST} component={PredictionGraph} />
+              <Route
+                path={VERIFY_EMAIL_ROUTE + "/:hash"}
+                component={VerifyEmail}
+              />
               {this.context.isLoggedIn === true ? (
                 <Switch>
                   <Route path={DASHBOARD_ROUTE} component={Dashboard} />

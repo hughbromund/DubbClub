@@ -14,6 +14,7 @@ export const VOTING_ROUTE = "/voting";
 export const RESET_PASSWORD_ROUTE = "/resetPassword";
 export const NBA_STANDINGS_ROUTE = "/nba/standings";
 export const GRAPH_TEST = "/graph";
+export const VERIFY_EMAIL_ROUTE = "/verifyEmail";
 
 /* Base URL for Backend */
 export var BASE = "https://api.dubb.club";
@@ -50,6 +51,8 @@ export const GET_HIGH_VOTE_GAMES = BASE + "/api/nba/getHighVoteGames";
 export const GET_VOTE_DIFF_GAMES = BASE + "/api/nba/getHighPredictDiffGames";
 export const GET_NBA_STANDINGS = BASE + "/api/nba/getTeamStandings";
 export const GET_LIVE_GAME_PREDS = BASE + "/api/nba/getLiveGamePreds";
+export const SEND_VERIFY_EMAIL = BASE + "/api/user/sendVerifyEmail";
+export const VERIFY_EMAIL = BASE + "/api/user/verifyEmail";
 
 /* Date options to convert to UTC for Game Cards */
 export const DATE_OPTIONS = {

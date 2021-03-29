@@ -12,6 +12,7 @@ import {
   UPDATE_PHONE_NUMBER,
   UPDATE_NOTIFICATIONS,
   UPDATE_SPOILERS,
+  SEND_VERIFY_EMAIL,
 } from "../../constants/Constants";
 import AuthContext from "../../contexts/AuthContext.js";
 import Alert from "../Alert/Alert";
@@ -38,7 +39,9 @@ export default class Account extends Component {
       phoneNumber: "",
       newPhoneNumber: "",
       error: "",
-      warning: "",
+      warnings: [],
+      verify: { email: true },
+      verifyEmailLabel: "Verify Email",
       emailNotifications: false,
       smsNotifications: false,
       hideSpoilers: false,
@@ -57,18 +60,23 @@ export default class Account extends Component {
     // console.log(res);
 
     var body = await res.json();
-    // console.log(body);
+    console.log(body);
 
-    var warning = "";
+    var warnings = [];
     var tempPhoneNumber = "";
 
     if (body.phoneNumber === "none") {
-      warning =
-        "No Phone Number Set. Please add a Phone Number to your account. ";
+      warnings.push(
+        "No Phone Number Set. Please add a Phone Number to your account. "
+      );
     } else {
       tempPhoneNumber = body.phoneNumber.substring(
         body.phoneNumber.length - 10
       );
+    }
+
+    if (body.verify.email === false) {
+      warnings.push("Email Not Verified. Please Verify Your Email below.");
     }
 
     this.setState({
@@ -82,8 +90,9 @@ export default class Account extends Component {
       newPasswordConfirm: "",
       emailNotifications: body.notifications.email,
       smsNotifications: body.notifications["SMS"],
+      verify: body.verify,
       error: "",
-      warning: warning,
+      warnings: warnings,
     });
   }
 
@@ -106,10 +115,14 @@ export default class Account extends Component {
               <Alert>{this.state.error}</Alert>
             </div>
           </Expand>
-          <Expand open={this.state.warning !== ""}>
-            <div className={classes.alertDiv}>
-              <Alert variant="warning">{this.state.warning}</Alert>
-            </div>
+          <Expand open={this.state.warnings.length !== 0}>
+            {this.state.warnings.map((warning, index) => (
+              <div className={classes.alertDiv}>
+                <Alert variant="warning" key={"warning-" + index}>
+                  {warning}
+                </Alert>
+              </div>
+            ))}
           </Expand>
           <Card>
             <div>
@@ -132,7 +145,11 @@ export default class Account extends Component {
               Your username is unique to you and can't be changed.
             </div>
             <div>
-              <b>Email</b>
+              <b>Email</b>{" "}
+              <FontAwesomeIcon
+                icon={["fas", "check"]}
+                hidden={!this.state.verify.email}
+              />
             </div>
             <form
               onSubmit={(e) => {
@@ -188,6 +205,39 @@ export default class Account extends Component {
                   }}
                 >
                   Save Changes
+                </SmartButton>
+              </Expand>
+              <Expand open={!this.state.verify.email}>
+                <SmartButton
+                  disabled={this.state.verify.email}
+                  runOnClick={async () => {
+                    var res = await fetch(SEND_VERIFY_EMAIL, {
+                      method: "POST",
+                      mode: "cors",
+                      headers: {
+                        "Content-Type": "application/json",
+                        "x-access-token": this.context.token,
+                      },
+                    });
+
+                    var body = await res.json();
+
+                    if (res.status !== 200) {
+                      this.setState({ error: body.message });
+                      return false;
+                    }
+
+                    // console.log(res);
+                    // console.log(body);
+                    this.fetchUserInfo();
+                    this.setState({
+                      error: "",
+                      verifyEmailLabel: "Email Sent",
+                    });
+                    return true;
+                  }}
+                >
+                  {this.state.verifyEmailLabel}
                 </SmartButton>
               </Expand>
             </form>
@@ -365,7 +415,7 @@ export default class Account extends Component {
                     return true;
                   }}
                 >
-                  Email
+                  Email {this.state.emailNotifications ? "On" : "Off"}
                 </SmartButton>
               </Col>
               <Col>
@@ -399,7 +449,7 @@ export default class Account extends Component {
                     return true;
                   }}
                 >
-                  Text Message
+                  Text Message {this.state.smsNotifications ? "On" : "Off"}
                 </SmartButton>
               </Col>
             </Row>
