@@ -118,9 +118,10 @@ exports.updateTeamStandings = async function (req, res, next) {
     }
 }
 
-exports.getTeamStandings = async function (req, res, next) {
+exports.getTeamsFromDb = async function (req, res, next) {
     try {
-        nbaService.getTeamStandings(req, res);
+        let teams = await nbaService.getTeamsFromDb();
+        res.status(200).json(teams);
     } catch(e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
