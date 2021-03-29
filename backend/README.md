@@ -345,30 +345,34 @@ JSON return Format:
     "message": "Team standings updated successfully!"
 }
 
-### /api/nba/getTeamStandings
+### /api/nba/getTeamsFromDb
 
 GET
-gets a list of each team, their conference and standing
+gets the team objects from the db  
 Requirements: nothing
-Returns: a list of team ID's with the associated information
+Returns: the team objects  
 Status: Working  
 Issues: None  
 
 JSON return Format:
-{
-  "teams": [
-    {
-        "teamId": 1,
-        "conference": "east",
-        "standing": 6
-    },
-    {
-        "teamId": 8,
-        "conference": "west",
-        "standing": 7
-    }
-  ]
-}
+[  
+  {  
+    "_id": "605d4d880e4f1db334d2ab30",  
+    "teamId": 1,  
+    "teamName": "Atlanta Hawks",  
+    "elo": 1690.0729320970106,  
+    "lastGameID": 8888,  
+    "conference": "east",  
+    "standing": 6,  
+    "gamesBehind": 9,  
+    "lastTenLosses": 3,  
+    "lastTenWins": 7,  
+    "losses": 23,  
+    "winStreak": 0,  
+    "wins": 23,  
+    "teamImage": "https://upload.wikimedia.org/wikipedia/fr/e/ee/Hawks_2016.png"  
+  }  
+]  
 
 ### /api/nba/getLiveGamePreds/:league/:gameId
 

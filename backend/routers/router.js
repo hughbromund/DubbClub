@@ -96,7 +96,7 @@ router.get("/api/nba/getHighPredictDiffGames", authJWT.verifyTokenOptional, nbaC
 router.get("/api/nba/updateTeamStandings", nbaController.updateTeamStandings)
 
 //get a list of teams, their conferences and standings
-router.get("/api/nba/getTeamStandings", nbaController.getTeamStandings)
+router.get("/api/nba/getTeamsFromDb", nbaController.getTeamsFromDb)
 
 //get a list of predictions for a live game
 router.get("/api/nba/getLiveGamePreds/:gameId", nbaController.getLiveGamePreds)

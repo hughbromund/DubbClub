@@ -514,36 +514,9 @@ exports.updateTeamStandings = async function() {
   return teamList
 }
 
-exports.getTeamStandings = (req, res) => {
-
-  NBAteam.find().exec((err, teams) => {
-
-    if (err) {
-      return res.status(500).send({ err: err, message: "Database failure." });
-    }
-
-    retArr = []
-
-    for (var i = 0; i < teams.length; i++) {
-      team = teams[i]
-      teams[i] = {
-        teamId: team.teamId, 
-        conference: team.conference, 
-        standing: team.standing,
-        wins: team.wins,
-        losses: team.losses,
-        lastTenWins: team.lastTenWins,
-        lastTenLosses: team.lastTenLosses,
-        winStreak: team.winStreak,
-        gamesBehind: team.gamesBehind
-      }
-    }
-
-    res.status(200).send({
-      teams: teams,
-      message: "Successful!"
-    })
-  });
+exports.getTeamsFromDb = async function() {
+  let teams = await NBAteam.find().exec()
+  return teams
 }
 
 exports.getLiveGamePreds = (req, res) => {
