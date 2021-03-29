@@ -1,8 +1,18 @@
 const path = require("path");
 const axios = require("axios");
+const User = require("../database/models/user");
 const config = require(path.resolve(__dirname, "../config.json"));
 const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
 const NBAteam = require(path.resolve(__dirname, "../database/models/NBAteam"));
+const nodemailer = require("nodemailer")
+
+const transporter = nodemailer.createTransport({
+  service: config.email_service,
+  auth: {
+    user: config.email_user,
+    pass: config.email_pass
+  }
+})
 
 exports.getBasicGameInfo = async function() {
   var start = new Date();
@@ -567,3 +577,37 @@ exports.getLiveGamePreds = (req, res) => {
   });
 
 };
+
+exports.notifications = (game) => {
+  let title = game.home.teamName + " vs. " + game.away.teamName + " is starting!"
+  let body = game.home.teamName + " vs. " + game.away.teamName + " is starting! Go to https://dubb.club/dashboard to the see the latest predictions and information."
+
+  User.find({"favoriteTeams.NBA": { "$in": [game.home.teamId, game.away.teamId]}}).exec((err, user) => {
+    if (err) {
+      console.log(err)
+    }
+    
+    for (var i = 0; i < user.length; i++) {
+      if (user[i].notifications.email && user[i].verify.email) {
+        const mailOptions = {
+          from: config.email_user,
+          to: user[i].email,
+          subject: title,
+          text: body
+        } 
+  
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            //return res.status(500).send({ err: error, message: "Email failure." });
+            console.log(err)
+            console.log(info)
+          }
+        })
+      }
+
+      if (user[i].notifications.SMS) {
+        //twilio goes here
+      }
+    }
+  })
+}
