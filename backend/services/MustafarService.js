@@ -38,7 +38,7 @@ exports.updateDbWithPredictions = async function(upcoming, predictions) {
             if (homeTeam.teamId === 7) {
                 homeTeam.teamImage = cavsLogo
             } else if (homeTeam.teamId === 10) {
-                homeTeam.teamId = pistonsLogo
+                homeTeam.teamImage = pistonsLogo
             }
     
             const awayTeam = new NBAteam({
@@ -54,7 +54,7 @@ exports.updateDbWithPredictions = async function(upcoming, predictions) {
             if (awayTeam.teamId === 7) {
                 awayTeam.teamImage = cavsLogo
             } else if (awayTeam.teamId === 10) {
-                awayTeam.teamId = pistonsLogo
+                awayTeam.teamImage = pistonsLogo
             }
     
             let arena = (upcoming[i].arena === "" || upcoming[i].arena === undefined) ? "TBD" : upcoming[i].arena
