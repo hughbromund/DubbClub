@@ -411,7 +411,7 @@ def predict_nba_live_win():
 
     # Calculate time remaining in seconds
     clock_arr = clock_str.split(":")
-    clock_in_sec = int(clock_arr[0]) * 60 + int(clock_arr[1])
+    clock_in_sec = int(clock_arr[0]) * 60 + int(float(clock_arr[1]))
 
     total_time_sec = 720 * 4
     SECONDS_PER_QUARTER = 720
