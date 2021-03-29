@@ -28,11 +28,13 @@ export default class Search extends Component {
   constructor(props) {
     super(props);
     console.log(this.props.match.params.id);
-    const id = Number(this.props.match.params.id);
-    let team = "";
+    const id = this.props.match.params.id;
+    let team = "Atlanta Hawks";
+    console.log(NBA_TEAM_INFO);
+    console.log(id);
     if (id !== undefined) {
       console.log(id);
-      team = getTeamByID(id);
+      team = getTeamByID(Number(id));
     }
 
     this.state = {
@@ -49,7 +51,10 @@ export default class Search extends Component {
   }
 
   async componentDidMount() {
-    await this.fetchGameDataByTeam();
+    if (this.state.searchTeam !== "") {
+      // await this.fetchGameDataByTeam();
+      console.log(this.state.searchTeam);
+    }
   }
 
   async fetchGameDataByDate() {
@@ -104,13 +109,6 @@ export default class Search extends Component {
       cards.push(temp);
     }
     let teams = [];
-    if (this.state.searchTeam !== "") {
-      teams.push(
-        <option value="" selected disabled hidden>
-          Select a team...
-        </option>
-      );
-    }
     for (const team in NBA_TEAM_INFO) {
       let temp = <option>{team}</option>;
       teams.push(temp);
@@ -135,6 +133,7 @@ export default class Search extends Component {
                     value={this.state.searchTeam}
                     onChange={(e) => {
                       this.setState({ searchTeam: e.target.value });
+                      console.log(this.state.searchTeam);
                     }}
                     as="select"
                   >
@@ -185,7 +184,7 @@ export default class Search extends Component {
           </Row>
         </Container>
         <Container fluid>
-          {cards.length !== 0 ? (
+          {cards.length !== 0 || this.props.match.params.id === undefined ? (
             <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
               {cards}
             </Row>
