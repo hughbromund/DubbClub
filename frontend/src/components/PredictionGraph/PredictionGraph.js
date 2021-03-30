@@ -6,13 +6,13 @@ import { GET_LIVE_GAME_PREDS } from "../../constants/Constants";
 import classes from "./PredictionGraph.module.css";
 
 var initData = [
-  {
-    id: "Q1",
-    data: [
-      { x: 10, y: 20 },
-      { x: 5, y: 15 },
-    ],
-  },
+  // {
+  //   id: "Q1",
+  //   data: [
+  //     { x: 10, y: 20 },
+  //     { x: 5, y: 15 },
+  //   ],
+  // },
 ];
 var initLength = 2880;
 
@@ -97,7 +97,10 @@ export default class PredictionGraph extends Component {
        * If period 4 is the last period we have data for, we only want the total time to go to period 4.
        * Since predictions are in order of time, we can look at the last prediction and see which period it happened in
        */
-      if (key <= predictions[predictions.length - 1].period) {
+      if (
+        predictions.length > 0 &&
+        key <= predictions[predictions.length - 1].period
+      ) {
         tempLength = tempLength + periodLengths[key];
         periods.push(tempLength);
       }
