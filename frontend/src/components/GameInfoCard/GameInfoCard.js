@@ -51,6 +51,7 @@ const INITIAL_STATE = {
   homeTeam: "Loading",
   awayTeam: "Loading",
   arena: "Loading",
+  playedGameStats: undefined,
 };
 
 export default class GameInfoCard extends Component {
@@ -64,7 +65,39 @@ export default class GameInfoCard extends Component {
     this.hexAlphaConverter = this.hexAlphaConverter.bind(this);
     this.hexMedianValue = this.hexMedianValue.bind(this);
     this.fetchGameData = this.fetchGameData.bind(this);
+    this.renderPredictionSubtext = this.renderPredictionSubtext.bind(this);
   }
+
+  renderPredictionSubtext() {
+    let winner = "";
+    if (
+      this.state.playedGameStats.away.points -
+        this.state.playedGameStats.home.points >
+      0
+    ) {
+      winner = this.state.awayTeam;
+    } else {
+      winner = this.state.homeTeam;
+    }
+
+    console.log(this.state.predictedWinner);
+
+    if (winner.toUpperCase() === this.state.predictedWinner.toUpperCase()) {
+      return (
+        <div className={classes.center}>
+          <span className={classes.center}>Prediction successful! </span>
+          <FontAwesomeIcon className={classes.check} icon={["fas", "check"]} />
+        </div>
+      );
+    }
+    return (
+      <div className={classes.center}>
+        <span className={classes.center}>Prediction unsuccessful! </span>
+        <FontAwesomeIcon className={classes.cross} icon={["fas", "times"]} />
+      </div>
+    );
+  }
+
   renderButtonConditionally() {
     return this.props.onClickHandler === null ? null : (
       <Button onClick={this.props.onClickHandler}>See More</Button>
@@ -111,7 +144,7 @@ export default class GameInfoCard extends Component {
   async fetchGameData(gameID) {
     var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
     var body = await res.json();
-    // console.log(body.game);
+    console.log(body.game);
 
     if (res.status === 200) {
       var predictedWinner = body.game.home[0].teamName;
@@ -143,6 +176,7 @@ export default class GameInfoCard extends Component {
         gameTime: time,
         homeId: body.game.home[0].teamId,
         awayId: body.game.away[0].teamId,
+        playedGameStats: body.game.playedGameStats,
       });
     }
   }
@@ -340,7 +374,35 @@ export default class GameInfoCard extends Component {
                   </div>
                 </Col>
               </Row>
-              <br />
+              {this.state.playedGameStats !== undefined ? (
+                <div>
+                  <br />
+                  <Row noGutters>
+                    <Col>
+                      <div className={classes.teamNames}>
+                        <div>
+                          <b>{this.state.playedGameStats.away.points}</b>
+                        </div>
+                      </div>
+                    </Col>
+                    <Col sm={1}>
+                      <div className={classes.teamNames}>
+                        <b>-</b>
+                      </div>
+                    </Col>
+                    <Col>
+                      <div className={classes.teamNames}>
+                        <div>
+                          <b>{this.state.playedGameStats.home.points}</b>
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row>{this.renderPredictionSubtext()}</Row>
+                </div>
+              ) : (
+                <div />
+              )}
               <Row>
                 <div className={classes.speedometer}>
                   <Speedometer

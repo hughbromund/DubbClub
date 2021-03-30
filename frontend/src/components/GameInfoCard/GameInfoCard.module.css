@@ -2,6 +2,17 @@
   text-align: center;
 }
 
+.center {
+  margin: 0 auto;
+}
+
+.check {
+  color: var(--success-color);
+}
+.cross {
+  color: var(--error-color);
+}
+
 .logo {
   width: 100px;
 }
