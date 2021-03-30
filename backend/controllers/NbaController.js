@@ -47,16 +47,6 @@ exports.getGameDetailsByGameId = async function (req, res, next) {
     }
 };
 
-exports.userVote = async function (req, res, next) {
-    try {
-        if (req.body.homeAway != "home" && req.body.homeAway != "away") {
-            return res.status(400).json({ status: 400, message: "homeaway was not home or away"});
-        }
-        nbaService.userVote(req, res);
-      } catch (e) {
-        return res.status(400).json({ status: 400, message: e.message });
-    }
-};
 
 exports.getGameFromDb = async function (req, res, next) {
     try {
@@ -132,8 +122,4 @@ exports.getLiveGamePreds = async function (req, res, next) {
     } catch(e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
-}
-
-exports.notificationsTest = async function (req, res, next) {
-    nbaService.notificationsTest(req, res);
 }
