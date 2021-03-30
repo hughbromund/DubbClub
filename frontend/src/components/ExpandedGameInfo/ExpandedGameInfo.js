@@ -73,7 +73,7 @@ export default class ExpandedGameInfo extends Component {
   }
 
   async fetchGameData() {
-    return;
+    // return;
     var res = await fetch(GET_GAME_BY_ID + `/${this.state.gameID}`, {});
     var body = await res.json();
     console.log(body);
@@ -321,11 +321,7 @@ export default class ExpandedGameInfo extends Component {
                   <Col xs={12} lg={4}>
                     <Card>{this.getStatusText()}</Card>
                     <Card>
-                      <Table
-                        bordered
-                        size="sm"
-                        className={[classes.card].join(" ")}
-                      >
+                      <Table size="sm" className={[classes.card].join(" ")}>
                         <thead>
                           <tr>
                             <th></th>
@@ -518,7 +514,7 @@ export default class ExpandedGameInfo extends Component {
             <Col>
               <h2 className={classes.headerPadding}>{this.state.homeTeam}</h2>
               <Card className={classes.playerCard}>
-                <Table bordered className={[classes.card].join(" ")}>
+                <Table className={[classes.card].join(" ")}>
                   <thead>
                     <tr>
                       <th>Players</th>
@@ -532,7 +528,7 @@ export default class ExpandedGameInfo extends Component {
               </Card>
               <h2 className={classes.headerPadding}>{this.state.awayTeam}</h2>
               <Card className={classes.playerCard}>
-                <Table bordered className={[classes.card].join(" ")}>
+                <Table className={[classes.card].join(" ")}>
                   <thead>
                     <tr>
                       <th>Players</th>

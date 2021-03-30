@@ -6,4 +6,8 @@
   margin: var(--default-margin);
   max-width: var(--default-column-width);
   text-align: left;
+  transition: var(--default-transition);
+}
+.Card:hover {
+  transform: translate(0px, -10px);
 }
