@@ -30,6 +30,9 @@
   background-color: var(--background-color);
   color: var(--text-primary);
 }
+body {
+  color: var(--text-primary) !important;
+}
 
 .centered {
   text-align: center;
