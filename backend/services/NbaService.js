@@ -614,7 +614,7 @@ exports.notifications = (game) => {
         })
       }
 
-      if (user[i].notifications.SMS && user[i].phoneNumber.length == 12) {
+      if (user[i].notifications.SMS && user[i].phoneNumber && user[i].phoneNumber.length == 12) {
         //console.log("sending text")
         twilio.messages.create({
           body: body,
