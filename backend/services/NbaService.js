@@ -239,7 +239,7 @@ async function getTeamStats(teamId, teamName, teamImage) {
 }
 
 
-exports.getPlayedGameStats = async function(gameId) {
+getPlayedGameStats = async function(gameId) {
   var options = {
     method: 'GET',
     url: "https://api-nba-v1.p.rapidapi.com/gameDetails/" + gameId,
@@ -263,6 +263,8 @@ exports.getPlayedGameStats = async function(gameId) {
 
   return team;
 }
+
+exports.getPlayedGameStats = getPlayedGameStats
 
 
 exports.userVote = (req, res) => {
