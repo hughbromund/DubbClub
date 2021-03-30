@@ -6,6 +6,12 @@ const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
 const NBAteam = require(path.resolve(__dirname, "../database/models/NBAteam"));
 const nodemailer = require("nodemailer")
 
+const accountSid = config.TWILIO_ACCOUNT_SID;
+const authToken = config.TWILIO_AUTH_TOKEN;
+const twilio = require('twilio')(accountSid, authToken)
+
+const phoneNumber = config.TWILIO_PHONE_NUMBER;
+
 const transporter = nodemailer.createTransport({
   service: config.email_service,
   auth: {
@@ -579,16 +585,19 @@ exports.getLiveGamePreds = (req, res) => {
 };
 
 exports.notifications = (game) => {
-  let title = game.home.teamName + " vs. " + game.away.teamName + " is starting!"
-  let body = game.home.teamName + " vs. " + game.away.teamName + " is starting! Go to https://dubb.club/dashboard to the see the latest predictions and information."
+  game = game.toObject()
+  let title = game.home[0].teamName + " vs. " + game.away[0].teamName + " is starting!"
+  let body = game.home[0].teamName + " vs. " + game.away[0].teamName + " is starting! Go to https://dubb.club/dashboard to the see the latest predictions and information."
 
-  User.find({"favoriteTeams.NBA": { "$in": [game.home.teamId, game.away.teamId]}}).exec((err, user) => {
+  User.find({"favoriteTeams.NBA": { "$in": [game.home[0].teamId, game.away[0].teamId]}}).exec((err, user) => {
     if (err) {
       console.log(err)
     }
+    //console.log(user)
     
     for (var i = 0; i < user.length; i++) {
       if (user[i].notifications.email && user[i].verify.email) {
+        //console.log("sending email")
         const mailOptions = {
           from: config.email_user,
           to: user[i].email,
@@ -605,9 +614,23 @@ exports.notifications = (game) => {
         })
       }
 
-      if (user[i].notifications.SMS) {
-        //twilio goes here
+      if (user[i].notifications.SMS && user[i].phoneNumber.length == 12) {
+        //console.log("sending text")
+        twilio.messages.create({
+          body: body,
+          from: phoneNumber,
+          to: user[i].phoneNumber
+        }).catch(e => { console.error('Got an error:', e.code, e.message); });
       }
     }
   })
+}
+
+exports.notificationsTest = async(req, res) => {
+  NBAgame.findOne({id: req.body.id}).exec((err, game) => {
+    this.notifications(game)
+    return res.status(200).send({message: "Success!"})
+  })
+  
+  
 }

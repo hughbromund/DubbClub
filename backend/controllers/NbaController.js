@@ -133,3 +133,7 @@ exports.getLiveGamePreds = async function (req, res, next) {
         return res.status(400).json({ status: 400, message: e.message });
     }
 }
+
+exports.notificationsTest = async function (req, res, next) {
+    nbaService.notificationsTest(req, res);
+}

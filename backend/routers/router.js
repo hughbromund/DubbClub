@@ -101,4 +101,7 @@ router.get("/api/nba/getTeamStandings", nbaController.getTeamStandings)
 //get a list of predictions for a live game
 router.get("/api/nba/getLiveGamePreds/:gameId", nbaController.getLiveGamePreds)
 
+//TESTING PURPOSES ONLY - post gameId to send all users notifications
+//router.post("/api/nba/notificationsTest", nbaController.notificationsTest)
+
 module.exports = router;
