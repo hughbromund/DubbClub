@@ -76,7 +76,7 @@ export default class ExpandedGameInfo extends Component {
     // return;
     var res = await fetch(GET_GAME_BY_ID + `/${this.state.gameID}`, {});
     var body = await res.json();
-    console.log(body);
+    // console.log(body);
     this.setState({
       homeLineScore: body.home.lineScore,
       homeLeaders: body.home.leaders,
@@ -118,8 +118,8 @@ export default class ExpandedGameInfo extends Component {
       // console.log(getColorByTeam(game.home[0].teamName));
       var timeoutID = null;
       if (game.status === LIVE) {
-        timeoutID = setTimeout(() => {
-          this.fetchPrediction();
+        timeoutID = setTimeout(async () => {
+          await this.fetchPrediction();
         }, REFRESH_RATE);
       }
 
@@ -504,6 +504,8 @@ export default class ExpandedGameInfo extends Component {
                       awayTeam={this.state.awayTeam}
                       homeHex={this.state.homeHex}
                       awayHex={this.state.awayHex}
+                      liveRefresh={this.state.status === LIVE}
+                      refreshRate={REFRESH_RATE}
                       gameID={this.state.gameID}
                     />
                   </div>
