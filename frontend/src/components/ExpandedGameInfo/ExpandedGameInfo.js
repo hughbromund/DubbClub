@@ -17,9 +17,16 @@ import AuthContext from "../../contexts/AuthContext.js";
 import Button from "../Button/Button";
 import SmartButton from "../SmartButton/SmartButton";
 import PredictionGraph from "../PredictionGraph/PredictionGraph";
+import Card from "../Card/Card";
 
 const USER_PREDICT = "user";
 const ML_PREDICT = "ml";
+
+const SCHEDULED = "Scheduled";
+const LIVE = "In Play";
+const FINISHED = "Finished";
+
+const REFRESH_RATE = 60000;
 
 export default class ExpandedGameInfo extends Component {
   constructor(props) {
@@ -32,6 +39,10 @@ export default class ExpandedGameInfo extends Component {
       gameID: this.props.location.pathname.substring(
         this.props.location.pathname.lastIndexOf("/") + 1
       ),
+      homeLineScore: [],
+      awayLineScore: [],
+      homeLeaders: [],
+      awayLeaders: [],
       predictions: {},
       votedTeam: "none",
       homeVotes: 0,
@@ -41,6 +52,8 @@ export default class ExpandedGameInfo extends Component {
       predictionConfidence: 50,
       predictionType: ML_PREDICT,
       loading: true,
+      status: "Scheduled",
+      timeoutID: null,
     };
     this.fetchPrediction = this.fetchPrediction.bind(this);
     this.voteForTeam = this.voteForTeam.bind(this);
@@ -48,9 +61,19 @@ export default class ExpandedGameInfo extends Component {
     this.getUserConfidence = this.getUserConfidence.bind(this);
     this.getUserWinner = this.getUserWinner.bind(this);
     this.getHomeAwayWinner = this.getHomeAwayWinner.bind(this);
+    this.getStatusText = this.getStatusText.bind(this);
+    this.getUserWinnerName = this.getUserWinnerName.bind(this);
+  }
+
+  componentWillUnmount() {
+    // console.log(this.state.timeoutID);
+    if (this.state.timeoutID !== null) {
+      clearTimeout(this.state.timeoutID);
+    }
   }
 
   async fetchGameData() {
+    return;
     var res = await fetch(GET_GAME_BY_ID + `/${this.state.gameID}`, {});
     var body = await res.json();
     console.log(body);
@@ -70,10 +93,14 @@ export default class ExpandedGameInfo extends Component {
         "x-access-token": this.context.token,
       },
     });
+    if (!(res.status === 200 || res.status === 204)) {
+      return;
+    }
+
     var body = await res.json();
-    console.log(body);
+    // console.log(body);
     var game = body.game;
-    console.log({ game });
+    // console.log({ game });
 
     if (body.game !== undefined) {
       var predictedWinner = game.home[0].teamName;
@@ -88,7 +115,13 @@ export default class ExpandedGameInfo extends Component {
         minute: "2-digit",
       });
 
-      console.log(getColorByTeam(game.home[0].teamName));
+      // console.log(getColorByTeam(game.home[0].teamName));
+      var timeoutID = null;
+      if (game.status === LIVE) {
+        timeoutID = setTimeout(() => {
+          this.fetchPrediction();
+        }, REFRESH_RATE);
+      }
 
       this.setState({
         predictedWinner: predictedWinner,
@@ -107,6 +140,8 @@ export default class ExpandedGameInfo extends Component {
         votedTeam: body.votedTeam,
         homeVotes: body.game.homeVoters.length,
         awayVotes: body.game.awayVoters.length,
+        status: body.game.status,
+        timeoutID: timeoutID,
       });
     }
   }
@@ -135,11 +170,26 @@ export default class ExpandedGameInfo extends Component {
     var userConfidence =
       (100 * this.state.homeVotes) /
       (this.state.awayVotes + this.state.homeVotes);
+
+    if (this.state.awayVotes > this.state.homeVotes) {
+      userConfidence =
+        (100 * this.state.awayVotes) /
+        (this.state.awayVotes + this.state.homeVotes);
+    }
     if (userConfidence === 0 || isNaN(userConfidence)) {
       userConfidence = 50;
     }
 
-    return userConfidence;
+    return Number(userConfidence.toFixed(2));
+  }
+
+  getUserWinnerName() {
+    var userWinnerName = this.state.homeTeam;
+
+    if (this.state.awayVotes > this.state.homeVotes) {
+      userWinnerName = this.state.awayTeam;
+    }
+    return userWinnerName;
   }
 
   getUserWinner() {
@@ -158,6 +208,25 @@ export default class ExpandedGameInfo extends Component {
     }
 
     return homeAwayWinner;
+  }
+
+  getStatusText() {
+    if (this.state.status === SCHEDULED) {
+      return (
+        <div>
+          Starts on {this.state.date} at {this.state.time}
+        </div>
+      );
+    }
+    if (this.state.status === LIVE) {
+      return <div>LIVE GAME</div>;
+    } else {
+      return (
+        <div>
+          Game Complete, Played on {this.state.date} at {this.state.time}
+        </div>
+      );
+    }
   }
 
   async voteForTeam(homeAway) {
@@ -250,37 +319,40 @@ export default class ExpandedGameInfo extends Component {
                     </div>
                   </Col>
                   <Col xs={12} lg={4}>
-                    <Table
-                      bordered
-                      size="sm"
-                      className={[classes.card].join(" ")}
-                    >
-                      <thead>
-                        <tr>
-                          <th></th>
-                          {this.state.awayLineScore.map((element, index) => (
-                            <th id={index}>Q{index + 1}</th>
-                          ))}
-                          <th>Total</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>{this.state.awayTeam}</td>
-                          {this.state.awayLineScore.map((element, index) => (
-                            <td id={index}>{element}</td>
-                          ))}
-                          <td>{this.state.awayScore}</td>
-                        </tr>
-                        <tr>
-                          <td>{this.state.homeTeam}</td>
-                          {this.state.homeLineScore.map((element, index) => (
-                            <td id={index}>{element}</td>
-                          ))}
-                          <td>{this.state.homeScore}</td>
-                        </tr>
-                      </tbody>
-                    </Table>
+                    <Card>{this.getStatusText()}</Card>
+                    <Card>
+                      <Table
+                        bordered
+                        size="sm"
+                        className={[classes.card].join(" ")}
+                      >
+                        <thead>
+                          <tr>
+                            <th></th>
+                            {this.state.awayLineScore.map((element, index) => (
+                              <th id={index}>Q{index + 1}</th>
+                            ))}
+                            <th>Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{this.state.awayTeam}</td>
+                            {this.state.awayLineScore.map((element, index) => (
+                              <td id={index}>{element}</td>
+                            ))}
+                            <td>{this.state.awayScore}</td>
+                          </tr>
+                          <tr>
+                            <td>{this.state.homeTeam}</td>
+                            {this.state.homeLineScore.map((element, index) => (
+                              <td id={index}>{element}</td>
+                            ))}
+                            <td>{this.state.homeScore}</td>
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </Card>
                   </Col>
                   <Col xs={6} lg={2}>
                     <br />
@@ -331,12 +403,12 @@ export default class ExpandedGameInfo extends Component {
           </Row>
           <hr />
           <Row>
-            <Col>
+            <Col xs={12} md={6}>
               <Row>
                 <div
                   className={[classes.centered, classes.speedometer].join(" ")}
                 >
-                  <Row>
+                  <Row xs={2} className={classes.buttonRow}>
                     <Col>
                       <Button
                         variant={
@@ -348,7 +420,7 @@ export default class ExpandedGameInfo extends Component {
                           this.setState({ predictionType: ML_PREDICT });
                         }}
                       >
-                        Dubb Club Prediction
+                        Dubb Club Pregame Prediction
                       </Button>
                     </Col>
                     <Col>
@@ -368,23 +440,28 @@ export default class ExpandedGameInfo extends Component {
                   </Row>
 
                   <br />
-                  {this.state.predictionType === ML_PREDICT ? (
-                    <Speedometer
-                      predictedWinner={this.getHomeAwayWinner()}
-                      predictionConfidence={this.state.predictionConfidence}
-                      awayHex={this.state.awayHex}
-                      homeHex={this.state.homeHex}
-                    />
-                  ) : (
-                    <Speedometer
-                      predictedWinner={this.getUserWinner()}
-                      predictionConfidence={this.getUserConfidence()}
-                      awayHex={this.state.awayHex}
-                      homeHex={this.state.homeHex}
-                    />
-                  )}
+                  <Card className={classes.speedometerCard}>
+                    <div className={classes.speedometer}>
+                      {this.state.predictionType === ML_PREDICT ? (
+                        <Speedometer
+                          predictedWinner={this.getHomeAwayWinner()}
+                          predictionConfidence={this.state.predictionConfidence}
+                          awayHex={this.state.awayHex}
+                          homeHex={this.state.homeHex}
+                          fluidWidth={false}
+                        />
+                      ) : (
+                        <Speedometer
+                          predictedWinner={this.getUserWinner()}
+                          predictionConfidence={this.getUserConfidence()}
+                          awayHex={this.state.awayHex}
+                          homeHex={this.state.homeHex}
+                        />
+                      )}
+                    </div>
+                  </Card>
                 </div>
-                <div>
+                <Card className={classes.speedometerCard}>
                   <h5>
                     {this.state.predictionType === ML_PREDICT ? (
                       this.state.predictionConfidence > 51 ? (
@@ -402,62 +479,71 @@ export default class ExpandedGameInfo extends Component {
                           <b>Toss Up Game</b>
                         </div>
                       )
+                    ) : this.getUserConfidence() > 51 ? (
+                      <div>
+                        Users are <b>{this.getUserConfidence()}%</b> confident
+                        that the <b>{this.getUserWinnerName()}</b> win
+                      </div>
                     ) : (
-                      this.state.awayVotes +
-                      " user(s) think that " +
-                      this.state.awayTeam +
-                      " will win and " +
-                      this.state.homeVotes +
-                      " user(s) think that " +
-                      this.state.homeTeam +
-                      " will win."
+                      <div>
+                        <b>Users are Evenly Split</b>
+                      </div>
                     )}
                   </h5>
-                </div>
+                </Card>
               </Row>
               <Row>
-                <div
-                  style={{
-                    height: "600px",
-                    width: "1000px",
-                  }}
-                >
-                  <PredictionGraph
-                    homeTeam={this.state.homeTeam}
-                    awayTeam={this.state.awayTeam}
-                    homeHex={this.state.homeHex}
-                    awayHex={this.state.awayHex}
-                    gameID={this.state.gameID}
-                  />
-                </div>
+                <Card className={classes.predictionGraphCard}>
+                  <h2 className={classes.headerPadding}>
+                    Live Game Predictions
+                  </h2>
+                  <h5 className={classes.headerPadding}>
+                    Dubb Club generates new predictions while games are in
+                    progress. Those predictions are shown here.
+                  </h5>
+
+                  <div className={classes.predictionGraph}>
+                    <PredictionGraph
+                      homeTeam={this.state.homeTeam}
+                      awayTeam={this.state.awayTeam}
+                      homeHex={this.state.homeHex}
+                      awayHex={this.state.awayHex}
+                      gameID={this.state.gameID}
+                    />
+                  </div>
+                </Card>
               </Row>
             </Col>
 
             <Col>
-              <h2>{this.state.homeTeam}</h2>
-              <Table bordered className={[classes.card].join(" ")}>
-                <thead>
-                  <tr>
-                    <th>Players</th>
-                    <th>Stat</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.homeLeaders.map(this.createPlayerStatRow)}
-                </tbody>
-              </Table>
-              <h2>{this.state.awayTeam}</h2>
-              <Table bordered className={[classes.card].join(" ")}>
-                <thead>
-                  <tr>
-                    <th>Players</th>
-                    <th>Stat</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.awayLeaders.map(this.createPlayerStatRow)}
-                </tbody>
-              </Table>
+              <h2 className={classes.headerPadding}>{this.state.homeTeam}</h2>
+              <Card className={classes.playerCard}>
+                <Table bordered className={[classes.card].join(" ")}>
+                  <thead>
+                    <tr>
+                      <th>Players</th>
+                      <th>Stat</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.homeLeaders.map(this.createPlayerStatRow)}
+                  </tbody>
+                </Table>
+              </Card>
+              <h2 className={classes.headerPadding}>{this.state.awayTeam}</h2>
+              <Card className={classes.playerCard}>
+                <Table bordered className={[classes.card].join(" ")}>
+                  <thead>
+                    <tr>
+                      <th>Players</th>
+                      <th>Stat</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.awayLeaders.map(this.createPlayerStatRow)}
+                  </tbody>
+                </Table>
+              </Card>
             </Col>
           </Row>
         </Container>

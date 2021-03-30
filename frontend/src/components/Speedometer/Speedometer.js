@@ -71,68 +71,70 @@ export default class Speedometer extends Component {
   render() {
     // console.log(this.props);
     return (
-      <ReactSpeedometer
-        forceRender={this.state.forceRender}
-        value={
-          this.props.predictedWinner === "away"
-            ? this.state.predictionConfidence.map(50, 100, 0, 100) * -1
-            : this.state.predictionConfidence.map(50, 100, 0, 100)
-        }
-        minValue={-100}
-        maxValue={100}
-        segments={7}
-        needleColor={"white"}
-        ringWidth={20}
-        needleTransitionDuration={0}
-        currentValueText={
-          Math.abs(this.props.predictionConfidence) + "% Confidence"
-        }
-        fluidWidth={this.props.fluidWidth}
-        width={this.props.width}
-        height={this.props.height}
-        segmentColors={[
-          this.hexAlphaConverter(this.props.awayHex, 1),
-          this.hexAlphaConverter(this.props.awayHex, 0.6),
-          this.hexAlphaConverter(this.props.awayHex, 0.4),
-          this.hexAlphaConverter(
-            this.hexMedianValue(this.props.homeHex, this.props.awayHex),
-            0.2
-          ),
-          this.hexAlphaConverter(this.props.homeHex, 0.4),
-          this.hexAlphaConverter(this.props.homeHex, 0.6),
-          this.hexAlphaConverter(this.props.homeHex, 1),
-        ]}
-        customSegmentLabels={[
-          {
-            text: "100%",
-            position: "OUTSIDE",
-          },
-          {
-            text: "",
-            position: "OUTSIDE",
-          },
-          {
-            text: "",
-            position: "OUTSIDE",
-          },
-          {
-            text: "50%",
-            position: "OUTSIDE",
-          },
-          {
-            text: "",
-            position: "OUTSIDE",
-          },
-          {
-            text: "",
-            position: "OUTSIDE",
-          },
-          {
-            text: "100%",
-            position: "OUTSIDE",
-          },
-        ]}
-      />
+      <div className={classes.speedometer}>
+        <ReactSpeedometer
+          forceRender={this.state.forceRender}
+          value={
+            this.props.predictedWinner === "away"
+              ? this.state.predictionConfidence.map(50, 100, 0, 100) * -1
+              : this.state.predictionConfidence.map(50, 100, 0, 100)
+          }
+          minValue={-100}
+          maxValue={100}
+          segments={7}
+          needleColor={"white"}
+          ringWidth={20}
+          needleTransitionDuration={0}
+          currentValueText={
+            Math.abs(this.props.predictionConfidence) + "% Confidence"
+          }
+          fluidWidth={this.props.fluidWidth}
+          width={this.props.width}
+          height={this.props.height}
+          segmentColors={[
+            this.hexAlphaConverter(this.props.awayHex, 1),
+            this.hexAlphaConverter(this.props.awayHex, 0.6),
+            this.hexAlphaConverter(this.props.awayHex, 0.4),
+            this.hexAlphaConverter(
+              this.hexMedianValue(this.props.homeHex, this.props.awayHex),
+              0.2
+            ),
+            this.hexAlphaConverter(this.props.homeHex, 0.4),
+            this.hexAlphaConverter(this.props.homeHex, 0.6),
+            this.hexAlphaConverter(this.props.homeHex, 1),
+          ]}
+          customSegmentLabels={[
+            {
+              text: "100%",
+              position: "OUTSIDE",
+            },
+            {
+              text: "",
+              position: "OUTSIDE",
+            },
+            {
+              text: "",
+              position: "OUTSIDE",
+            },
+            {
+              text: "50%",
+              position: "OUTSIDE",
+            },
+            {
+              text: "",
+              position: "OUTSIDE",
+            },
+            {
+              text: "",
+              position: "OUTSIDE",
+            },
+            {
+              text: "100%",
+              position: "OUTSIDE",
+            },
+          ]}
+        />
+      </div>
     );
   }
 }

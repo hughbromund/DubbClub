@@ -12,7 +12,7 @@
 .speedometer {
   text-align: center;
   margin: 0 auto;
-  margin-bottom: -100px;
+  /* margin-bottom: -100px; */
   width: var(--default-column-width);
 }
 .teamNames {
