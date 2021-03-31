@@ -87,7 +87,15 @@ export default class ExpandedGameInfo extends Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    console.log("Component Updated");
+    console.log(this.context.token);
+    console.log(prevProps);
+    console.log(prevState);
+  }
+
   async fetchPrediction() {
+    console.log(this.context.token);
     var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${this.state.gameID}`, {
       headers: {
         "x-access-token": this.context.token,
@@ -98,7 +106,7 @@ export default class ExpandedGameInfo extends Component {
     }
 
     var body = await res.json();
-    // console.log(body);
+    console.log(body);
     var game = body.game;
     // console.log({ game });
 
@@ -159,7 +167,7 @@ export default class ExpandedGameInfo extends Component {
     }
 
     return (
-      <tr>
+      <tr id={index}>
         <td>{element.name}</td>
         <td>{stat}</td>
       </tr>
@@ -246,7 +254,7 @@ export default class ExpandedGameInfo extends Component {
     if (res.status !== 200) {
       return false;
     } else {
-      await this.fetchPrediction(this.state.gameID);
+      await this.fetchPrediction();
       return true;
     }
   }
