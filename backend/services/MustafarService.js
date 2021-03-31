@@ -116,9 +116,18 @@ exports.updateDbWithLivePredictions = async function(upcoming, liveGames) {
 
     console.log(res.data)
 
+    liveObj = {
+        "awayConfidence": res.data.awayConfidence,
+        "homeConfidence": res.data.homeConfidence,
+        "period": res.data.period,
+        "timeElapsed": res.data.timeElapsed,
+        "homeScore": upcoming.hTeam.score.points,
+        "awayScore": upcoming.vTeam.score.points
+    }
+
     NBAgame.updateOne(
         { id: parseInt(upcoming.gameId, 10) },
-        { "$push": {livePredictions: res.data }}
+        { "$push": {livePredictions: liveObj }}
      ).exec()
 
      return res.data
