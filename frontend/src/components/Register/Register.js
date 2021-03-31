@@ -55,7 +55,7 @@ export default class Register extends Component {
                 <Alert>{this.state.error}</Alert>
               </div>
             </Expand>
-            <Card>
+            <Card static={true}>
               <form
                 onSubmit={(e) => {
                   e.preventDefault();

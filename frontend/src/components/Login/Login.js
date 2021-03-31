@@ -52,7 +52,7 @@ export default class Login extends Component {
                 <Alert>{this.state.error}</Alert>
               </div>
             </Expand>
-            <Card>
+            <Card static={true}>
               <form
                 onSubmit={(e) => {
                   e.preventDefault();

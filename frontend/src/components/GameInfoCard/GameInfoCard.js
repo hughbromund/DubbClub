@@ -144,7 +144,7 @@ export default class GameInfoCard extends Component {
   async fetchGameData(gameID) {
     var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
     var body = await res.json();
-    console.log(body.game);
+    // console.log(body.game);
 
     if (res.status === 200) {
       var predictedWinner = body.game.home[0].teamName;

@@ -63,10 +63,19 @@
   min-width: 100%;
 }
 .predictionGraph {
-  height: 40rem;
+  height: 35rem;
 }
 @media (max-width: 768px) {
   .predictionGraph {
-    height: 20rem;
+    height: 18rem;
+  }
+  .playerCard {
+    min-width: 0%;
+  }
+  .speedometerCard {
+    min-width: 0%;
+  }
+  .predictionGraphCard {
+    min-width: 0%;
   }
 }

@@ -124,7 +124,7 @@ export default class Account extends Component {
               </div>
             ))}
           </Expand>
-          <Card>
+          <Card static={true}>
             <div>
               <b>Username</b>
             </div>

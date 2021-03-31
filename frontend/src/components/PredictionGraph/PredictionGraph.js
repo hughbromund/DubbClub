@@ -177,7 +177,7 @@ export default class PredictionGraph extends Component {
             },
           }}
           gridYValues={[0, 50, 100]}
-          margin={{ top: 100, right: 100, bottom: 100, left: 100 }}
+          margin={{ top: 10, right: 10, bottom: 50, left: 70 }}
           tooltip={(point) => {
             var team = this.state.homeTeamName;
             if (point.point.serieId === AWAY_VALUE) {
