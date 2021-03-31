@@ -43,10 +43,22 @@ gets all game IDs from the NBA in the next three days
 Requirements: none  
 Returns: JSON list of gameIds  
 Status: Working  
-Issues: Doesn't currently have start time, uses UTC to find games,  
+Issues:   
 
 JSON Format:  
 [8188,8187,8908,8909,8910,8911,8912,8913,8914,8915,8916,8917,8918,8919,8920,8921] 
+
+### /api/nba/getDashboard
+
+GET  
+gets all game IDs for dashboard  
+Requirements: auth JWT token  
+Returns: JSON list of lists of gameIds  
+Status: Working  
+Issues:  
+
+JSON Format:  
+{"regFinished":[8946,8947,8352,8948],"regLive":[],"regUpcoming":[8949,8950,8951,8952,8953,8954,8955,8956,8957,8958,8360,8959,8960,8961,8962,8963,8964,8965,8966,8967,8968,8969,8970,8971,8972,8973,8974,8975],"favFinished":[],"favLive":[],"favUpcoming":[8951,8958,8962,8966,8970,8971]}
 
 ### /api/nba/getUpcomingGamesFromDb
 

@@ -17,7 +17,11 @@ const NBAgameSchema = new Schema({
     awayVoters: {type: Array, unique: false, required: false, default: []},
     status: {type: String, unique : false, required: true},
     livePredictions: {type: Array, unique: false, required: false, default: []},
-    playedGameStats: {type: Object, unique: false, required: false, default: {}}
+    playedGameStats: {type: Object, unique: false, required: false, default: {}},
+    homeScore: { type: Number, unique: false, required: false},
+    awayScore: { type: Number, unique: false, required: false},
+    period: { type: Number, unique: false, required: false},
+    clock: { type: String, unique: false, required: false}
 }, { collection: "NBAgame"})
 
 // Define schema methods

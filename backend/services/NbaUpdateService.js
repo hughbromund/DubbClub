@@ -45,7 +45,8 @@ exports.refresh = async function refresh() {
 
       //transition to live game
       if (gameInDb.status === "Scheduled" && upcoming[i].statusGame === "In Play") {
-         await NBAgame.findOneAndUpdate({id : gameId}, {status: "In Play"}).exec()
+         let arena = (upcoming[i].arena === "" || upcoming[i].arena === undefined) ? "TBD" : upcoming[i].arena
+         await NBAgame.findOneAndUpdate({id : gameId}, {status: "In Play", arena: arena}).exec()
          console.log("Updated game " + gameId + " to In Play.")
          nbaUserService.notifications(gameInDb)
       }

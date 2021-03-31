@@ -6,7 +6,6 @@ const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
 const NBAteam = require(path.resolve(__dirname, "../database/models/NBAteam"));
 const nodemailer = require("nodemailer")
 
-
 exports.getBasicGameInfo = async function() {
   var start = new Date();
   let result = [];
@@ -77,7 +76,7 @@ exports.getLightGameInfo = async function() {
   return result;
 }
 
-exports.getLightGameInfoPlusCurr = async function() {
+getLightGameInfoPlusCurr = async function() {
   var start = new Date();
   // console.log(start)
   start.setDate(start.getDate() - 1)
@@ -112,6 +111,51 @@ exports.getLightGameInfoPlusCurr = async function() {
     } 
   }
   return result;
+}
+exports.getLightGameInfoPlusCurr = getLightGameInfoPlusCurr
+
+exports.getDashboard = async function(userId) {
+  let start = new Date()
+  let end = new Date()
+  start.setDate(start.getDate() - 1)
+  end.setDate(end.getDate() + 4)
+
+  favTeams = await User.findOne({_id: userId}).exec()
+  favTeams = favTeams.toObject().favoriteTeams.NBA
+
+  let results = await NBAgame.find({date: {$gt: start, $lt:end}})
+  let favUpcoming = []
+  let regUpcoming = []
+  let favLive = []
+  let regLive = []
+  let favFinished = []
+  let regFinished = []
+
+  for (let i = 0; i < results.length; i++) {
+    for (let j = 0; j < favTeams.length; j++) {
+      if (parseInt(favTeams[j], 10) === parseInt(results[i].home[0].teamId, 10) || parseInt(favTeams[j], 10) === parseInt(results[i].away[0].teamId, 10)) {
+        if (results[i].status === "Scheduled") {
+          favUpcoming.push(results[i].id)
+        } else if (results[i].status === "In Play") {
+          favLive.push(results[i].id)
+        } else if (results[i].status === "Finished") {
+          favFinished.push(results[i].id)
+        }
+        break
+      }
+    }
+    if (results[i].status === "Scheduled") {
+      regUpcoming.push(results[i].id)
+    } else if (results[i].status === "In Play") {
+      regLive.push(results[i].id)
+    } else if (results[i].status === "Finished") {
+      regFinished.push(results[i].id)
+    }
+  }
+
+  return {"regFinished": regFinished, "regLive": regLive, "regUpcoming": regUpcoming,
+   "favFinished": favFinished, "favLive": favLive, "favUpcoming": favUpcoming}
+
 }
 
 exports.getUpcomingGameIds = async function() {
