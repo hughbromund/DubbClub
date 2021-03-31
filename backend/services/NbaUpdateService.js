@@ -5,6 +5,7 @@ const config = require(path.resolve(__dirname, "../config.json"));
 const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
 
 const nbaService = require(path.resolve(__dirname, "../services/NbaService.js"));
+const nbaUserService = require(path.resolve(__dirname, "../services/NbaUserService"));
 const mustafarService = require(path.resolve(__dirname, "../services/MustafarService.js"));
 
 
@@ -46,6 +47,7 @@ exports.refresh = async function refresh() {
       if (gameInDb.status === "Scheduled" && upcoming[i].statusGame === "In Play") {
          await NBAgame.findOneAndUpdate({id : gameId}, {status: "In Play"}).exec()
          console.log("Updated game " + gameId + " to In Play.")
+         nbaUserService.notifications(gameInDb)
       }
 
       //transition to finished game

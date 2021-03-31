@@ -256,7 +256,7 @@ exports.login = (req, res) => {
     //league
     var listName = "favoriteTeams." + req.body.league 
 
-    User.updateOne({_id: req.userId}, {"$addToSet": {[listName]: req.body.teamId}})
+    User.updateOne({_id: req.userId}, {"$addToSet": {[listName]: parseInt(req.body.teamId, 10)}})
     .exec((err, user) => {
 
       if (err) {
@@ -274,7 +274,7 @@ exports.login = (req, res) => {
   exports.unfavoriteTeam = (req, res) => {
     var listName = "favoriteTeams." + req.body.league 
     
-    User.updateOne({_id: req.userId}, {"$pull": {[listName]: req.body.teamId}})
+    User.updateOne({_id: req.userId}, {"$pull": {[listName]: parseInt(req.body.teamId, 10)}})
     .exec((err, user) => {
 
       if (err) {

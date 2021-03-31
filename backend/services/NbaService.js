@@ -1,8 +1,11 @@
 const path = require("path");
 const axios = require("axios");
+const User = require("../database/models/user");
 const config = require(path.resolve(__dirname, "../config.json"));
 const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
 const NBAteam = require(path.resolve(__dirname, "../database/models/NBAteam"));
+const nodemailer = require("nodemailer")
+
 
 exports.getBasicGameInfo = async function() {
   var start = new Date();
@@ -267,28 +270,7 @@ getPlayedGameStats = async function(gameId) {
 exports.getPlayedGameStats = getPlayedGameStats
 
 
-exports.userVote = (req, res) => {
-  var gameId = req.body.gameId
-  var homeAwayOpposite = "away"
-  if (req.body.homeAway == "away") {
-    var homeAwayOpposite = "home"
-  }
-  var votersVar = req.body.homeAway + "Voters"
-  var votersOpp = homeAwayOpposite + "Voters"
 
-  NBAgame.updateOne({id: gameId}, {"$addToSet": {[votersVar]: req.userId}, "$pull": {[votersOpp]: req.userId}}).exec((err, game) => {
-    if (err) {
-      return res.status(500).send({ err: err, message: "Database failure." });
-    }
-
-    if (!game) {
-      return res.status(404).send({ message: "Game Not found." });
-    }
-
-    res.status(200).send({message: "Successfully Voted."})
-  })
-
-}
 
 exports.getGameFromDb = (req, res) => {
   var start = new Date();
@@ -542,3 +524,4 @@ exports.getLiveGamePreds = (req, res) => {
   });
 
 };
+

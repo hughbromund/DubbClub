@@ -26,6 +26,11 @@ const nbaController = require(path.resolve(
     "../controllers/NbaController"
 ));
 
+const nbaUserController = require(path.resolve(
+    __dirname,
+    "../controllers/NbaUserController"
+));
+
 const mustafarController = require(path.resolve(
     __dirname,
     "../controllers/MustafarController"
@@ -84,7 +89,7 @@ router.get("/api/nba/getUpcomingGamesFromDb", authJWT.verifyTokenOptional, nbaCo
 router.get("/api/nba/getUpcomingGameIdsFromDb", authJWT.verifyTokenOptional, nbaController.getUpcomingGameIdsFromDb)
 
 //user vote on predicted winner of npa game
-router.post("/api/nba/vote", authJWT.verifyToken, nbaController.userVote)
+router.post("/api/nba/vote", authJWT.verifyToken, nbaUserController.userVote)
 
 //get high vote count game
 router.get("/api/nba/getHighVoteGames", authJWT.verifyTokenOptional, nbaController.getHighVoteGames)
@@ -100,5 +105,8 @@ router.get("/api/nba/getTeamsFromDb", nbaController.getTeamsFromDb)
 
 //get a list of predictions for a live game
 router.get("/api/nba/getLiveGamePreds/:gameId", nbaController.getLiveGamePreds)
+
+//TESTING PURPOSES ONLY - post gameId to send all users notifications
+//router.post("/api/nba/notificationsTest", nbaUserController.notificationsTest)
 
 module.exports = router;
