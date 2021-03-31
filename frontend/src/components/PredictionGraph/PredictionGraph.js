@@ -37,12 +37,19 @@ export default class PredictionGraph extends Component {
       homeTeamName: this.props.homeTeam,
       awayTeamName: this.props.awayTeam,
       gameID: this.props.gameID,
+      timeoutID: null,
     };
 
     this.getColor = this.getColor.bind(this);
     this.fetchData = this.fetchData.bind(this);
   }
 
+  componentWillUnmount() {
+    // console.log(this.state.timeoutID);
+    if (this.state.timeoutID !== null) {
+      clearTimeout(this.state.timeoutID);
+    }
+  }
   async fetchData() {
     var res = await fetch(GET_LIVE_GAME_PREDS + "/" + this.state.gameID);
 
@@ -97,19 +104,27 @@ export default class PredictionGraph extends Component {
        * If period 4 is the last period we have data for, we only want the total time to go to period 4.
        * Since predictions are in order of time, we can look at the last prediction and see which period it happened in
        */
-      if (
-        predictions.length > 0 &&
-        key <= predictions[predictions.length - 1].period
-      ) {
-        tempLength = tempLength + periodLengths[key];
-        periods.push(tempLength);
-      }
+
+      tempLength = tempLength + periodLengths[key];
+      periods.push(tempLength);
     });
 
     // console.log(tempLength);
     // console.log(periods);
 
-    this.setState({ data: tempData, length: tempLength, periods: periods });
+    var timeoutID = null;
+    if (this.props.liveRefresh) {
+      timeoutID = setTimeout(async () => {
+        await this.fetchData();
+      }, this.props.refreshRate);
+    }
+
+    this.setState({
+      data: tempData,
+      length: tempLength,
+      periods: periods,
+      timeoutID,
+    });
   }
 
   async componentDidMount() {
