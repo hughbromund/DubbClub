@@ -25,6 +25,7 @@ import {
 } from "react-share";
 import AuthContext from "../../contexts/AuthContext.js";
 import Button from "../Button/Button";
+import Spoiler from "../Spoiler/Spoiler";
 import Card from "../Card/Card";
 import SmartButton from "../SmartButton/SmartButton";
 import Speedometer from "../Speedometer/Speedometer";
@@ -171,7 +172,9 @@ export default class GameInfoCard extends Component {
             <Col>
               <div className={classes.teamNames}>
                 <div>
-                  <b>{this.state.awayLiveScore}</b>
+                  <Spoiler>
+                    <b>{this.state.awayLiveScore}</b>
+                  </Spoiler>
                 </div>
               </div>
             </Col>
@@ -183,7 +186,9 @@ export default class GameInfoCard extends Component {
             <Col>
               <div className={classes.teamNames}>
                 <div>
-                  <b>{this.state.homeLiveScore}</b>
+                  <Spoiler>
+                    <b>{this.state.homeLiveScore}</b>{" "}
+                  </Spoiler>
                 </div>
               </div>
             </Col>
