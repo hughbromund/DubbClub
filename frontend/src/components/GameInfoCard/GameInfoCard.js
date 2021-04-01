@@ -31,6 +31,8 @@ const rgbHex = require("rgb-hex");
 const hexRgb = require("hex-rgb");
 var classNames = require("classnames");
 
+const REFRESH_RATE = 60000;
+
 /**
  * This maps the value of a number from one range to a new one.
  *
@@ -52,6 +54,12 @@ const INITIAL_STATE = {
   awayTeam: "Loading",
   arena: "Loading",
   playedGameStats: undefined,
+  homeLiveScore: undefined,
+  awayLiveScore: undefined,
+  liveTimeRem: undefined,
+  livePeriod: undefined,
+  liveGame: false,
+  timeoutID: null,
 };
 
 export default class GameInfoCard extends Component {
@@ -66,6 +74,73 @@ export default class GameInfoCard extends Component {
     this.hexMedianValue = this.hexMedianValue.bind(this);
     this.fetchGameData = this.fetchGameData.bind(this);
     this.renderPredictionSubtext = this.renderPredictionSubtext.bind(this);
+    this.renderScore = this.renderScore.bind(this);
+  }
+
+  renderScore() {
+    if (this.state.playedGameStats !== undefined) {
+      return (
+        <div>
+          <br />
+          <Row noGutters>
+            <Col>
+              <div className={classes.teamNames}>
+                <div>
+                  <b>{this.state.playedGameStats.away.points}</b>
+                </div>
+              </div>
+            </Col>
+            <Col sm={1}>
+              <div className={classes.teamNames}>
+                <b>-</b>
+              </div>
+            </Col>
+            <Col>
+              <div className={classes.teamNames}>
+                <div>
+                  <b>{this.state.playedGameStats.home.points}</b>
+                </div>
+              </div>
+            </Col>
+          </Row>
+          <Row>{this.renderPredictionSubtext()}</Row>
+        </div>
+      );
+    } else if (this.state.liveGame) {
+      return (
+        <div>
+          <br />
+          <Row noGutters>
+            <Col>
+              <div className={classes.teamNames}>
+                <div>
+                  <b>{this.state.awayLiveScore}</b>
+                </div>
+              </div>
+            </Col>
+            <Col sm={1}>
+              <div className={classes.teamNames}>
+                <b>-</b>
+              </div>
+            </Col>
+            <Col>
+              <div className={classes.teamNames}>
+                <div>
+                  <b>{this.state.homeLiveScore}</b>
+                </div>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <div className={classes.center}>
+              Q{this.state.livePeriod}-{this.state.liveTimeRem}
+            </div>
+          </Row>
+        </div>
+      );
+    } else {
+      return <div />;
+    }
   }
 
   renderPredictionSubtext() {
@@ -80,8 +155,6 @@ export default class GameInfoCard extends Component {
       winner = this.state.homeTeam;
     }
 
-    console.log(this.state.predictedWinner);
-
     if (winner.toUpperCase() === this.state.predictedWinner.toUpperCase()) {
       return (
         <div className={classes.center}>
@@ -95,12 +168,6 @@ export default class GameInfoCard extends Component {
         <span className={classes.center}>Prediction unsuccessful! </span>
         <FontAwesomeIcon className={classes.cross} icon={["fas", "times"]} />
       </div>
-    );
-  }
-
-  renderButtonConditionally() {
-    return this.props.onClickHandler === null ? null : (
-      <Button onClick={this.props.onClickHandler}>See More</Button>
     );
   }
 
@@ -144,8 +211,6 @@ export default class GameInfoCard extends Component {
   async fetchGameData(gameID) {
     var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
     var body = await res.json();
-    // console.log(body.game);
-
     if (res.status === 200) {
       var predictedWinner = body.game.home[0].teamName;
       if (body.game.away[0].teamId === body.game.predictedWinner) {
@@ -178,6 +243,23 @@ export default class GameInfoCard extends Component {
         awayId: body.game.away[0].teamId,
         playedGameStats: body.game.playedGameStats,
       });
+      if (body.game.status.toUpperCase() === "IN PLAY") {
+        this.setState({
+          homeLiveScore: body.game.homeScore,
+          awayLiveScore: body.game.awayScore,
+          liveTimeRem: body.game.clock,
+          livePeriod: body.game.period,
+          liveGame: true,
+        });
+      }
+
+      var tID = null;
+      if (this.state.liveGame) {
+        tID = setTimeout(async () => {
+          await this.fetchGameData();
+        }, REFRESH_RATE);
+        this.setState({ timeoutID: tID });
+      }
     }
   }
 
@@ -187,6 +269,13 @@ export default class GameInfoCard extends Component {
         this.setState(INITIAL_STATE);
         this.fetchGameData(this.props.gameID);
       }
+    }
+  }
+
+  componentWillUnmount() {
+    // console.log(this.state.timeoutID);
+    if (this.state.timeoutID !== null) {
+      clearTimeout(this.state.timeoutID);
     }
   }
 
@@ -242,8 +331,6 @@ export default class GameInfoCard extends Component {
     if (this.state.predictedWinner === this.state.awayTeam) {
       homeAwayWinner = "away";
     }
-
-    // console.log(this.state);
 
     return (
       <div>
@@ -374,35 +461,7 @@ export default class GameInfoCard extends Component {
                   </div>
                 </Col>
               </Row>
-              {this.state.playedGameStats !== undefined ? (
-                <div>
-                  <br />
-                  <Row noGutters>
-                    <Col>
-                      <div className={classes.teamNames}>
-                        <div>
-                          <b>{this.state.playedGameStats.away.points}</b>
-                        </div>
-                      </div>
-                    </Col>
-                    <Col sm={1}>
-                      <div className={classes.teamNames}>
-                        <b>-</b>
-                      </div>
-                    </Col>
-                    <Col>
-                      <div className={classes.teamNames}>
-                        <div>
-                          <b>{this.state.playedGameStats.home.points}</b>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row>{this.renderPredictionSubtext()}</Row>
-                </div>
-              ) : (
-                <div />
-              )}
+              {this.renderScore()}
               <Row>
                 <div className={classes.speedometer}>
                   <Speedometer
@@ -431,8 +490,6 @@ export default class GameInfoCard extends Component {
                   </h5>
                 </div>
               </Row>
-
-              {/* {this.renderButtonConditionally()} */}
             </Container>
           </Card>
           <div
@@ -454,7 +511,6 @@ export default class GameInfoCard extends Component {
               <Button
                 variant="success"
                 onClick={() => {
-                  console.log(this.props.gameID);
                   if (this.props.gameID !== undefined) {
                     this.props.history.push(
                       GAME_INFO_ROUTE + "/" + this.props.gameID
