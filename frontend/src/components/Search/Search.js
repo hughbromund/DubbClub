@@ -43,6 +43,7 @@ export default class Search extends Component {
       searchDate: new Date(),
       games: {},
       predictions: {},
+      isButtonDisabled: false,
     };
 
     this.fetchGameDataByDate = this.fetchGameDataByDate.bind(this);
@@ -52,7 +53,10 @@ export default class Search extends Component {
 
   async componentDidMount() {
     if (this.state.searchTeam !== "") {
-      // await this.fetchGameDataByTeam();
+      console.log("here");
+      this.setState({ isButtonDisabled: true });
+      await this.fetchGameDataByTeam();
+      this.setState({ isButtonDisabled: false });
       console.log(this.state.searchTeam);
     }
   }
@@ -176,6 +180,7 @@ export default class Search extends Component {
                     }
                     return true;
                   }}
+                  disabled={this.state.isButtonDisabled}
                 >
                   Go
                 </SmartButton>

@@ -10,6 +10,9 @@ import {
   GET_GAME_BY_ID_FROM_DB,
   DATE_OPTIONS,
   REFRESH_RATE,
+  LIVE,
+  SCHEDULED,
+  FINISHED,
 } from "../../constants/Constants";
 import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
 import {
@@ -58,7 +61,7 @@ const INITIAL_STATE = {
   awayLiveScore: undefined,
   liveTimeRem: undefined,
   livePeriod: undefined,
-  liveGame: false,
+  status: "Scheduled",
   timeoutID: null,
 };
 
@@ -78,18 +81,24 @@ export default class GameInfoCard extends Component {
   }
 
   renderGraph(homeAwayWinner) {
-    if (this.state.liveGame) {
+    if (this.state.status === LIVE) {
+      console.log(this.state);
+      console.log(this.props.gameID);
       return (
         <Row>
-          <PredictionGraph
-            homeTeam={this.state.homeTeam}
-            awayTeam={this.state.awayTeam}
-            homeHex={this.state.homeHex}
-            awayHex={this.state.awayHex}
-            liveRefresh={this.state.liveGame}
-            refreshRate={REFRESH_RATE}
-            gameID={this.state.gameID}
-          />
+          <div className={classes.predictionGraphCard}>
+            <div className={classes.predictionGraph}>
+              <PredictionGraph
+                homeTeam={this.state.homeTeam}
+                awayTeam={this.state.awayTeam}
+                homeHex={this.state.homeHex}
+                awayHex={this.state.awayHex}
+                liveRefresh={this.state.status === LIVE}
+                refreshRate={REFRESH_RATE}
+                gameID={this.props.gameID}
+              />
+            </div>
+          </div>
         </Row>
       );
     }
@@ -154,7 +163,7 @@ export default class GameInfoCard extends Component {
           <Row>{this.renderPredictionSubtext()}</Row>
         </div>
       );
-    } else if (this.state.liveGame) {
+    } else if (this.state.status === LIVE) {
       return (
         <div>
           <br />
@@ -290,19 +299,19 @@ export default class GameInfoCard extends Component {
         homeId: body.game.home[0].teamId,
         awayId: body.game.away[0].teamId,
         playedGameStats: body.game.playedGameStats,
+        status: body.game.status,
       });
-      if (body.game.status.toUpperCase() === "IN PLAY") {
+      if (body.game.status === LIVE) {
         this.setState({
           homeLiveScore: body.game.homeScore,
           awayLiveScore: body.game.awayScore,
           liveTimeRem: body.game.clock,
           livePeriod: body.game.period,
-          liveGame: true,
         });
       }
 
       var tID = null;
-      if (this.state.liveGame) {
+      if (body.game.status === LIVE) {
         tID = setTimeout(async () => {
           await this.fetchGameData(this.props.gameID);
         }, REFRESH_RATE);

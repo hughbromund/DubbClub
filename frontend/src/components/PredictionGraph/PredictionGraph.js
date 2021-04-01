@@ -62,7 +62,7 @@ export default class PredictionGraph extends Component {
 
     var predictions = body.data.predictions;
 
-    // console.log(predictions);
+    console.log(predictions);
     var tempData = [];
     var homeData = [];
     var awayData = [];
