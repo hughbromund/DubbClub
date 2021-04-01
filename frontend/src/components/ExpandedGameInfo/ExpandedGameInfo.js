@@ -8,8 +8,9 @@ import {
   GET_GAME_BY_ID_FROM_DB,
   NBA_VOTE,
   DATE_OPTIONS,
+  REFRESH_RATE,
 } from "../../constants/Constants";
-import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
+import { getColorByTeam } from "../../constants/NBAConstants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Speedometer from "../Speedometer/Speedometer";
 import classes from "./ExpandedGameInfo.module.css";
@@ -18,6 +19,7 @@ import Button from "../Button/Button";
 import SmartButton from "../SmartButton/SmartButton";
 import PredictionGraph from "../PredictionGraph/PredictionGraph";
 import Card from "../Card/Card";
+import Expand from "react-expand-animated";
 
 const USER_PREDICT = "user";
 const ML_PREDICT = "ml";
@@ -26,14 +28,11 @@ const SCHEDULED = "Scheduled";
 const LIVE = "In Play";
 const FINISHED = "Finished";
 
-const REFRESH_RATE = 60000;
-
 export default class ExpandedGameInfo extends Component {
   constructor(props) {
     super(props);
     // console.log(props);
 
-    this.fetchGameData = this.fetchGameData.bind(this);
     this.state = {
       game: {},
       gameID: this.props.location.pathname.substring(
@@ -72,30 +71,8 @@ export default class ExpandedGameInfo extends Component {
     }
   }
 
-  async fetchGameData() {
-    // return;
-    var res = await fetch(GET_GAME_BY_ID + `/${this.state.gameID}`, {});
-    var body = await res.json();
-    // console.log(body);
-    this.setState({
-      homeLineScore: body.home.lineScore,
-      homeLeaders: body.home.leaders,
-      homeScore: body.home.points,
-      awayLineScore: body.away.lineScore,
-      awayLeaders: body.away.leaders,
-      awayScore: body.away.points,
-    });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    console.log("Component Updated");
-    console.log(this.context.token);
-    console.log(prevProps);
-    console.log(prevState);
-  }
-
   async fetchPrediction() {
-    console.log(this.context.token);
+    // console.log(this.context.token);
     var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${this.state.gameID}`, {
       headers: {
         "x-access-token": this.context.token,
@@ -106,7 +83,7 @@ export default class ExpandedGameInfo extends Component {
     }
 
     var body = await res.json();
-    console.log(body);
+    // console.log(body);
     var game = body.game;
     // console.log({ game });
 
@@ -131,6 +108,28 @@ export default class ExpandedGameInfo extends Component {
         }, REFRESH_RATE);
       }
 
+      var homeScore = body.game.homeScore;
+      var awayScore = body.game.awayScore;
+      var homeLineScore = [];
+      var awayLineScore = [];
+      var awayLeaders = [];
+      var homeLeaders = [];
+      if (game.status === FINISHED && game.playedGameStats !== undefined) {
+        homeLineScore = game.playedGameStats.home.lineScore;
+        awayLineScore = game.playedGameStats.away.lineScore;
+        homeScore = game.playedGameStats.home.points;
+        awayScore = game.playedGameStats.away.points;
+        awayLeaders = game.playedGameStats.away.leaders;
+        homeLeaders = game.playedGameStats.home.leaders;
+      }
+
+      var period = game.period;
+      if (period > 4) {
+        period = "OT";
+      } else {
+        period = "Q" + period;
+      }
+
       this.setState({
         predictedWinner: predictedWinner,
         predictionConfidence: Number((game.confidence * 100).toFixed(2)),
@@ -150,6 +149,14 @@ export default class ExpandedGameInfo extends Component {
         awayVotes: body.game.awayVoters.length,
         status: body.game.status,
         timeoutID: timeoutID,
+        homeScore: homeScore,
+        awayScore: awayScore,
+        homeLineScore: homeLineScore,
+        awayLineScore: awayLineScore,
+        homeLeaders: homeLeaders,
+        awayLeaders: awayLeaders,
+        clock: body.game.clock,
+        period: period,
       });
     }
   }
@@ -227,7 +234,11 @@ export default class ExpandedGameInfo extends Component {
       );
     }
     if (this.state.status === LIVE) {
-      return <div>LIVE GAME</div>;
+      return (
+        <div>
+          <b>Live Game</b> - {this.state.period} - {this.state.clock}
+        </div>
+      );
     } else {
       return (
         <div>
@@ -260,7 +271,7 @@ export default class ExpandedGameInfo extends Component {
   }
 
   async componentDidMount() {
-    await Promise.all([this.fetchGameData(), this.fetchPrediction()]);
+    await Promise.all([this.fetchPrediction()]);
 
     this.setState({ loading: false });
   }
@@ -522,34 +533,49 @@ export default class ExpandedGameInfo extends Component {
             </Col>
 
             <Col>
-              <h2 className={classes.headerPadding}>{this.state.homeTeam}</h2>
-              <Card className={classes.playerCard}>
-                <Table className={[classes.card].join(" ")}>
-                  <thead>
-                    <tr>
-                      <th>Players</th>
-                      <th>Stat</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.homeLeaders.map(this.createPlayerStatRow)}
-                  </tbody>
-                </Table>
-              </Card>
-              <h2 className={classes.headerPadding}>{this.state.awayTeam}</h2>
-              <Card className={classes.playerCard}>
-                <Table className={[classes.card].join(" ")}>
-                  <thead>
-                    <tr>
-                      <th>Players</th>
-                      <th>Stat</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.awayLeaders.map(this.createPlayerStatRow)}
-                  </tbody>
-                </Table>
-              </Card>
+              <Expand open={this.state.status !== FINISHED}>
+                <h2 className={classes.headerPadding}>Post-Game Summary</h2>
+                <Card className={classes.playerCard}>
+                  When the game is over, Dubb Club will display individual
+                  player statistics and box score information.
+                </Card>
+              </Expand>
+              <Expand open={this.state.status === LIVE}>
+                <Card className={classes.playerCard}>
+                  This game is Live! No need to refresh, Dubb Club will load our
+                  latest predictions every {REFRESH_RATE / 1000} seconds.
+                </Card>
+              </Expand>
+              <Expand open={this.state.status === FINISHED}>
+                <h2 className={classes.headerPadding}>{this.state.homeTeam}</h2>
+                <Card className={classes.playerCard}>
+                  <Table className={[classes.card].join(" ")}>
+                    <thead>
+                      <tr>
+                        <th>Players</th>
+                        <th>Stat</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.homeLeaders.map(this.createPlayerStatRow)}
+                    </tbody>
+                  </Table>
+                </Card>
+                <h2 className={classes.headerPadding}>{this.state.awayTeam}</h2>
+                <Card className={classes.playerCard}>
+                  <Table className={[classes.card].join(" ")}>
+                    <thead>
+                      <tr>
+                        <th>Players</th>
+                        <th>Stat</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.awayLeaders.map(this.createPlayerStatRow)}
+                    </tbody>
+                  </Table>
+                </Card>
+              </Expand>
             </Col>
           </Row>
         </Container>
