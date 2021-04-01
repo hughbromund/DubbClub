@@ -70,7 +70,6 @@ export default class NBAStandings extends Component {
     }
     let renderedEast = [];
     for (let i = 0; i < this.state.east.length; i++) {
-      var iconType = "far";
       var temp = (
         <tr>
           <td>
