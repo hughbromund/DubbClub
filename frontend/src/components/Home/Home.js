@@ -53,7 +53,7 @@ export default class Home extends Component {
       );
     }
     let cards = [];
-    console.log(this.state.games.regUpcoming);
+    // console.log(this.state.games.regUpcoming);
     for (let i = 0; i < this.state.games.regUpcoming.length; i++) {
       let temp = (
         <Col key={"col-" + i}>
@@ -72,7 +72,7 @@ export default class Home extends Component {
       cards.push(temp);
     }
     let liveCards = [];
-    console.log(this.state.games.regLive);
+    // console.log(this.state.games.regLive);
     for (let i = 0; i < this.state.games.regLive.length; i++) {
       let temp = (
         <Col key={"col-" + i}>
