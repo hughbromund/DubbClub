@@ -9,6 +9,7 @@ import {
   GAME_INFO_ROUTE,
   GET_GAME_BY_ID_FROM_DB,
   DATE_OPTIONS,
+  REFRESH_RATE,
 } from "../../constants/Constants";
 import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
 import {
@@ -30,8 +31,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const rgbHex = require("rgb-hex");
 const hexRgb = require("hex-rgb");
 var classNames = require("classnames");
-
-const REFRESH_RATE = 60000;
 
 /**
  * This maps the value of a number from one range to a new one.

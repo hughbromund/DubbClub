@@ -63,3 +63,4 @@ export const DATE_OPTIONS = {
   day: "numeric",
   timeZone: "EST",
 };
+export const REFRESH_RATE = 60000;
