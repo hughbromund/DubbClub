@@ -7,6 +7,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
+import FavoriteStar from "../FavoriteStar/FavoriteStar";
 
 import classes from "./NBAStandings.module.css";
 
@@ -72,6 +73,7 @@ export default class NBAStandings extends Component {
       var temp = (
         <tr>
           <td>
+            <FavoriteStar id={this.state.east[i].teamId} />{" "}
             <img width="25" src={this.state.east[i].teamImage} />{" "}
             <Link
               className={classes.table}
@@ -93,6 +95,7 @@ export default class NBAStandings extends Component {
       var temp = (
         <tr>
           <td>
+            <FavoriteStar id={this.state.west[i].teamId} />{" "}
             <img width="25" src={this.state.west[i].teamImage} />{" "}
             <Link
               className={classes.table}
