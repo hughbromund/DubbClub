@@ -27,6 +27,7 @@ import SmartButton from "../SmartButton/SmartButton";
 import Speedometer from "../Speedometer/Speedometer";
 import classes from "./GameInfoCard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import PredictionGraph from "../PredictionGraph/PredictionGraph";
 
 const rgbHex = require("rgb-hex");
 const hexRgb = require("hex-rgb");
@@ -74,6 +75,54 @@ export default class GameInfoCard extends Component {
     this.fetchGameData = this.fetchGameData.bind(this);
     this.renderPredictionSubtext = this.renderPredictionSubtext.bind(this);
     this.renderScore = this.renderScore.bind(this);
+  }
+
+  renderGraph(homeAwayWinner) {
+    if (this.state.liveGame) {
+      return (
+        <Row>
+          <PredictionGraph
+            homeTeam={this.state.homeTeam}
+            awayTeam={this.state.awayTeam}
+            homeHex={this.state.homeHex}
+            awayHex={this.state.awayHex}
+            liveRefresh={this.state.liveGame}
+            refreshRate={REFRESH_RATE}
+            gameID={this.state.gameID}
+          />
+        </Row>
+      );
+    }
+    return (
+      <Row>
+        <div className={classes.speedometer}>
+          <Speedometer
+            predictedWinner={homeAwayWinner}
+            awayHex={this.state.awayHex}
+            homeHex={this.state.homeHex}
+            predictionConfidence={this.state.predictionConfidence}
+          />
+        </div>
+        <div className={classes.predictionLine}>
+          <h5>
+            {this.state.predictionConfidence > 51 ? (
+              <div>
+                <b>{this.state.predictionConfidence}%</b> confidence that the{" "}
+                <b>{this.state.predictedWinner}</b> win
+              </div>
+            ) : this.state.predictedWinner === "" ? (
+              <div>
+                <b>No Prediction Available</b>
+              </div>
+            ) : (
+              <div>
+                <b>Toss Up Game</b>
+              </div>
+            )}
+          </h5>
+        </div>
+      </Row>
+    );
   }
 
   renderScore() {
@@ -464,34 +513,7 @@ export default class GameInfoCard extends Component {
                 </Col>
               </Row>
               {this.renderScore()}
-              <Row>
-                <div className={classes.speedometer}>
-                  <Speedometer
-                    predictedWinner={homeAwayWinner}
-                    awayHex={this.state.awayHex}
-                    homeHex={this.state.homeHex}
-                    predictionConfidence={this.state.predictionConfidence}
-                  />
-                </div>
-                <div className={classes.predictionLine}>
-                  <h5>
-                    {this.state.predictionConfidence > 51 ? (
-                      <div>
-                        <b>{this.state.predictionConfidence}%</b> confidence
-                        that the <b>{this.state.predictedWinner}</b> win
-                      </div>
-                    ) : this.state.predictedWinner === "" ? (
-                      <div>
-                        <b>No Prediction Available</b>
-                      </div>
-                    ) : (
-                      <div>
-                        <b>Toss Up Game</b>
-                      </div>
-                    )}
-                  </h5>
-                </div>
-              </Row>
+              {this.renderGraph(homeAwayWinner)}
             </Container>
           </Card>
           <div
