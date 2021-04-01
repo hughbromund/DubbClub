@@ -453,12 +453,29 @@ def predict_nba_live_win():
     output_dict["period"] = period
 
     max_conf = max(probability_matrix[0])
+
+    # Account for never giving 100% probability
+    if max_conf == 1.0 and total_time_sec != 0:
+        max_conf = 0.98
+
     if y_pred[0] == 1:
         output_dict["homeConfidence"] = max_conf
         output_dict["awayConfidence"] = 1.0 - max_conf
     else:
         output_dict["homeConfidence"] = 1.0 - max_conf
         output_dict["awayConfidence"] = max_conf
+
+    # End of game cases
+    if total_time_sec == 0:
+        if h_score > a_score:
+            output_dict["homeConfidence"] = 1.0
+            output_dict["awayConfidence"] = 0.0
+        elif a_score > h_score:
+            output_dict["homeConfidence"] = 0.0
+            output_dict["awayConfidence"] = 1.0
+        else:
+            output_dict["homeConfidence"] = 0.5
+            output_dict["awayConfidence"] = 0.5
 
     return output_dict
 

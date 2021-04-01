@@ -127,8 +127,7 @@ exports.updateDbWithLivePredictions = async function(upcoming, liveGames) {
 
     NBAgame.updateOne(
         { id: parseInt(upcoming.gameId, 10) }, {"homeScore": liveGame.hTeam.score.points, "awayScore": liveGame.vTeam.score.points, 
-        "period": res.data.period, "clock": liveGame.clock},
-        { "$push": {livePredictions: liveObj }}
+        "period": res.data.period, "clock": liveGame.clock, "$push": {livePredictions: liveObj }}
      ).exec()
 
      return res.data
