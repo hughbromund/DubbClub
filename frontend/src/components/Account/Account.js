@@ -28,7 +28,7 @@ export default class Account extends Component {
     super(props);
 
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log(tz);
+    // console.log(tz);
 
     this.state = {
       username: "",
@@ -60,7 +60,7 @@ export default class Account extends Component {
     // console.log(res);
 
     var body = await res.json();
-    console.log(body);
+    // console.log(body);
 
     var warnings = [];
     var tempPhoneNumber = "";
@@ -486,6 +486,7 @@ export default class Account extends Component {
                 // console.log(res);
                 // console.log(body);
                 this.fetchUserInfo();
+                this.context.refreshSpoilers();
                 this.setState({ error: "" });
                 return true;
               }}
