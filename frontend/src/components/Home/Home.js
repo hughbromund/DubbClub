@@ -98,12 +98,12 @@ export default class Home extends Component {
           <h3>Live Games</h3>
           <hr />
           <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
-            {liveCards}
+            {liveCards.length !== 0 ? liveCards : "No currently running games."}
           </Row>
           <h3>Upcoming Games with Dubb Club Predictions</h3>
           <hr />
           <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
-            {cards.length !== 0 ? cards : "No currently running games."}
+            {cards}
           </Row>
         </Container>
       </div>
