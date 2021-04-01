@@ -255,7 +255,7 @@ export default class GameInfoCard extends Component {
       var tID = null;
       if (this.state.liveGame) {
         tID = setTimeout(async () => {
-          await this.fetchGameData();
+          await this.fetchGameData(this.props.gameID);
         }, REFRESH_RATE);
         this.setState({ timeoutID: tID });
       }
