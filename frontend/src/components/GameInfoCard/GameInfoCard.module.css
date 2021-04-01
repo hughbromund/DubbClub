@@ -62,6 +62,15 @@
 .rightAlignSpan {
   float: right;
 }
+
+.predictionGraph {
+  height: 300px;
+}
+.predictionGraphCard {
+  min-width: 100%;
+  padding: 0px;
+}
+
 @media (max-width: 768px) {
   .background {
     margin-bottom: var(--default-margin);

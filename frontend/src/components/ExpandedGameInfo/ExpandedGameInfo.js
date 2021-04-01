@@ -9,6 +9,9 @@ import {
   NBA_VOTE,
   DATE_OPTIONS,
   REFRESH_RATE,
+  LIVE,
+  SCHEDULED,
+  FINISHED,
 } from "../../constants/Constants";
 import { getColorByTeam } from "../../constants/NBAConstants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
@@ -23,10 +26,6 @@ import Expand from "react-expand-animated";
 
 const USER_PREDICT = "user";
 const ML_PREDICT = "ml";
-
-const SCHEDULED = "Scheduled";
-const LIVE = "In Play";
-const FINISHED = "Finished";
 
 export default class ExpandedGameInfo extends Component {
   constructor(props) {

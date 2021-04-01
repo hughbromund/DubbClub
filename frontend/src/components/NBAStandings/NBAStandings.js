@@ -79,7 +79,7 @@ export default class NBAStandings extends Component {
               className={classes.table}
               to={SEARCH_ROUTE + `/${this.state.east[i].teamId}`}
             >
-              {getTeamByID(this.state.east[i].teamId)}
+              {this.state.east[i].teamName}
             </Link>
           </td>
           <td>{this.state.east[i].wins}</td>
@@ -101,7 +101,7 @@ export default class NBAStandings extends Component {
               className={classes.table}
               to={SEARCH_ROUTE + `/${this.state.west[i].teamId}`}
             >
-              {getTeamByID(this.state.west[i].teamId)}
+              {this.state.west[i].teamName}
             </Link>
           </td>
           <td>{this.state.west[i].wins}</td>

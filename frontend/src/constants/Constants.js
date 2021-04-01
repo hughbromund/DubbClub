@@ -64,3 +64,7 @@ export const DATE_OPTIONS = {
   timeZone: "EST",
 };
 export const REFRESH_RATE = 60000;
+
+export const SCHEDULED = "Scheduled";
+export const LIVE = "In Play";
+export const FINISHED = "Finished";
