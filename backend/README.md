@@ -52,7 +52,7 @@ JSON Format:
 
 GET  
 gets all game IDs for dashboard  
-Requirements: auth JWT token  
+Requirements: OPTIONAL auth JWT token for favorite games  
 Returns: JSON list of lists of gameIds  
 Status: Working  
 Issues:  
