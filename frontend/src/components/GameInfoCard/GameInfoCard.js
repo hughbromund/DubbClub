@@ -255,7 +255,7 @@ export default class GameInfoCard extends Component {
       var tID = null;
       if (this.state.liveGame) {
         tID = setTimeout(async () => {
-          await this.fetchGameData();
+          await this.fetchGameData(this.props.gameID);
         }, REFRESH_RATE);
         this.setState({ timeoutID: tID });
       }
@@ -265,6 +265,9 @@ export default class GameInfoCard extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.props !== prevProps) {
       if (this.props.gameID !== prevProps.gameID) {
+        if (this.state.timeoutID !== null) {
+          clearTimeout(this.state.timeoutID);
+        }
         this.setState(INITIAL_STATE);
         this.fetchGameData(this.props.gameID);
       }
