@@ -7,17 +7,29 @@ export default class Spoiler extends Component {
     super(props);
 
     this.getSpoilers = this.getSpoilers.bind(this);
+    this.state = {
+      manualOverride: false,
+    };
   }
 
   getSpoilers() {
+    if (this.state.manualOverride) {
+      return "";
+    }
     if (this.context.hideSpoilers) {
       return classes.blur;
     }
-    return "";
   }
 
   render() {
-    return <div className={this.getSpoilers()}>{this.props.children}</div>;
+    return (
+      <div
+        onClick={() => this.setState({ manualOverride: true })}
+        className={this.getSpoilers()}
+      >
+        {this.props.children}
+      </div>
+    );
   }
 }
 
