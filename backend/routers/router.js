@@ -107,7 +107,7 @@ router.get("/api/nba/getTeamsFromDb", nbaController.getTeamsFromDb)
 router.get("/api/nba/getLiveGamePreds/:gameId", nbaController.getLiveGamePreds)
 
 //get list of all gameIds necessary for dashboard based on status and favorites
-router.get("/api/nba/getDashboard", authJWT.verifyToken, nbaController.getDashboard)
+router.get("/api/nba/getDashboard", authJWT.verifyTokenOptional, nbaController.getDashboard)
 
 //TESTING PURPOSES ONLY - post gameId to send all users notifications
 //router.post("/api/nba/notificationsTest", nbaUserController.notificationsTest)

@@ -120,8 +120,11 @@ exports.getDashboard = async function(userId) {
   start.setDate(start.getDate() - 1)
   end.setDate(end.getDate() + 4)
 
-  favTeams = await User.findOne({_id: userId}).exec()
-  favTeams = favTeams.toObject().favoriteTeams.NBA
+  favTeams = {}
+  if (userId != undefined) {
+    favTeams = await User.findOne({_id: userId}).exec()
+    favTeams = favTeams.toObject().favoriteTeams.NBA
+  }
 
   let results = await NBAgame.find({date: {$gt: start, $lt:end}})
   let favUpcoming = []
@@ -132,16 +135,19 @@ exports.getDashboard = async function(userId) {
   let regFinished = []
 
   for (let i = 0; i < results.length; i++) {
-    for (let j = 0; j < favTeams.length; j++) {
-      if (parseInt(favTeams[j], 10) === parseInt(results[i].home[0].teamId, 10) || parseInt(favTeams[j], 10) === parseInt(results[i].away[0].teamId, 10)) {
-        if (results[i].status === "Scheduled") {
-          favUpcoming.push(results[i].id)
-        } else if (results[i].status === "In Play") {
-          favLive.push(results[i].id)
-        } else if (results[i].status === "Finished") {
-          favFinished.push(results[i].id)
+    if (userId != undefined) {
+      console.log(favTeams)
+      for (let j = 0; j < favTeams.length; j++) {
+        if (parseInt(favTeams[j], 10) === parseInt(results[i].home[0].teamId, 10) || parseInt(favTeams[j], 10) === parseInt(results[i].away[0].teamId, 10)) {
+          if (results[i].status === "Scheduled") {
+            favUpcoming.push(results[i].id)
+          } else if (results[i].status === "In Play") {
+            favLive.push(results[i].id)
+          } else if (results[i].status === "Finished") {
+            favFinished.push(results[i].id)
+          }
+          break
         }
-        break
       }
     }
     if (results[i].status === "Scheduled") {
