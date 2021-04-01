@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import { GAME_INFO_ROUTE, UPCOMING_GAMES_ID } from "../../constants/Constants";
+import {
+  GAME_INFO_ROUTE,
+  GET_DASHBOARD,
+  UPCOMING_GAMES_ID,
+} from "../../constants/Constants";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
 import Masthead from "../Masthead/Masthead";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
@@ -25,7 +29,7 @@ export default class Home extends Component {
   }
 
   async fetchGameData() {
-    var res = await fetch(UPCOMING_GAMES_ID, {});
+    var res = await fetch(GET_DASHBOARD, {});
     var body = await res.json();
     this.setState({
       games: body,
@@ -49,17 +53,17 @@ export default class Home extends Component {
       );
     }
     let cards = [];
-    // console.log(this.state.games);
-    for (let i = 0; i < this.state.games.length; i++) {
+    console.log(this.state.games.regUpcoming);
+    for (let i = 0; i < this.state.games.regUpcoming.length; i++) {
       let temp = (
         <Col key={"col-" + i}>
           <GameInfoCard
             onClickHandler={() => {
               this.props.history.push(
-                GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
+                GAME_INFO_ROUTE + `/${this.state.games.regUpcoming[i]}`
               );
             }}
-            gameID={this.state.games[i]}
+            gameID={this.state.games.regUpcoming[i]}
             history={this.props.history}
             key={i}
           />
@@ -67,15 +71,39 @@ export default class Home extends Component {
       );
       cards.push(temp);
     }
+    let liveCards = [];
+    console.log(this.state.games.regLive);
+    for (let i = 0; i < this.state.games.regLive.length; i++) {
+      let temp = (
+        <Col key={"col-" + i}>
+          <GameInfoCard
+            onClickHandler={() => {
+              this.props.history.push(
+                GAME_INFO_ROUTE + `/${this.state.games.regLive[i]}`
+              );
+            }}
+            gameID={this.state.games.regLive[i]}
+            history={this.props.history}
+            key={i}
+          />
+        </Col>
+      );
+      liveCards.push(temp);
+    }
     return (
       <div>
         <Container fluid>
           <Masthead history={this.props.history} />
 
+          <h3>Live Games</h3>
+          <hr />
+          <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+            {liveCards}
+          </Row>
           <h3>Upcoming Games with Dubb Club Predictions</h3>
           <hr />
           <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
-            {cards}
+            {cards.length !== 0 ? cards : "No currently running games."}
           </Row>
         </Container>
       </div>
