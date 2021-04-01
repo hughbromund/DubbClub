@@ -21,7 +21,7 @@ export default class AuthProvider extends Component {
       isLoggedIn: false,
       username: "",
       token: null,
-      favoriteTeams: null,
+      favoriteTeams: {},
     };
     this.refreshToken = this.refreshToken.bind(this);
   }
@@ -94,6 +94,9 @@ export default class AuthProvider extends Component {
           refreshFavoriteTeams: async () => {
             await this.getFavoriteTeams(this.state.token);
             return;
+          },
+          getFavoriteTeamsList: () => {
+            return this.state.favoriteTeams;
           },
           isFollowedTeam: (league, teamId) => {
             if (this.state.favoriteTeams === null) {

@@ -7,12 +7,21 @@ import GameInfoCard from "../GameInfoCard/GameInfoCard";
 import {
   GAME_INFO_ROUTE,
   UPCOMING_GAMES_INFO,
+  GET_DASHBOARD,
 } from "../../constants/Constants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Card from "../Card/Card";
+import Expand from "react-expand-animated";
 
 const INITIAL_STATE = {
-  games: {},
+  favLive: [],
+  favFinished: [],
+  favUpcoming: [],
+  regFinished: [],
+  regLive: [],
+  regUpcoming: [],
+  loading: true,
+  favoriteTeamsList: {},
 };
 
 export default class Dashboard extends Component {
@@ -24,99 +33,41 @@ export default class Dashboard extends Component {
   }
 
   async fetchGameData() {
-    var res = await fetch(UPCOMING_GAMES_INFO, {});
-    var body = await res.json();
-    console.log(body);
-    this.setState({
-      games: body,
-      currentDate: new Date().setHours(0, 0, 0, 0),
+    var res = await fetch(GET_DASHBOARD, {
+      headers: {
+        "x-access-token": this.context.token,
+      },
     });
+    var body = await res.json();
+
+    this.setState(body);
   }
 
   async componentDidMount() {
-    if (this.state.games.length === undefined) {
-      this.fetchGameData();
+    await this.fetchGameData();
+    this.setState({
+      loading: false,
+      favoriteTeamsList: this.context.getFavoriteTeamsList(),
+    });
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (
+      JSON.stringify(this.context.getFavoriteTeamsList()) !==
+      JSON.stringify(this.state.favoriteTeamsList)
+    ) {
+      await this.fetchGameData();
+      this.setState({ favoriteTeamsList: this.context.getFavoriteTeamsList() });
     }
   }
 
   render() {
-    if (this.state.games.length === undefined) {
+    if (this.state.loading) {
       return (
         <div>
           <LoadingSpinner />
         </div>
       );
-    }
-    var followedGames = [];
-    var otherGames = [];
-
-    for (var i = 0; i < this.state.games.length; i++) {
-      if (
-        this.context.isFollowedTeam(
-          "NBA",
-          this.state.games[i].away[0].teamId
-        ) ||
-        this.context.isFollowedTeam("NBA", this.state.games[i].home[0].teamId)
-      ) {
-        followedGames.push(this.state.games[i]);
-      } else {
-        otherGames.push(this.state.games[i]);
-      }
-    }
-
-    // console.log({ followedGames });
-    // console.log({ otherGames });
-
-    var followedCards = [];
-
-    for (let i = 0; i < followedGames.length; i++) {
-      let temp = (
-        <Col key={"favorite-col-" + i}>
-          <GameInfoCard
-            onClickHandler={() => {
-              this.props.history.push(
-                GAME_INFO_ROUTE + `/${this.state.games[i].id}`
-              );
-            }}
-            gameID={followedGames[i].id}
-            history={this.props.history}
-            key={"favorite-" + i}
-          />
-        </Col>
-      );
-      followedCards.push(temp);
-    }
-    if (followedCards.length === 0) {
-      followedCards.push(
-        <Col>
-          <Card>
-            <b>No Favorited Teams</b>
-            <hr />
-            To Favorite Teams, simply hover over the logo of the team you want
-            to favorite and click the Favorite button.
-          </Card>
-        </Col>
-      );
-    }
-
-    var otherCards = [];
-
-    for (let i = 0; i < otherGames.length; i++) {
-      let temp = (
-        <Col key={"other-col-" + i}>
-          <GameInfoCard
-            onClickHandler={() => {
-              this.props.history.push(
-                GAME_INFO_ROUTE + `/${this.state.games[i].id}`
-              );
-            }}
-            gameID={otherGames[i].id}
-            history={this.props.history}
-            key={"other-" + i}
-          />
-        </Col>
-      );
-      otherCards.push(temp);
     }
 
     return (
@@ -125,16 +76,108 @@ export default class Dashboard extends Component {
           <h1>
             Welcome Back <b>{this.context.username}</b>
           </h1>
-          <h3>Upcoming Games from Teams you Follow</h3>
-          <hr />
-          <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
-            {followedCards}
-          </Row>
-          <h3>Upcoming Games</h3>
-          <hr />
-          <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
-            {otherCards}
-          </Row>
+          <Expand open={this.state.favLive.length > 0}>
+            <h3>Live Games From Teams You Follow</h3>
+            <hr />
+            <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+              {this.state.favLive.map((element, index) => {
+                return (
+                  <Col key={element}>
+                    <GameInfoCard
+                      gameID={element}
+                      history={this.props.history}
+                      key={element}
+                    />
+                  </Col>
+                );
+              })}
+            </Row>
+          </Expand>
+          <Expand open={this.state.favUpcoming.length > 0}>
+            <h3>Upcoming Games From Teams You Follow</h3>
+            <hr />
+            <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+              {this.state.favUpcoming.map((element, index) => {
+                return (
+                  <Col key={element}>
+                    <GameInfoCard
+                      gameID={element}
+                      history={this.props.history}
+                      key={element}
+                    />
+                  </Col>
+                );
+              })}
+            </Row>
+          </Expand>
+          <Expand open={this.state.favFinished.length > 0}>
+            <h3>Recently Finished Games From Teams You Follow</h3>
+            <hr />
+            <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+              {this.state.favFinished.map((element, index) => {
+                return (
+                  <Col key={element}>
+                    <GameInfoCard
+                      gameID={element}
+                      history={this.props.history}
+                      key={element}
+                    />
+                  </Col>
+                );
+              })}
+            </Row>
+          </Expand>
+          <Expand open={this.state.regLive.length > 0}>
+            <h3>All Live Games</h3>
+            <hr />
+            <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+              {this.state.regLive.map((element, index) => {
+                return (
+                  <Col key={element}>
+                    <GameInfoCard
+                      gameID={element}
+                      history={this.props.history}
+                      key={element}
+                    />
+                  </Col>
+                );
+              })}
+            </Row>
+          </Expand>
+          <Expand open={this.state.regUpcoming.length > 0}>
+            <h3>All Upcoming Games</h3>
+            <hr />
+            <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+              {this.state.regUpcoming.map((element, index) => {
+                return (
+                  <Col key={element}>
+                    <GameInfoCard
+                      gameID={element}
+                      history={this.props.history}
+                      key={element}
+                    />
+                  </Col>
+                );
+              })}
+            </Row>
+          </Expand>
+          <Expand open={this.state.regFinished.length > 0}>
+            <h3>All Recently Finished Games</h3>
+            <hr />
+            <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+              {this.state.regFinished.map((element, index) => {
+                return (
+                  <Col key={element}>
+                    <GameInfoCard
+                      gameID={element}
+                      history={this.props.history}
+                      key={element}
+                    />
+                  </Col>
+                );
+              })}
+            </Row>
+          </Expand>
         </Container>
       </div>
     );
