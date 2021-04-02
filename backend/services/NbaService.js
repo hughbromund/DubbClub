@@ -165,7 +165,7 @@ exports.getDashboard = async function(userId) {
 }
 
 exports.getGamesByTeamFromDb = async function(teamId) {
-  let results =  await NBAgame.find({"$or": [{"home[0].teamId": teamId}, {"away[0].teamId": teamId}]})
+  let results = await NBAgame.find({"$or": [{"home.teamId": teamId}, {"away.teamId": teamId}]})
   let ids = []
   for (let i = 0; i < results.length; i++) {
     ids.push(results[i].id)
@@ -174,11 +174,16 @@ exports.getGamesByTeamFromDb = async function(teamId) {
 }
 
 exports.getGamesByDateFromDb = async function(date) {
-  let end = new Date(date.getDate + 1)
-  let results = await NBAgame.find({date: {$gt: date, $lt:end}})
+  let start = new Date(date)
+  start.setHours(start.getHours() + 7)
+  let end = new Date(start)
+  end.setDate(end.getDate() + 1)
+  let results = await NBAgame.find({date: {$gte: start, $lte:end}})
+
   let ids = []
   for (let i = 0; i < results.length; i++) {
     ids.push(results[i].id)
+    console.log(results[i].date)
   }
   return ids
 }
