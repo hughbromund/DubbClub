@@ -52,7 +52,7 @@ export default class Search extends Component {
   }
 
   async componentDidMount() {
-    if (this.state.searchTeam !== "") {
+    if (this.props.match.params.id !== undefined) {
       console.log("here");
       this.setState({ isButtonDisabled: true });
       await this.fetchGameDataByTeam();
