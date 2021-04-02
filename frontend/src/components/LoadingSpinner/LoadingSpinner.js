@@ -14,8 +14,8 @@ export default class LoadingSpinner extends Component {
               <object
                 type="image/svg+xml"
                 data={LoadingLogo}
-                style={{ width: "100px" }}
-              ></object>
+                style={{ width: this.props.width || "100px" }}
+              />
             </span>
             <h4>
               <b>Loading...</b>
