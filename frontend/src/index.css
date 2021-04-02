@@ -23,11 +23,15 @@
 
   --error-color: #d32f2f;
   --success-color: green;
+  --warning-color: #ffb74d;
 
   --default-transition: 0.5s;
 
   background-color: var(--background-color);
   color: var(--text-primary);
+}
+body {
+  color: var(--text-primary) !important;
 }
 
 .centered {
@@ -37,7 +41,7 @@
 /* Modifications for global CSS on Mobile Devices */
 @media (max-width: 768px) {
   :root {
-    --default-margin: 10px;
+    /* --default-margin: 5px; */
     --default-padding: 10px;
     --default-column-width: 100%;
   }
@@ -48,6 +52,17 @@
 }
 ::-moz-selection {
   background: var(--secondary-color); /* Gecko Browsers */
+}
+
+a {
+  color: var(--text-primary);
+}
+
+a:onhover {
+  color: var(--text-primary);
+}
+a:active {
+  color: var(--text-primary);
 }
 
 body {

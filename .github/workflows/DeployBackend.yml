@@ -81,6 +81,27 @@ jobs:
           field: ${{ secrets.EMAIL_PASS_KEY }}
           value: ${{ secrets.EMAIL_PASS_VALUE }}
 
+      - name: Set Twilio SID
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: ./backend/config.json
+          field: ${{ secrets.TWILIO_ACCOUNT_SID_KEY }}
+          value: ${{ secrets.TWILIO_ACCOUNT_SID_VALUE }}
+
+      - name: Set Twilio Auth Token
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: ./backend/config.json
+          field: ${{ secrets.TWILIO_AUTH_TOKEN_KEY }}
+          value: ${{ secrets.TWILIO_AUTH_TOKEN_VALUE }}
+
+      - name: Set Twilio Phone Number
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: ./backend/config.json
+          field: ${{ secrets.TWILIO_PHONE_NUMBER_KEY }}
+          value: ${{ secrets.TWILIO_PHONE_NUMBER_VALUE }}
+
       - name: Deploy Backend
         uses: google-github-actions/deploy-appengine@main
         with:

@@ -10,17 +10,25 @@
   color: var(--text-primary);
   padding: var(--default-padding);
   border-radius: var(--border-radius);
-  margin: var(--default-margin);
+  /* margin: var(--default-margin); */
 }
 .bottomCard {
   height: 100%;
 }
 
 .speedometer {
+  min-width: 100%;
+}
+.speedometerCard {
   text-align: center;
-  margin: 0 auto;
-  margin-bottom: -100px;
-  min-height: 40rem;
+  margin-bottom: var(--default-margin);
+  min-width: 100%;
+}
+.buttonRow {
+  margin: var(--default-margin);
+}
+.headerPadding {
+  padding: var(--default-padding);
 }
 
 .centered {
@@ -39,9 +47,6 @@
   background-color: var(--top-color);
   border-radius: var(--border-radius);
   transition: var(--default-transition);
-  min-width: 150px;
-  max-width: 25%;
-  display: inline-block;
 }
 
 .team {
@@ -49,4 +54,28 @@
 }
 .right {
   text-align: right;
+}
+.predictionGraphCard {
+  min-width: 100%;
+  padding: 0px;
+}
+.playerCard {
+  min-width: 100%;
+}
+.predictionGraph {
+  height: 35rem;
+}
+@media (max-width: 768px) {
+  .predictionGraph {
+    height: 18rem;
+  }
+  .playerCard {
+    min-width: 0%;
+  }
+  .speedometerCard {
+    min-width: 0%;
+  }
+  .predictionGraphCard {
+    min-width: 0%;
+  }
 }

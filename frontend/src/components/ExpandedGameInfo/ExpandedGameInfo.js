@@ -7,14 +7,22 @@ import {
   GET_GAME_BY_ID,
   GET_GAME_BY_ID_FROM_DB,
   NBA_VOTE,
+  DATE_OPTIONS,
+  REFRESH_RATE,
+  LIVE,
+  SCHEDULED,
+  FINISHED,
 } from "../../constants/Constants";
-import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
+import { getColorByTeam } from "../../constants/NBAConstants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Speedometer from "../Speedometer/Speedometer";
 import classes from "./ExpandedGameInfo.module.css";
 import AuthContext from "../../contexts/AuthContext.js";
 import Button from "../Button/Button";
 import SmartButton from "../SmartButton/SmartButton";
+import PredictionGraph from "../PredictionGraph/PredictionGraph";
+import Card from "../Card/Card";
+import Expand from "react-expand-animated";
 
 const USER_PREDICT = "user";
 const ML_PREDICT = "ml";
@@ -24,70 +32,219 @@ export default class ExpandedGameInfo extends Component {
     super(props);
     // console.log(props);
 
-    this.fetchGameData = this.fetchGameData.bind(this);
     this.state = {
       game: {},
       gameID: this.props.location.pathname.substring(
         this.props.location.pathname.lastIndexOf("/") + 1
       ),
+      homeLineScore: [],
+      awayLineScore: [],
+      homeLeaders: [],
+      awayLeaders: [],
       predictions: {},
       votedTeam: "none",
       homeVotes: 0,
       awayVotes: 0,
+      homeHex: "#000000",
+      awayHex: "#ffffff",
+      predictionConfidence: 50,
       predictionType: ML_PREDICT,
+      loading: true,
+      status: "Scheduled",
+      timeoutID: null,
     };
     this.fetchPrediction = this.fetchPrediction.bind(this);
-    this.getPredictedWinner = this.getPredictedWinner.bind(this);
-    this.getPredictionConfidence = this.getPredictionConfidence.bind(this);
     this.voteForTeam = this.voteForTeam.bind(this);
+    this.createPlayerStatRow = this.createPlayerStatRow.bind(this);
+    this.getUserConfidence = this.getUserConfidence.bind(this);
+    this.getUserWinner = this.getUserWinner.bind(this);
+    this.getHomeAwayWinner = this.getHomeAwayWinner.bind(this);
+    this.getStatusText = this.getStatusText.bind(this);
+    this.getUserWinnerName = this.getUserWinnerName.bind(this);
   }
 
-  async fetchGameData() {
-    var res = await fetch(GET_GAME_BY_ID + `/${this.state.gameID}`, {});
-    var body = await res.json();
-    this.setState({
-      game: body,
-    });
-    await this.fetchPrediction(this.state.gameID);
+  componentWillUnmount() {
+    // console.log(this.state.timeoutID);
+    if (this.state.timeoutID !== null) {
+      clearTimeout(this.state.timeoutID);
+    }
   }
 
-  async fetchPrediction(gameID) {
-    var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {
+  async fetchPrediction() {
+    // console.log(this.context.token);
+    var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${this.state.gameID}`, {
       headers: {
         "x-access-token": this.context.token,
       },
     });
+    if (!(res.status === 200 || res.status === 204)) {
+      return;
+    }
+
     var body = await res.json();
     // console.log(body);
-    var temp = this.state.predictions;
+    var game = body.game;
+    // console.log({ game });
 
     if (body.game !== undefined) {
-      temp[gameID] = {
-        predictedWinner: getTeamByID(body.game.predictedWinner),
-        confidence: body.game.confidence,
-      };
-      this.setState({
-        predictions: temp,
+      var predictedWinner = game.home[0].teamName;
+      if (game.away[0].teamId === game.predictedWinner) {
+        predictedWinner = game.away[0].teamName;
+      }
 
+      var date = new Date(game.date).toLocaleDateString("en-US", DATE_OPTIONS);
+
+      var time = new Date(game.date).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      // console.log(getColorByTeam(game.home[0].teamName));
+      var timeoutID = null;
+      if (game.status === LIVE) {
+        timeoutID = setTimeout(async () => {
+          await this.fetchPrediction();
+        }, REFRESH_RATE);
+      }
+
+      var homeScore = body.game.homeScore;
+      var awayScore = body.game.awayScore;
+      var homeLineScore = [];
+      var awayLineScore = [];
+      var awayLeaders = [];
+      var homeLeaders = [];
+      if (game.status === FINISHED && game.playedGameStats !== undefined) {
+        homeLineScore = game.playedGameStats.home.lineScore;
+        awayLineScore = game.playedGameStats.away.lineScore;
+        homeScore = game.playedGameStats.home.points;
+        awayScore = game.playedGameStats.away.points;
+        awayLeaders = game.playedGameStats.away.leaders;
+        homeLeaders = game.playedGameStats.home.leaders;
+      }
+
+      var period = game.period;
+      if (period > 4) {
+        period = "OT";
+      } else {
+        period = "Q" + period;
+      }
+
+      this.setState({
+        predictedWinner: predictedWinner,
+        predictionConfidence: Number((game.confidence * 100).toFixed(2)),
+        homeTeam: game.home[0].teamName,
+        awayTeam: game.away[0].teamName,
+        homeHex: getColorByTeam(game.home[0].teamName),
+        awayHex: getColorByTeam(game.away[0].teamName),
+        awayLogo: game.away[0].teamImage,
+        homeLogo: game.home[0].teamImage,
+        date: date,
+        time: time,
+
+        homeId: game.home[0].teamId,
+        awayId: game.away[0].teamId,
         votedTeam: body.votedTeam,
         homeVotes: body.game.homeVoters.length,
         awayVotes: body.game.awayVoters.length,
+        status: body.game.status,
+        timeoutID: timeoutID,
+        homeScore: homeScore,
+        awayScore: awayScore,
+        homeLineScore: homeLineScore,
+        awayLineScore: awayLineScore,
+        homeLeaders: homeLeaders,
+        awayLeaders: awayLeaders,
+        clock: body.game.clock,
+        period: period,
       });
     }
   }
 
-  getPredictionConfidence(gameID) {
-    if (this.state.predictions[gameID] === undefined) {
-      return 50;
+  createPlayerStatRow(element, index) {
+    var stat = "";
+    if (element.points !== undefined) {
+      stat = element.points + " points";
     }
-    return Math.floor(this.state.predictions[gameID].confidence * 100);
+    if (element.assists !== undefined) {
+      stat = element.assists + " assists";
+    }
+    if (element.rebounds !== undefined) {
+      stat = element.rebounds + " rebounds";
+    }
+
+    return (
+      <tr id={index}>
+        <td>{element.name}</td>
+        <td>{stat}</td>
+      </tr>
+    );
   }
 
-  getPredictedWinner(gameID) {
-    if (this.state.predictions[gameID] === undefined) {
-      return "";
+  getUserConfidence() {
+    var userConfidence =
+      (100 * this.state.homeVotes) /
+      (this.state.awayVotes + this.state.homeVotes);
+
+    if (this.state.awayVotes > this.state.homeVotes) {
+      userConfidence =
+        (100 * this.state.awayVotes) /
+        (this.state.awayVotes + this.state.homeVotes);
     }
-    return this.state.predictions[gameID].predictedWinner;
+    if (userConfidence === 0 || isNaN(userConfidence)) {
+      userConfidence = 50;
+    }
+
+    return Number(userConfidence.toFixed(2));
+  }
+
+  getUserWinnerName() {
+    var userWinnerName = this.state.homeTeam;
+
+    if (this.state.awayVotes > this.state.homeVotes) {
+      userWinnerName = this.state.awayTeam;
+    }
+    return userWinnerName;
+  }
+
+  getUserWinner() {
+    var userWinner = "home";
+    if (this.state.awayVotes > this.state.homeVotes) {
+      userWinner = "away";
+    }
+    return userWinner;
+  }
+
+  getHomeAwayWinner() {
+    var homeAwayWinner = "home";
+
+    if (this.state.predictedWinner === this.state.awayTeam) {
+      homeAwayWinner = "away";
+    }
+
+    return homeAwayWinner;
+  }
+
+  getStatusText() {
+    if (this.state.status === SCHEDULED) {
+      return (
+        <div>
+          Starts on {this.state.date} at {this.state.time}
+        </div>
+      );
+    }
+    if (this.state.status === LIVE) {
+      return (
+        <div>
+          <b>Live Game</b> - {this.state.period} - {this.state.clock}
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          Game Complete, Played on {this.state.date} at {this.state.time}
+        </div>
+      );
+    }
   }
 
   async voteForTeam(homeAway) {
@@ -107,99 +264,25 @@ export default class ExpandedGameInfo extends Component {
     if (res.status !== 200) {
       return false;
     } else {
-      await this.fetchPrediction(this.state.gameID);
+      await this.fetchPrediction();
       return true;
     }
   }
 
   async componentDidMount() {
-    this.fetchGameData();
+    await Promise.all([this.fetchPrediction()]);
+
+    this.setState({ loading: false });
   }
 
   render() {
-    if (this.state.game.away === undefined) {
+    if (this.state.loading === true) {
       return (
         <div>
           <LoadingSpinner />
         </div>
       );
     }
-    var awayStats = [];
-    for (var i = 0; i < this.state.game.away.leaders.length; i++) {
-      var temp = (
-        <tr>
-          <td>{this.state.game.away.leaders[i].name}</td>
-          {this.state.game.away.leaders[i].points !== undefined ? (
-            <td>{this.state.game.away.leaders[i].points} points</td>
-          ) : (
-            ""
-          )}
-          {this.state.game.away.leaders[i].assists !== undefined ? (
-            <td>{this.state.game.away.leaders[i].assists} assists</td>
-          ) : (
-            ""
-          )}
-          {this.state.game.away.leaders[i].rebounds !== undefined ? (
-            <td>{this.state.game.away.leaders[i].rebounds} rebounds</td>
-          ) : (
-            ""
-          )}
-        </tr>
-      );
-      awayStats.push(temp);
-    }
-    var homeStats = [];
-    for (var i = 0; i < this.state.game.home.leaders.length; i++) {
-      var temp = (
-        <tr>
-          <td>{this.state.game.home.leaders[i].name}</td>
-          {this.state.game.home.leaders[i].points !== undefined ? (
-            <td>{this.state.game.home.leaders[i].points} points</td>
-          ) : (
-            ""
-          )}
-          {this.state.game.home.leaders[i].assists !== undefined ? (
-            <td>{this.state.game.home.leaders[i].assists} assists</td>
-          ) : (
-            ""
-          )}
-          {this.state.game.home.leaders[i].rebounds !== undefined ? (
-            <td>{this.state.game.home.leaders[i].rebounds} rebounds</td>
-          ) : (
-            ""
-          )}
-        </tr>
-      );
-      homeStats.push(temp);
-    }
-    // console.log(this.state);
-    var homeAwayWinner = "home";
-
-    if (
-      this.state.predictedWinner === getTeamByID(this.state.game.away.teamId)
-    ) {
-      homeAwayWinner = "away";
-    }
-    // console.log(homeAwayWinner);
-
-    var userConfidence =
-      (100 * this.state.homeVotes) /
-      (this.state.awayVotes + this.state.homeVotes);
-
-    var userWinner = "home";
-    if (this.state.awayVotes > this.state.homeVotes) {
-      userConfidence =
-        (100 * this.state.awayVotes) /
-        (this.state.awayVotes + this.state.homeVotes);
-      userWinner = "away";
-    }
-
-    if (userConfidence === 0 || isNaN(userConfidence)) {
-      userConfidence = 50;
-    }
-
-    // console.log({ userConfidence });
-
     return (
       <div>
         <Container fluid>
@@ -207,7 +290,10 @@ export default class ExpandedGameInfo extends Component {
             <Col>
               <Container fluid>
                 <Row>
-                  <Col xs={1}>
+                  <Col
+                    xs={{ span: 6, order: "first" }}
+                    lg={{ span: 2, order: "first" }}
+                  >
                     <div className={classes.background}>
                       <div
                         className={[
@@ -216,7 +302,7 @@ export default class ExpandedGameInfo extends Component {
                         ].join(" ")}
                       >
                         <img
-                          src={this.state.game.away.logo}
+                          src={this.state.awayLogo}
                           className={classes.logo}
                         />
                       </div>
@@ -239,77 +325,61 @@ export default class ExpandedGameInfo extends Component {
                       )}
                     </div>
                   </Col>
-                  <Col>
+                  <Col xs={6} lg={2}>
                     <br />
                     <div className={classes.center}>
-                      <h4>
-                        {getTeamByID(Number(this.state.game["away"]["teamId"]))}
-                      </h4>
+                      <h4>{this.state.awayTeam}</h4>
                     </div>
                     <div className={classes.center}>
                       <h1>
-                        <b>{this.state.game.away.points}</b>
+                        <b>{this.state.awayScore}</b>
                       </h1>
                     </div>
                   </Col>
-                  <Col>
-                    <Table
-                      bordered
-                      size="sm"
-                      className={[classes.card].join(" ")}
-                    >
-                      <thead>
-                        <tr>
-                          <th></th>
-                          <th>Q1</th>
-                          <th>Q2</th>
-                          <th>Q3</th>
-                          <th>Q4</th>
-                          <th>Total</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            {getTeamByID(
-                              Number(this.state.game["away"]["teamId"])
-                            )}
-                          </td>
-                          <td>{this.state.game.away.lineScore[0]}</td>
-                          <td>{this.state.game.away.lineScore[1]}</td>
-                          <td>{this.state.game.away.lineScore[2]}</td>
-                          <td>{this.state.game.away.lineScore[3]}</td>
-                          <td>{this.state.game.away.points}</td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {getTeamByID(
-                              Number(this.state.game["home"]["teamId"])
-                            )}
-                          </td>
-                          <td>{this.state.game.home.lineScore[0]}</td>
-                          <td>{this.state.game.home.lineScore[1]}</td>
-                          <td>{this.state.game.home.lineScore[2]}</td>
-                          <td>{this.state.game.home.lineScore[3]}</td>
-                          <td>{this.state.game.home.points}</td>
-                        </tr>
-                      </tbody>
-                    </Table>
+                  <Col xs={12} lg={4}>
+                    <Card>{this.getStatusText()}</Card>
+                    <Card>
+                      <Table size="sm" className={[classes.card].join(" ")}>
+                        <thead>
+                          <tr>
+                            <th></th>
+                            {this.state.awayLineScore.map((element, index) => (
+                              <th id={index}>Q{index + 1}</th>
+                            ))}
+                            <th>Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{this.state.awayTeam}</td>
+                            {this.state.awayLineScore.map((element, index) => (
+                              <td id={index}>{element}</td>
+                            ))}
+                            <td>{this.state.awayScore}</td>
+                          </tr>
+                          <tr>
+                            <td>{this.state.homeTeam}</td>
+                            {this.state.homeLineScore.map((element, index) => (
+                              <td id={index}>{element}</td>
+                            ))}
+                            <td>{this.state.homeScore}</td>
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </Card>
                   </Col>
-                  <Col>
+                  <Col xs={6} lg={2}>
                     <br />
-                    <div className={classes.center}>
-                      <h4>
-                        {getTeamByID(Number(this.state.game["home"]["teamId"]))}
-                      </h4>
+                    <div className={classes.centered}>
+                      <h4>{this.state.homeTeam}</h4>
                     </div>
-                    <div className={classes.center}>
+                    <div className={classes.centered}>
                       <h1>
-                        <b>{this.state.game.home.points}</b>
+                        <b>{this.state.homeScore}</b>
                       </h1>
                     </div>
                   </Col>
-                  <Col xs={1}>
+                  <Col xs={6} lg={2}>
                     <div className={classes.background}>
                       <div
                         className={[
@@ -318,7 +388,7 @@ export default class ExpandedGameInfo extends Component {
                         ].join(" ")}
                       >
                         <img
-                          src={this.state.game.home.logo}
+                          src={this.state.homeLogo}
                           className={classes.logo}
                         />
                       </div>
@@ -347,125 +417,164 @@ export default class ExpandedGameInfo extends Component {
           </Row>
           <hr />
           <Row>
-            <Col>
-              <div
-                className={[classes.speedometer, classes.bottomCard].join(" ")}
-              >
-                <Row>
-                  <Col>
-                    <Button
-                      variant={
-                        this.state.predictionType === ML_PREDICT
-                          ? ""
-                          : "outline"
-                      }
-                      onClick={() => {
-                        this.setState({ predictionType: ML_PREDICT });
-                      }}
-                    >
-                      Dubb Club Prediction
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button
-                      variant={
-                        this.state.predictionType === USER_PREDICT
-                          ? ""
-                          : "outline"
-                      }
-                      onClick={() => {
-                        this.setState({ predictionType: USER_PREDICT });
-                      }}
-                    >
-                      User Prediction
-                    </Button>
-                  </Col>
-                </Row>
+            <Col xs={12} md={6}>
+              <Row>
+                <div
+                  className={[classes.centered, classes.speedometer].join(" ")}
+                >
+                  <Row xs={2} className={classes.buttonRow}>
+                    <Col>
+                      <Button
+                        variant={
+                          this.state.predictionType === ML_PREDICT
+                            ? ""
+                            : "outline"
+                        }
+                        onClick={() => {
+                          this.setState({ predictionType: ML_PREDICT });
+                        }}
+                      >
+                        Dubb Club Pregame Prediction
+                      </Button>
+                    </Col>
+                    <Col>
+                      <Button
+                        variant={
+                          this.state.predictionType === USER_PREDICT
+                            ? ""
+                            : "outline"
+                        }
+                        onClick={() => {
+                          this.setState({ predictionType: USER_PREDICT });
+                        }}
+                      >
+                        User Prediction
+                      </Button>
+                    </Col>
+                  </Row>
 
-                <br />
-                {this.state.predictionType === ML_PREDICT ? (
-                  <Speedometer
-                    predictedWinner={homeAwayWinner}
-                    predictionConfidence={this.getPredictionConfidence(
-                      this.state.gameID
-                    )}
-                    awayHex={getColorByTeam(
-                      getTeamByID(Number(this.state.game["away"]["teamId"]))
-                    )}
-                    homeHex={getColorByTeam(
-                      getTeamByID(Number(this.state.game["home"]["teamId"]))
-                    )}
-                    fluidWidth={true}
-                  />
-                ) : (
-                  <Speedometer
-                    predictedWinner={userWinner}
-                    predictionConfidence={userConfidence}
-                    awayHex={getColorByTeam(
-                      getTeamByID(Number(this.state.game["away"]["teamId"]))
-                    )}
-                    homeHex={getColorByTeam(
-                      getTeamByID(Number(this.state.game["home"]["teamId"]))
-                    )}
-                    fluidWidth={true}
-                  />
-                )}
-              </div>
-              <div>
-                <h5>
-                  {this.state.predictionType === ML_PREDICT ? (
-                    this.getPredictionConfidence(this.state.gameID) > 51 ? (
+                  <br />
+                  <Card className={classes.speedometerCard}>
+                    <div className={classes.speedometer}>
+                      {this.state.predictionType === ML_PREDICT ? (
+                        <Speedometer
+                          predictedWinner={this.getHomeAwayWinner()}
+                          predictionConfidence={this.state.predictionConfidence}
+                          awayHex={this.state.awayHex}
+                          homeHex={this.state.homeHex}
+                          fluidWidth={false}
+                        />
+                      ) : (
+                        <Speedometer
+                          predictedWinner={this.getUserWinner()}
+                          predictionConfidence={this.getUserConfidence()}
+                          awayHex={this.state.awayHex}
+                          homeHex={this.state.homeHex}
+                        />
+                      )}
+                    </div>
+                  </Card>
+                </div>
+                <Card className={classes.speedometerCard}>
+                  <h5>
+                    {this.state.predictionType === ML_PREDICT ? (
+                      this.state.predictionConfidence > 51 ? (
+                        <div>
+                          Dubb Club is <b>{this.state.predictionConfidence}%</b>{" "}
+                          confident that the <b>{this.state.predictedWinner}</b>{" "}
+                          win
+                        </div>
+                      ) : this.state.predictedWinner === "" ? (
+                        <div>
+                          <b>No Prediction Available</b>
+                        </div>
+                      ) : (
+                        <div>
+                          <b>Toss Up Game</b>
+                        </div>
+                      )
+                    ) : this.getUserConfidence() > 51 ? (
                       <div>
-                        Dubb Club is{" "}
-                        <b>
-                          {this.getPredictionConfidence(this.state.gameID)}%
-                        </b>{" "}
-                        confidence that the{" "}
-                        <b>{this.getPredictedWinner(this.state.gameID)}</b> win
-                      </div>
-                    ) : this.getPredictedWinner(this.state.gameID) === "" ? (
-                      <div>
-                        <b>No Prediction Available</b>
+                        Users are <b>{this.getUserConfidence()}%</b> confident
+                        that the <b>{this.getUserWinnerName()}</b> win
                       </div>
                     ) : (
                       <div>
-                        <b>Toss Up Game</b>
+                        <b>Users are Evenly Split</b>
                       </div>
-                    )
-                  ) : (
-                    this.state.awayVotes +
-                    " user(s) think that " +
-                    getTeamByID(Number(this.state.game["away"]["teamId"])) +
-                    " will win and " +
-                    this.state.homeVotes +
-                    " user(s) think that " +
-                    getTeamByID(Number(this.state.game["home"]["teamId"])) +
-                    " will win."
-                  )}
-                </h5>
-              </div>
+                    )}
+                  </h5>
+                </Card>
+              </Row>
+              <Row>
+                <Card className={classes.predictionGraphCard}>
+                  <h2 className={classes.headerPadding}>
+                    Live Game Predictions
+                  </h2>
+                  <h5 className={classes.headerPadding}>
+                    Dubb Club generates new predictions while games are in
+                    progress. Those predictions are shown here.
+                  </h5>
+
+                  <div className={classes.predictionGraph}>
+                    <PredictionGraph
+                      homeTeam={this.state.homeTeam}
+                      awayTeam={this.state.awayTeam}
+                      homeHex={this.state.homeHex}
+                      awayHex={this.state.awayHex}
+                      liveRefresh={this.state.status === LIVE}
+                      refreshRate={REFRESH_RATE}
+                      gameID={this.state.gameID}
+                    />
+                  </div>
+                </Card>
+              </Row>
             </Col>
+
             <Col>
-              <h2>{getTeamByID(Number(this.state.game["home"]["teamId"]))}</h2>
-              <Table bordered className={[classes.card].join(" ")}>
-                <thead>
-                  <tr>
-                    <th>Players</th>
-                    <th>Stat</th>
-                  </tr>
-                </thead>
-                <tbody>{homeStats}</tbody>
-              </Table>
-              <h2>{getTeamByID(Number(this.state.game["away"]["teamId"]))}</h2>
-              <Table bordered className={[classes.card].join(" ")}>
-                <thead>
-                  <tr>
-                    <th>Players</th>
-                    <th>Stat</th>
-                  </tr>
-                </thead>
-                <tbody>{awayStats}</tbody>
-              </Table>
+              <Expand open={this.state.status !== FINISHED}>
+                <h2 className={classes.headerPadding}>Post-Game Summary</h2>
+                <Card className={classes.playerCard}>
+                  When the game is over, Dubb Club will display individual
+                  player statistics and box score information.
+                </Card>
+              </Expand>
+              <Expand open={this.state.status === LIVE}>
+                <Card className={classes.playerCard}>
+                  This game is Live! No need to refresh, Dubb Club will load our
+                  latest predictions every {REFRESH_RATE / 1000} seconds.
+                </Card>
+              </Expand>
+              <Expand open={this.state.status === FINISHED}>
+                <h2 className={classes.headerPadding}>{this.state.homeTeam}</h2>
+                <Card className={classes.playerCard}>
+                  <Table className={[classes.card].join(" ")}>
+                    <thead>
+                      <tr>
+                        <th>Players</th>
+                        <th>Stat</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.homeLeaders.map(this.createPlayerStatRow)}
+                    </tbody>
+                  </Table>
+                </Card>
+                <h2 className={classes.headerPadding}>{this.state.awayTeam}</h2>
+                <Card className={classes.playerCard}>
+                  <Table className={[classes.card].join(" ")}>
+                    <thead>
+                      <tr>
+                        <th>Players</th>
+                        <th>Stat</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.awayLeaders.map(this.createPlayerStatRow)}
+                    </tbody>
+                  </Table>
+                </Card>
+              </Expand>
             </Col>
           </Row>
         </Container>

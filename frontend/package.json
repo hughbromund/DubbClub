@@ -8,10 +8,14 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.14",
+    "@nivo/core": "^0.67.0",
+    "@nivo/line": "^0.67.0",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
     "bootstrap": "^4.6.0",
+    "classnames": "^2.2.6",
+    "enzyme": "^3.11.0",
     "hex-rgb": "^4.2.0",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
@@ -21,6 +25,7 @@
     "react-https-redirect": "^1.1.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
+    "react-share": "^4.4.0",
     "rgb-hex": "^3.0.0",
     "serve": "^11.3.2",
     "web-vitals": "^1.1.0"
@@ -30,7 +35,9 @@
     "local": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "react-spring-issue-1078": "find node_modules -path \\*@react-spring/\\*/package.json -exec sed -i.bak 's/\"sideEffects\": false/\"sideEffects\": true/g' {} +",
+    "postinstall": "npm run react-spring-issue-1078"
   },
   "eslintConfig": {
     "extends": [
@@ -49,5 +56,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.4.1"
   }
 }

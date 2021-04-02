@@ -3,6 +3,7 @@ import React, { Component } from "react";
 
 import {
   REFRESH_TOKEN,
+  USER_INFO,
   TOKEN_KEY,
   USERNAME_KEY,
   GET_FAVORITE_TEAMS_LIST,
@@ -21,9 +22,11 @@ export default class AuthProvider extends Component {
       isLoggedIn: false,
       username: "",
       token: null,
-      favoriteTeams: null,
+      favoriteTeams: {},
+      hideSpoilers: false,
     };
     this.refreshToken = this.refreshToken.bind(this);
+    this.getSpoilers = this.getSpoilers.bind(this);
   }
 
   async getFavoriteTeams(token) {
@@ -39,6 +42,25 @@ export default class AuthProvider extends Component {
     // console.log(body.favoriteTeams);
     this.setState({
       favoriteTeams: body.favoriteTeams,
+    });
+
+    return;
+  }
+
+  async getSpoilers(token) {
+    var res = await fetch(USER_INFO, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "x-access-token": token,
+      },
+    });
+
+    var body = await res.json();
+    // console.log(body);
+
+    this.setState({
+      hideSpoilers: body.hideSpoilers,
     });
 
     return;
@@ -91,9 +113,16 @@ export default class AuthProvider extends Component {
           isLoggedIn: this.state.isLoggedIn,
           username: this.state.username,
           token: this.state.token,
+          hideSpoilers: this.state.hideSpoilers,
           refreshFavoriteTeams: async () => {
             await this.getFavoriteTeams(this.state.token);
             return;
+          },
+          refreshSpoilers: async () => {
+            await this.getSpoilers(this.state.token);
+          },
+          getFavoriteTeamsList: () => {
+            return this.state.favoriteTeams;
           },
           isFollowedTeam: (league, teamId) => {
             if (this.state.favoriteTeams === null) {
@@ -168,6 +197,7 @@ export default class AuthProvider extends Component {
             var body = await res.json();
 
             await this.getFavoriteTeams(body.accessToken);
+            await this.getSpoilers(body.accessToken);
             // localStorage.removeItem(TOKEN_KEY);
             localStorage.setItem(TOKEN_KEY, body.accessToken);
             this.setState({

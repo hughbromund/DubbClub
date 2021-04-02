@@ -1,6 +1,6 @@
 .speedometer {
-  text-align: center;
-  margin: 0 auto;
+  /* text-align: center; */
+  /* margin: 0 auto; */
+  /* width: calc(2 * var(--default-column-width)); */
   margin-bottom: -100px;
-  width: var(--default-column-width);
 }

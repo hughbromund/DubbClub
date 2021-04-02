@@ -49,7 +49,7 @@ export default class ResetPassword extends Component {
                   <Alert variant={"success"}>{this.state.message}</Alert>
                 </div>
               </Expand>
-              <Card>
+              <Card static={true}>
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();

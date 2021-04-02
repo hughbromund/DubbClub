@@ -1,0 +1,12 @@
+.Masthead {
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
+
+.CenterAlign {
+  text-align: center;
+}
+.ButtonWidth {
+  max-width: var(--default-column-width);
+  margin: 0 auto;
+}

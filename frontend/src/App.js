@@ -6,12 +6,17 @@ import AuthContext from "./contexts/AuthContext";
 import Navigation from "./components/Navigation/Navigation";
 import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
+import Voting from "./components/Voting/Voting";
 import Register from "./components/Register/Register";
 import ExpandedGameInfo from "./components/ExpandedGameInfo/ExpandedGameInfo";
+import NBAStandings from "./components/NBAStandings/NBAStandings";
+import GameInfoCard from "./components/GameInfoCard/GameInfoCard";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Search from "./components/Search/Search";
 import Account from "./components/Account/Account";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
+import PredictionGraph from "./components/PredictionGraph/PredictionGraph";
+import VerifyEmail from "./components/VerifyEmail/VerifyEmail";
 import "./constants/Constants";
 
 import classes from "./App.module.css";
@@ -20,6 +25,7 @@ import classes from "./App.module.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
 import {
   HOME_ROUTE,
   LOGIN_ROUTE,
@@ -29,9 +35,14 @@ import {
   ACCOUNT_ROUTE,
   DASHBOARD_ROUTE,
   RESET_PASSWORD_ROUTE,
+  VOTING_ROUTE,
+  NBA_STANDINGS_ROUTE,
+  GRAPH_TEST,
+  VERIFY_EMAIL_ROUTE,
 } from "./constants/Constants";
 library.add(fab);
 library.add(fas);
+library.add(far);
 class App extends Component {
   componentDidMount() {
     console.log("App Mounted");
@@ -52,7 +63,9 @@ class App extends Component {
               <Route exact path={HOME_ROUTE} component={Home} />
               <Route path={LOGIN_ROUTE} component={Login} />
               <Route path={REGISTER_ROUTE} component={Register} />
-              <Route path={SEARCH_ROUTE} component={Search} />
+              <Route path={SEARCH_ROUTE + "/:id?"} component={Search} />
+              <Route path={VOTING_ROUTE} component={Voting} />
+              <Route path={NBA_STANDINGS_ROUTE} component={NBAStandings} />
               <Route
                 path={RESET_PASSWORD_ROUTE + "/:resetHash?"}
                 component={ResetPassword}
@@ -61,6 +74,11 @@ class App extends Component {
                 exact
                 path={GAME_INFO_ROUTE + "/:id"}
                 component={ExpandedGameInfo}
+              />
+              <Route path={GRAPH_TEST} component={PredictionGraph} />
+              <Route
+                path={VERIFY_EMAIL_ROUTE + "/:hash"}
+                component={VerifyEmail}
               />
               {this.context.isLoggedIn === true ? (
                 <Switch>

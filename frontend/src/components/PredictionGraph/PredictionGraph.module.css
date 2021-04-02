@@ -1,0 +1,11 @@
+.PredictionGraph {
+  height: 100%;
+  color: black;
+}
+.tooltip {
+  background-color: var(--top-color);
+  color: var(--text-primary);
+  padding: var(--default-padding);
+  border-radius: var(--border-radius);
+  transition: var(--default-transition);
+}

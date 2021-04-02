@@ -15,7 +15,17 @@ const userSchema = new Schema({
         NBA: {type: Array, unique: false, required: true, default: []},
         NFL: {type: Array, unique: false, required: true, default: []},
         MLB: {type: Array, unique: false, required: true, default: []}
-    }
+    },
+    notifications: {
+        email: { type: Boolean, unique: false, required: true, default: false},
+        SMS: { type: Boolean, unique: false, required: true, default: false},
+    },
+    phoneNumber: {type: String, unique: false, required: false},
+    hideSpoilers: { type: Boolean, unique: false, required: true, default: false},
+    verify: { 
+        email: {type: Boolean, unique: false, required: false, default: false},
+        emailHash: { type: String, unique: false, required: false, default: ""},
+    },
 }, { collection: "User"})
 
 // Define schema methods

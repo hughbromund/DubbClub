@@ -54,3 +54,23 @@ exports.unfavoriteTeam = async function (req, res, next) {
 exports.favoriteTeamList = async function (req, res, next) {
     UserService.favoriteTeamList(req, res);
 }
+
+exports.changePhoneNumber = async function (req, res, next) {
+    UserService.changePhoneNumber(req, res);
+}
+
+exports.changeNotifications = async function (req, res, next) {
+    UserService.changeNotifications(req, res);
+}
+
+exports.updateSpoilers = async function (req, res, next) {
+    UserService.updateSpoilers(req, res);
+}
+
+exports.verifyEmail = async function (req, res, next) {
+    UserService.verifyEmail(req, res);
+}
+
+exports.verifyEmailEmail = async function (req, res, next) {
+    UserService.verifyEmailEmail(req, res);
+}

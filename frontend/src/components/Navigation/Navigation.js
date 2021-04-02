@@ -2,14 +2,18 @@ import React, { Component } from "react";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import logo from "../../assets/LogoWordmarkWhite.png";
 import {
   ACCOUNT_ROUTE,
   DASHBOARD_ROUTE,
   HOME_ROUTE,
   LOGIN_ROUTE,
+  NBA_STANDINGS_ROUTE,
   REGISTER_ROUTE,
   SEARCH_ROUTE,
+  VOTING_ROUTE,
 } from "../../constants/Constants";
 import AuthContext from "../../contexts/AuthContext.js";
 import classes from "./Navigation.module.css";
@@ -44,7 +48,7 @@ export default class Navigation extends Component {
             as={Link}
             to={HOME_ROUTE}
           >
-            <img alt="" src={logo} width="200" />
+            <img alt="Dubb Club Logo" src={logo} width="200" />
           </Navbar.Brand>
           <Navbar.Toggle
             onClick={() =>
@@ -75,6 +79,20 @@ export default class Navigation extends Component {
               >
                 Search
               </Nav.Link>
+              <Nav.Link
+                onClick={() => this.setExpanded(false)}
+                as={Link}
+                to={NBA_STANDINGS_ROUTE}
+              >
+                Standings
+              </Nav.Link>
+              <Nav.Link
+                onClick={() => this.setExpanded(false)}
+                as={Link}
+                to={VOTING_ROUTE}
+              >
+                Voting
+              </Nav.Link>
               <Nav.Link>
                 Version:{" "}
                 {process.env.REACT_APP_VERSION
@@ -89,7 +107,8 @@ export default class Navigation extends Component {
                   as={Link}
                   to={ACCOUNT_ROUTE}
                 >
-                  Account: <b>{this.context.username}</b>
+                  <b>{this.context.username}</b>{" "}
+                  <FontAwesomeIcon icon={["fas", "user"]} />
                 </Nav.Link>
               ) : (
                 <Nav>

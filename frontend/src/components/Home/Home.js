@@ -3,13 +3,12 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import {
-  DATE_OPTIONS,
   GAME_INFO_ROUTE,
-  GET_GAME_BY_ID_FROM_DB,
-  NEXT_SEVEN_DAYS_BASIC_GAME_INFO,
+  GET_DASHBOARD,
+  UPCOMING_GAMES_ID,
 } from "../../constants/Constants";
-import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
+import Masthead from "../Masthead/Masthead";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const INITIAL_STATE = {
@@ -22,118 +21,49 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
 
-    if (
-      localStorage.getItem("homepageState") === null ||
-      JSON.parse(localStorage.getItem("homepageState")).currentDate !==
-        new Date().setHours(0, 0, 0, 0)
-    ) {
-      this.state = INITIAL_STATE;
-    } else {
-      this.state = JSON.parse(localStorage.getItem("homepageState"));
-    }
+    this.state = {
+      games: [],
+    };
 
     this.fetchGameData = this.fetchGameData.bind(this);
-    this.fetchPrediction = this.fetchPrediction.bind(this);
-    this.getPredictedWinner = this.getPredictedWinner.bind(this);
-    this.getPredictionConfidence = this.getPredictionConfidence.bind(this);
   }
 
   async fetchGameData() {
-    var res = await fetch(NEXT_SEVEN_DAYS_BASIC_GAME_INFO, {});
+    var res = await fetch(GET_DASHBOARD, {});
     var body = await res.json();
     this.setState({
       games: body,
       currentDate: new Date().setHours(0, 0, 0, 0),
     });
-    for (var i = 0; i < body.length; i++) {
-      if (body[i].gameId !== undefined) {
-        await this.fetchPrediction(body[i].gameId);
-      }
-    }
-  }
-
-  async fetchPrediction(gameID) {
-    var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
-    var body = await res.json();
-    var temp = this.state.predictions;
-    if (body.game !== undefined) {
-      temp[gameID] = {
-        predictedWinner: getTeamByID(body.game.predictedWinner),
-        confidence: body.game.confidence,
-      };
-      this.setState({ predictions: temp });
-    }
-  }
-
-  getPredictionConfidence(gameId) {
-    if (this.state.predictions[gameId] === undefined) {
-      return 50;
-    }
-    return Math.floor(this.state.predictions[gameId].confidence * 100);
-  }
-
-  getPredictedWinner(gameId) {
-    if (this.state.predictions[gameId] === undefined) {
-      return "";
-    }
-    return this.state.predictions[gameId].predictedWinner;
   }
 
   async componentDidMount() {
-    if (this.state.games.length === undefined) {
-      this.fetchGameData();
-    }
-  }
-
-  componentWillUnmount() {
-    localStorage.setItem("homepageState", JSON.stringify(this.state));
+    this.fetchGameData();
   }
 
   render() {
-    if (this.state.games.length === undefined) {
+    if (this.state.games.length === 0) {
       return (
         <div>
-          <LoadingSpinner />
+          <Container fluid>
+            <Masthead />
+            <LoadingSpinner />
+          </Container>
         </div>
       );
     }
     let cards = [];
-    // console.log(this.state.games);
-    for (let i = 0; i < this.state.games.length; i++) {
-      if (
-        this.state.games[i].home.teamName === undefined ||
-        this.state.games[i].away.teamName === undefined
-      ) {
-        continue;
-      }
+    // console.log(this.state.games.regUpcoming);
+    for (let i = 0; i < this.state.games.regUpcoming.length; i++) {
       let temp = (
         <Col key={"col-" + i}>
           <GameInfoCard
-            homeTeam={this.state.games[i].home.teamName}
-            awayTeam={this.state.games[i].away.teamName}
-            gameTime={new Date(this.state.games[i].date).toLocaleDateString(
-              "en-US",
-              DATE_OPTIONS
-            )}
-            predictedWinner={this.getPredictedWinner(
-              this.state.games[i].gameId
-            )}
-            predictionConfidence={this.getPredictionConfidence(
-              this.state.games[i].gameId
-            )}
-            awayLogo={this.state.games[i].away.teamImage}
-            homeLogo={this.state.games[i].home.teamImage}
-            venue={this.state.games[i].arena}
             onClickHandler={() => {
               this.props.history.push(
-                GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
+                GAME_INFO_ROUTE + `/${this.state.games.regUpcoming[i]}`
               );
             }}
-            homeHex={getColorByTeam(this.state.games[i].home.teamName)}
-            awayHex={getColorByTeam(this.state.games[i].away.teamName)}
-            homeId={this.state.games[i].home.teamId}
-            awayId={this.state.games[i].away.teamId}
-            gameID={this.state.games[i].gameId}
+            gameID={this.state.games.regUpcoming[i]}
             history={this.props.history}
             key={i}
           />
@@ -141,17 +71,36 @@ export default class Home extends Component {
       );
       cards.push(temp);
     }
+    let liveCards = [];
+    // console.log(this.state.games.regLive);
+    for (let i = 0; i < this.state.games.regLive.length; i++) {
+      let temp = (
+        <Col key={"col-" + i}>
+          <GameInfoCard
+            onClickHandler={() => {
+              this.props.history.push(
+                GAME_INFO_ROUTE + `/${this.state.games.regLive[i]}`
+              );
+            }}
+            gameID={this.state.games.regLive[i]}
+            history={this.props.history}
+            key={i}
+          />
+        </Col>
+      );
+      liveCards.push(temp);
+    }
     return (
       <div>
         <Container fluid>
-          <h1>
-            Welcome to <b>DUBB CLUB</b>!
-          </h1>
-          <h3>
-            Dubb Club lets you see game predictions for all the sports you love
-          </h3>
-          <br />
-          <h3>Upcoming Games with Predictions</h3>
+          <Masthead history={this.props.history} />
+
+          <h3>Live Games</h3>
+          <hr />
+          <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+            {liveCards.length !== 0 ? liveCards : "No currently running games."}
+          </Row>
+          <h3>Upcoming Games with Dubb Club Predictions</h3>
           <hr />
           <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
             {cards}

@@ -6,4 +6,18 @@
   margin: var(--default-margin);
   max-width: var(--default-column-width);
   text-align: left;
+  transition: var(--default-transition);
+}
+.Card:hover {
+  transform: translate(0px, -10px);
+}
+.StaticCard {
+  background: var(--foreground-color);
+  color: var(--text-primary);
+  padding: var(--default-padding);
+  border-radius: var(--border-radius);
+  margin: var(--default-margin);
+  max-width: var(--default-column-width);
+  text-align: left;
+  transition: var(--default-transition);
 }

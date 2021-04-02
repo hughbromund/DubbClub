@@ -34,7 +34,7 @@ if (process.env.REACT_APP_RUNTIME !== "production") {
         /**
          * If we can find a match in the whitelist, we return true
          */
-        if (whitelist.indexOf(origin) !== -1) {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
           callback(null, true);
         } else {
           /**
@@ -61,3 +61,5 @@ const dbConnection = require(path.resolve(__dirname, "./database"));
 app.listen(port, () => {
   console.log(`Dubb Club backend listening at http://localhost:${port}`);
 });
+
+module.exports = app;

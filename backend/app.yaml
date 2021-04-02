@@ -1,3 +1,10 @@
 service: backend
 env: standard
 runtime: nodejs10
+env_variables:
+  REACT_APP_RUNTIME: "production"
+automatic_scaling:
+  target_cpu_utilization: 0.90
+  min_instances: 0
+  max_instances: 1
+  max_concurrent_requests: 50

@@ -18,3 +18,13 @@
   text-align: left;
   font-weight: bold;
 }
+.AlertWarning {
+  background: var(--warning-color);
+  color: black;
+  padding: var(--default-padding);
+  border-radius: var(--border-radius);
+  /* margin: var(--default-margin); */
+  max-width: var(--default-column-width);
+  text-align: left;
+  font-weight: bold;
+}

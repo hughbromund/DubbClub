@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import requests
 import pandas as pd
 import pickle
@@ -21,7 +21,7 @@ headers = {
 # Prepare database
 client = MongoClient(config_dict["databaseURI"])
 db = client["DubbClub-Database"]
-teams_col = db["Teams"]
+teams_col = db["NBAteam"]
 
 
 def get_last_10_games(home_id, away_id):
@@ -203,11 +203,11 @@ def update_team_elo(last_game_id, target_team_id):
     h_points = int(response["api"]["games"][0]["hTeam"]["score"]["points"])
     a_points = int(response["api"]["games"][0]["vTeam"]["score"]["points"])
 
-    h_team_data = list(teams_col.find({"tid": int(h_id)}))[0]
+    h_team_data = list(teams_col.find({"teamId": int(h_id)}))[0]
     h_elo_before = h_team_data["elo"]
     h_last_game_id = h_team_data["lastGameID"]
 
-    a_team_data = list(teams_col.find({"tid": int(a_id)}))[0]
+    a_team_data = list(teams_col.find({"teamId": int(a_id)}))[0]
     a_elo_before = a_team_data["elo"]
     a_last_game_id = a_team_data["lastGameID"]
 
@@ -234,7 +234,7 @@ def update_team_elo(last_game_id, target_team_id):
 
     if int(h_last_game_id) < int(last_game_id):
         teams_col.update_one({
-            'tid': int(h_id)
+            'teamId': int(h_id)
         }, {
             '$set': {
                 'elo': h_elo_after,
@@ -243,7 +243,7 @@ def update_team_elo(last_game_id, target_team_id):
         }, upsert=False)
     if int(a_last_game_id) < int(last_game_id):
         teams_col.update_one({
-            'tid': int(a_id)
+            'teamId': int(a_id)
         }, {
             '$set': {
                 'elo': a_elo_after,
@@ -314,8 +314,8 @@ def predict_nba_winner(game_id="6911"):
     a_id = response["api"]["games"][0]["vTeam"]["teamId"]
 
     # Query DB for last game and ELO
-    h_team_data = list(teams_col.find({"tid": int(h_id)}))[0]
-    a_team_data = list(teams_col.find({"tid": int(a_id)}))[0]
+    h_team_data = list(teams_col.find({"teamId": int(h_id)}))[0]
+    a_team_data = list(teams_col.find({"teamId": int(a_id)}))[0]
 
     h_elo = h_team_data["elo"]
     a_elo = a_team_data["elo"]
@@ -388,7 +388,94 @@ def predict_nba_winner(game_id="6911"):
         output_dict["pred_winner"] = int(a_id)
 
     output_dict["confidence"] = max_conf
-    # output_json = json.dumps(output_dict, indent=4)
+
+    return output_dict
+
+
+@app.route("/predictnbalivewin")
+def predict_nba_live_win():
+    arguments = request.args.to_dict()
+
+    # Get data from API/caller
+    period = int(arguments["period"])
+    clock_str = arguments["clock"]
+    h_score = int(arguments["homeScore"])
+    a_score = int(arguments["awayScore"])
+    h_elo = float(arguments["homeELO"])
+    a_elo = float(arguments["awayELO"])
+    h_id = int(arguments["homeID"])
+    a_id = int(arguments["awayID"])
+
+    # Calculate point differential
+    point_diff = h_score - a_score
+
+    # Calculate time remaining in seconds
+    clock_arr = clock_str.split(":")
+
+    if len(clock_arr) == 1:
+        clock_in_sec = int(float(clock_arr[0]))
+    else:
+        clock_in_sec = int(float(clock_arr[0])) * 60 + int(float(clock_arr[1]))
+
+    total_time_sec = 720 * 4
+    SECONDS_PER_QUARTER = 720
+
+    if period <= 4:
+        total_time_sec -= SECONDS_PER_QUARTER * (int(period) - 1)
+        total_time_sec -= SECONDS_PER_QUARTER - clock_in_sec
+    else:
+        total_time_sec = clock_in_sec
+
+    # Form dataframe from data
+    final_df = pd.DataFrame()
+    final_df.insert(loc=0, column='time_left', value=[total_time_sec])
+    final_df.insert(loc=0, column='point_diff', value=[point_diff])
+    final_df.insert(loc=0, column='a_elo', value=[a_elo])
+    final_df.insert(loc=0, column='h_elo', value=[h_elo])
+
+    # Make prediction
+    loaded_model = pickle.load(open('./live_prediction_model.pkl', 'rb'))
+    y_pred = loaded_model.predict(final_df)
+    probability_matrix = loaded_model.predict_proba(final_df)
+
+    output_dict = {
+        "homeConfidence": 0.0,
+        "awayConfidence": 0.0,
+        "timeElapsed": 0,
+        "period": 1
+    }
+
+    if period <= 4:
+        output_dict["timeElapsed"] = 720 - clock_in_sec
+    else:
+        output_dict["timeElapsed"] = 300 - clock_in_sec
+
+    output_dict["period"] = period
+
+    max_conf = max(probability_matrix[0])
+
+    # Account for never giving 100% probability
+    if max_conf == 1.0 and total_time_sec != 0:
+        max_conf = 0.98
+
+    if y_pred[0] == 1:
+        output_dict["homeConfidence"] = max_conf
+        output_dict["awayConfidence"] = 1.0 - max_conf
+    else:
+        output_dict["homeConfidence"] = 1.0 - max_conf
+        output_dict["awayConfidence"] = max_conf
+
+    # End of game cases
+    if total_time_sec == 0:
+        if h_score > a_score:
+            output_dict["homeConfidence"] = 1.0
+            output_dict["awayConfidence"] = 0.0
+        elif a_score > h_score:
+            output_dict["homeConfidence"] = 0.0
+            output_dict["awayConfidence"] = 1.0
+        else:
+            output_dict["homeConfidence"] = 0.5
+            output_dict["awayConfidence"] = 0.5
 
     return output_dict
 
@@ -398,7 +485,6 @@ def hello_world():
     output_dict = {
         "message": "Hello, world!",
     }
-    # output_json = json.dumps(output_dict, indent=4)
     return output_dict
 
 

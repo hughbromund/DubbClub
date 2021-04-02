@@ -2,6 +2,17 @@
   text-align: center;
 }
 
+.center {
+  margin: 0 auto;
+}
+
+.check {
+  color: var(--success-color);
+}
+.cross {
+  color: var(--error-color);
+}
+
 .logo {
   width: 100px;
 }
@@ -12,14 +23,19 @@
 .speedometer {
   text-align: center;
   margin: 0 auto;
-  margin-bottom: -100px;
+  /* margin-bottom: -100px; */
   width: var(--default-column-width);
 }
 .teamNames {
   text-align: center;
   font-size: 20px;
   line-height: 24px;
-  text-transform: capitalize;
+  height: 48px;
+}
+.predictionLine {
+  font-size: 14px;
+  height: 28px;
+  margin-bottom: var(--default-margin);
 }
 
 .background {
@@ -42,4 +58,21 @@
 }
 .gameTime {
   padding: var(--default-padding);
+}
+.rightAlignSpan {
+  float: right;
+}
+
+.predictionGraph {
+  height: 300px;
+}
+.predictionGraphCard {
+  min-width: 100%;
+  padding: 0px;
+}
+
+@media (max-width: 768px) {
+  .background {
+    margin-bottom: var(--default-margin);
+  }
 }

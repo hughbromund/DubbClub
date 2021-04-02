@@ -1,6 +1,7 @@
 const path = require("path");
 
 var nbaService = require(path.resolve(__dirname, "../services/NbaService"));
+var nbaUpdateService = require(path.resolve(__dirname, "../services/NbaUpdateService"));
 
 exports.getStub = async function (req, res, next) {
     res.sendStatus(200);
@@ -46,16 +47,6 @@ exports.getGameDetailsByGameId = async function (req, res, next) {
     }
 };
 
-exports.userVote = async function (req, res, next) {
-    try {
-        if (req.body.homeAway != "home" && req.body.homeAway != "away") {
-            return res.status(400).json({ status: 400, message: "homeaway was not home or away"});
-        }
-        nbaService.userVote(req, res);
-      } catch (e) {
-        return res.status(400).json({ status: 400, message: e.message });
-    }
-};
 
 exports.getGameFromDb = async function (req, res, next) {
     try {
@@ -64,3 +55,99 @@ exports.getGameFromDb = async function (req, res, next) {
         return res.status(400).json({ status: 400, message: e.message });
     }
 };
+
+exports.getUpcomingGamesFromDb = async function (req, res, next) {
+    try {
+        let result = await nbaService.getUpcomingGamesFromDb(req, res);
+        res.status(200).json(result);
+      } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};
+
+exports.getUpcomingGameIdsFromDb = async function (req, res, next) {
+    try {
+        let result = await nbaService.getUpcomingGameIdsFromDb(req, res);
+        res.status(200).json(result);
+      } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};
+
+exports.refresh = async function (req, res, next) {
+    try {
+        let result = await nbaUpdateService.refresh();
+        return res.status(200).json({"message":"Successful Refresh.", "updated Ids": result});
+      } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};
+
+exports.getHighVoteGames = async function (req, res, next) {
+    try {
+        nbaService.getHighVoteGames(req, res);
+      } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};
+
+exports.getHighPredictDiffGames = async function (req, res, next) {
+    try {
+        nbaService.getHighPredictDiffGames(req, res);
+      } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+};
+
+exports.updateTeamStandings = async function (req, res, next) {
+    try {
+        let result = await nbaService.updateTeamStandings(req, res);
+        res.status(200).json({ status: 200, message: "Team standings updated successfully!" });
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+exports.getTeamsFromDb = async function (req, res, next) {
+    try {
+        let teams = await nbaService.getTeamsFromDb();
+        res.status(200).json(teams);
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+exports.getLiveGamePreds = async function (req, res, next) {
+    try {
+        nbaService.getLiveGamePreds(req, res);
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+exports.getDashboard = async function (req, res, next) {
+    try {
+        let result = await nbaService.getDashboard(req.userId);
+        return res.status(200).json(result)
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+exports.getGamesByDateFromDb = async function (req, res, next) {
+    try {
+        let result = await nbaService.getGamesByDateFromDb(req.params.date);
+        return res.status(200).json(result)
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+exports.getGamesByTeamFromDb = async function (req, res, next) {
+    try {
+        let result = await nbaService.getGamesByTeamFromDb(req.params.teamId);
+        return res.status(200).json(result)
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
