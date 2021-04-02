@@ -117,7 +117,7 @@ exports.getLightGameInfoPlusCurr = getLightGameInfoPlusCurr
 exports.getDashboard = async function(userId) {
   let start = new Date()
   let end = new Date()
-  start.setDate(start.getDate() - 1)
+  start.setDate(start.getDate() - 3)
   end.setDate(end.getDate() + 4)
 
   favTeams = {}
@@ -162,6 +162,30 @@ exports.getDashboard = async function(userId) {
   return {"regFinished": regFinished, "regLive": regLive, "regUpcoming": regUpcoming,
    "favFinished": favFinished, "favLive": favLive, "favUpcoming": favUpcoming}
 
+}
+
+exports.getGamesByTeamFromDb = async function(teamId) {
+  let results = await NBAgame.find({"$or": [{"home.teamId": teamId}, {"away.teamId": teamId}]})
+  let ids = []
+  for (let i = 0; i < results.length; i++) {
+    ids.push(results[i].id)
+  }
+  return ids
+}
+
+exports.getGamesByDateFromDb = async function(date) {
+  let start = new Date(date)
+  start.setHours(start.getHours() + 7)
+  let end = new Date(start)
+  end.setDate(end.getDate() + 1)
+  let results = await NBAgame.find({date: {$gte: start, $lte:end}})
+
+  let ids = []
+  for (let i = 0; i < results.length; i++) {
+    ids.push(results[i].id)
+    console.log(results[i].date)
+  }
+  return ids
 }
 
 exports.getUpcomingGameIds = async function() {
