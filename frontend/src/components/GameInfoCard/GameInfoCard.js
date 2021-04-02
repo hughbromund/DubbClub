@@ -83,8 +83,8 @@ export default class GameInfoCard extends Component {
 
   renderGraph(homeAwayWinner) {
     if (this.state.status === LIVE) {
-      console.log(this.state);
-      console.log(this.props.gameID);
+      // console.log(this.state);
+      // console.log(this.props.gameID);
       return (
         <Row>
           <div className={classes.predictionGraphCard}>
