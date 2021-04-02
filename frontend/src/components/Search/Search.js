@@ -122,7 +122,7 @@ export default class Search extends Component {
         <Container>
           <Row>
             <Col>
-              <div className={classes.center}>
+              <div>
                 <h1>Search</h1>
               </div>
             </Col>
