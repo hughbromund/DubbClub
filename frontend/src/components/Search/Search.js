@@ -58,6 +58,7 @@ export default class Search extends Component {
       wins: 0,
       winStreak: 0,
       conference: "",
+      elo: 0,
       loading: false,
     };
 
@@ -140,6 +141,7 @@ export default class Search extends Component {
           winStreak: this.state.east[i].winStreak,
           teamName: this.state.searchTeam,
           teamHex: getColorByTeam(this.state.searchTeam),
+          elo: this.state.east[i].elo.toFixed(2),
         });
         return;
       }
@@ -158,6 +160,7 @@ export default class Search extends Component {
           winStreak: this.state.west[i].winStreak,
           teamName: this.state.searchTeam,
           teamHex: getColorByTeam(this.state.searchTeam),
+          elo: this.state.west[i].elo.toFixed(2),
         });
         return;
       }
@@ -190,7 +193,10 @@ export default class Search extends Component {
                   <b>{this.state.teamName}</b> #{this.state.teamStanding}
                 </h4>
                 <h5>
-                  <i>{this.state.conference}</i>
+                  <b>{this.state.conference}</b>
+                </h5>
+                <h5>
+                  <b>Elo:</b> {this.state.elo}
                 </h5>
               </Col>
               <Col sm={4}>
