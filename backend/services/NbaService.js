@@ -164,6 +164,25 @@ exports.getDashboard = async function(userId) {
 
 }
 
+exports.getGamesByTeamFromDb = async function(teamId) {
+  let results =  await NBAgame.find({"$or": [{"home[0].teamId": teamId}, {"away[0].teamId": teamId}]})
+  let ids = []
+  for (let i = 0; i < results.length; i++) {
+    ids.push(results[i].id)
+  }
+  return ids
+}
+
+exports.getGamesByDateFromDb = async function(date) {
+  let end = new Date(date.getDate + 1)
+  let results = await NBAgame.find({date: {$gt: date, $lt:end}})
+  let ids = []
+  for (let i = 0; i < results.length; i++) {
+    ids.push(results[i].id)
+  }
+  return ids
+}
+
 exports.getUpcomingGameIds = async function() {
   var start = new Date();
   let result = [];
