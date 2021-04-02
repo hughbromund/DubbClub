@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import classes from "./Button.module.css";
+var classNames = require("classnames");
 
 const SUCCESS = "success";
 const PRIMARY = "primary";
@@ -12,7 +13,7 @@ export default class Button extends Component {
         <button
           disabled={this.props.disabled}
           onClick={this.props.onClick}
-          className={classes.ButtonSuccess}
+          className={classNames(classes.ButtonSuccess, this.props.className)}
         >
           {this.props.children}
         </button>
@@ -23,7 +24,7 @@ export default class Button extends Component {
         <button
           disabled={this.props.disabled}
           onClick={this.props.onClick}
-          className={classes.ButtonError}
+          className={classNames(classes.ButtonError, this.props.className)}
         >
           {this.props.children}
         </button>
@@ -34,7 +35,7 @@ export default class Button extends Component {
         <button
           disabled={this.props.disabled}
           onClick={this.props.onClick}
-          className={classes.ButtonOutline}
+          className={classNames(classes.ButtonOutline, this.props.className)}
         >
           {this.props.children}
         </button>
@@ -44,7 +45,7 @@ export default class Button extends Component {
       <button
         disabled={this.props.disabled}
         onClick={this.props.onClick}
-        className={classes.Button}
+        className={classNames(classes.Button, this.props.className)}
       >
         {this.props.children}
       </button>

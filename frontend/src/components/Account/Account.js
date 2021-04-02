@@ -105,6 +105,11 @@ export default class Account extends Component {
       <div>
         <Container className={classes.Account}>
           <div className={classes.headerAlign}>
+            <span style={{ float: "right" }}>
+              <h3>
+                <FontAwesomeIcon size={"2x"} icon={["fas", "user"]} />
+              </h3>
+            </span>
             <h4>Your Account</h4>
             <h3>
               <b>{this.state.username}</b>
