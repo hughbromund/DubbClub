@@ -61,3 +61,5 @@ const dbConnection = require(path.resolve(__dirname, "./database"));
 app.listen(port, () => {
   console.log(`Dubb Club backend listening at http://localhost:${port}`);
 });
+
+module.exports = app;
