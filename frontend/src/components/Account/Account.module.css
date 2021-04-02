@@ -6,7 +6,8 @@
   cursor: not-allowed;
 }
 .headerAlign {
-  text-align: center;
+  text-align: left;
+  margin: var(--default-margin);
 }
 .alertDiv {
   padding: var(--default-margin);

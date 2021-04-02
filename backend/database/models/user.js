@@ -20,7 +20,7 @@ const userSchema = new Schema({
         email: { type: Boolean, unique: false, required: true, default: false},
         SMS: { type: Boolean, unique: false, required: true, default: false},
     },
-    phoneNumber: {type: String, unique: true, required: false},
+    phoneNumber: {type: String, unique: false, required: false},
     hideSpoilers: { type: Boolean, unique: false, required: true, default: false},
     verify: { 
         email: {type: Boolean, unique: false, required: false, default: false},

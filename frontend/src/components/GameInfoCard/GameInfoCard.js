@@ -83,8 +83,8 @@ export default class GameInfoCard extends Component {
 
   renderGraph(homeAwayWinner) {
     if (this.state.status === LIVE) {
-      console.log(this.state);
-      console.log(this.props.gameID);
+      // console.log(this.state);
+      // console.log(this.props.gameID);
       return (
         <Row>
           <div className={classes.predictionGraphCard}>
@@ -541,10 +541,13 @@ export default class GameInfoCard extends Component {
           >
             <b>{this.state.gameDate}</b> <b>{this.state.gameTime}</b>
             <span className={classes.rightAlignSpan}>
-              <FontAwesomeIcon size="2x" icon={["fas", "basketball-ball"]} />
+              {/* <FontAwesomeIcon size="2x" icon={["fas", "basketball-ball"]} /> */}
+              <b>NBA</b>
             </span>
+            <div>
+              <b>Location:</b> {this.state.arena}
+            </div>
             <Expand open={this.state.expandInfo}>
-              <div>{this.state.arena}</div>
               <br />
               <Button
                 variant="success"

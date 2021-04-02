@@ -55,8 +55,6 @@ export default class NBAStandings extends Component {
         west: tempWest,
       });
     }
-    console.log(this.state.east);
-    console.log(this.state.west);
   }
   render() {
     if (this.state.east.length === 0) {

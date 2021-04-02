@@ -133,3 +133,21 @@ exports.getDashboard = async function (req, res, next) {
         return res.status(400).json({ status: 400, message: e.message });
     }
 }
+
+exports.getGamesByDateFromDb = async function (req, res, next) {
+    try {
+        let result = await nbaService.getGamesByDateFromDb(req.params.date);
+        return res.status(200).json(result)
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+exports.getGamesByTeamFromDb = async function (req, res, next) {
+    try {
+        let result = await nbaService.getGamesByTeamFromDb(req.params.teamId);
+        return res.status(200).json(result)
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
