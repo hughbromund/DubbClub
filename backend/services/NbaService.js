@@ -117,7 +117,7 @@ exports.getLightGameInfoPlusCurr = getLightGameInfoPlusCurr
 exports.getDashboard = async function(userId) {
   let start = new Date()
   let end = new Date()
-  start.setDate(start.getDate() - 1)
+  start.setDate(start.getDate() - 3)
   end.setDate(end.getDate() + 4)
 
   favTeams = {}
