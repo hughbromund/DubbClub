@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AuthContext from "../../contexts/AuthContext.js";
+import Spinner from "react-bootstrap/Spinner";
 
 import { FAVORITE_TEAM, UNFAVORITE_TEAM } from "../../constants/Constants";
 
@@ -10,10 +11,12 @@ export default class FavoriteStar extends Component {
 
     this.state = {
       type: "far",
+      loading: false,
     };
   }
 
   async favoriteTeam(teamId) {
+    this.setState({ loading: true });
     var res = await fetch(FAVORITE_TEAM, {
       method: "POST",
       mode: "cors",
@@ -28,14 +31,19 @@ export default class FavoriteStar extends Component {
     });
     // console.log(res);
     if (res.status !== 200) {
+      this.setState({ loading: false });
+
       return false;
     }
 
     await this.context.refreshFavoriteTeams();
+    this.setState({ loading: false });
     return true;
   }
 
   async unFavoriteTeam(teamId) {
+    this.setState({ loading: true });
+
     var res = await fetch(UNFAVORITE_TEAM, {
       method: "POST",
       mode: "cors",
@@ -50,10 +58,12 @@ export default class FavoriteStar extends Component {
     });
     // console.log(res);
     if (res.status !== 200) {
+      this.setState({ loading: false });
       return false;
     }
 
     await this.context.refreshFavoriteTeams();
+    this.setState({ loading: false });
     return true;
   }
 
@@ -66,6 +76,8 @@ export default class FavoriteStar extends Component {
   render() {
     if (!this.context.isLoggedIn) {
       return <div />;
+    } else if (this.state.loading) {
+      return <Spinner animation="grow" size="sm" />;
     } else if (this.context.isFollowedTeam("NBA", this.props.id)) {
       return (
         <FontAwesomeIcon
