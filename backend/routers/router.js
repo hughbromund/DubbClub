@@ -192,6 +192,6 @@ router.get(
 );
 
 //TESTING PURPOSES ONLY - post gameId to send all users notifications
-router.post("/api/nba/notificationsTest", nbaUserController.notificationsTest);
+// router.post("/api/nba/notificationsTest", nbaUserController.notificationsTest);
 
 module.exports = router;
