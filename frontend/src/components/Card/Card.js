@@ -12,6 +12,7 @@ export default class Card extends Component {
     if (isStatic) {
       return (
         <div
+          style={this.props.style}
           className={classNames(
             classes.StaticCard,
             this.props.className === undefined ? "" : this.props.className
@@ -23,6 +24,7 @@ export default class Card extends Component {
     } else {
       return (
         <div
+          style={this.props.style}
           className={classNames(
             classes.Card,
             this.props.className === undefined ? "" : this.props.className
