@@ -7,11 +7,17 @@ var mustafarService = require(path.resolve(__dirname, "../services/MustafarServi
 exports.updateDbWithPredictions = async function (req, res, next) {
     try {
         let upcoming = await nbaService.getBasicGameInfo();
+        if (upcoming === undefined) {
+            throw new Error("No upcoming games found")
+        }
         let gameIds = []
         for (var i = 0; i < upcoming.length; i++) {
             gameIds.push(upcoming[i].gameId)
         }
         let predictions = await mustafarService.getMustafarPredictions(gameIds);
+        if (predictions === undefined) {
+            throw new Error("Failed to get predictions from mustafar")
+        }
         mustafarService.updateDbWithPredictions(upcoming, predictions)
         return res.status(200).send({message: "Successfully Updated Games."})
       } catch (e) {
