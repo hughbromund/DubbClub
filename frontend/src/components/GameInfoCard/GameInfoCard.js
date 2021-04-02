@@ -389,7 +389,7 @@ export default class GameInfoCard extends Component {
   }
 
   render() {
-    const shareURL = "https://www.dubb.club";
+    const shareURL = `https://www.dubb.club/game/${this.props.gameID}`;
     const shareText = `Dubb Club has predicted that the ${this.state.predictedWinner} will win with a confidence of ${this.state.predictionConfidence}%!`;
     var homeAwayWinner = "home";
 

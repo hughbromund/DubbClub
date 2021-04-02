@@ -109,7 +109,7 @@ export default class Voting extends Component {
         <Container>
           <Row>
             <Col>
-              <div className={classes.center}>
+              <div>
                 <h1>Voting</h1>
               </div>
             </Col>
