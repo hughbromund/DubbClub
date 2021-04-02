@@ -29,12 +29,10 @@ export default class Voting extends Component {
   }
 
   renderCards(voteDiffGamesCards, mostVotedGamesCards) {
-    if (this.state.searchType === MOST_VOTED_GAMES) {
-      console.log("Most voted!");
-      return mostVotedGamesCards;
+    if (this.state.searchType === VOTE_DIFF_GAMES) {
+      return voteDiffGamesCards;
     }
-    console.log("Vote diff!");
-    return voteDiffGamesCards;
+    return mostVotedGamesCards;
   }
 
   async getMostVotedGames() {
