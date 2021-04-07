@@ -112,5 +112,5 @@ exports.playerStub = async function() {
         "playerId": "92"
     }
 
-    return [mostRecentGame, third, second, historical]
+    return {"mostRecentGame": mostRecentGame, "seasons": [third, second], "career": historical}
 }
