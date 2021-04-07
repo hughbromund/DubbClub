@@ -112,5 +112,27 @@ exports.playerStub = async function() {
         "playerId": "92"
     }
 
-    return {"mostRecentGame": mostRecentGame, "seasons": [third, second], "career": historical}
+    let playerInfo = {
+        "firstName": "Clint",
+        "lastName": "Capela",
+        "teamId": "1",
+        "yearsPro": "6",
+        "collegeName": "Elan Chalon",
+        "country": "Switzerland",
+        "playerId": "92",
+        "dateOfBirth": "1994-05-18",
+        "affiliation": "Elan Chalon/Switzerland",
+        "startNba": "2014",
+        "heightInMeters": "2.08",
+        "weightInKilograms": "108.9",
+        "leagues": {
+            "standard": {
+                "jersey": "15",
+                "active": "1",
+                "pos": "C"
+            }
+        }
+    }
+
+    return {"playerInfo": playerInfo, "mostRecentGame": mostRecentGame, "seasons": [third, second], "career": historical}
 }
