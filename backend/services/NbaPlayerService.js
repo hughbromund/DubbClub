@@ -35,6 +35,7 @@ exports.playerStub = async function() {
     let second = {
         "season": "2020-21",
         "teamId": "1",
+        "teamImage": "https://upload.wikimedia.org/wikipedia/fr/e/ee/Hawks_2016.png",
         "points": "24",
         "pos": "C",
         "min": "32:10",
@@ -62,6 +63,7 @@ exports.playerStub = async function() {
     let third = {
         "season": "2019-20",
         "teamId": "1",
+        "teamImage": "https://upload.wikimedia.org/wikipedia/fr/e/ee/Hawks_2016.png",
         "points": "14",
         "pos": "C",
         "min": "28:42",
