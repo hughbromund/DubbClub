@@ -116,6 +116,7 @@ exports.playerStub = async function() {
         "firstName": "Clint",
         "lastName": "Capela",
         "teamId": "1",
+        "teamImage": "https://upload.wikimedia.org/wikipedia/fr/e/ee/Hawks_2016.png",
         "yearsPro": "6",
         "collegeName": "Elan Chalon",
         "country": "Switzerland",
