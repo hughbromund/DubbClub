@@ -598,4 +598,3 @@ exports.getLiveGamePreds = (req, res) => {
   });
 
 };
-
