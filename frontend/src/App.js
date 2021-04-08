@@ -13,6 +13,7 @@ import NBAStandings from "./components/NBAStandings/NBAStandings";
 import GameInfoCard from "./components/GameInfoCard/GameInfoCard";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Search from "./components/Search/Search";
+import AutoSearch from "./components/AutoSearch/AutoSearch";
 import Account from "./components/Account/Account";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import PredictionGraph from "./components/PredictionGraph/PredictionGraph";
@@ -63,7 +64,7 @@ class App extends Component {
               <Route exact path={HOME_ROUTE} component={Home} />
               <Route path={LOGIN_ROUTE} component={Login} />
               <Route path={REGISTER_ROUTE} component={Register} />
-              <Route path={SEARCH_ROUTE + "/:id?"} component={Search} />
+              <Route path={SEARCH_ROUTE + "/:id?"} component={AutoSearch} />
               <Route path={VOTING_ROUTE} component={Voting} />
               <Route path={NBA_STANDINGS_ROUTE} component={NBAStandings} />
               <Route
