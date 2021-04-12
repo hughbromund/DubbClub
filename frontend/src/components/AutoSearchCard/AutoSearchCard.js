@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Card from "../Card/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import LinkButton from "../LinkButton/LinkButton";
 
 import classes from "./AutoSearchCard.module.css";
 
@@ -23,7 +24,7 @@ export default class extends Component {
             key={i}
             style={
               part.toLowerCase() === highlight.toLowerCase()
-                ? { fontWeight: "bold" }
+                ? { fontWeight: "bold", backgroundColor: "#0050dd" }
                 : {}
             }
           >
@@ -46,6 +47,7 @@ export default class extends Component {
               <h3>
                 {this.getHighlightedText(this.props.name, this.props.search)}
               </h3>
+              <LinkButton>Hello there</LinkButton>
             </Col>
           </Row>
         </Card>

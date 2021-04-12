@@ -4,6 +4,7 @@ import AuthContext from "../../contexts/AuthContext.js";
 import Button from "../Button/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import LinkButton from "../LinkButton/LinkButton";
 
 import {
   DASHBOARD_ROUTE,
@@ -34,35 +35,17 @@ export default class Masthead extends Component {
               <div className={classes.ButtonWidth}>
                 <Row>
                   <Col>
-                    <Button
-                      onClick={() => {
-                        this.props.history.push(LOGIN_ROUTE);
-                      }}
-                    >
-                      Login
-                    </Button>
+                    <LinkButton to={LOGIN_ROUTE}>Login</LinkButton>
                   </Col>
                   <Col>
-                    <Button
-                      onClick={() => {
-                        this.props.history.push(REGISTER_ROUTE);
-                      }}
-                    >
-                      Sign Up
-                    </Button>
+                    <LinkButton to={REGISTER_ROUTE}> Sign Up</LinkButton>
                   </Col>
                 </Row>
               </div>
             </div>
           ) : (
             <div className={classes.ButtonWidth}>
-              <Button
-                onClick={() => {
-                  this.props.history.push(DASHBOARD_ROUTE);
-                }}
-              >
-                Dashboard
-              </Button>
+              <LinkButton to={DASHBOARD_ROUTE}> Dashboard</LinkButton>
             </div>
           )}
         </div>

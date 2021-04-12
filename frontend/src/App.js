@@ -64,7 +64,7 @@ class App extends Component {
               <Route exact path={HOME_ROUTE} component={Home} />
               <Route path={LOGIN_ROUTE} component={Login} />
               <Route path={REGISTER_ROUTE} component={Register} />
-              <Route path={SEARCH_ROUTE + "/:id?"} component={AutoSearch} />
+              <Route path={SEARCH_ROUTE + "/:query?"} component={AutoSearch} />
               <Route path={VOTING_ROUTE} component={Voting} />
               <Route path={NBA_STANDINGS_ROUTE} component={NBAStandings} />
               <Route

@@ -25,6 +25,7 @@ import {
 } from "react-share";
 import AuthContext from "../../contexts/AuthContext.js";
 import Button from "../Button/Button";
+import LinkButton from "../LinkButton/LinkButton";
 import Spoiler from "../Spoiler/Spoiler";
 import Card from "../Card/Card";
 import SmartButton from "../SmartButton/SmartButton";
@@ -549,18 +550,14 @@ export default class GameInfoCard extends Component {
             </div>
             <Expand open={this.state.expandInfo}>
               <br />
-              <Button
+
+              <LinkButton
                 variant="success"
-                onClick={() => {
-                  if (this.props.gameID !== undefined) {
-                    this.props.history.push(
-                      GAME_INFO_ROUTE + "/" + this.props.gameID
-                    );
-                  }
-                }}
+                to={GAME_INFO_ROUTE + "/" + this.props.gameID}
               >
                 More Info
-              </Button>
+              </LinkButton>
+
               <br />
               <br />
               <FacebookShareButton
