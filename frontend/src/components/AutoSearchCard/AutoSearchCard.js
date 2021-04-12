@@ -47,7 +47,9 @@ export default class extends Component {
               <h3>
                 {this.getHighlightedText(this.props.name, this.props.search)}
               </h3>
-              <LinkButton>Hello there</LinkButton>
+            </Col>
+            <Col xs={2}>
+              <LinkButton to={this.props.destination}>More Info</LinkButton>
             </Col>
           </Row>
         </Card>

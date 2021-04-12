@@ -15,6 +15,8 @@ export const RESET_PASSWORD_ROUTE = "/resetPassword";
 export const NBA_STANDINGS_ROUTE = "/nba/standings";
 export const GRAPH_TEST = "/graph";
 export const VERIFY_EMAIL_ROUTE = "/verifyEmail";
+export const TEAM_INFO_ROUTE = "/team";
+export const PLAYER_INFO_ROUTE = "/player";
 
 /* Base URL for Backend */
 export var BASE = "https://api.dubb.club";

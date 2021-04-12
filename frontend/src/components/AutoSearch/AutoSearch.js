@@ -3,7 +3,12 @@ import Container from "react-bootstrap/Container";
 import AutoSearchCard from "../AutoSearchCard/AutoSearchCard";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
-import { AUTOCOMPLETE_SEARCH, SEARCH_ROUTE } from "../../constants/Constants";
+import {
+  AUTOCOMPLETE_SEARCH,
+  SEARCH_ROUTE,
+  TEAM_INFO_ROUTE,
+  PLAYER_INFO_ROUTE,
+} from "../../constants/Constants";
 
 export default class AutoSearch extends Component {
   constructor(props) {
@@ -83,18 +88,22 @@ export default class AutoSearch extends Component {
           {this.state.loading ? <LoadingSpinner /> : ""}
           {this.state.teamResults.length + this.state.playerResults.length}{" "}
           Results - Searching for <i>{this.state.search}</i>
+          <h2 hidden={this.state.teamResults.length === 0}>Teams</h2>
           {this.state.teamResults.map((element, index) => {
             return (
               <AutoSearchCard
+                destination={TEAM_INFO_ROUTE + "/NBA/" + element.id}
                 name={element.name}
                 logo={element.teamImage}
                 search={this.state.search}
               />
             );
           })}
+          <h2 hidden={this.state.playerResults.length === 0}>Players</h2>
           {this.state.playerResults.map((element, index) => {
             return (
               <AutoSearchCard
+                destination={PLAYER_INFO_ROUTE + "/" + element.id}
                 name={element.name}
                 logo={element.teamImage}
                 search={this.state.search}
