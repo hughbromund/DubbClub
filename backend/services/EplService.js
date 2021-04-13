@@ -34,7 +34,7 @@ exports.getGameIdsByTeamStub = function() {
 }
 
 
-exports.getGameDetailsByGameId = function(gameId) {
+exports.getGameDetailsByGameIdStub = function(gameId) {
     var rand = Math.random()
     /*
     result = {
@@ -77,7 +77,7 @@ exports.getGameDetailsByGameId = function(gameId) {
                 status: "Scheduled",
                 homeScore: null,
                 awayScore: null,
-                predictedWinner: home,
+                predictedWinner: "home",
                 confidence: .51,
                 homeVoters: [],
                 awayVoters: [],
@@ -175,7 +175,7 @@ exports.getGameDetailsByGameId = function(gameId) {
                 status: "Finished",
                 homeScore: 3,
                 awayScore: 0,
-                predictedWinner: away,
+                predictedWinner: "away",
                 confidence: .58,
                 homeVoters: [],
                 awayVoters: [],
@@ -319,7 +319,7 @@ exports.getGameDetailsByGameId = function(gameId) {
                 status: "In Play",
                 homeScore: 0,
                 awayScore: 0,
-                predictedWinner: away,
+                predictedWinner: "away",
                 confidence: .67,
                 homeVoters: [],
                 awayVoters: [],
@@ -445,7 +445,7 @@ exports.getGameDetailsByGameId = function(gameId) {
     return result;
 }
 
-exports.getTeamStats = function(teamId) {
+exports.getTeamStatsStub = function(teamId) {
     result = {
         teamId: 33,
         teamName: "Manchester United",
