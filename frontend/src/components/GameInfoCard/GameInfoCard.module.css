@@ -49,10 +49,11 @@
 } */
 .outer {
   margin: 0px;
+  /* min-width: 100%; */
 }
 .wrapper {
   margin: var(--default-margin);
-  max-width: var(--default-column-width);
+  /* max-width: var(--default-column-width); */
   background-image: var(--gradient);
   border-radius: var(--border-radius);
 }
