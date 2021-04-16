@@ -616,7 +616,7 @@ export default class GameInfoCard extends Component {
             <b>{this.state.gameDate}</b> <b>{this.state.gameTime}</b>
             <span className={classes.rightAlignSpan}>
               {/* <FontAwesomeIcon size="2x" icon={["fas", "basketball-ball"]} /> */}
-              <b>NBA</b>
+              <b>{this.props.league || NBA}</b>
             </span>
             <div>
               <b>Location:</b> {this.state.arena}
