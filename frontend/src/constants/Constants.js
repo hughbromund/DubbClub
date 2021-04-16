@@ -60,6 +60,13 @@ export const SEND_VERIFY_EMAIL = BASE + "/api/user/sendVerifyEmail";
 export const VERIFY_EMAIL = BASE + "/api/user/verifyEmail";
 export const AUTOCOMPLETE_SEARCH = BASE + "/api/autoCompleteStub";
 
+/* EPL constants */
+export const EPL_GET_UPCOMING_GAMES = BASE + "/api/epl/getUpcomingGamesFromDb";
+export const EPL_GET_GAMES_BY_DATE = BASE + "/api/epl/getGamesByDate";
+export const EPL_GET_GAMES_BY_TEAM = BASE + "/api/epl/getGamesByTeamFromDb";
+export const EPL_GET_GAME_BY_ID = BASE + "/api/epl/getGameFromDb";
+export const EPL_GET_TEAM_STATS = BASE + "/api/epl/getTeamStats";
+
 /* Date options to convert to UTC for Game Cards */
 export const DATE_OPTIONS = {
   weekday: "long",
@@ -73,3 +80,7 @@ export const REFRESH_RATE = 60000;
 export const SCHEDULED = "Scheduled";
 export const LIVE = "In Play";
 export const FINISHED = "Finished";
+
+export const NBA = "NBA";
+export const EPL = "EPL";
+export const MLB = "MLB";
