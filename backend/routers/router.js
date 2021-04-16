@@ -43,6 +43,11 @@ const eplController = require(path.resolve(
   "../controllers/EplController"
 ));
 
+const alderaanController = require(path.resolve(
+  __dirname,
+  "../controllers/AlderaanController"
+));
+
 //User routes
 //NOTE: for any request requiring user auth, must call authJWT.verifyToken first
 router.post("/api/auth/login", userController.login)
@@ -136,5 +141,6 @@ router.get("/api/epl/getGamesByDate/:date", eplController.getGameIdsByDate)
 router.get("/api/epl/getGamesByTeamFromDb/:teamId", eplController.getGameIdsByTeam)
 router.get("/api/epl/getGameFromDb/:gameId", eplController.getGameDetailsByGameId)
 router.get("/api/epl/getTeamStats/:teamId", eplController.getTeamStats)
+router.get("/api/epl/updateDbWithGamesAndPredictions", alderaanController.updateDbWithGamesAndPredictions)
 
 module.exports = router;
