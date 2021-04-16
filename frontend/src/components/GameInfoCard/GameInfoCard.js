@@ -12,7 +12,10 @@ import {
   REFRESH_RATE,
   LIVE,
   SCHEDULED,
+  NBA,
   FINISHED,
+  EPL_GET_GAME_BY_ID,
+  EPL,
 } from "../../constants/Constants";
 import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
 import {
@@ -78,6 +81,8 @@ export default class GameInfoCard extends Component {
     this.hexAlphaConverter = this.hexAlphaConverter.bind(this);
     this.hexMedianValue = this.hexMedianValue.bind(this);
     this.fetchGameData = this.fetchGameData.bind(this);
+    this.fetchNBAGameData = this.fetchNBAGameData.bind(this);
+    this.fetchEPLGameData = this.fetchEPLGameData.bind(this);
     this.renderPredictionSubtext = this.renderPredictionSubtext.bind(this);
     this.renderScore = this.renderScore.bind(this);
   }
@@ -272,6 +277,69 @@ export default class GameInfoCard extends Component {
   }
 
   async fetchGameData(gameID) {
+    if (this.props.league === EPL) {
+      await this.fetchEPLGameData(gameID);
+    } else {
+      await this.fetchNBAGameData(gameID);
+    }
+  }
+
+  async fetchEPLGameData(gameID) {
+    var res = await fetch(EPL_GET_GAME_BY_ID + `/${gameID}`, {});
+    var body = await res.json();
+    if (res.status === 200) {
+      var predictedWinner = body.game.home.teamName;
+      if (body.game.away.teamId === body.game.predictedWinner) {
+        predictedWinner = body.game.away.teamName;
+      }
+
+      var date = new Date(body.game.date).toLocaleDateString(
+        "en-US",
+        DATE_OPTIONS
+      );
+
+      var time = new Date(body.game.date).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      this.setState({
+        arena: body.game.arena,
+        predictedWinner: predictedWinner,
+        predictionConfidence: Number((body.game.confidence * 100).toFixed(2)),
+        homeTeam: body.game.home.teamName,
+        awayTeam: body.game.away.teamName,
+        homeHex: getColorByTeam(body.game.home.teamName),
+        awayHex: getColorByTeam(body.game.away.teamName),
+        homeLogo: body.game.home.teamImage,
+        awayLogo: body.game.away.teamImage,
+        gameDate: date,
+        gameTime: time,
+        homeId: body.game.home.teamId,
+        awayId: body.game.away.teamId,
+        playedGameStats: body.game.playedGameStats,
+        status: body.game.status,
+      });
+      if (body.game.status === LIVE) {
+        this.setState({
+          homeLiveScore: body.game.homeScore,
+          awayLiveScore: body.game.awayScore,
+          liveTimeRem: body.game.clock,
+          livePeriod: body.game.period,
+        });
+      }
+
+      // var tID = null;
+      // if (body.game.status === LIVE) {
+      //   tID = setTimeout(async () => {
+      //     await this.fetchGameData(this.props.gameID);
+      //   }, REFRESH_RATE);
+      //   this.setState({ timeoutID: tID });
+      // }
+    }
+  }
+
+  async fetchNBAGameData(gameID) {
     var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
     var body = await res.json();
     if (res.status === 200) {
@@ -396,6 +464,11 @@ export default class GameInfoCard extends Component {
 
     if (this.state.predictedWinner === this.state.awayTeam) {
       homeAwayWinner = "away";
+    }
+
+    // TODO Remove this
+    if (this.props.league === EPL && this.state.status === LIVE) {
+      return <div />;
     }
 
     return (
@@ -543,7 +616,7 @@ export default class GameInfoCard extends Component {
             <b>{this.state.gameDate}</b> <b>{this.state.gameTime}</b>
             <span className={classes.rightAlignSpan}>
               {/* <FontAwesomeIcon size="2x" icon={["fas", "basketball-ball"]} /> */}
-              <b>NBA</b>
+              <b>{this.props.league || NBA}</b>
             </span>
             <div>
               <b>Location:</b> {this.state.arena}
