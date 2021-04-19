@@ -20,3 +20,4 @@ models/nba_pregame_win_prediction/season_data/season_2016.json
 models/nba_pregame_win_prediction/season_data/season_2015.jso
 models/nba_pregame_win_prediction/season_data/season_2015.json
 models/nba_pregame_win_prediction/config.py
+models/mlb_pregame_prediction/2019_data_june23.pickle

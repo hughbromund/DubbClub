@@ -6,6 +6,9 @@ import {
   GAME_INFO_ROUTE,
   GET_DASHBOARD,
   UPCOMING_GAMES_ID,
+  EPL_GET_UPCOMING_GAMES,
+  EPL,
+  NBA,
 } from "../../constants/Constants";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
 import Masthead from "../Masthead/Masthead";
@@ -23,9 +26,11 @@ export default class Home extends Component {
 
     this.state = {
       games: [],
+      EPLGames: [],
     };
 
     this.fetchGameData = this.fetchGameData.bind(this);
+    this.fetchEPLGameData = this.fetchEPLGameData.bind(this);
   }
 
   async fetchGameData() {
@@ -36,9 +41,17 @@ export default class Home extends Component {
       currentDate: new Date().setHours(0, 0, 0, 0),
     });
   }
+  async fetchEPLGameData() {
+    var res = await fetch(EPL_GET_UPCOMING_GAMES, {});
+    var body = await res.json();
+    this.setState({
+      EPLGames: body,
+    });
+  }
 
   async componentDidMount() {
     this.fetchGameData();
+    this.fetchEPLGameData();
   }
 
   render() {
@@ -66,6 +79,7 @@ export default class Home extends Component {
             gameID={this.state.games.regUpcoming[i]}
             history={this.props.history}
             key={i}
+            league={NBA}
           />
         </Col>
       );
@@ -85,10 +99,30 @@ export default class Home extends Component {
             gameID={this.state.games.regLive[i]}
             history={this.props.history}
             key={i}
+            league={NBA}
           />
         </Col>
       );
       liveCards.push(temp);
+    }
+    let EPLCards = [];
+    for (let i = 0; i < this.state.EPLGames.length; i++) {
+      let temp = (
+        <Col key={"col-" + i}>
+          <GameInfoCard
+            // onClickHandler={() => {
+            //   this.props.history.push(
+            //     GAME_INFO_ROUTE + `/${this.state.games.regLive[i]}`
+            //   );
+            // }}
+            gameID={this.state.EPLGames[i]}
+            history={this.props.history}
+            key={i}
+            league={EPL}
+          />
+        </Col>
+      );
+      EPLCards.push(temp);
     }
     return (
       <div>
@@ -100,10 +134,15 @@ export default class Home extends Component {
           <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
             {liveCards.length !== 0 ? liveCards : "No currently running games."}
           </Row>
-          <h3>Upcoming Games with Dubb Club Predictions</h3>
+          <h3>Upcoming NBA Games with Dubb Club Predictions</h3>
           <hr />
           <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
-            {cards}
+            {cards.slice(0, 9)}
+          </Row>
+          <h3>Upcoming EPL Games with Dubb Club Predictions</h3>
+          <hr />
+          <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+            {EPLCards.slice(0, 9)}
           </Row>
         </Container>
       </div>
