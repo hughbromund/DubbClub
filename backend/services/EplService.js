@@ -383,9 +383,9 @@ exports.getGameDetailsByGameIdStub = function(gameId) {
                 },
                 "referee": NULL,
                 "status": {
-                "elapsed": 7,
-                "long": "First Half",
-                "short": "1H",
+                    "elapsed": 7,
+                    "long": "First Half",
+                    "short": "1H",
                 },
                 "timestamp": 1617804000,
                 "timezone": "UTC",

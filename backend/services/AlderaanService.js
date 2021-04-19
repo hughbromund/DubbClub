@@ -47,6 +47,7 @@ exports.getUpcomingGamesAPI = async function() {
             league: 39,
             from: start.toISOString().slice(0,10),
             to: end.toISOString().slice(0,10),
+            timezone: "America/Indiana/Indianapolis",
             season: 2020,
         }
     }
@@ -115,26 +116,13 @@ exports.updateDbWithPredictions = async function(upcoming, predictions) {
  
 
 
-exports.updateDbWithLivePredictions = async function(upcoming, liveGames) {
+exports.updateDbWithLivePredictions = async function(upcoming) {
 
-    home = await NBAteam.findOne({ teamId : parseInt(upcoming.hTeam.teamId, 10) }).exec()
-    away = await NBAteam.findOne({ teamId : parseInt(upcoming.vTeam.teamId, 10) }).exec()
+    home = await EPLteam.findOne({ teamId : parseInt(upcoming.teams.home.id, 10) }).exec()
+    away = await EPLteam.findOne({ teamId : parseInt(upcoming.teams.away.id, 10) }).exec()
     
-    liveGame = {}
 
-    gamesList = liveGames.api.games
-
-    for (let i = 0; i < gamesList.length; i++) {
-        if (parseInt(gamesList[i].gameId, 10) === parseInt(upcoming.gameId, 10)) {
-            liveGame = gamesList[i]
-            break
-        }
-    }
-
-    if (liveGame.clock === "") {
-        return {}
-    }
-
+    /*
     let request = {
         "period": liveGame.currentPeriod.slice(0,1),
         "clock": liveGame.clock,
@@ -148,7 +136,7 @@ exports.updateDbWithLivePredictions = async function(upcoming, liveGames) {
 
     let url = "https://mustafar.dubb.club/predictnbalivewin"
     res = await axios.get(url, {params: request})
-
+    
     console.log(res.data)
 
     liveObj = {
@@ -159,11 +147,16 @@ exports.updateDbWithLivePredictions = async function(upcoming, liveGames) {
         "homeScore": liveGame.hTeam.score.points,
         "awayScore": liveGame.vTeam.score.points
     }
+    */
 
-    NBAgame.updateOne(
-        { id: parseInt(upcoming.gameId, 10) }, {"homeScore": liveGame.hTeam.score.points, "awayScore": liveGame.vTeam.score.points, 
-        "period": res.data.period, "clock": liveGame.clock, "$push": {livePredictions: liveObj }}
+    /*
+
+    EPLgame.updateOne(
+        { id: parseInt(upcoming.fixture.id, 10) }, 
+        {
+            "$push": {livePredictions: liveObj }
+        }
      ).exec()
-
-     return res.data
+    */
+    
 }

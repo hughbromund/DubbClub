@@ -142,5 +142,6 @@ router.get("/api/epl/getGamesByTeamFromDb/:teamId", eplController.getGameIdsByTe
 router.get("/api/epl/getGameFromDb/:gameId", eplController.getGameDetailsByGameId)
 router.get("/api/epl/getTeamStats/:teamId", eplController.getTeamStats)
 router.get("/api/epl/updateDbWithGamesAndPredictions", alderaanController.updateDbWithGamesAndPredictions)
+router.get("/api/epl/refresh", eplController.refresh);
 
 module.exports = router;
