@@ -86,6 +86,8 @@ export default class Login extends Component {
                     disabled={
                       this.state.username === "" || this.state.password === ""
                     }
+                    successMessage="Successfully Logged In!"
+                    errorMessage="Error Logging In!"
                     runOnClick={async () => {
                       var res = await fetch(LOGIN, {
                         method: "POST",

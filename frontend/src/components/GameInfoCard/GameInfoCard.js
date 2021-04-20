@@ -433,6 +433,12 @@ export default class GameInfoCard extends Component {
                         )}
                       >
                         <SmartButton
+                          successMessage={
+                            "Added the " +
+                            this.state.awayTeam +
+                            " to your favorites!"
+                          }
+                          errorMessage="Error Favoriting"
                           runOnClick={() => {
                             return this.favoriteTeam(this.state.awayId);
                           }}
@@ -446,6 +452,12 @@ export default class GameInfoCard extends Component {
                         }
                       >
                         <SmartButton
+                          successMessage={
+                            "Removed the " +
+                            this.state.awayTeam +
+                            " from your favorites!"
+                          }
+                          errorMessage="Error Removing Favorite"
                           runOnClick={() => {
                             return this.unFavoriteTeam(this.state.awayId);
                           }}
@@ -485,6 +497,12 @@ export default class GameInfoCard extends Component {
                         )}
                       >
                         <SmartButton
+                          successMessage={
+                            "Added the " +
+                            this.state.homeTeam +
+                            " to your favorites!"
+                          }
+                          errorMessage="Error Favoriting"
                           runOnClick={() => {
                             return this.favoriteTeam(this.state.homeId);
                           }}
@@ -498,6 +516,12 @@ export default class GameInfoCard extends Component {
                         }
                       >
                         <SmartButton
+                          successMessage={
+                            "Removed the " +
+                            this.state.homeTeam +
+                            " from your favorites!"
+                          }
+                          errorMessage="Error Removing Favorite"
                           runOnClick={() => {
                             return this.unFavoriteTeam(this.state.homeId);
                           }}

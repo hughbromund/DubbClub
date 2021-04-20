@@ -1,5 +1,6 @@
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import React, { Component } from "react";
+import { ToastContainer, toast, Slide } from "react-toastify";
 
 import AuthContext from "./contexts/AuthContext";
 
@@ -61,6 +62,18 @@ class App extends Component {
     // console.log(this.context.isLoggedIn);
     return (
       <div>
+        <ToastContainer
+          transition={Slide}
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <Router>
           <Navigation />
 
