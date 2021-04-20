@@ -155,7 +155,7 @@ exports.getGamesByTeamFromDb = async function (req, res, next) {
 
 exports.playerStub = async function (req, res, next) {
     try {
-        let result = await nbaPlayerService.playerStub();
+        let result = await nbaPlayerService.doobedo();
         return res.status(200).json(result)
     } catch(e) {
         return res.status(400).json({ status: 400, message: e.message });

@@ -139,3 +139,105 @@ exports.playerStub = async function() {
 
     return {"playerInfo": playerInfo, "mostRecentGame": mostRecentGame, "seasons": [third, second], "career": historical}
 }
+
+//2020 - 2021: 8133-
+//2019 - 2020: 7699-8125
+//2018 - 2019: 4308-6221
+//2017 - 2018: 2842-4234
+//2016 - 2017: 1428-2840
+//2015 - 2016: 1-1427
+
+exports.populateDb = async function populateDb() {
+    var options = {
+        method: 'GET',
+        url: "https://api-nba-v1.p.rapidapi.com/players/playerId/92",
+        headers: {
+          'x-rapidapi-key': config.nbaApiKey,
+          'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
+        }
+    }
+
+    let player = await axios.request(options)
+    player = player.data.api.players[0]
+
+    let team = await NBAteam.findOne({ teamId : player.teamId }).exec()
+
+    let playerInfo = {
+        firstName: player.firstName,
+        lastName: player.lastName,
+        teamId: player.teamId,
+        teamImage: team.teamImage,
+        yearsPro: player.yearsPro,
+        collegeName: player.collegeName,
+        country: player.country,
+        playerId: player.playerId,
+        dateOfBirth: player.dateOfBirth,
+        affiliation: player.affiliation,
+        startNba: player.startNba,
+        heightInMeters: player.heightInMeters,
+        weightInKilograms: player.weightInKilograms,
+        jersey: player.leagues.standard.jersey,
+        active: player.leagues.standard.active,
+        pos: player.leagues.standard.pos,
+    }
+
+    let year = playerInfo.startNba
+    let totalGamesPlayed = 0
+    let seasons = []
+    
+
+    while (year < new Date().getFullYear - 1) {
+        let seasonAvgs = await axios.get("https://www.balldontlie.io/api/v1/season_averages?season=" + year + " &player_ids[]=83")
+        seasonAvgs = seasonAvgs.data[0]
+        totalGamesPlayed += seasonAvgs.games_played
+        seasons.push(createSeasonObj(seasonAvgs))
+    }
+
+    return seasons
+
+}
+
+async function createSeasonObj(seasonAvgs) {
+    console.log(seasonAvgs)
+    let team = await NBAteam.findOne({ teamId : teamId }).exec()
+    return {
+        "teamId": teamId,
+        "teamImage": team.teamImage,
+        "season": season,
+        "numGames": numGames,
+        "points": totPoints,
+        "min": min,
+        "fgm": fgm,
+        "fga": fga,
+        "fgp": fgp,
+        "ftm": ftm,
+        "fta": fta,
+        "ftp": ftp,
+        "tpm": tpm,
+        "tpa": tpa,
+        "tpp": tpp,
+        "offReb": totOffReb,
+        "defReb": totDefReb,
+        "totReb": totReb,
+        "totRebGm": totRebGm,
+        "totAssists": totAssists,
+        "assistsGm": assistsGm,
+        "totPFouls": totPFouls,
+        "pFoulsGm": pFoulsGm,
+        "totSteals": totSteals,
+        "stealsGm": stealsGm,
+        "totTurnovers": totTurnovers,
+        "turnoversGm": turnoversGm,
+        "totBlocks": totBlocks,
+        "blocksGm": blocksGm,
+        "totPlusMinus": totPlusMinus,
+        "plusMinusGm": plusMinusGm
+    }
+}
+
+exports.doobedo = async function() {
+    let res = await axios.get("https://www.balldontlie.io/api/v1/season_averages?season=2018&player_ids[]=1&player_ids[]=2")
+    console.log(res.data.data)
+
+    return res.data
+}

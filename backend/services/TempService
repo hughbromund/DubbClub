@@ -1,0 +1,516 @@
+exports.populateDb = async function populateDb() {
+    let year = 2015
+    let requests = []
+    for (let i = 0; i < 6; i++) {
+        var gmOptions = {
+            method: 'GET',
+            url: "https://api-nba-v1.p.rapidapi.com/games/seasonYear/" + year,
+            headers: {
+              'x-rapidapi-key': config.nbaApiKey,
+              'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
+            }
+        }
+        year++
+        requests.push(axios.request(gmOptions))
+    }
+
+    let finishedRequests = await Promise.all(requests)
+
+    let yearGames = []
+
+    for (let i = 0; i < 6; i++) {
+        let seasonGames = finishedRequests[i].data.api.games
+        let gms = []
+        for (let j = 0; j < seasonGames.length; j++) {
+            if (seasonGames[j].league === "standard") {
+                gms.push(seasonGames[j].gameId)
+            }
+        }
+        yearGames.push(gms)
+        console.log(gms.length)
+    }
+
+    var options = {
+        method: 'GET',
+        url: "https://api-nba-v1.p.rapidapi.com/statistics/players/playerId/92",
+        headers: {
+          'x-rapidapi-key': config.nbaApiKey,
+          'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com'
+        }
+    };
+
+    let result = await axios.request(options)
+    let game = result.data.api.statistics
+    let careerGames = 0
+    let seasons = []
+
+    let currSeason = 2015
+    let numGames = 0
+    let totPoints = 0
+    let pointsGm = 0
+    let min = 0
+    let fgm = 0
+    let fga = 0
+    let fgp = 0
+    let ftm = 0
+    let fta = 0
+    let ftp = 0
+    let tpm = 0
+    let tpa = 0
+    let tpp = 0
+    let totOffReb = 0
+    let offRebGm = 0
+    let totDefReb = 0
+    let defRebGm = 0
+    let totRebGm = 0
+    let totReb = 0
+    let totAssists = 0
+    let assistsGm = 0
+    let totPFouls = 0
+    let pFoulsGm = 0
+    let stealsGm = 0
+    let totSteals = 0
+    let totTurnovers = 0
+    let turnoversGm = 0
+    let totBlocks = 0
+    let blocksGm = 0
+    let totPlusMinus = 0
+    let plusMinusGm = 0
+    
+
+    console.log("game " + game.length)
+    for (let i = 0; i < game.length; i++) {
+
+        //2015 - 2016
+        if (yearGames[0].includes(game[i].gameId) && game[i].min != "") {
+            totPoints += parseInt(game[i].points, 10)
+            numGames++
+            careerGames++
+            pointsGm = totPoints / numGames
+            min += parseInt(game[i].min, 10)
+            fgm += parseInt(game[i].fgm, 10)
+            fga += parseInt(game[i].fga, 10)
+            fgp = fga / fgm
+            ftm += parseInt(game[i].ftm, 10)
+            fta += parseInt(game[i].fta, 10)
+            ftp = fta / ftm
+            tpm += parseInt(game[i].tpm, 10)
+            tpa += parseInt(game[i].tpa, 10)
+            tpp = tpm / tpa
+            totOffReb += parseInt(game[i].offReb, 10)
+            offRebGm = totOffReb / numGames
+            totDefReb += parseInt(game[i].defReb, 10)
+            defRebGm = totDefReb / numGames
+            totReb = parseInt(game[i].totReb, 10)
+            totRebGm += totReb / numGames
+            totAssists += parseInt(game[i].assists, 10)
+            assistsGm = totAssists / numGames
+            totPFouls += parseInt(game[i].pFouls, 10)
+            pFoulsGm = totPFouls / numGames
+            totSteals += parseInt(game[i].steals, 10)
+            stealsGm = totSteals / numGames
+            totTurnovers += parseInt(game[i].turnovers, 10)
+            turnoversGm = totTurnovers / numGames
+            totBlocks += parseInt(game[i].blocks, 10)
+            blocksGm = totBlocks / numGames
+            totPlusMinus += parseInt(game[i].plusMinus, 10)
+            plusMinusGm = totPlusMinus / numGames
+            continue
+        }
+
+        //2016 - 2017
+        if (yearGames[1].includes(game[i].gameId) && game[i].min != "") {
+            if (currSeason === 2015) {
+                let seasonObj = await createSeasonObj(game[i].teamId, "2015-2016", numGames, totPoints, pointsGm,
+                min, fgm, fga, fgp, ftm, fta, ftp, tpm, tpa, tpp, totOffReb, offRebGm, totDefReb,
+                defRebGm, totReb, totRebGm, totAssists, assistsGm, totPFouls, pFoulsGm, totSteals,
+                stealsGm, totTurnovers, turnoversGm, totBlocks, blocksGm, totPlusMinus, plusMinusGm)
+                seasons.push(seasonObj)
+                numGames = 0
+                currSeason = 2016
+                totPoints = 0
+                pointsGm = 0
+                min = 0
+                fgm = 0
+                fga = 0
+                fgp = 0
+                ftm = 0
+                fta = 0
+                ftp = 0
+                tpm = 0
+                tpa = 0
+                tpp = 0
+                totOffReb = 0
+                offRebGm = 0
+                totDefReb = 0
+                defRebGm = 0
+                totRebGm = 0
+                totReb = 0
+                totAssists = 0
+                assistsGm = 0
+                totPFouls = 0
+                pFoulsGm = 0
+                totPFouls = 0
+                stealsGm = 0
+                totSteals = 0
+                totTurnovers = 0
+                turnoversGm = 0
+                totBlocks = 0
+                blocksGm = 0
+                totPlusMinus = 0
+                plusMinusGm = 0
+            }
+            totPoints += parseInt(game[i].points, 10)
+            numGames++
+            careerGames++
+            pointsGm = totPoints / numGames
+            min += parseInt(game[i].min, 10)
+            fgm += parseInt(game[i].fgm, 10)
+            fga += parseInt(game[i].fga, 10)
+            fgp = fga / fgm
+            ftm += parseInt(game[i].ftm, 10)
+            fta += parseInt(game[i].fta, 10)
+            ftp = fta / ftm
+            tpm += parseInt(game[i].tpm, 10)
+            tpa += parseInt(game[i].tpa, 10)
+            tpp = tpm / tpa
+            totOffReb += parseInt(game[i].offReb, 10)
+            offRebGm = totOffReb / numGames
+            totDefReb += parseInt(game[i].defReb, 10)
+            defRebGm = totDefReb / numGames
+            totReb = parseInt(game[i].totReb, 10)
+            totRebGm += totReb / numGames
+            totAssists += parseInt(game[i].assists, 10)
+            assistsGm = totAssists / numGames
+            totPFouls += parseInt(game[i].pFouls, 10)
+            pFoulsGm = totPFouls / numGames
+            totSteals += parseInt(game[i].steals, 10)
+            stealsGm = totSteals / numGames
+            totTurnovers += parseInt(game[i].turnovers, 10)
+            turnoversGm = totTurnovers / numGames
+            totBlocks += parseInt(game[i].blocks, 10)
+            blocksGm = totBlocks / numGames
+            totPlusMinus += parseInt(game[i].plusMinus, 10)
+            plusMinusGm = totPlusMinus / numGames
+            continue
+        }
+
+        //2017 - 2018
+        if (yearGames[2].includes(game[i].gameId) && game[i].min != "") {
+            if (currSeason === 2016) {
+                let seasonObj = await createSeasonObj(game[i].teamId, "2016-2017", numGames, totPoints, pointsGm,
+                min, fgm, fga, fgp, ftm, fta, ftp, tpm, tpa, tpp, totOffReb, offRebGm, totDefReb,
+                defRebGm, totReb, totRebGm, totAssists, assistsGm, totPFouls, pFoulsGm, totSteals,
+                stealsGm, totTurnovers, turnoversGm, totBlocks, blocksGm, totPlusMinus, plusMinusGm)
+                seasons.push(seasonObj)
+                numGames = 0
+                currSeason = 2017
+                totPoints = 0
+                pointsGm = 0
+                min = 0
+                fgm = 0
+                fga = 0
+                fgp = 0
+                ftm = 0
+                fta = 0
+                ftp = 0
+                tpm = 0
+                tpa = 0
+                tpp = 0
+                totOffReb = 0
+                offRebGm = 0
+                totDefReb = 0
+                defRebGm = 0
+                totRebGm = 0
+                totReb = 0
+                totAssists = 0
+                assistsGm = 0
+                totPFouls = 0
+                pFoulsGm = 0
+                totPFouls = 0
+                stealsGm = 0
+                totSteals = 0
+                totTurnovers = 0
+                turnoversGm = 0
+                totBlocks = 0
+                blocksGm = 0
+                totPlusMinus = 0
+                plusMinusGm = 0
+            }
+            totPoints += parseInt(game[i].points, 10)
+            numGames++
+            careerGames++
+            pointsGm = totPoints / numGames
+            min += parseInt(game[i].min, 10)
+            fgm += parseInt(game[i].fgm, 10)
+            fga += parseInt(game[i].fga, 10)
+            fgp = fga / fgm
+            ftm += parseInt(game[i].ftm, 10)
+            fta += parseInt(game[i].fta, 10)
+            ftp = fta / ftm
+            tpm += parseInt(game[i].tpm, 10)
+            tpa += parseInt(game[i].tpa, 10)
+            tpp = tpm / tpa
+            totOffReb += parseInt(game[i].offReb, 10)
+            offRebGm = totOffReb / numGames
+            totDefReb += parseInt(game[i].defReb, 10)
+            defRebGm = totDefReb / numGames
+            totReb = parseInt(game[i].totReb, 10)
+            totRebGm += totReb / numGames
+            totAssists += parseInt(game[i].assists, 10)
+            assistsGm = totAssists / numGames
+            totPFouls += parseInt(game[i].pFouls, 10)
+            pFoulsGm = totPFouls / numGames
+            totSteals += parseInt(game[i].steals, 10)
+            stealsGm = totSteals / numGames
+            totTurnovers += parseInt(game[i].turnovers, 10)
+            turnoversGm = totTurnovers / numGames
+            totBlocks += parseInt(game[i].blocks, 10)
+            blocksGm = totBlocks / numGames
+            totPlusMinus += parseInt(game[i].plusMinus, 10)
+            plusMinusGm = totPlusMinus / numGames
+            continue
+        }
+
+        //2018 - 2019
+        if (yearGames[3].includes(game[i].gameId) && game[i].min != "") {
+            if (currSeason === 2017) {
+                let seasonObj = await createSeasonObj(game[i].teamId, "2017-2018", numGames, totPoints, pointsGm,
+                min, fgm, fga, fgp, ftm, fta, ftp, tpm, tpa, tpp, totOffReb, offRebGm, totDefReb,
+                defRebGm, totReb, totRebGm, totAssists, assistsGm, totPFouls, pFoulsGm, totSteals,
+                stealsGm, totTurnovers, turnoversGm, totBlocks, blocksGm, totPlusMinus, plusMinusGm)
+                seasons.push(seasonObj)
+                numGames = 0
+                currSeason = 2018
+                totPoints = 0
+                pointsGm = 0
+                min = 0
+                fgm = 0
+                fga = 0
+                fgp = 0
+                ftm = 0
+                fta = 0
+                ftp = 0
+                tpm = 0
+                tpa = 0
+                tpp = 0
+                totOffReb = 0
+                offRebGm = 0
+                totDefReb = 0
+                defRebGm = 0
+                totRebGm = 0
+                totReb = 0
+                totAssists = 0
+                assistsGm = 0
+                totPFouls = 0
+                pFoulsGm = 0
+                totPFouls = 0
+                stealsGm = 0
+                totSteals = 0
+                totTurnovers = 0
+                turnoversGm = 0
+                totBlocks = 0
+                blocksGm = 0
+                totPlusMinus = 0
+                plusMinusGm = 0
+            }
+            totPoints += parseInt(game[i].points, 10)
+            numGames++
+            careerGames++
+            pointsGm = totPoints / numGames
+            min += parseInt(game[i].min, 10)
+            fgm += parseInt(game[i].fgm, 10)
+            fga += parseInt(game[i].fga, 10)
+            fgp = fga / fgm
+            ftm += parseInt(game[i].ftm, 10)
+            fta += parseInt(game[i].fta, 10)
+            ftp = fta / ftm
+            tpm += parseInt(game[i].tpm, 10)
+            tpa += parseInt(game[i].tpa, 10)
+            tpp = tpm / tpa
+            totOffReb += parseInt(game[i].offReb, 10)
+            offRebGm = totOffReb / numGames
+            totDefReb += parseInt(game[i].defReb, 10)
+            defRebGm = totDefReb / numGames
+            totReb = parseInt(game[i].totReb, 10)
+            totRebGm += totReb / numGames
+            totAssists += parseInt(game[i].assists, 10)
+            assistsGm = totAssists / numGames
+            totPFouls += parseInt(game[i].pFouls, 10)
+            pFoulsGm = totPFouls / numGames
+            totSteals += parseInt(game[i].steals, 10)
+            stealsGm = totSteals / numGames
+            totTurnovers += parseInt(game[i].turnovers, 10)
+            turnoversGm = totTurnovers / numGames
+            totBlocks += parseInt(game[i].blocks, 10)
+            blocksGm = totBlocks / numGames
+            totPlusMinus += parseInt(game[i].plusMinus, 10)
+            plusMinusGm = totPlusMinus / numGames
+            continue
+        }
+
+        //2019 - 2020
+        if (yearGames[4].includes(game[i].gameId) && game[i].min != "") {
+            if (currSeason === 2018) {
+                let seasonObj = await createSeasonObj(game[i].teamId, "2018-2019", numGames, totPoints, pointsGm,
+                min, fgm, fga, fgp, ftm, fta, ftp, tpm, tpa, tpp, totOffReb, offRebGm, totDefReb,
+                defRebGm, totReb, totRebGm, totAssists, assistsGm, totPFouls, pFoulsGm, totSteals,
+                stealsGm, totTurnovers, turnoversGm, totBlocks, blocksGm, totPlusMinus, plusMinusGm)
+                seasons.push(seasonObj)
+                numGames = 0
+                currSeason = 2019
+                totPoints = 0
+                pointsGm = 0
+                min = 0
+                fgm = 0
+                fga = 0
+                fgp = 0
+                ftm = 0
+                fta = 0
+                ftp = 0
+                tpm = 0
+                tpa = 0
+                tpp = 0
+                totOffReb = 0
+                offRebGm = 0
+                totDefReb = 0
+                defRebGm = 0
+                totRebGm = 0
+                totReb = 0
+                totAssists = 0
+                assistsGm = 0
+                totPFouls = 0
+                pFoulsGm = 0
+                totPFouls = 0
+                stealsGm = 0
+                totSteals = 0
+                totTurnovers = 0
+                turnoversGm = 0
+                totBlocks = 0
+                blocksGm = 0
+                totPlusMinus = 0
+                plusMinusGm = 0
+            }
+            totPoints += parseInt(game[i].points, 10)
+            numGames++
+            careerGames++
+            pointsGm = totPoints / numGames
+            min += parseInt(game[i].min, 10)
+            fgm += parseInt(game[i].fgm, 10)
+            fga += parseInt(game[i].fga, 10)
+            fgp = fga / fgm
+            ftm += parseInt(game[i].ftm, 10)
+            fta += parseInt(game[i].fta, 10)
+            ftp = fta / ftm
+            tpm += parseInt(game[i].tpm, 10)
+            tpa += parseInt(game[i].tpa, 10)
+            tpp = tpm / tpa
+            totOffReb += parseInt(game[i].offReb, 10)
+            offRebGm = totOffReb / numGames
+            totDefReb += parseInt(game[i].defReb, 10)
+            defRebGm = totDefReb / numGames
+            totReb = parseInt(game[i].totReb, 10)
+            totRebGm += totReb / numGames
+            totAssists += parseInt(game[i].assists, 10)
+            assistsGm = totAssists / numGames
+            totPFouls += parseInt(game[i].pFouls, 10)
+            pFoulsGm = totPFouls / numGames
+            totSteals += parseInt(game[i].steals, 10)
+            stealsGm = totSteals / numGames
+            totTurnovers += parseInt(game[i].turnovers, 10)
+            turnoversGm = totTurnovers / numGames
+            totBlocks += parseInt(game[i].blocks, 10)
+            blocksGm = totBlocks / numGames
+            totPlusMinus += parseInt(game[i].plusMinus, 10)
+            plusMinusGm = totPlusMinus / numGames
+            continue
+        }
+
+        //2020 - 2021
+        if (yearGames[5].includes(game[i].gameId) && game[i].min != "") {
+            if (currSeason === 2019) {
+                let seasonObj = await createSeasonObj(game[i].teamId, "2019-2020", numGames, totPoints, pointsGm,
+                min, fgm, fga, fgp, ftm, fta, ftp, tpm, tpa, tpp, totOffReb, offRebGm, totDefReb,
+                defRebGm, totReb, totRebGm, totAssists, assistsGm, totPFouls, pFoulsGm, totSteals,
+                stealsGm, totTurnovers, turnoversGm, totBlocks, blocksGm, totPlusMinus, plusMinusGm)
+                seasons.push(seasonObj)
+                numGames = 0
+                currSeason = 2020
+                totPoints = 0
+                pointsGm = 0
+                min = 0
+                fgm = 0
+                fga = 0
+                fgp = 0
+                ftm = 0
+                fta = 0
+                ftp = 0
+                tpm = 0
+                tpa = 0
+                tpp = 0
+                totOffReb = 0
+                offRebGm = 0
+                totDefReb = 0
+                defRebGm = 0
+                totRebGm = 0
+                totReb = 0
+                totAssists = 0
+                assistsGm = 0
+                totPFouls = 0
+                pFoulsGm = 0
+                totPFouls = 0
+                stealsGm = 0
+                totSteals = 0
+                totTurnovers = 0
+                turnoversGm = 0
+                totBlocks = 0
+                blocksGm = 0
+                totPlusMinus = 0
+                plusMinusGm = 0
+            }
+            console.log(game[i].gameId)
+            totPoints += parseInt(game[i].points, 10)
+            numGames++
+            careerGames++
+            pointsGm = totPoints / numGames
+            min += parseInt(game[i].min, 10)
+            fgm += parseInt(game[i].fgm, 10)
+            fga += parseInt(game[i].fga, 10)
+            fgp = fga / fgm
+            ftm += parseInt(game[i].ftm, 10)
+            fta += parseInt(game[i].fta, 10)
+            ftp = fta / ftm
+            tpm += parseInt(game[i].tpm, 10)
+            tpa += parseInt(game[i].tpa, 10)
+            tpp = tpm / tpa
+            totOffReb += parseInt(game[i].offReb, 10)
+            offRebGm = totOffReb / numGames
+            totDefReb += parseInt(game[i].defReb, 10)
+            defRebGm = totDefReb / numGames
+            totReb = parseInt(game[i].totReb, 10)
+            totRebGm += totReb / numGames
+            totAssists += parseInt(game[i].assists, 10)
+            assistsGm = totAssists / numGames
+            totPFouls += parseInt(game[i].pFouls, 10)
+            pFoulsGm = totPFouls / numGames
+            totSteals += parseInt(game[i].steals, 10)
+            stealsGm = totSteals / numGames
+            totTurnovers += parseInt(game[i].turnovers, 10)
+            turnoversGm = totTurnovers / numGames
+            totBlocks += parseInt(game[i].blocks, 10)
+            blocksGm = totBlocks / numGames
+            totPlusMinus += parseInt(game[i].plusMinus, 10)
+            plusMinusGm = totPlusMinus / numGames
+            continue
+        }
+    }
+
+    let seasonObj = await createSeasonObj(1, "2020-2021", numGames, totPoints, pointsGm,
+                min, fgm, fga, fgp, ftm, fta, ftp, tpm, tpa, tpp, totOffReb, offRebGm, totDefReb,
+                defRebGm, totReb, totRebGm, totAssists, assistsGm, totPFouls, pFoulsGm, totSteals,
+                stealsGm, totTurnovers, turnoversGm, totBlocks, blocksGm, totPlusMinus, plusMinusGm)
+    seasons.push(seasonObj)
+
+    return seasons
+
+}
