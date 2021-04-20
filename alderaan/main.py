@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 
 @app.route("/predicteplpregame")
-def predict_nba_live_win():
+def predict_epl_pregame():
     arguments = request.args.to_dict()
 
     # Get data from arguments

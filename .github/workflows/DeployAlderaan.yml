@@ -65,7 +65,7 @@ jobs:
       - name: Fetch LFS Files
         run: git lfs checkout
 
-      - name: Deploy Mustafar
+      - name: Deploy Alderaan
         uses: google-github-actions/deploy-appengine@main
         with:
           deliverables: app.yaml
