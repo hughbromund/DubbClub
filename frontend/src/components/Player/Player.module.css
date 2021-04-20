@@ -7,3 +7,13 @@
 .headerPadding {
   margin: var(--default-margin);
 }
+.SeasonCard {
+  min-width: 100%;
+}
+.SeasonTable {
+  color: var(--text-primary);
+  min-width: 100%;
+}
+.RowImage {
+  height: 2rem;
+}
