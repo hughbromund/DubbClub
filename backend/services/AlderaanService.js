@@ -14,16 +14,95 @@ exports.getAlderaanPredictions = async function(upcoming) {
     let results = []
     //temp results
     for (var i = 0; i < upcoming.length; i++) {
-        results.push({pred_winner: upcoming[i].teams.away.id, confidence: .6})
-    }
 
-    /*
-    for (var i = 0; i < upcoming.length; i++) {
-        let url = "https://mustafar.dubb.club/predictnbawin/" + gameIds[i]
-        let res = await axios.get(url)
+        homeId = upcoming[i].teams.home.id
+        awayId = upcoming[i].teams.away.id
+        fixtureSeason = upcoming[i].league.season
+        fixtureLeague = upcoming[i].league.id
+
+        // Home stats
+        var options = {
+            method: 'GET',
+            url: "https://api-football-v1.p.rapidapi.com/v3/teams/statistics",
+            headers: {
+                'x-rapidapi-key': config.nbaApiKey,
+                'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
+            },
+            params: {season: fixtureSeason.toString(), team: homeId.toString(), league: fixtureLeague.toString()},
+        }
+        let request = await axios.request(options)    
+        let homeData = request.data.response;
+
+        // Away stats
+        var options = {
+            method: 'GET',
+            url: "https://api-football-v1.p.rapidapi.com/v3/teams/statistics",
+            headers: {
+                'x-rapidapi-key': config.nbaApiKey,
+                'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
+            },
+            params: {season: fixtureSeason.toString(), team: awayId.toString(), league: fixtureLeague.toString()},
+        }
+        request = await axios.request(options)
+        let awayData = request.data.response;
+
+        // Calculate last 5 win percentage for each team
+        let hWinPercent5 = 0.0
+        if (homeData.fixtures.played.total < 5) {
+            hWinPercent5 = parseFloat(homeData.fixtures.wins.total) / parseFloat(homeData.fixtures.played.total)
+        } else {
+            let hForm5 = homeData.form
+            hForm5 = hForm5.substr(hForm5.length - 5)
+            let hCount = 0
+            for (let i = 0; i < hForm5.length; i++) {
+                if (hForm5.charAt(i) == 'W') {
+                    hCount++
+                }
+            }
+            hWinPercent5 = parseFloat(hCount / 5.0)
+        }
+
+        // Calculate last 5 win percentage for each team
+        let aWinPercent5 = 0.0
+        if (awayData.fixtures.played.total < 5) {
+            aWinPercent5 = parseFloat(awayData.fixtures.wins.total) / parseFloat(awayData.fixtures.played.total)
+        } else {
+            let aForm5 = awayData.form
+            aForm5 = aForm5.substr(aForm5.length - 5)
+            let aCount = 0
+            for (let i = 0; i < aForm5.length; i++) {
+                if (aForm5.charAt(i) == 'W') {
+                    aCount++
+                }
+            }
+            aWinPercent5 = parseFloat(aCount / 5.0)
+        }
+
+        // TODO: fill ELO's from DB
+        let alderaan_params = {
+            "hEloBefore": 1500.0,
+            "aEloBefore": 1500.0,
+            "hMatchPlayed": homeData.fixtures.played.total,
+            "aMatchPlayed": awayData.fixtures.played.total,
+            "hGoalDiff": homeData.goals.for.total.total - homeData.goals.against.total.total,
+            "aGoalDiff": awayData.goals.for.total.total - awayData.goals.against.total.total,
+            "hWinPercent": parseFloat(homeData.fixtures.wins.total) / parseFloat(homeData.fixtures.played.total),
+            "aWinPercent": parseFloat(awayData.fixtures.wins.total) / parseFloat(awayData.fixtures.played.total),
+            "hWinPercentLast5": hWinPercent5,
+            "aWinPercentLast5": aWinPercent5,
+            "goalDiffDiff": homeData.goals.for.total.total - homeData.goals.against.total.total - 
+                (awayData.goals.for.total.total - awayData.goals.against.total.total)
+        }
+    
+        // TODO: change to deployed URL
+        let url = "https://alderaan-dot-dubbclub.uc.r.appspot.com/predicteplpregame"
+        // let url = "http://127.0.0.1:5000/predicteplpregame"
+        res = await axios.get(url, {params: alderaan_params})
+
+        console.log(res.data)
+
         results.push(res.data)
     }
-    */
     return results
 }
 
