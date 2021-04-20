@@ -1,0 +1,10 @@
+Flask
+requests
+pandas
+pymongo
+pymongo[srv]
+scikit-learn
+numpy
+pytest
+attrs==19.1.0
+pytest-flask
