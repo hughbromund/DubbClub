@@ -104,27 +104,30 @@ export default class Player extends Component {
                 />
               </Col>
               <Col>
-                <h1>
-                  <b>
-                    {this.state.playerInfo.firstName}{" "}
-                    {this.state.playerInfo.lastName}
-                  </b>
-                </h1>
+                <Row>
+                  <h1>
+                    <b>
+                      {this.state.playerInfo.firstName}{" "}
+                      {this.state.playerInfo.lastName}
+                    </b>
+                  </h1>
+                </Row>
               </Col>
             </Row>
           </Card>
-          <Row>
+          <Row noGutters>
             <Col>
+              <h2 className={classes.headerPadding}>Most Recent Game</h2>
               <GameInfoCard gameID={this.state.mostRecentGame.gameId} />
             </Col>
             <Col>
-              <Row>
+              <Row noGutters>
                 <Card className={classes.MostRecentGameStats}>
                   <h3>Most Recent Game Stats</h3>
                   <Row md={3}>{this.generateRecentGameStats()}</Row>
                 </Card>
               </Row>
-              <Row>
+              <Row noGutters>
                 <Card className={classes.MostRecentGameStats}>
                   <h3>Career Stats</h3>
                   <Row md={3}>{this.generateCareerStats()}</Row>

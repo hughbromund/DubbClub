@@ -4,3 +4,6 @@
 .MostRecentGameStats {
   min-width: 100%;
 }
+.headerPadding {
+  margin: var(--default-margin);
+}
