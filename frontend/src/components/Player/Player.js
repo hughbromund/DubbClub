@@ -115,13 +115,16 @@ export default class Player extends Component {
     if (season === "historical") {
       season = "Career";
     }
+    var team = getTeamByID(element.teamId);
+    if (team === 0) {
+      team = "";
+    }
 
     return (
       <tr>
         <td>{season}</td>
         <td>
-          <img className={classes.RowImage} src={element.teamImage} />{" "}
-          {getTeamByID(element.teamId)}
+          <img className={classes.RowImage} src={element.teamImage} /> {team}
         </td>
         <td>{element.assists}</td>
         <td>{element.blocks}</td>
@@ -131,6 +134,10 @@ export default class Player extends Component {
         <td>{element.ftm}</td>
         <td>{element.fta}</td>
         <td>{element.ftp}%</td>
+        <td>{element.tpm}</td>
+        <td>{element.tpa}</td>
+        <td>{element.tpp}%</td>
+        <td>{element.min}</td>
       </tr>
     );
   }
@@ -213,6 +220,33 @@ export default class Player extends Component {
               </Col>
             </Row>
           </Card>
+          <h2 className={classes.headerPadding}>Seasonal Data</h2>
+          <Row noGutters>
+            <Card className={classes.SeasonCard}>
+              <Table className={classes.SeasonTable} responsive>
+                <thead>
+                  <tr>
+                    <th>Season</th>
+                    <th>Team</th>
+                    <th>AST</th>
+                    <th>BLK</th>
+                    <th>FGM</th>
+                    <th>FGA</th>
+                    <th>FGP</th>
+                    <th>FTM</th>
+                    <th>FTA</th>
+                    <th>FTP</th>
+                    <th>TPM</th>
+                    <th>TPA</th>
+                    <th>TPP</th>
+                    <th>MINS</th>
+                  </tr>
+                </thead>
+                <tbody>{this.state.seasons.map(this.createSeasonRow)}</tbody>
+                <tbody>{this.createSeasonRow(this.state.career)}</tbody>
+              </Table>
+            </Card>
+          </Row>
           <Row noGutters>
             <Col>
               <h2 className={classes.headerPadding}>Most Recent Game</h2>
@@ -232,28 +266,6 @@ export default class Player extends Component {
                 </Card>
               </Row>
             </Col>
-          </Row>
-          <Row noGutters>
-            <Card className={classes.SeasonCard}>
-              <Table className={classes.SeasonTable}>
-                <thead>
-                  <tr>
-                    <th>Season</th>
-                    <th>Team</th>
-                    <th>AST</th>
-                    <th>BLK</th>
-                    <th>FGM</th>
-                    <th>FGA</th>
-                    <th>FGP</th>
-                    <th>FTM</th>
-                    <th>FTA</th>
-                    <th>FTP</th>
-                  </tr>
-                </thead>
-                <tbody>{this.state.seasons.map(this.createSeasonRow)}</tbody>
-                <tbody>{this.createSeasonRow(this.state.career)}</tbody>
-              </Table>
-            </Card>
           </Row>
         </Container>
       </div>
