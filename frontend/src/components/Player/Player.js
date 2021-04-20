@@ -110,9 +110,15 @@ export default class Player extends Component {
 
   createSeasonRow(element, index) {
     console.log(element);
+
+    var season = element.season;
+    if (season === "historical") {
+      season = "Career";
+    }
+
     return (
       <tr>
-        <td>{element.season}</td>
+        <td>{season}</td>
         <td>
           <img className={classes.RowImage} src={element.teamImage} />{" "}
           {getTeamByID(element.teamId)}
@@ -245,6 +251,7 @@ export default class Player extends Component {
                   </tr>
                 </thead>
                 <tbody>{this.state.seasons.map(this.createSeasonRow)}</tbody>
+                <tbody>{this.createSeasonRow(this.state.career)}</tbody>
               </Table>
             </Card>
           </Row>
