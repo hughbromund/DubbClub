@@ -45,6 +45,9 @@ exports.refresh = async function refresh() {
          await EPLGame.findOneAndUpdate({id : gameId}, {status: "In Play"}).exec()
          console.log("Updated game " + gameId + " to In Play.")
          //nbaUserService.notifications(gameInDb) add EPL notifications
+
+         await updateDbWithLiveStats(upcoming[i])
+         await alderaanService.updateDbWithLivePredictions(upcoming[i])
       }
  
       //transition to finished game
@@ -52,14 +55,11 @@ exports.refresh = async function refresh() {
          await EPLgame.findOneAndUpdate({id : gameId}, {status: "Finished"}).exec()
          console.log("Updated game " + gameId + " to Finished.")
          //let game = updateDbWithPlayedGameStats(gameId) // no longer required?
+         await updateDbWithLiveStats(upcoming[i])
       }
-
-      if (gameInDb.status === "In Play") {
+      else if (gameInDb.status === "In Play") {
          await updateDbWithLiveStats(upcoming[i])
          await alderaanService.updateDbWithLivePredictions(upcoming[i])
-      }
-      else if (gameInDb.status === "Finished") {
-         await updateDbWithLiveStats(upcoming[i])
       }
    }
 }
