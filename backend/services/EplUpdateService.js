@@ -63,6 +63,13 @@ exports.refresh = async function refresh() {
          await updateDbWithLiveStats(upcoming[i])
          await alderaanService.updateDbWithLivePredictions(upcoming[i])
       }
+      else if (gameInDb.status === "Scheduled" && endStatuses.includes(upcoming[i].fixture.status.short)) {
+         await EPLgame.findOneAndUpdate({id : gameId}, {status: "Finished"}).exec()
+         console.log("Updated game " + gameId + " to Finished.")
+         //let game = updateDbWithPlayedGameStats(gameId) // no longer required?
+         await updateDbWithLiveStats(upcoming[i])
+         await updateDbWithTeamStats(upcoming[i])
+      }
    }
 }
 
@@ -193,7 +200,7 @@ updateDbWithTeamStats = async function (game) {
    let request = await axios.request(options) 
    request = request.data.response
 
-   await EPLteam.updateOne({id: request.team.id}, {
+   await EPLteam.updateOne({teamId: request.team.id}, {
       teamId: request.team.id,
       teamName: request.team.name,
       teamImage: request.team.logo,
@@ -210,10 +217,10 @@ updateDbWithTeamStats = async function (game) {
    }, {upsert : true}).exec()
 
    options.params.team = game.teams.away.id
-   let request = await axios.request(options) 
+   request = await axios.request(options) 
    request = request.data.response
 
-   await EPLteam.updateOne({id: request.team.id}, {
+   await EPLteam.updateOne({teamId: request.team.id}, {
       teamId: request.team.id,
       teamName: request.team.name,
       teamImage: request.team.logo,
