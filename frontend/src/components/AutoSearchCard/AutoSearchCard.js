@@ -39,17 +39,19 @@ export default class extends Component {
     return (
       <div>
         <Card className={classes.AutoSearchCard}>
-          <Row>
-            <Col xs={1}>
-              <img style={{ width: "100%" }} src={this.props.logo} />
+          <Row xs={1} sm={2} md={3}>
+            <Col md="auto">
+              <img style={{ height: "3rem" }} src={this.props.logo} />
             </Col>
             <Col>
               <h3>
                 {this.getHighlightedText(this.props.name, this.props.search)}
               </h3>
             </Col>
-            <Col xs={2}>
-              <LinkButton to={this.props.destination}>More Info</LinkButton>
+            <Col>
+              <span style={{ float: "right" }}>
+                <LinkButton to={this.props.destination}>More Info</LinkButton>
+              </span>
             </Col>
           </Row>
         </Card>

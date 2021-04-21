@@ -157,10 +157,10 @@ export default class Player extends Component {
       <div>
         <Container>
           <Card className={classes.PlayerInfoCard}>
-            <Row>
-              <Col xs={2}>
+            <Row xs={1} sm={2} md={3}>
+              <Col md="auto">
                 <img
-                  style={{ width: "100%" }}
+                  style={{ height: "8rem" }}
                   src={this.state.playerInfo.teamImage}
                 />
               </Col>
