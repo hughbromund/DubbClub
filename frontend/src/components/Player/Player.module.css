@@ -1,0 +1,21 @@
+.PlayerInfoCard {
+  min-width: 100%;
+  padding: var(--default-padding);
+  margin: var(--default-margin);
+}
+.MostRecentGameStats {
+  min-width: 100%;
+}
+.headerPadding {
+  margin: var(--default-margin);
+}
+.SeasonCard {
+  min-width: 100%;
+}
+.SeasonTable {
+  color: var(--text-primary);
+  min-width: 100%;
+}
+.RowImage {
+  height: 2rem;
+}

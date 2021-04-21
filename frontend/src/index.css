@@ -30,6 +30,18 @@
   background-color: var(--background-color);
   color: var(--text-primary);
 }
+.Toastify__toast--success {
+  color: var(--text-primary);
+  background-color: var(--success-color);
+  font-family: "Poppins", sans-serif;
+  font-weight: bold;
+}
+.Toastify__toast--error {
+  color: var(--text-primary);
+  background-color: var(--error-color);
+  font-family: "Poppins", sans-serif;
+  font-weight: bold;
+}
 body {
   color: var(--text-primary) !important;
 }
