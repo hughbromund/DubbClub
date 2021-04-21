@@ -42,7 +42,7 @@ exports.refresh = async function refresh() {
 
          //let arena = (upcoming[i].arena === "" || upcoming[i].arena === undefined) ? "TBD" : upcoming[i].arena
 
-         await EPLGame.findOneAndUpdate({id : gameId}, {status: "In Play"}).exec()
+         await EPLgame.findOneAndUpdate({id : gameId}, {status: "In Play"}).exec()
          console.log("Updated game " + gameId + " to In Play.")
          //nbaUserService.notifications(gameInDb) add EPL notifications
 
@@ -79,6 +79,8 @@ updateDbWithLiveStats = async function (game) {
    let request = await axios.request(options) 
    request = request.data.response
 
+   console.log(request)
+
    let home = request[0]
    let away = request[1]
 
@@ -100,22 +102,75 @@ updateDbWithLiveStats = async function (game) {
 
    for (var i = 0; i < home.statistics.length; i++) {
       let statName = home.statistics[i].type
-      homeStats[statName] = home.statistics[i].value
+      let value = home.statistics[i].value
+      if (value == null) {
+         value = 0
+      }
+      else if (value[value.length - 1] == '%') {
+         value = value.substring(0, value.length - 1)
+      }
+      homeStats[statName] = value
    }
 
    for (var i = 0; i < away.statistics.length; i++) {
       let statName = away.statistics[i].type
-      awayStats[statName] = away.statistics[i].value
+      let value = away.statistics[i].value
+      if (value == null) {
+         value = 0
+      }
+      else if (value[value.length - 1] == '%') {
+         value = value.substring(0, value.length - 1)
+      }
+      awayStats[statName] = value
    }
    
+   console.log(homeStats)
 
    await EPLgame.updateOne({ id: parseInt(game.fixture.id, 10) }, 
       {
           homeScore: game.goals.home,
           awayScore: game.goals.away,
           playedGameStats: {
-              home: homeStats,
-              away: awayStats,
+              home: {
+               teamId: game.teams.home.id,
+               points: game.goals.home,
+               shotsOnGoal: homeStats['Shots on Goal'],
+               shotsOffGoal: homeStats['Shots off Goal'],
+               totalShots: homeStats['Total Shots'],
+               blockedShot: homeStats['Blocked Shots'],
+               shotsInsidebox: homeStats['Shots insidebox'],
+               shotsOutsidebox: homeStats['Shots outsidebox'],
+               fouls: homeStats['Fouls'],
+               cornerKicks: homeStats['Corner Kicks'],
+               offsides: homeStats['Offsides'],
+               ballPossessionPercentage: homeStats['Ball Possession'],
+               yellowCards: homeStats['Yellow Cards'],
+               redCards: homeStats['Red Cards'],
+               goalkeeperSaves: homeStats['Goalkeeper Saves'],
+               totalPasses: homeStats['Total passes'],
+               passesAccurate: homeStats['Passes accurate'],
+               passesPercentage: homeStats['Passes %'],
+              },
+              away: {
+               teamId: game.teams.away.id,
+               points: game.goals.away,
+               shotsOnGoal: awayStats['Shots on Goal'],
+               shotsOffGoal: awayStats['Shots off Goal'],
+               totalShots: awayStats['Total Shots'],
+               blockedShot: awayStats['Blocked Shots'],
+               shotsInsidebox: awayStats['Shots insidebox'],
+               shotsOutsidebox: awayStats['Shots outsidebox'],
+               fouls: awayStats['Fouls'],
+               cornerKicks: awayStats['Corner Kicks'],
+               offsides: awayStats['Offsides'],
+               ballPossessionPercentage: awayStats['Ball Possession'],
+               yellowCards: awayStats['Yellow Cards'],
+               redCards: awayStats['Red Cards'],
+               goalkeeperSaves: awayStats['Goalkeeper Saves'],
+               totalPasses: awayStats['Total passes'],
+               passesAccurate: awayStats['Passes accurate'],
+               passesPercentage: awayStats['Passes %'],
+              },
           },
           period: period,
           clock: game.fixture.status.elapsed,
