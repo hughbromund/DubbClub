@@ -4,6 +4,7 @@ const config = require(path.resolve(__dirname, "../config.json"));
 
 var alderaanService = require(path.resolve(__dirname, "../services/AlderaanService"));
 const EPLgame = require("../database/models/EPLgame");
+const EPLteam = require("../database/models/EPLteam");
 
 
 exports.refresh = async function refresh() {
@@ -56,6 +57,7 @@ exports.refresh = async function refresh() {
          console.log("Updated game " + gameId + " to Finished.")
          //let game = updateDbWithPlayedGameStats(gameId) // no longer required?
          await updateDbWithLiveStats(upcoming[i])
+         await updateDbWithTeamStats(upcoming[i])
       }
       else if (gameInDb.status === "In Play") {
          await updateDbWithLiveStats(upcoming[i])
@@ -78,8 +80,6 @@ updateDbWithLiveStats = async function (game) {
    };
    let request = await axios.request(options) 
    request = request.data.response
-
-   console.log(request)
 
    let home = request[0]
    let away = request[1]
@@ -123,8 +123,6 @@ updateDbWithLiveStats = async function (game) {
       }
       awayStats[statName] = value
    }
-   
-   console.log(homeStats)
 
    await EPLgame.updateOne({ id: parseInt(game.fixture.id, 10) }, 
       {
@@ -176,4 +174,58 @@ updateDbWithLiveStats = async function (game) {
           clock: game.fixture.status.elapsed,
       }
    ).exec()
+}
+
+updateDbWithTeamStats = async function (game) {
+   var options = {
+      method: 'GET',
+      url: "https://api-football-v1.p.rapidapi.com/v3/teams/statistics",
+         headers: {
+            'x-rapidapi-key': config.nbaApiKey,
+            'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
+         },
+      params: {
+         league: "39",
+         season: "2020",
+         team: game.teams.home.id
+      }
+   };
+   let request = await axios.request(options) 
+   request = request.data.response
+
+   await EPLteam.updateOne({id: request.team.id}, {
+      teamId: request.team.id,
+      teamName: request.team.name,
+      teamImage: request.team.logo,
+      wins: request.fixtures.wins.total,
+      draws: request.fixtures.draws.total,
+      losses: request.fixtures.loses.total,
+      lastGameID: game.fixture.id,
+      goalsFor: request.goals.for.total.total,
+      goalsAgainst: request.goals.against.total.total,
+      biggestWinAway: request.biggest.wins.away,
+      biggestWinHome: request.biggest.wins.home,
+      goalsAverageAway: request.goals.for.average.away,
+      goalsAverageHome: request.goals.for.average.home,
+   }, {upsert : true}).exec()
+
+   options.params.team = game.teams.away.id
+   let request = await axios.request(options) 
+   request = request.data.response
+
+   await EPLteam.updateOne({id: request.team.id}, {
+      teamId: request.team.id,
+      teamName: request.team.name,
+      teamImage: request.team.logo,
+      wins: request.fixtures.wins.total,
+      draws: request.fixtures.draws.total,
+      losses: request.fixtures.loses.total,
+      lastGameID: game.fixture.id,
+      goalsFor: request.goals.for.total.total,
+      goalsAgainst: request.goals.against.total.total,
+      biggestWinAway: request.biggest.wins.away,
+      biggestWinHome: request.biggest.wins.home,
+      goalsAverageAway: request.goals.for.average.away,
+      goalsAverageHome: request.goals.for.average.home,
+   }, {upsert : true}).exec()
 }
