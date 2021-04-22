@@ -6,6 +6,7 @@ import Table from "react-bootstrap/Table";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Card from "../Card/Card";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
+import Tooltip from "../Tooltip/Tooltip";
 
 import { GET_PLAYER_INFO } from "../../constants/Constants";
 import { getTeamByID } from "../../constants/NBAConstants";
@@ -228,18 +229,66 @@ export default class Player extends Component {
                   <tr>
                     <th>Season</th>
                     <th>Team</th>
-                    <th>AST</th>
-                    <th>BLK</th>
-                    <th>FGM</th>
-                    <th>FGA</th>
-                    <th>FGP</th>
-                    <th>FTM</th>
-                    <th>FTA</th>
-                    <th>FTP</th>
-                    <th>TPM</th>
-                    <th>TPA</th>
-                    <th>TPP</th>
-                    <th>MINS</th>
+                    <th>
+                      <Tooltip text="Assists" placement="top">
+                        AST
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Blocks" placement="top">
+                        BLK
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Field Goals Made" placement="top">
+                        FGM
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Field Goals Attempted" placement="top">
+                        FGA
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Field Goal Percentage" placement="top">
+                        FGP
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Free Throws Made" placement="top">
+                        FTM
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Free Throws Attempted" placement="top">
+                        FTA
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Free Throw Percentage" placement="top">
+                        FTP
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Three Pointers Made" placement="top">
+                        TPM
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Three Pointers Attempted" placement="top">
+                        TPA
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Three Pointer Percentage" placement="top">
+                        TPP
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Minutes Played" placement="top">
+                        MINS
+                      </Tooltip>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>{this.state.seasons.map(this.createSeasonRow)}</tbody>
