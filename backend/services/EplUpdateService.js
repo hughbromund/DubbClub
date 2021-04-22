@@ -118,6 +118,13 @@ updateDbWithLiveStats = async function (game) {
       }
       homeStats[statName] = value
    }
+   let homeLineScore = []
+   if (game.score.halftime.home != null) {
+      homeLineScore.push(game.score.halftime.home)
+   }
+   if (game.score.fulltime.home != null) {
+      homeLineScore.push(game.score.fulltime.home)
+   }
 
    for (var i = 0; i < away.statistics.length; i++) {
       let statName = away.statistics[i].type
@@ -131,6 +138,14 @@ updateDbWithLiveStats = async function (game) {
       awayStats[statName] = value
    }
 
+   let awayLineScore = []
+   if (game.score.halftime.away != null) {
+      awayLineScore.push(game.score.halftime.away)
+   }
+   if (game.score.fulltime.away != null) {
+      awayLineScore.push(game.score.fulltime.away)
+   }
+
    await EPLgame.updateOne({ id: parseInt(game.fixture.id, 10) }, 
       {
           homeScore: game.goals.home,
@@ -139,6 +154,7 @@ updateDbWithLiveStats = async function (game) {
               home: {
                teamId: game.teams.home.id,
                points: game.goals.home,
+               lineScore: homeLineScore,
                shotsOnGoal: homeStats['Shots on Goal'],
                shotsOffGoal: homeStats['Shots off Goal'],
                totalShots: homeStats['Total Shots'],
@@ -159,6 +175,7 @@ updateDbWithLiveStats = async function (game) {
               away: {
                teamId: game.teams.away.id,
                points: game.goals.away,
+               lineScore: awayLineScore,
                shotsOnGoal: awayStats['Shots on Goal'],
                shotsOffGoal: awayStats['Shots off Goal'],
                totalShots: awayStats['Total Shots'],

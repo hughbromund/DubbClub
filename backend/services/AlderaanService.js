@@ -141,26 +141,10 @@ exports.updateDbWithPredictions = async function(upcoming, predictions) {
         gameInDb = await EPLgame.findOne({ id : upcoming[i].fixture.id }).exec()
 
         if (gameInDb === null) {
-            console.log(predictions[i])
             const homeTeam = new EPLteam({
                 teamId: upcoming[i].teams.home.id,
                 teamName: upcoming[i].teams.home.name,
                 teamImage: upcoming[i].teams.home.logo,
-                /*
-                wins: 
-                draws: 
-                losses: 
-                standing: 
-                elo: ,
-                position: ,
-                lastGameID: ,
-                goalsFor: ,
-                goalsAgainst: ,
-                biggestWinAway: ,
-                biggestWinHome: ,
-                goalsAverageAway: ,
-                goalsAverageHome: ,
-                */
             });
     
             const awayTeam = new EPLteam({
@@ -177,18 +161,20 @@ exports.updateDbWithPredictions = async function(upcoming, predictions) {
                 arena: arena,
                 home: homeTeam,
                 away: awayTeam,
-                predictedWinner: predictions[i].pred_winner,
-                confidence: predictions[i].confidence,
+                homeWinProb: predictions[i].homeWinProb,
+                awayWinProb: predictions[i].awayWinProb,
+                drawProb: predictions[i].drawProb,
                 status: "Scheduled"
             });
     
             EPLgame.updateOne({ id : upcoming[i].fixture.id }, {$set : game}, {upsert : true}).exec()
         } else {
-            gameInDb = await EPLgame.findOneAndUpdate({ id : upcoming[i].fixture.id}, {predictedWinner: predictions[i].pred_winner,
-                confidence: predictions[i].confidence}).exec()
+            gameInDb = await EPLgame.findOneAndUpdate({ id : upcoming[i].fixture.id}, {
+                homeWinProb: predictions[i].homeWinProb,
+                awayWinProb: predictions[i].awayWinProb,
+                drawProb: predictions[i].drawProb,
+            }).exec()
         }
-
-        
     }
 }
 
