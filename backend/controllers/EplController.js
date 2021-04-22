@@ -1,6 +1,7 @@
 const path = require("path");
 
 var eplService = require(path.resolve(__dirname, "../services/EplService"));
+var eplUpdateService = require(path.resolve(__dirname, "../services/EplUpdateService"));
 
 exports.getUpcomingGameIds = async function (req, res, next) {
     try {
@@ -49,4 +50,14 @@ exports.getTeamStats = async function (req, res, next) {
       } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
+};
+
+
+exports.refresh = async function (req, res, next) {
+  try {
+    await eplUpdateService.refresh();
+    return res.status(200).json({"message":"Successful Refresh."});
+  } catch (e) {
+    return res.status(400).json({ status: 400, message: e.message });
+  }
 };
