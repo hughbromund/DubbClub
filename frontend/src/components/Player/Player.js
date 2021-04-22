@@ -270,17 +270,17 @@ export default class Player extends Component {
                       </Tooltip>
                     </th>
                     <th>
-                      <Tooltip text="Three Point's Made" placement="top">
+                      <Tooltip text="Three Pointers Made" placement="top">
                         TPM
                       </Tooltip>
                     </th>
                     <th>
-                      <Tooltip text="Three Point's Attempted" placement="top">
+                      <Tooltip text="Three Pointers Attempted" placement="top">
                         TPA
                       </Tooltip>
                     </th>
                     <th>
-                      <Tooltip text="Three Point Percentage" placement="top">
+                      <Tooltip text="Three Pointer Percentage" placement="top">
                         TPP
                       </Tooltip>
                     </th>
