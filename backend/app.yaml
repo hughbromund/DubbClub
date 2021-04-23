@@ -1,6 +1,6 @@
 service: backend
 env: standard
-runtime: nodejs10
+runtime: nodejs14
 env_variables:
   REACT_APP_RUNTIME: "production"
 automatic_scaling:
