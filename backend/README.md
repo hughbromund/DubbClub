@@ -669,11 +669,12 @@ Returns: list of upcoming gameIds, success/failure message
 
 Status: Working
 
-```
+
 JSON Result Format:
+```json
 {
-  "gameIds: [123, 456]
-  "message": "Success!"
+  gameIds: [123, 456],
+  message: "Success!"
 }
 ```
 ### /api/epl/getGamesByDate/:date
@@ -688,11 +689,12 @@ Returns: list of upcoming gameIds, success/failure message
 
 Status: Working
 
-```
+
 JSON Result Format:
+```json
 {
-  "gameIds: [123, 456]
-  "message": "Success!"
+  gameIds: [123, 456],
+  message: "Success!"
 }
 ```
 ### /api/epl/getGamesByTeamFromDb/:teamId
@@ -709,10 +711,10 @@ Status: Working
 
 
 JSON Result Format:
-```
+```json
 {
-  "gameIds: [123, 456]
-  "message": "Success!"
+  gameIds: [123, 456],
+  message: "Success!"
 }
 ```
 
@@ -729,7 +731,7 @@ Status: Working
 
 
 JSON Result Format:
-```
+```json
 {
 game: {
     id: 592804,
@@ -819,7 +821,7 @@ Status: Working
 
 
 JSON Result Format:
-```
+```json
 {
     "team": {
         "elo": 1500,
