@@ -656,3 +656,170 @@ JSON Result Format:
 {
   "message": "Email Sent!"
 }
+
+router.get("/api/epl/getUpcomingGamesFromDb", eplController.getUpcomingGameIds)
+router.get("/api/epl/getGamesByDate/:date", eplController.getGameIdsByDate)
+router.get("/api/epl/getGamesByTeamFromDb/:teamId", eplController.getGameIdsByTeam)
+router.get("/api/epl/getGameFromDb/:gameId", eplController.getGameDetailsByGameId)
+router.get("/api/epl/getTeamStats/:teamId", eplController.getTeamStats)
+
+### /api/epl/getUpcomingGamesFromDb
+
+GET
+gets list of upcoming EPL gameIds
+Requirements: nothing
+Returns: list of upcoming gameIds, success/failure message  
+Status: Working
+
+
+JSON Result Format:
+{
+  "gameIds: [123, 456]
+  "message": "Success!"
+}
+
+### /api/epl/getGamesByDate/:date
+
+GET
+gets list of upcoming EPL gameIds on specified date
+Requirements: specified date
+Returns: list of upcoming gameIds, success/failure message  
+Status: Working
+
+
+JSON Result Format:
+{
+  "gameIds: [123, 456]
+  "message": "Success!"
+}
+
+### /api/epl/getGamesByTeamFromDb/:teamId
+
+GET
+gets list of upcoming EPL gameIds by teamId
+Requirements: specified teamId
+Returns: list of upcoming gameIds, success/failure message  
+Status: Working
+
+
+JSON Result Format:
+{
+  "gameIds: [123, 456]
+  "message": "Success!"
+}
+
+### /api/epl/getGameFromDb/:gameId
+GET
+gets game info for a specified gameId
+Requirements: specified gameId
+Returns: all game info, votedteam, success/failure message  
+Status: Working
+
+
+JSON Result Format:
+{
+game: {
+    id: 592804,
+    date: "2021-04-12T17:00:00+00:00",
+    arena: "The Hawthorns",
+    home: {
+        teamId: 2649,
+        teamImage: "https://media.api-sports.io/football/teams/2649.png",
+        teamName: "Borac Cacak",
+    },
+    away: {
+        teamId: 2640,
+        teamImage: "https://media.api-sports.io/football/teams/2640.png",
+        teamName: "Radnicki Pirot",
+    },
+    status: "In Play",
+    homeScore: 0,
+    awayScore: 0,
+    homeWinProb: 0.3134534
+    awayWinProb: 0.3211455
+    drawProb: 0.3523237
+    homeVoters: [],
+    awayVoters: [],
+    livePredictions: [],
+    playedGameStats: {
+      home: {
+        teamId: 2649,
+        points: 3,
+        lineScore: [2, 3]
+        shotsOnGoal: 3,
+        shotsOffGoal: 2,
+        totalShots: 9,
+        blockedShot: 4,
+        shotsInsidebox: 4,
+        shotsOutsidebox: 5,
+        fouls: 22,
+        cornerKicks: 3,
+        offsides: 1,
+        ballPossessionPercentage: 32,
+        yellowCards: 5,
+        redCards: 1,
+        goalkeeperSaves: 0,
+        totalPasses: 242,
+        passesAccurate: 121,
+        passesPercentage: 50,
+      },
+      away: {
+        teamId: 2640,
+        points: 0,
+        lineScore: [0, 0]
+        shotsOnGoal: 5,
+        shotsOffGoal: 3,
+        totalShots: 11,
+        blockedShot: 3,
+        shotsInsidebox: 2,
+        shotsOutsidebox: 7,
+        fouls: 13,
+        cornerKicks: 2,
+        offsides: 3,
+        ballPossessionPercentage: 68,
+        yellowCards: 3,
+        redCards: 2,
+        goalkeeperSaves: 1,
+        totalPasses: 213,
+        passesAccurate: 130,
+        passesPercentage: 62,
+      }
+    },
+    period: 1,
+    clock: "55"
+  },
+  votedTeam: "none",
+  message: "Success!",
+}
+### /api/epl/getTeamStats/:teamId
+GET
+gets team info for a specified team
+Requirements: specified gameId
+Returns: all team info, success/failure message  
+Status: Working
+
+
+JSON Result Format:
+{
+    "team": {
+        "elo": 1500,
+        "position": 0,
+        "_id": "6080a71422b6482a6f236739",
+        "teamId": 49,
+        "__v": 0,
+        "biggestWinAway": "1-4",
+        "biggestWinHome": "4-0",
+        "draws": 10,
+        "goalsAgainst": 31,
+        "goalsAverageAway": "1.4",
+        "goalsAverageHome": "1.7",
+        "goalsFor": 50,
+        "lastGameID": 592798,
+        "losses": 7,
+        "teamImage": "https://media.api-sports.io/football/teams/49.png",
+        "teamName": "Chelsea",
+        "wins": 15
+    },
+    "message": "Success!"
+}
+
