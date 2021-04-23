@@ -5,7 +5,7 @@ var eplUpdateService = require(path.resolve(__dirname, "../services/EplUpdateSer
 
 exports.getUpcomingGameIds = async function (req, res, next) {
     try {
-        let result = await eplService.getUpcomingGameIdsStub();
+        let result = await eplService.getUpcomingGameIds();
         res.status(200).json(result);
       } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
@@ -36,7 +36,7 @@ exports.getGameIdsByTeam = async function (req, res, next) {
 
 exports.getGameDetailsByGameId = async function (req, res, next) {
     try {
-        let result = await eplService.getGameDetailsByGameIdStub(req.params.gameId);
+        let result = await eplService.getGameDetails(req.params.gameId, req.userId);
         res.status(200).json(result);
       } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
