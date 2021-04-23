@@ -1,5 +1,6 @@
 const path = require("path");
 const EPLgame = require("../database/models/EPLgame");
+const EPLteam = require("../database/models/EPLteam");
 
 exports.getUpcomingGameIdsStub = function() {
     result = []
@@ -235,6 +236,16 @@ exports.getTeamStatsStub = function(teamId) {
     return result;
 }
 
+
+exports.getTeamStats = async function(teamId) {
+    result = await EPLteam.findOne({teamId: teamId}).exec();
+
+    if (!result) {
+        return { message: "Team Not found." }
+    }
+
+    return {team: result, message: "Success!" };
+}
 
 exports.getGameDetails = async function (gameId, userId) {
     var start = new Date();

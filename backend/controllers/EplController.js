@@ -45,7 +45,7 @@ exports.getGameDetailsByGameId = async function (req, res, next) {
 
 exports.getTeamStats = async function (req, res, next) {
     try {
-        let result = await eplService.getTeamStatsStub(req.params.teamId);
+        let result = await eplService.getTeamStats(req.params.teamId);
         res.status(200).json(result);
       } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
