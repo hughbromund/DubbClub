@@ -666,57 +666,76 @@ router.get("/api/epl/getTeamStats/:teamId", eplController.getTeamStats)
 ### /api/epl/getUpcomingGamesFromDb
 
 GET
+
 gets list of upcoming EPL gameIds
+
 Requirements: nothing
-Returns: list of upcoming gameIds, success/failure message  
+
+Returns: list of upcoming gameIds, success/failure message
+
 Status: Working
 
-
+```
 JSON Result Format:
 {
   "gameIds: [123, 456]
   "message": "Success!"
 }
-
+```
 ### /api/epl/getGamesByDate/:date
 
 GET
+
 gets list of upcoming EPL gameIds on specified date
+
 Requirements: specified date
+
 Returns: list of upcoming gameIds, success/failure message  
+
 Status: Working
 
-
+```
 JSON Result Format:
 {
   "gameIds: [123, 456]
   "message": "Success!"
 }
-
+```
 ### /api/epl/getGamesByTeamFromDb/:teamId
 
 GET
+
 gets list of upcoming EPL gameIds by teamId
+
 Requirements: specified teamId
+
 Returns: list of upcoming gameIds, success/failure message  
+
 Status: Working
 
 
 JSON Result Format:
+```
 {
   "gameIds: [123, 456]
   "message": "Success!"
 }
+```
 
 ### /api/epl/getGameFromDb/:gameId
 GET
+
 gets game info for a specified gameId
+
 Requirements: specified gameId
+
 Returns: all game info, votedteam, success/failure message  
+
 Status: Working
 
 
 JSON Result Format:
+```
 {
 game: {
     id: 592804,
@@ -791,15 +810,22 @@ game: {
   votedTeam: "none",
   message: "Success!",
 }
+```
+
 ### /api/epl/getTeamStats/:teamId
 GET
+
 gets team info for a specified team
+
 Requirements: specified gameId
+
 Returns: all team info, success/failure message  
+
 Status: Working
 
 
 JSON Result Format:
+```
 {
     "team": {
         "elo": 1500,
@@ -822,4 +848,5 @@ JSON Result Format:
     },
     "message": "Success!"
 }
+```
 
