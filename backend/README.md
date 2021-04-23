@@ -657,12 +657,6 @@ JSON Result Format:
   "message": "Email Sent!"
 }
 
-router.get("/api/epl/getUpcomingGamesFromDb", eplController.getUpcomingGameIds)
-router.get("/api/epl/getGamesByDate/:date", eplController.getGameIdsByDate)
-router.get("/api/epl/getGamesByTeamFromDb/:teamId", eplController.getGameIdsByTeam)
-router.get("/api/epl/getGameFromDb/:gameId", eplController.getGameDetailsByGameId)
-router.get("/api/epl/getTeamStats/:teamId", eplController.getTeamStats)
-
 ### /api/epl/getUpcomingGamesFromDb
 
 GET
