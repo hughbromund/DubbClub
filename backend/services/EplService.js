@@ -1,7 +1,6 @@
 const path = require("path");
-const axios = require("axios");
-const config = require(path.resolve(__dirname, "../config.json"));
-
+const EPLgame = require("../database/models/EPLgame");
+const EPLteam = require("../database/models/EPLteam");
 
 exports.getUpcomingGameIdsStub = function() {
     result = []
@@ -36,26 +35,6 @@ exports.getGameIdsByTeamStub = function() {
 
 exports.getGameDetailsByGameIdStub = function(gameId) {
     var rand = Math.random()
-    /*
-    result = {
-        id: ,
-        date: ,
-        arena: ,
-        home: ,
-        away: ,
-        status: ,
-        playedGameStats: ,
-        homeScore: ,
-        awayScore: ,
-        period: ,
-        clock:  ,
-        predictedWinner: ,
-        confidence: ,
-        homeVoters: ,
-        awayVoters: ,
-
-    } 
-    */
 
     if (rand <= .33) {
 
@@ -85,76 +64,6 @@ exports.getGameDetailsByGameIdStub = function(gameId) {
             votedTeam: "none",
             message: "Success!",
         }
-        /*
-        result = { 
-            "fixture": {
-                "id": 592809,
-                "referee": null,
-                "timezone": "UTC",
-                "date": "2021-04-16T19:00:00+00:00",
-                "timestamp": 1618599600,
-                "periods": {
-                    "first": null,
-                    "second": null
-                },
-                "venue": {
-                    "id": 8560,
-                    "name": "Goodison Park",
-                    "city": "Liverpool"
-                },
-                "status": {
-                    "long": "Not Started",
-                    "short": "NS",
-                    "elapsed": null
-                }
-            },
-            "league": {
-                "id": 39,
-                "name": "Premier League",
-                "country": "England",
-                "logo": "https://media.api-sports.io/football/leagues/39.png",
-                "flag": "https://media.api-sports.io/flags/gb.svg",
-                "season": 2020,
-                "round": "Regular Season - 32"
-            },
-            "teams": {
-                "home": {
-                    "id": 45,
-                    "name": "Everton",
-                    "logo": "https://media.api-sports.io/football/teams/45.png",
-                    "winner": null
-                },
-                "away": {
-                    "id": 47,
-                    "name": "Tottenham",
-                    "logo": "https://media.api-sports.io/football/teams/47.png",
-                    "winner": null
-                }
-            },
-            "goals": {
-                "home": null,
-                "away": null
-            },
-            "score": {
-                "halftime": {
-                    "home": null,
-                    "away": null
-                },
-                "fulltime": {
-                    "home": null,
-                    "away": null
-                },
-                "extratime": {
-                    "home": null,
-                    "away": null
-                },
-                "penalty": {
-                    "home": null,
-                    "away": null
-                }
-            }
-        }
-        */
     }
     else if (rand <= .67) {
         result = {
@@ -228,77 +137,6 @@ exports.getGameDetailsByGameIdStub = function(gameId) {
             votedTeam: "none",
             message: "Success!",
         }
-
-        /*
-        result = {
-            "fixture": {
-                "id": 592804,
-                "referee": "Simon Hooper, England",
-                "timezone": "UTC",
-                "date": "2021-04-12T17:00:00+00:00",
-                "timestamp": 1618246800,
-                "periods": {
-                    "first": 1618246800,
-                    "second": 1618250400
-                },
-                "venue": {
-                    "id": 597,
-                    "name": "The Hawthorns",
-                    "city": "West Bromwich"
-                },
-                "status": {
-                    "long": "Match Finished",
-                    "short": "FT",
-                    "elapsed": 90
-                }
-            },
-            "league": {
-                "id": 39,
-                "name": "Premier League",
-                "country": "England",
-                "logo": "https://media.api-sports.io/football/leagues/39.png",
-                "flag": "https://media.api-sports.io/flags/gb.svg",
-                "season": 2020,
-                "round": "Regular Season - 31"
-            },
-            "teams": {
-                "home": {
-                    "id": 60,
-                    "name": "West Brom",
-                    "logo": "https://media.api-sports.io/football/teams/60.png",
-                    "winner": true
-                },
-                "away": {
-                    "id": 41,
-                    "name": "Southampton",
-                    "logo": "https://media.api-sports.io/football/teams/41.png",
-                    "winner": false
-                }
-            },
-            "goals": {
-                "home": 3,
-                "away": 0
-            },
-            "score": {
-                "halftime": {
-                    "home": 2,
-                    "away": 0
-                },
-                "fulltime": {
-                    "home": 3,
-                    "away": 0
-                },
-                "extratime": {
-                    "home": null,
-                    "away": null
-                },
-                "penalty": {
-                    "home": null,
-                    "away": null
-                }
-            }
-        }
-        */
     }
     else {
         result = {
@@ -372,75 +210,6 @@ exports.getGameDetailsByGameIdStub = function(gameId) {
             votedTeam: "none",
             message: "Success!",
         }
-        /*
-        result = {
-            "fixture": {
-                "date": "2021-04-07T14:00:00+00:00",
-                "id": 568987,
-                "periods": {
-                    "first": 1617804000,
-                    "second": NULL,
-                },
-                "referee": NULL,
-                "status": {
-                    "elapsed": 7,
-                    "long": "First Half",
-                    "short": "1H",
-                },
-                "timestamp": 1617804000,
-                "timezone": "UTC",
-                "venue": {
-                    "city": "Pirot",
-                    "id": 2909,
-                    "name": "Stadion Dragan Nikolić",
-                },
-            },
-            "goals":{
-                "away": 0,
-                "home": 0,
-            },
-            "league":{
-                "country": "Serbia",
-                "flag": "https://media.api-sports.io/flags/rs.svg",
-                "id": 287,
-                "logo": "https://media.api-sports.io/football/leagues/287.png",
-                "name": "Prva Liga",
-                "round": "Regular Season - 26",
-                "season": 2020,
-            },
-            "score":{
-                "extratime": {
-                    "away": NULL,
-                    "home": NULL,
-                },
-                "fulltime": {
-                    "away": NULL,
-                    "home": NULL,
-                },
-                "halftime": {
-                    "away": 0,
-                    "home": 0,
-                },
-                "penalty": {
-                    "away": NULL,
-                    "home": NULL,
-                },
-            },
-            "teams": {
-                "away": {
-                    "id": 2649,
-                    "logo": "https://media.api-sports.io/football/teams/2649.png",
-                    "name": "Borac Cacak",
-                    "winner": NULL,
-                },
-                "home": {
-                    "id":2640,
-                    "logo": "https://media.api-sports.io/football/teams/2640.png",
-                    "name": "Radnicki Pirot",
-                    "winner": NULL,
-                },
-            }
-        }*/
     }
     return result;
 }
@@ -465,4 +234,69 @@ exports.getTeamStatsStub = function(teamId) {
     }
 
     return result;
+}
+
+
+exports.getTeamStats = async function(teamId) {
+    result = await EPLteam.findOne({teamId: teamId}).exec();
+
+    if (!result) {
+        return { message: "Team Not found." }
+    }
+
+    return {team: result, message: "Success!" };
+}
+
+exports.getGameDetails = async function (gameId, userId) {
+    var start = new Date();
+    let result = await EPLgame.findOne({id: gameId}).exec();
+
+    if (!result) {
+        return { message: "Game Not found." }
+    }
+
+    var votedTeamVal = "none"
+  
+    if (userId) {
+        if (result.homeVoters.includes(userId)) {
+        votedTeamVal = "home"
+        }
+        else if (result.awayVoters.includes(userId)) {
+        votedTeamVal = "away"
+        }
+    }
+  
+      return {
+        votedTeam: votedTeamVal,
+        game: result,
+        message: "Successful!"
+      }
+  }
+
+  exports.getUpcomingGameIds = async function() {
+    let start = new Date()
+    let end = new Date()
+    end.setDate(end.getDate() + 4)
+    
+    let results = await EPLgame.find({date: {$gt: start, $lt:end}})
+    results = {gameIds: results.map(a => a.id), message: "Success!"}
+    return results
+  }
+
+  exports.getGameIdsByDate = async function(date) {
+    let start = new Date(date)
+    start.setHours(start.getHours() + 7)
+    let end = new Date(start)
+    end.setDate(end.getDate() + 1)
+    let results = await EPLgame.find({date: {$gte: start, $lte:end}})
+    results = {gameIds: results.map(a => a.id), message: "Success!"}
+    
+    return results;
+}
+
+exports.getGameIdsByTeam = async function(teamId) {
+    let results = await EPLgame.find({"$or": [{"playedGameStats.home.teamId": teamId}, {"playedGameStats.away.teamId": teamId}]})
+    results = {gameIds: results.map(a => a.id), message: "Success!"}
+
+    return results;
 }
