@@ -1,6 +1,6 @@
 service: default
 env: standard
-runtime: nodejs10
+runtime: nodejs14
 automatic_scaling:
   target_cpu_utilization: 0.90
   min_instances: 0
