@@ -279,6 +279,24 @@ exports.getGameDetails = async function (gameId, userId) {
     end.setDate(end.getDate() + 4)
     
     let results = await EPLgame.find({date: {$gt: start, $lt:end}})
-    results = {gameIds: results.map(a => a.id)}
+    results = {gameIds: results.map(a => a.id), message: "Success!"}
     return results
   }
+
+  exports.getGameIdsByDate = async function(date) {
+    let start = new Date(date)
+    start.setHours(start.getHours() + 7)
+    let end = new Date(start)
+    end.setDate(end.getDate() + 1)
+    let results = await EPLgame.find({date: {$gte: start, $lte:end}})
+    results = {gameIds: results.map(a => a.id), message: "Success!"}
+    
+    return results;
+}
+
+exports.getGameIdsByTeam = async function(teamId) {
+    let results = await EPLgame.find({"$or": [{"playedGameStats.home.teamId": teamId}, {"playedGameStats.away.teamId": teamId}]})
+    results = {gameIds: results.map(a => a.id), message: "Success!"}
+
+    return results;
+}
