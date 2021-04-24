@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
+import { toast } from "react-toastify";
 import Spinner from "react-bootstrap/Spinner";
 import Button from "../Button/Button";
 
@@ -38,6 +39,14 @@ export default class SmartButton extends Component {
     clearTimeout(this.timeoutID);
   }
   render() {
+    var successMessage = this.props.successMessage;
+    if (successMessage === undefined) {
+      successMessage = "Success";
+    }
+    var errorMessage = this.props.errorMessage;
+    if (errorMessage === undefined) {
+      errorMessage = "Error";
+    }
     var variant = this.props.variant;
     if (this.state.status === SUCCESS) {
       variant = "success";
@@ -53,8 +62,10 @@ export default class SmartButton extends Component {
           this.setState({ status: LOADING });
           var res = await this.props.runOnClick();
           if (res === true) {
+            toast.success(successMessage);
             this.setState({ status: SUCCESS });
           } else {
+            toast.error(errorMessage);
             this.setState({ status: ERROR });
           }
           this.timeoutID = setTimeout(() => {

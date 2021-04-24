@@ -15,6 +15,8 @@ export const RESET_PASSWORD_ROUTE = "/resetPassword";
 export const NBA_STANDINGS_ROUTE = "/nba/standings";
 export const GRAPH_TEST = "/graph";
 export const VERIFY_EMAIL_ROUTE = "/verifyEmail";
+export const TEAM_INFO_ROUTE = "/team";
+export const PLAYER_INFO_ROUTE = "/player";
 
 /* Base URL for Backend */
 export var BASE = "https://api.dubb.club";
@@ -56,6 +58,15 @@ export const GET_LIVE_GAME_PREDS = BASE + "/api/nba/getLiveGamePreds";
 export const GET_DASHBOARD = BASE + "/api/nba/getDashboard";
 export const SEND_VERIFY_EMAIL = BASE + "/api/user/sendVerifyEmail";
 export const VERIFY_EMAIL = BASE + "/api/user/verifyEmail";
+export const AUTOCOMPLETE_SEARCH = BASE + "/api/autoCompleteStub";
+export const GET_PLAYER_INFO = BASE + "/api/nba/playerStub";
+
+/* EPL constants */
+export const EPL_GET_UPCOMING_GAMES = BASE + "/api/epl/getUpcomingGamesFromDb";
+export const EPL_GET_GAMES_BY_DATE = BASE + "/api/epl/getGamesByDate";
+export const EPL_GET_GAMES_BY_TEAM = BASE + "/api/epl/getGamesByTeamFromDb";
+export const EPL_GET_GAME_BY_ID = BASE + "/api/epl/getGameFromDb";
+export const EPL_GET_TEAM_STATS = BASE + "/api/epl/getTeamStats";
 
 /* Date options to convert to UTC for Game Cards */
 export const DATE_OPTIONS = {
@@ -70,3 +81,7 @@ export const REFRESH_RATE = 60000;
 export const SCHEDULED = "Scheduled";
 export const LIVE = "In Play";
 export const FINISHED = "Finished";
+
+export const NBA = "NBA";
+export const EPL = "EPL";
+export const MLB = "MLB";

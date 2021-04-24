@@ -1,8 +1,7 @@
-service: backend
+service: alderaan
 env: standard
-runtime: nodejs14
-env_variables:
-  REACT_APP_RUNTIME: "production"
+runtime: python38
+instance_class: F4_1G
 automatic_scaling:
   target_cpu_utilization: 0.90
   min_instances: 0

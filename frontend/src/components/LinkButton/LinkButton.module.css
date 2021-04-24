@@ -1,0 +1,7 @@
+.LinkButton,
+.LinkButton:hover {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--text-primary);
+  text-align: center;
+}

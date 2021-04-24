@@ -4,7 +4,7 @@
   padding: var(--default-padding);
   border-radius: var(--border-radius);
   margin: var(--default-margin);
-  max-width: var(--default-column-width);
+  /* max-width: var(--default-column-width); */
   text-align: left;
   transition: var(--default-transition);
 }

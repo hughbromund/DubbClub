@@ -1,5 +1,6 @@
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import React, { Component } from "react";
+import { ToastContainer, toast, Slide } from "react-toastify";
 
 import AuthContext from "./contexts/AuthContext";
 
@@ -13,10 +14,14 @@ import NBAStandings from "./components/NBAStandings/NBAStandings";
 import GameInfoCard from "./components/GameInfoCard/GameInfoCard";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Search from "./components/Search/Search";
+import AutoSearch from "./components/AutoSearch/AutoSearch";
 import Account from "./components/Account/Account";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import PredictionGraph from "./components/PredictionGraph/PredictionGraph";
 import VerifyEmail from "./components/VerifyEmail/VerifyEmail";
+import Team from "./components/Team/Team";
+import Player from "./components/Player/Player";
+
 import "./constants/Constants";
 
 import classes from "./App.module.css";
@@ -39,6 +44,8 @@ import {
   NBA_STANDINGS_ROUTE,
   GRAPH_TEST,
   VERIFY_EMAIL_ROUTE,
+  TEAM_INFO_ROUTE,
+  PLAYER_INFO_ROUTE,
 } from "./constants/Constants";
 library.add(fab);
 library.add(fas);
@@ -55,6 +62,18 @@ class App extends Component {
     // console.log(this.context.isLoggedIn);
     return (
       <div>
+        <ToastContainer
+          transition={Slide}
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <Router>
           <Navigation />
 
@@ -63,7 +82,7 @@ class App extends Component {
               <Route exact path={HOME_ROUTE} component={Home} />
               <Route path={LOGIN_ROUTE} component={Login} />
               <Route path={REGISTER_ROUTE} component={Register} />
-              <Route path={SEARCH_ROUTE + "/:id?"} component={Search} />
+              <Route path={SEARCH_ROUTE + "/:query?"} component={AutoSearch} />
               <Route path={VOTING_ROUTE} component={Voting} />
               <Route path={NBA_STANDINGS_ROUTE} component={NBAStandings} />
               <Route
@@ -74,6 +93,16 @@ class App extends Component {
                 exact
                 path={GAME_INFO_ROUTE + "/:id"}
                 component={ExpandedGameInfo}
+              />
+              <Route
+                exact
+                path={TEAM_INFO_ROUTE + "/:league?" + "/:id?"}
+                component={Team}
+              />
+              <Route
+                exact
+                path={PLAYER_INFO_ROUTE + "/:id?"}
+                component={Player}
               />
               <Route path={GRAPH_TEST} component={PredictionGraph} />
               <Route

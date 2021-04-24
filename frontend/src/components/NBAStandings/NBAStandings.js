@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { GET_NBA_STANDINGS, SEARCH_ROUTE } from "../../constants/Constants";
+import {
+  GET_NBA_STANDINGS,
+  SEARCH_ROUTE,
+  TEAM_INFO_ROUTE,
+} from "../../constants/Constants";
 import { getTeamByID } from "../../constants/NBAConstants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Container from "react-bootstrap/Container";
@@ -75,7 +79,7 @@ export default class NBAStandings extends Component {
             <img width="25" src={this.state.east[i].teamImage} />{" "}
             <Link
               className={classes.table}
-              to={SEARCH_ROUTE + `/${this.state.east[i].teamId}`}
+              to={TEAM_INFO_ROUTE + "/NBA" + `/${this.state.east[i].teamId}`}
             >
               {this.state.east[i].teamName}
             </Link>
@@ -97,7 +101,7 @@ export default class NBAStandings extends Component {
             <img width="25" src={this.state.west[i].teamImage} />{" "}
             <Link
               className={classes.table}
-              to={SEARCH_ROUTE + `/${this.state.west[i].teamId}`}
+              to={TEAM_INFO_ROUTE + "/NBA" + `/${this.state.west[i].teamId}`}
             >
               {this.state.west[i].teamName}
             </Link>
