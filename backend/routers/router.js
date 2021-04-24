@@ -117,8 +117,9 @@ router.get("/api/nba/getGamesByDateFromDb/:date", nbaController.getGamesByDateFr
 //get list of all gameIds from given team from db
 router.get("/api/nba/getGamesByTeamFromDb/:teamId", nbaController.getGamesByTeamFromDb)
 
-//get list of all gameIds from given team from db
-router.get("/api/nba/playerStub", nbaController.playerStub)
+//get player object from db
+router.get("/api/nba/getPlayer/:playerId", nbaController.getPlayer)
+
 //get list of all gameIds from given team from db
 router.get("/api/autoCompleteStub", searchController.autoCompleteStub)
 
