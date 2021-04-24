@@ -5,11 +5,52 @@ const EPLteam = require("../database/models/EPLteam");
 const EPLgame = require("../database/models/EPLgame");
 
 
+function getUpdatedElos(hElo, aElo, goalDiff) {
+    Oh = 0
+    Oa = 0
+    if (goalDiff < 0) {
+        Oh = 0
+        Oa = 1
+    } else if (goalDiff == 0) {
+        Oh = 0.5
+        Oa = 0.5
+    } else {
+        Oh = 1
+        Oa = 0
+    }
+
+    K = 20
+    homeAd = 65
+    dr = hElo - aElo + homeAd
+    Eh = 1.0 / (1 + Math.pow(10, (-dr / 400.0)))
+    Ea = 1 - Eh
+
+    G = 1
+    if (Math.abs(goalDiff) > 1) {
+        G = Math.log2(1.7 * Math.abs(goalDiff)) * 2 / (2 + 0.001 * dr)
+    }
+
+    hEloPost = hElo + K * G * (Oh - Eh)
+    aEloPost = aElo + K * G * (Oa - Ea)
+
+    return [hEloPost, aEloPost]
+}
+
 //async not working with mustafar
 
 exports.getAlderaanPredictions = async function(upcoming) {
     //upcoming contains all data from the api
     //will likely require you lookup each team from database as needed before call to alderaan.
+
+    var fixtureOptions = {
+        method: 'GET',
+        url: "https://api-football-v1.p.rapidapi.com/v3/fixtures", //+ start.toISOString().slice(0,10),
+        headers: {
+            'x-rapidapi-key': config.nbaApiKey,
+            'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
+        },
+        params: {}
+    }
 
     let results = []
     //temp results
@@ -17,6 +58,11 @@ exports.getAlderaanPredictions = async function(upcoming) {
 
         homeId = upcoming[i].teams.home.id
         awayId = upcoming[i].teams.away.id
+
+        console.log(upcoming[i].teams.home.name)
+        console.log(upcoming[i].teams.away.name)
+        console.log(upcoming[i].fixture.id)
+
         fixtureSeason = upcoming[i].league.season
         fixtureLeague = upcoming[i].league.id
 
@@ -78,10 +124,141 @@ exports.getAlderaanPredictions = async function(upcoming) {
             aWinPercent5 = parseFloat(aCount / 5.0)
         }
 
-        // TODO: fill ELO's from DB
+        // Get last game ID's from DB
+        home = await EPLteam.findOne({ teamId : parseInt(homeId) }).exec()
+        away = await EPLteam.findOne({ teamId : parseInt(awayId) }).exec()
+
+        var hLastGameDB = home.lastGameID
+        var aLastGameDB = away.lastGameID
+
+        // Get home recorded last game
+        var apiParams = {
+            id: hLastGameDB
+        }
+        fixtureOptions.params = apiParams
+        request = await axios.request(fixtureOptions)
+        hRecordedGameObj = request.data.response[0]
+
+        // Get away recorded last game
+        apiParams = {
+            id: aLastGameDB
+        }
+        fixtureOptions.params = apiParams
+        request = await axios.request(fixtureOptions)
+        aRecordedGameObj = request.data.response[0]
+
+        // Get home last game
+        apiParams = {
+            league: fixtureLeague,
+            last: 1,
+            team: homeId,
+            season: fixtureSeason,
+        }
+        fixtureOptions.params = apiParams
+        request = await axios.request(fixtureOptions)
+        hLatestGameObj = request.data.response[0]
+
+        // Get home last game
+        apiParams = {
+            league: fixtureLeague,
+            last: 1,
+            team: awayId,
+            season: fixtureSeason,
+        }
+        fixtureOptions.params = apiParams
+        request = await axios.request(fixtureOptions)
+        aLatestGameObj = request.data.response[0]
+
+        hDBGameDate = new Date(hRecordedGameObj.fixture.date)
+        aDBGameDate = new Date(aRecordedGameObj.fixture.date)
+        hLatestDate = new Date(hLatestGameObj.fixture.date)
+        aLatestDate = new Date(aLatestGameObj.fixture.date)
+
+        if (hDBGameDate < hLatestDate) {
+            // Update elos for home team latest game fixture
+            var goalDiff = hLatestGameObj.goals.home - hLatestGameObj.goals.away
+            var hLatestHTeam = await EPLteam.findOne({ teamId : parseInt(hLatestGameObj.teams.home.id) }).exec()
+            var hLatestATeam = await EPLteam.findOne({ teamId : parseInt(hLatestGameObj.teams.away.id) }).exec()
+            var hLatestHElo = hLatestHTeam.elo
+            var hLatestAElo = hLatestATeam.elo
+
+            var elos = getUpdatedElos(hLatestHElo, hLatestAElo, goalDiff)
+
+            var otherId = -1
+
+            if (hLatestGameObj.teams.home.id == homeId) {
+                EPLteam.updateOne({ teamId : homeId }, {$set : {elo: elos[0], lastGameID: hLatestGameObj.fixture.id}}, {upsert : true}).exec()
+                otherId = hLatestGameObj.teams.away.id
+            } else {
+                EPLteam.updateOne({ teamId : homeId }, {$set : {elo: elos[1], lastGameID: hLatestGameObj.fixture.id}}, {upsert : true}).exec()
+                otherId = hLatestGameObj.teams.home.id
+            }
+
+            // Check if other team's last game should be updated
+            otherTeam = await EPLteam.findOne({ teamId : parseInt(otherId) }).exec()
+            apiParams = {
+                id: otherTeam.lastGameID
+            }
+            fixtureOptions.params = apiParams
+            request = await axios.request(fixtureOptions)
+            var otherLastGame = request.data.response[0]
+            otherGameDate = new Date(otherLastGame.fixture.date)
+
+            if (otherGameDate < hLatestDate) {
+                if (hLatestGameObj.teams.home.id == homeId) {
+                    EPLteam.updateOne({ teamId : otherId }, {$set : {elo: elos[1], lastGameId: hLatestGameObj.fixture.id}}, {upsert : true}).exec()
+                } else {
+                    EPLteam.updateOne({ teamId : otherId }, {$set : {elo: elos[0], lastGameID: hLatestGameObj.fixture.id}}, {upsert : true}).exec()
+                }
+            }
+        }
+
+        if (aDBGameDate < aLatestDate) {
+            // Update elos for away team latest game fixture
+            var goalDiff = aLatestGameObj.goals.home - aLatestGameObj.goals.away
+            var aLatestHTeam = await EPLteam.findOne({ teamId : parseInt(aLatestGameObj.teams.home.id) }).exec()
+            var aLatestATeam = await EPLteam.findOne({ teamId : parseInt(aLatestGameObj.teams.away.id) }).exec()
+            var aLatestHElo = aLatestHTeam.elo
+            var aLatestAElo = aLatestATeam.elo
+
+            var elos = getUpdatedElos(aLatestHElo, aLatestAElo, goalDiff)
+
+            var otherId = -1
+
+            if (aLatestGameObj.teams.home.id == awayId) {
+                EPLteam.updateOne({ teamId : awayId }, {$set : {elo: elos[0], lastGameID: aLatestGameObj.fixture.id}}, {upsert : true}).exec()
+                otherId = aLatestGameObj.teams.away.id
+            } else {
+                EPLteam.updateOne({ teamId : awayId }, {$set : {elo: elos[1], lastGameID: aLatestGameObj.fixture.id}}, {upsert : true}).exec()
+                otherId = aLatestGameObj.teams.home.id
+            }
+
+            // Check if other team's last game should be updated
+            otherTeam = await EPLteam.findOne({ teamId : parseInt(otherId) }).exec()
+            apiParams = {
+                id: otherTeam.lastGameID
+            }
+            fixtureOptions.params = apiParams
+            request = await axios.request(fixtureOptions)
+            var otherLastGame = request.data.response[0]
+            otherGameDate = new Date(otherLastGame.fixture.date)
+
+            if (otherGameDate < hLatestDate) {
+                if (aLatestGameObj.teams.home.id == awayId) {
+                    EPLteam.updateOne({ teamId : otherId }, {$set : {elo: elos[1], lastGameID: aLatestGameObj.fixture.id}}, {upsert : true}).exec()
+                } else {
+                    EPLteam.updateOne({ teamId : otherId }, {$set : {elo: elos[0], lastGameID: aLatestGameObj.fixture.id}}, {upsert : true}).exec()
+                }
+            }
+
+        }
+
+        home = await EPLteam.findOne({ teamId : parseInt(homeId) }).exec()
+        away = await EPLteam.findOne({ teamId : parseInt(awayId) }).exec()
+
         let alderaan_params = {
-            "hEloBefore": 1500.0,
-            "aEloBefore": 1500.0,
+            "hEloBefore": home.elo,
+            "aEloBefore": away.elo,
             "hMatchPlayed": homeData.fixtures.played.total,
             "aMatchPlayed": awayData.fixtures.played.total,
             "hGoalDiff": homeData.goals.for.total.total - homeData.goals.against.total.total,
@@ -94,9 +271,7 @@ exports.getAlderaanPredictions = async function(upcoming) {
                 (awayData.goals.for.total.total - awayData.goals.against.total.total)
         }
     
-        // TODO: change to deployed URL
         let url = "https://alderaan-dot-dubbclub.uc.r.appspot.com/predicteplpregame"
-        // let url = "http://127.0.0.1:5000/predicteplpregame"
         res = await axios.get(url, {params: alderaan_params})
 
         console.log(res.data)
