@@ -124,8 +124,6 @@ export default class Home extends Component {
       );
       EPLCards.push(temp);
     }
-    console.log(this.state.EPLGames);
-    console.log(EPLCards);
     return (
       <div>
         <Container fluid>

@@ -469,10 +469,6 @@ export default class GameInfoCard extends Component {
       homeAwayWinner = "away";
     }
 
-    if (this.props.league === EPL) {
-      console.log(this.props);
-    }
-
     // TODO Remove this
     if (this.props.league === EPL && this.state.status === LIVE) {
       return <div />;
