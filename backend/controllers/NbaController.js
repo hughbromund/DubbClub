@@ -153,9 +153,27 @@ exports.getGamesByTeamFromDb = async function (req, res, next) {
     }
 }
 
-exports.playerStub = async function (req, res, next) {
+exports.getPlayer = async function (req, res, next) {
     try {
-        let result = await nbaPlayerService.playerStub();
+        let result = await nbaPlayerService.getPlayer(req.params.playerId);
+        return res.status(200).json(result)
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+exports.updatePlayer = async function (req, res, next) {
+    try {
+        let result = await nbaPlayerService.updatePlayerById(req.params.playerId);
+        return res.status(200).json(result)
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+exports.updatePlayersByGame = async function (req, res, next) {
+    try {
+        let result = await nbaPlayerService.updatePlayersByGame(req.params.gameId);
         return res.status(200).json(result)
     } catch(e) {
         return res.status(400).json({ status: 400, message: e.message });

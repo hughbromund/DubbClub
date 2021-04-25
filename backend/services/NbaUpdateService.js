@@ -7,6 +7,8 @@ const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
 const nbaService = require(path.resolve(__dirname, "../services/NbaService.js"));
 const nbaUserService = require(path.resolve(__dirname, "../services/NbaUserService"));
 const mustafarService = require(path.resolve(__dirname, "../services/MustafarService.js"));
+const nbaPlayerService = require(path.resolve(__dirname, "../services/NbaPlayerService.js"));
+
 
 
 exports.refresh = async function refresh() {
@@ -56,6 +58,11 @@ exports.refresh = async function refresh() {
          await NBAgame.findOneAndUpdate({id : gameId}, {status: "Finished"}).exec()
          console.log("Updated game " + gameId + " to Finished.")
          let game = updateDbWithPlayedGameStats(gameId)
+         try {
+            let updated = await nbaPlayerService.updatePlayersByGame(gameId)
+         } catch (e) {
+            console.log("update players didn't work " + e.message)
+         }
       }
 
       if (upcoming[i].statusGame === "In Play") {

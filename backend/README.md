@@ -36,6 +36,109 @@ JSON Format:
   }  
 ]
 
+### /api/nba/getPlayer/:playerId
+
+GET  
+gets player object from db  
+Requirements: playerId    
+Returns: player object  
+Status: Working  
+Issues: if player can't be correlated, won't be found. If they haven't played in a while  
+there won't be a most recent game  
+
+JSON Format:
+
+{  
+  "playerInfo": {  
+    "firstName": "Tyreke",  
+    "lastName": "Evans",  
+    "yearsPro": 0,  
+    "collegeName": "Memphis",  
+    "country": "USA",  
+    "playerId": 163,  
+    "externPlayerId": 150,  
+    "dateOfBirth": "1989-09-19T00:00:00.000Z",  
+    "affiliation": "Memphis/USA",  
+    "startNba": "2009",  
+    "heightInMeters": null,  
+    "weightInKilograms": null,  
+    "jersey": 12,  
+    "active": 0,  
+    "pos": ""  
+  },  
+  "career": {  
+    "season": "historical",  
+    "points": 15.734410774410776,  
+    "min": "303:9",  
+    "fgm": 5.907777777777778,  
+    "fga": 13.4329797979798,  
+    "fgp": 0.43766498316498315,  
+    "ftm": 3.076414141414142,  
+    "fta": 4.067037037037037,  
+    "ftp": 0.7540808080808081,  
+    "tpm": 0.8409595959595959,  
+    "tpa": 2.6064309764309765,  
+    "tpp": 0.30104882154882157,  
+    "offReb": 0.8443939393939395,  
+    "defReb": 3.7365656565656566,  
+    "reb": 4.5810942760942766,  
+    "assists": 4.800488215488215,  
+    "pFouls": 2.2044444444444444,  
+    "steals": 1.235808080808081,  
+    "turnovers": 2.506279461279461,  
+    "blocks": 0.3749494949494949  
+  },  
+  "mostRecentGame": {  
+    "points": 21,  
+    "min": "25:52",  
+    "fgm": 7,  
+    "fga": 18,  
+    "fgp": 38.9,  
+    "ftm": 4,  
+    "fta": 4,  
+    "ftp": 100,  
+    "tpm": 3,  
+    "tpa": 7,  
+    "tpp": 42.9,  
+    "offReb": 0,  
+    "defReb": 2,  
+    "assists": 1,  
+    "pFouls": 4,  
+    "steals": 1,  
+    "turnovers": 2,  
+    "blocks": 0  
+  },
+  "_id": "6083a93a22b6482a6fb13a5b",  
+  "__v": 0,  
+  "seasons": [  
+    {  
+      "_id": "6083a93df9653b4ea0c02540",  
+      "teamId": 15,  
+      "teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/c/cf/Pacers_de_l%27Indiana_logo.svg/1180px-Pacers_de_l%27Indiana_logo.svg.png",  
+      "season": "2018",  
+      "points": 10.23,  
+      "min": "20:19",  
+      "fgm": 3.72,  
+      "fga": 9.57,  
+      "fgp": 0.389,  
+      "ftm": 1.67,  
+      "fta": 2.32,  
+      "ftp": 0.719,  
+      "tpm": 1.12,  
+      "tpa": 3.13,  
+      "tpp": 0.356,  
+      "offReb": 0.48,  
+      "defReb": 2.43,   
+      "reb": 2.91,  
+      "assists": 2.41,  
+      "pFouls": 1.71,  
+      "steals": 0.84,  
+      "turnovers": 1.71,  
+      "blocks": 0.26  
+    }  
+  ]  
+}
+
 ### /api/nba/getUpcomingGameIdsFromDb
 
 GET  
