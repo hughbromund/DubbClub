@@ -54,10 +54,10 @@ exports.getTeamStats = async function (req, res, next) {
 
 
 exports.refresh = async function (req, res, next) {
-  try {
+  //try {
     await eplUpdateService.refresh();
     return res.status(200).json({"message":"Successful Refresh."});
-  } catch (e) {
-    return res.status(400).json({ status: 400, message: e.message });
-  }
+  //} catch (e) {
+   // return res.status(400).json({ status: 400, message: e.message });
+  //}
 };
