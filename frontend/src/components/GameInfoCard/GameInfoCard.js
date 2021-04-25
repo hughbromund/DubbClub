@@ -142,7 +142,10 @@ export default class GameInfoCard extends Component {
   }
 
   renderScore() {
-    if (this.state.playedGameStats !== undefined) {
+    if (
+      this.state.playedGameStats !== undefined &&
+      this.state.playedGameStats.away.lineScore.length !== 0
+    ) {
       return (
         <div>
           <br />
@@ -288,10 +291,10 @@ export default class GameInfoCard extends Component {
     var res = await fetch(EPL_GET_GAME_BY_ID + `/${gameID}`, {});
     var body = await res.json();
     if (res.status === 200) {
-      var predictedWinner = body.game.home.teamName;
-      if (body.game.away.teamId === body.game.predictedWinner) {
-        predictedWinner = body.game.away.teamName;
-      }
+      var predictedWinner = body.game.home[0].teamName;
+      // if (body.game.away.teamId === body.game.predictedWinner) {
+      //   predictedWinner = body.game.away[0].teamName;
+      // }
 
       var date = new Date(body.game.date).toLocaleDateString(
         "en-US",
@@ -307,16 +310,16 @@ export default class GameInfoCard extends Component {
         arena: body.game.arena,
         predictedWinner: predictedWinner,
         predictionConfidence: Number((body.game.confidence * 100).toFixed(2)),
-        homeTeam: body.game.home.teamName,
-        awayTeam: body.game.away.teamName,
-        homeHex: getColorByTeam(body.game.home.teamName),
-        awayHex: getColorByTeam(body.game.away.teamName),
-        homeLogo: body.game.home.teamImage,
-        awayLogo: body.game.away.teamImage,
+        homeTeam: body.game.home[0].teamName,
+        awayTeam: body.game.away[0].teamName,
+        homeHex: getColorByTeam(body.game.home[0].teamName),
+        awayHex: getColorByTeam(body.game.away[0].teamName),
+        homeLogo: body.game.home[0].teamImage,
+        awayLogo: body.game.away[0].teamImage,
         gameDate: date,
         gameTime: time,
-        homeId: body.game.home.teamId,
-        awayId: body.game.away.teamId,
+        homeId: body.game.home[0].teamId,
+        awayId: body.game.away[0].teamId,
         playedGameStats: body.game.playedGameStats,
         status: body.game.status,
       });
@@ -464,6 +467,10 @@ export default class GameInfoCard extends Component {
 
     if (this.state.predictedWinner === this.state.awayTeam) {
       homeAwayWinner = "away";
+    }
+
+    if (this.props.league === EPL) {
+      console.log(this.props);
     }
 
     // TODO Remove this

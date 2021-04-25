@@ -45,7 +45,7 @@ export default class Home extends Component {
     var res = await fetch(EPL_GET_UPCOMING_GAMES, {});
     var body = await res.json();
     this.setState({
-      EPLGames: body,
+      EPLGames: body.gameIds,
     });
   }
 
@@ -124,6 +124,8 @@ export default class Home extends Component {
       );
       EPLCards.push(temp);
     }
+    console.log(this.state.EPLGames);
+    console.log(EPLCards);
     return (
       <div>
         <Container fluid>
