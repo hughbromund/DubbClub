@@ -1,143 +1,150 @@
-##  Endpoints for Game Data
+# Endpoints for Dubb Club
+
+## Endpoints for Game Data
 
 ### /api/nba/getBasicGameData DEPRECATED - PLEASE USE getUpcomingGamesFromDb
 
 GET  
 gets all games from the NBA in the next three days  
-Requirements: none 
+Requirements: none
 Returns: JSON list of game info and each team's info  
 Status: Working  
 Issues: Doesn't currently have start time, uses UTC to find games,
 
-JSON Format:  
-[  
+JSON Format:
+
+```json
+[
   {
-    "gameId": "8608",  
+    "gameId": "8608",
     "date": "2021-03-02T03:30:00.000Z",
-    "arena": "TD Garden",  
-    "home": {  
-      "teamId": "2",  
-      "teamName": "Boston Celtics",  
-      "teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/6/65/Celtics_de_Boston_logo.svg/1024px-Celtics_de_Boston_logo.svg.png",  
-      "wins": "13",  
-      "losses": "13",  
-      "conferenceName": "east",  
-      "place": "4"  
-    },  
-    "away": {  
-      "teamId": "9",  
-      "teamName": "Denver Nuggets",  
-      "teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/3/35/Nuggets_de_Denver_2018.png/180px-Nuggets_de_Denver_2018.png",  
-      "wins": "15",  
-      "losses": "11",  
-      "conferenceName": "west",  
-      "place": "7"  
-    }  
-  }  
+    "arena": "TD Garden",
+    "home": {
+      "teamId": "2",
+      "teamName": "Boston Celtics",
+      "teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/6/65/Celtics_de_Boston_logo.svg/1024px-Celtics_de_Boston_logo.svg.png",
+      "wins": "13",
+      "losses": "13",
+      "conferenceName": "east",
+      "place": "4"
+    },
+    "away": {
+      "teamId": "9",
+      "teamName": "Denver Nuggets",
+      "teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/3/35/Nuggets_de_Denver_2018.png/180px-Nuggets_de_Denver_2018.png",
+      "wins": "15",
+      "losses": "11",
+      "conferenceName": "west",
+      "place": "7"
+    }
+  }
 ]
+```
 
 ### /api/nba/getPlayer/:playerId
 
 GET  
 gets player object from db  
-Requirements: playerId    
+Requirements: playerId  
 Returns: player object  
 Status: Working  
 Issues: if player can't be correlated, won't be found. If they haven't played in a while  
-there won't be a most recent game  
+there won't be a most recent game
 
 JSON Format:
 
-{  
-  "playerInfo": {  
-    "firstName": "Tyreke",  
-    "lastName": "Evans",  
-    "yearsPro": 0,  
-    "collegeName": "Memphis",  
-    "country": "USA",  
-    "playerId": 163,  
-    "externPlayerId": 150,  
-    "dateOfBirth": "1989-09-19T00:00:00.000Z",  
-    "affiliation": "Memphis/USA",  
-    "startNba": "2009",  
-    "heightInMeters": null,  
-    "weightInKilograms": null,  
-    "jersey": 12,  
-    "active": 0,  
-    "pos": ""  
-  },  
-  "career": {  
-    "season": "historical",  
-    "points": 15.734410774410776,  
-    "min": "303:9",  
-    "fgm": 5.907777777777778,  
-    "fga": 13.4329797979798,  
-    "fgp": 0.43766498316498315,  
-    "ftm": 3.076414141414142,  
-    "fta": 4.067037037037037,  
-    "ftp": 0.7540808080808081,  
-    "tpm": 0.8409595959595959,  
-    "tpa": 2.6064309764309765,  
-    "tpp": 0.30104882154882157,  
-    "offReb": 0.8443939393939395,  
-    "defReb": 3.7365656565656566,  
-    "reb": 4.5810942760942766,  
-    "assists": 4.800488215488215,  
-    "pFouls": 2.2044444444444444,  
-    "steals": 1.235808080808081,  
-    "turnovers": 2.506279461279461,  
-    "blocks": 0.3749494949494949  
-  },  
-  "mostRecentGame": {  
-    "points": 21,  
-    "min": "25:52",  
-    "fgm": 7,  
-    "fga": 18,  
-    "fgp": 38.9,  
-    "ftm": 4,  
-    "fta": 4,  
-    "ftp": 100,  
-    "tpm": 3,  
-    "tpa": 7,  
-    "tpp": 42.9,  
-    "offReb": 0,  
-    "defReb": 2,  
-    "assists": 1,  
-    "pFouls": 4,  
-    "steals": 1,  
-    "turnovers": 2,  
-    "blocks": 0  
+```json
+{
+  "playerInfo": {
+    "firstName": "Tyreke",
+    "lastName": "Evans",
+    "yearsPro": 0,
+    "collegeName": "Memphis",
+    "country": "USA",
+    "playerId": 163,
+    "externPlayerId": 150,
+    "dateOfBirth": "1989-09-19T00:00:00.000Z",
+    "affiliation": "Memphis/USA",
+    "startNba": "2009",
+    "heightInMeters": null,
+    "weightInKilograms": null,
+    "jersey": 12,
+    "active": 0,
+    "pos": ""
   },
-  "_id": "6083a93a22b6482a6fb13a5b",  
-  "__v": 0,  
-  "seasons": [  
-    {  
-      "_id": "6083a93df9653b4ea0c02540",  
-      "teamId": 15,  
-      "teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/c/cf/Pacers_de_l%27Indiana_logo.svg/1180px-Pacers_de_l%27Indiana_logo.svg.png",  
-      "season": "2018",  
-      "points": 10.23,  
-      "min": "20:19",  
-      "fgm": 3.72,  
-      "fga": 9.57,  
-      "fgp": 0.389,  
-      "ftm": 1.67,  
-      "fta": 2.32,  
-      "ftp": 0.719,  
-      "tpm": 1.12,  
-      "tpa": 3.13,  
-      "tpp": 0.356,  
-      "offReb": 0.48,  
-      "defReb": 2.43,   
-      "reb": 2.91,  
-      "assists": 2.41,  
-      "pFouls": 1.71,  
-      "steals": 0.84,  
-      "turnovers": 1.71,  
-      "blocks": 0.26  
-    }  
-  ]  
+  "career": {
+    "season": "historical",
+    "points": 15.734410774410776,
+    "min": "303:9",
+    "fgm": 5.907777777777778,
+    "fga": 13.4329797979798,
+    "fgp": 0.43766498316498315,
+    "ftm": 3.076414141414142,
+    "fta": 4.067037037037037,
+    "ftp": 0.7540808080808081,
+    "tpm": 0.8409595959595959,
+    "tpa": 2.6064309764309765,
+    "tpp": 0.30104882154882157,
+    "offReb": 0.8443939393939395,
+    "defReb": 3.7365656565656566,
+    "reb": 4.5810942760942766,
+    "assists": 4.800488215488215,
+    "pFouls": 2.2044444444444444,
+    "steals": 1.235808080808081,
+    "turnovers": 2.506279461279461,
+    "blocks": 0.3749494949494949
+  },
+  "mostRecentGame": {
+    "points": 21,
+    "min": "25:52",
+    "fgm": 7,
+    "fga": 18,
+    "fgp": 38.9,
+    "ftm": 4,
+    "fta": 4,
+    "ftp": 100,
+    "tpm": 3,
+    "tpa": 7,
+    "tpp": 42.9,
+    "offReb": 0,
+    "defReb": 2,
+    "assists": 1,
+    "pFouls": 4,
+    "steals": 1,
+    "turnovers": 2,
+    "blocks": 0
+  },
+  "_id": "6083a93a22b6482a6fb13a5b",
+  "__v": 0,
+  "seasons": [
+    {
+      "_id": "6083a93df9653b4ea0c02540",
+      "teamId": 15,
+      "teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/c/cf/Pacers_de_l%27Indiana_logo.svg/1180px-Pacers_de_l%27Indiana_logo.svg.png",
+      "season": "2018",
+      "points": 10.23,
+      "min": "20:19",
+      "fgm": 3.72,
+      "fga": 9.57,
+      "fgp": 0.389,
+      "ftm": 1.67,
+      "fta": 2.32,
+      "ftp": 0.719,
+      "tpm": 1.12,
+      "tpa": 3.13,
+      "tpp": 0.356,
+      "offReb": 0.48,
+      "defReb": 2.43,
+      "reb": 2.91,
+      "assists": 2.41,
+      "pFouls": 1.71,
+      "steals": 0.84,
+      "turnovers": 1.71,
+      "blocks": 0.26
+    }
+  ]
 }
+```
 
 ### /api/nba/getUpcomingGameIdsFromDb
 
@@ -146,10 +153,30 @@ gets all game IDs from the NBA in the next three days
 Requirements: none  
 Returns: JSON list of gameIds  
 Status: Working  
-Issues:   
+Issues:
 
-JSON Format:  
-[8188,8187,8908,8909,8910,8911,8912,8913,8914,8915,8916,8917,8918,8919,8920,8921] 
+JSON Format:
+
+```json
+[
+  8188,
+  8187,
+  8908,
+  8909,
+  8910,
+  8911,
+  8912,
+  8913,
+  8914,
+  8915,
+  8916,
+  8917,
+  8918,
+  8919,
+  8920,
+  8921
+]
+```
 
 ### /api/nba/getDashboard
 
@@ -158,10 +185,49 @@ gets all game IDs for dashboard
 Requirements: OPTIONAL auth JWT token for favorite games  
 Returns: JSON list of lists of gameIds  
 Status: Working  
-Issues:  
+Issues:
 
-JSON Format:  
-{"regFinished":[8946,8947,8352,8948],"regLive":[],"regUpcoming":[8949,8950,8951,8952,8953,8954,8955,8956,8957,8958,8360,8959,8960,8961,8962,8963,8964,8965,8966,8967,8968,8969,8970,8971,8972,8973,8974,8975],"favFinished":[],"favLive":[],"favUpcoming":[8951,8958,8962,8966,8970,8971]}
+JSON Format:
+
+```json
+{
+  "regFinished": [8946, 8947, 8352, 8948],
+  "regLive": [],
+  "regUpcoming": [
+    8949,
+    8950,
+    8951,
+    8952,
+    8953,
+    8954,
+    8955,
+    8956,
+    8957,
+    8958,
+    8360,
+    8959,
+    8960,
+    8961,
+    8962,
+    8963,
+    8964,
+    8965,
+    8966,
+    8967,
+    8968,
+    8969,
+    8970,
+    8971,
+    8972,
+    8973,
+    8974,
+    8975
+  ],
+  "favFinished": [],
+  "favLive": [],
+  "favUpcoming": [8951, 8958, 8962, 8966, 8970, 8971]
+}
+```
 
 ### /api/nba/getGamesByDateFromDb/:date
 
@@ -170,10 +236,13 @@ gets all game IDs in DB from date
 Requirements: date object 31-03-2021  
 Returns: JSON list of gameIds  
 Status: Working  
-Issues: N/A  
+Issues: N/A
 
-JSON Format:  
-[8946,8947,8352,8948]
+JSON Format:
+
+```json
+[8946, 8947, 8352, 8948]
+```
 
 ### /api/nba/getGamesByTeamFromDb/:date
 
@@ -182,11 +251,13 @@ gets all game IDs in DB from teamId
 Requirements: teamId  
 Returns: JSON list of gameIds  
 Status: Working  
-Issues: N/A  
+Issues: N/A
 
-JSON Format:  
-[8946,8947,8352,8948]
+JSON Format:
 
+```json
+[8946, 8947, 8352, 8948]
+```
 
 ### /api/nba/getUpcomingGamesFromDb
 
@@ -195,48 +266,51 @@ gets all games from the NBA in the next three days
 Requirements: none  
 Returns: JSON list of game info and each team's info  
 Status: Working  
-Issues: Doesn't currently have start time, uses UTC to find games,  
+Issues: Doesn't currently have start time, uses UTC to find games,
 
-JSON Format:  
-[  
-      "arena": "TBD",  
-      "homeVoters": [],  
-      "awayVoters": [  
-        "603adbd83534d306ece241ce"  
-      ],  
-      "_id": "60578abc7a3c4a0429a4f348",  
-      "id": 8880,  
-      "__v": 0,  
-      "away": [  
-        {  
-          "_id": "60578abc7a3c4a0429a4f347",  
-          "teamId": 8,  
-          "teamName": "Dallas Mavericks",  
-          "teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/b/b8/Mavericks_de_Dallas_logo.svg/150px-Mavericks_de_Dallas_logo.svg.png",  
-          "wins": 21,  
-          "losses": 19,  
-          "conferenceName": "west",  
-          "place": 8  
-        }  
-      ],  
-      "confidence": 0.5371316492657674,  
-      "date": "2021-03-22T02:00:00.000Z",  
-      "home": [  
-        {  
-          "_id": "60578abc7a3c4a0429a4f346",  
-          "teamId": 29,  
-          "teamName": "Portland Trail Blazers",  
-          "teamImage": "https://upload.wikimedia.org/wikipedia/en/thumb/2/21/Portland_Trail_Blazers_logo.svg/1200px-Portland_Trail_Blazers_logo.svg.png",  
-          "wins": 25,  
-          "losses": 16,  
-          "conferenceName": "west",  
-          "place": 6  
-        }  
-      ],  
-      "predictedWinner": 8,  
-      "status": "Scheduled"  
-    }  
-]  
+JSON Format:
+
+```json
+[
+ "arena": "TBD",
+ "homeVoters": [],
+ "awayVoters": [
+"603adbd83534d306ece241ce"
+],
+ "\_id": "60578abc7a3c4a0429a4f348",
+ "id": 8880,
+ "\_\_v": 0,
+ "away": [
+{
+"_id": "60578abc7a3c4a0429a4f347",
+"teamId": 8,
+"teamName": "Dallas Mavericks",
+"teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/b/b8/Mavericks_de_Dallas_logo.svg/150px-Mavericks_de_Dallas_logo.svg.png",
+"wins": 21,
+"losses": 19,
+"conferenceName": "west",
+"place": 8
+}
+],
+ "confidence": 0.5371316492657674,
+ "date": "2021-03-22T02:00:00.000Z",
+ "home": [
+{
+"_id": "60578abc7a3c4a0429a4f346",
+"teamId": 29,
+"teamName": "Portland Trail Blazers",
+"teamImage": "https://upload.wikimedia.org/wikipedia/en/thumb/2/21/Portland_Trail_Blazers_logo.svg/1200px-Portland_Trail_Blazers_logo.svg.png",
+"wins": 25,
+"losses": 16,
+"conferenceName": "west",
+"place": 6
+}
+],
+ "predictedWinner": 8,
+ "status": "Scheduled"
+ }
+]
+```
 
 ### /api/nba/updateDbWithPredictions
 
@@ -246,10 +320,9 @@ uploads them to Mongo
 Requirements: none  
 Returns: status code and message  
 Status: Working  
-Issues: If the gameIds change on the API side we might have a problem  
+Issues: If the gameIds change on the API side we might have a problem
 
-Schema Format: Please navigate to Mongo to see the Schema (Game) format  
-
+Schema Format: Please navigate to Mongo to see the Schema (Game) format
 
 ### /api/nba/getGamesByDate/:date
 
@@ -261,9 +334,9 @@ Status: Working
 Issues: Doesn't currently have start time, uses UTC to find games,
 
 JSON Format:  
-same as above  
+same as above
 
-### /api/nba/getRecentGamesByTeam/:team  
+### /api/nba/getRecentGamesByTeam/:team
 
 GET  
 gets previous 10 games for a team  
@@ -272,73 +345,76 @@ Returns: JSON list of game info and each team's info
 Status: Working  
 Issues: Doesn't currently have start time, uses UTC to find games,
 
-JSON Format:  
-[  
-  {
-    "gameId": "8608",  
-    "date": "2021-03-02T03:30:00.000Z",
-    "arena": "TD Garden",  
-    "home": {  
-      "teamId": "2",  
-      "teamName": "Boston Celtics",  
-      "teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/6/65/Celtics_de_Boston_logo.svg/1024px-Celtics_de_Boston_logo.svg.png",  
-      "wins": "13",  
-      "losses": "13",  
-      "conferenceName": "east",  
-      "place": "4"  
-    },  
-    "away": {  
-      "teamId": "9",  
-      "teamName": "Denver Nuggets",  
-      "teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/3/35/Nuggets_de_Denver_2018.png/180px-Nuggets_de_Denver_2018.png",  
-      "wins": "15",  
-      "losses": "11",  
-      "conferenceName": "west",  
-      "place": "7"  
-    }  
-  }  
-  "gameStats" : {  
-    "home": {  
-      "teamId": "15",  
-      "score": 100,  
-      "linescore": [  
-        "23",  
-        "40",  
-        "23",  
-        "24"  
-      ],  
-      "leaders": [  
-        {  
-          "points": "7",  
-          "playerId": "727",  
-          "name": "Jarrett Allen"  
-        },  
-        {  
-          "rebounds": "14",  
-          "playerId": "727",  
-          "name": "Jarrett Allen"  
-        },  
-        {  
-          "assists": "11",  
-          "playerId": "142",  
-          "name": "Spencer Dinwiddie"  
-        },  
-        {  
-          "points": "22",  
-          "playerId": "507",  
-          "name": "Garrett Temple"  
-        },  
-        {  
-          "assists": "4",  
-          "playerId": "1013",  
-          "name": "Theo Pinson"  
-        }  
-      ]  
-    }  
-  }  
-]  
+JSON Format:
 
-### /api/nba/getGameDetailsByGameId/:gameId  
+```json
+[
+ {
+"gameId": "8608",
+ "date": "2021-03-02T03:30:00.000Z",
+"arena": "TD Garden",
+ "home": {
+ "teamId": "2",
+ "teamName": "Boston Celtics",
+ "teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/6/65/Celtics_de_Boston_logo.svg/1024px-Celtics_de_Boston_logo.svg.png",
+ "wins": "13",
+ "losses": "13",
+ "conferenceName": "east",
+ "place": "4"
+ },
+ "away": {
+ "teamId": "9",
+ "teamName": "Denver Nuggets",
+ "teamImage": "https://upload.wikimedia.org/wikipedia/fr/thumb/3/35/Nuggets_de_Denver_2018.png/180px-Nuggets_de_Denver_2018.png",
+ "wins": "15",
+ "losses": "11",
+ "conferenceName": "west",
+ "place": "7"
+ }
+ }
+ "gameStats" : {
+ "home": {
+ "teamId": "15",
+ "score": 100,
+ "linescore": [
+"23",
+"40",
+"23",
+"24"
+],
+ "leaders": [
+{
+"points": "7",
+"playerId": "727",
+"name": "Jarrett Allen"
+},
+{
+"rebounds": "14",
+"playerId": "727",
+"name": "Jarrett Allen"
+},
+{
+"assists": "11",
+"playerId": "142",
+"name": "Spencer Dinwiddie"
+},
+{
+"points": "22",
+"playerId": "507",
+"name": "Garrett Temple"
+},
+{
+"assists": "4",
+"playerId": "1013",
+"name": "Theo Pinson"
+}
+]
+ }
+ }
+]
+```
+
+### /api/nba/getGameDetailsByGameId/:gameId
 
 GET  
 gets game stats for specific gameId
@@ -347,48 +423,52 @@ Returns: JSON object with home and away game stats
 Status: Working  
 Issues: Doesn't currently have start time, uses UTC to find games,
 
-JSON Format:  
-  "gameStats" : {  
-    "home": {  
-      "teamId": "15",  
-      "logo": "some link"
-      "score": 100,  
-      "linescore": [  
-        "23",  
-        "40",  
-        "23",  
-        "24"  
-      ],  
-      "leaders": [  
-        {  
-          "points": "7",  
-          "playerId": "727",  
-          "name": "Jarrett Allen"  
-        },  
-        {  
-          "rebounds": "14",  
-          "playerId": "727",  
-          "name": "Jarrett Allen"  
-        },  
-        {  
-          "assists": "11",  
-          "playerId": "142",  
-          "name": "Spencer Dinwiddie"  
-        },  
-        {  
-          "points": "22",  
-          "playerId": "507",  
-          "name": "Garrett Temple"  
-        },  
-        {  
-          "assists": "4",  
-          "playerId": "1013",  
-          "name": "Theo Pinson"  
-        }  
-      ]  
-    }  
-  }  
-]  
+JSON Format:
+
+```json
+{
+ "gameStats" : {
+ "home": {
+ "teamId": "15",
+ "logo": "some link"
+"score": 100,
+ "linescore": [
+"23",
+"40",
+"23",
+"24"
+],
+ "leaders": [
+{
+"points": "7",
+"playerId": "727",
+"name": "Jarrett Allen"
+},
+{
+"rebounds": "14",
+"playerId": "727",
+"name": "Jarrett Allen"
+},
+{
+"assists": "11",
+"playerId": "142",
+"name": "Spencer Dinwiddie"
+},
+{
+"points": "22",
+"playerId": "507",
+"name": "Garrett Temple"
+},
+{
+"assists": "4",
+"playerId": "1013",
+"name": "Theo Pinson"
+}
+]
+ }
+ }
+]
+```
 
 ### /api/nba/getGameFromDb/:gameId
 
@@ -399,12 +479,15 @@ Returns: JSON body of relavent data, or message of failure
 Status: Working  
 Issues: None?
 
-JSON return Format:  
-{  
-  "votedTeam": "none", (will be "none", "away", or "home")
-  "game": Same as getBasicGameData json format  
-  "message": "Successful!"  
+JSON return Format:
+
+```json
+{
+ "votedTeam": "none", (will be "none", "away", or "home")
+"game": Same as getBasicGameData json format
+ "message": "Successful!"
 }
+```
 
 ### /api/nba/refresh
 
@@ -413,10 +496,13 @@ fixes gameId if necessary, handles transition between status, handles calling li
 Requirements: nothing  
 Returns: JSON list of changed ids plus error/success message  
 Status: Working  
-Issues: None  
+Issues: None
 
-JSON return Format:  
-{"message":"Successful Refresh.","updated Ids":["Updated 8600 to 8844"]}  
+JSON return Format:
+
+```json
+{ "message": "Successful Refresh.", "updated Ids": ["Updated 8600 to 8844"] }
+```
 
 ### /api/nba/vote
 
@@ -428,15 +514,21 @@ Status: Working
 Issues: None?
 
 JSON Request Format:
+
+```json
 {
   "gameId": 8701,
   "homeAway": "home"
 }
+```
 
-JSON return Format:  
+JSON return Format:
+
+```json
 {
   "message": "Successful!"
 }
+```
 
 ### /api/nba/getHighVoteGames
 
@@ -447,12 +539,15 @@ Returns: JSON body of relavent data, or message of failure
 Status: Working  
 Issues: None?
 
-JSON return Format:  
-{  
-  "games": array of game objects, each object similar to getBasicGameData json format. Also includes the following fields on each game:
-   {"voteCount", "votedTeam"}
-  "message": "Successful!"  
+JSON return Format:
+
+```json
+{
+ "games": array of game objects, each object similar to getBasicGameData json format. Also includes the following fields on each game:
+{"voteCount", "votedTeam"}
+"message": "Successful!"
 }
+```
 
 ### /api/nba/getHighPredictDiffGames
 
@@ -463,12 +558,15 @@ Returns: JSON body of relavent data, or message of failure
 Status: Working  
 Issues: None?
 
-JSON return Format:  
-{  
-  "games": array of game objects, each object similar to getBasicGameData json format. Also includes the following fields on each game:
-   {"votedTeam", "predictedWinnerVote", "confidenceVote", "confidenceDifference"}
-  "message": "Successful!"  
+JSON return Format:
+
+```json
+{
+ "games": array of game objects, each object similar to getBasicGameData json format. Also includes the following fields on each game:
+{"votedTeam", "predictedWinnerVote", "confidenceVote", "confidenceDifference"}
+"message": "Successful!"
 }
+```
 
 ### /api/nba/updateTeamStandings
 
@@ -477,13 +575,16 @@ updates each team's standing based on the information provided by the API
 Requirements: nothing
 Returns: status and message
 Status: Working  
-Issues: None  
+Issues: None
 
-JSON return Format: 
+JSON return Format:
+
+```json
 {
-    "status": 200,
-    "message": "Team standings updated successfully!"
+  "status": 200,
+  "message": "Team standings updated successfully!"
 }
+```
 
 ### /api/nba/getTeamsFromDb
 
@@ -492,27 +593,30 @@ gets the team objects from the db
 Requirements: nothing
 Returns: the team objects  
 Status: Working  
-Issues: None  
+Issues: None
 
 JSON return Format:
-[  
-  {  
-    "_id": "605d4d880e4f1db334d2ab30",  
-    "teamId": 1,  
-    "teamName": "Atlanta Hawks",  
-    "elo": 1690.0729320970106,  
-    "lastGameID": 8888,  
-    "conference": "east",  
-    "standing": 6,  
-    "gamesBehind": 9,  
-    "lastTenLosses": 3,  
-    "lastTenWins": 7,  
-    "losses": 23,  
-    "winStreak": 0,  
-    "wins": 23,  
-    "teamImage": "https://upload.wikimedia.org/wikipedia/fr/e/ee/Hawks_2016.png"  
-  }  
-]  
+
+```json
+[
+  {
+    "_id": "605d4d880e4f1db334d2ab30",
+    "teamId": 1,
+    "teamName": "Atlanta Hawks",
+    "elo": 1690.0729320970106,
+    "lastGameID": 8888,
+    "conference": "east",
+    "standing": 6,
+    "gamesBehind": 9,
+    "lastTenLosses": 3,
+    "lastTenWins": 7,
+    "losses": 23,
+    "winStreak": 0,
+    "wins": 23,
+    "teamImage": "https://upload.wikimedia.org/wikipedia/fr/e/ee/Hawks_2016.png"
+  }
+]
+```
 
 ### /api/nba/getLiveGamePreds/:league/:gameId
 
@@ -524,6 +628,8 @@ Status: Stubbed
 Issues: Need to implement dynamic live game predictions
 
 JSON return Format:
+
+```json
 {
   "data": {
     "periodLengths": {
@@ -549,9 +655,9 @@ JSON return Format:
     ]
   }
 }
+```
 
-
-##  Endpoints for User Accounts
+## Endpoints for User Accounts
 
 ### /api/user/info
 
@@ -562,16 +668,19 @@ Returns: failure message or relevant user info
 Status: Working
 
 JSON Result Format:
+
+```json
 {
-  "username": "datboi",
-  "email": "firemonkey@gmail.com"
-  "phoneNumber": "1234567890"
-  "notifications": {
-    "SMS": true,
-    "email" true
-  }
-  "hideSpoilers": true
+"username": "datboi",
+"email": "firemonkey@gmail.com"
+"phoneNumber": "1234567890"
+"notifications": {
+"SMS": true,
+"email" true
 }
+"hideSpoilers": true
+}
+```
 
 ### /api/user/resetPasswordEmail
 
@@ -582,14 +691,20 @@ Returns: success/failure message
 Status: Working
 
 JSON Request Format:
+
+```json
 {
-  "username": "peyton",
+  "username": "peyton"
 }
+```
 
 JSON Result Format:
+
+```json
 {
   "message": "If the user exists, the email was sent"
 }
+```
 
 ### /api/user/resetPassword
 
@@ -600,15 +715,21 @@ Returns: success/failure message
 Status: Working
 
 JSON Request Format:
+
+```json
 {
   "hash": "dfsfsdf3234sdf",
-  "password": "supersecret",
+  "password": "supersecret"
 }
+```
 
 JSON Result Format:
+
+```json
 {
   "message": "Successfully Updated Password!"
 }
+```
 
 ### /api/user/updatePhoneNumber
 
@@ -619,14 +740,20 @@ Returns: success/failure message
 Status: Working
 
 JSON Request Format:
+
+```json
 {
-  "phoneNumber": "1234567890",
+  "phoneNumber": "1234567890"
 }
+```
 
 JSON Result Format:
+
+```json
 {
   "message": "Successfully updated phone number!"
 }
+```
 
 ### /api/user/updateNotifications
 
@@ -637,16 +764,21 @@ Returns: success/failure message
 Status: Working
 
 JSON Request Format:
+
+```json
 {
   "sms": true,
   "email": false
 }
+```
 
 JSON Result Format:
+
+```json
 {
   "message": "Successfully updated notification settings"
 }
-
+```
 
 ### /api/user/updateSpoilers
 
@@ -657,14 +789,20 @@ Returns: success/failure message
 Status: Working
 
 JSON Request Format:
+
+```json
 {
-  "hideSpoilers": true,
+  "hideSpoilers": true
 }
+```
 
 JSON Result Format:
+
+```json
 {
   "message": "Successfully updated hiding spoilers!"
 }
+```
 
 ### /api/user/favoriteteam
 
@@ -675,15 +813,21 @@ Returns: success/failure message
 Status: working for NBA, NFL, MLB
 
 JSON Request Format:
+
+```json
 {
   "league": "NBA",
   "teamId": "123"
 }
+```
 
 JSON Result Format:
+
+```json
 {
   "message": "Successfully favorited team!"
 }
+```
 
 ### /api/user/unfavoriteteam
 
@@ -693,35 +837,43 @@ Requirements: JWT auth token, league and teamId
 Returns: success/failure message  
 Status: working for NBA, NFL, MLB
 
-
 JSON Request Format:
+
+```json
 {
   "league": "NBA",
   "teamId": "123"
 }
+```
 
 JSON Result Format:
+
+```json
 {
   "message": "Successfully unfavorited team!"
 }
+```
 
 ### /api/user/favoriteteamlist
 
 GET
 Gets list of favorite teams from each league for user
-Requirements: JWT auth token 
+Requirements: JWT auth token
 Returns: list of favorite NBA, NFL, NBA teams, success/failure message  
 Status: working for NBA, NFL, MLB
 
 JSON Result Format:
+
+```json
 {
-  "favoriteTeams": {
-    "NBA": ["1234", "234"]
-    "NFL": [],
-    "MLB": ["323", "414"]
-  },
-  "message": "Success!"
+"favoriteTeams": {
+"NBA": ["1234", "234"]
+"NFL": [],
+"MLB": ["323", "414"]
+},
+"message": "Success!"
 }
+```
 
 ### /api/user/verifyEmail
 
@@ -732,15 +884,20 @@ Returns: success/failure message
 Status: Working
 
 JSON Request Format:
-{
-  "hash": "dfsfsdf3234sdf",
 
+```json
+{
+  "hash": "dfsfsdf3234sdf"
 }
+```
 
 JSON Result Format:
+
+```json
 {
   "message": "Successfully Verified Email!"
 }
+```
 
 ### /api/user/sendVerifyEmail
 
@@ -751,14 +908,20 @@ Returns: success/failure message
 Status: Working
 
 JSON Request Format:
+
+```json
 {
   empty
 }
+```
 
 JSON Result Format:
+
+```json
 {
   "message": "Email Sent!"
 }
+```
 
 ### /api/epl/getUpcomingGamesFromDb
 
@@ -772,14 +935,15 @@ Returns: list of upcoming gameIds, success/failure message
 
 Status: Working
 
-
 JSON Result Format:
+
 ```json
 {
-  gameIds: [123, 456],
-  message: "Success!"
+  "gameIds": [123, 456],
+  "message": "Success!"
 }
 ```
+
 ### /api/epl/getGamesByDate/:date
 
 GET
@@ -788,18 +952,19 @@ gets list of upcoming EPL gameIds on specified date
 
 Requirements: specified date
 
-Returns: list of upcoming gameIds, success/failure message  
+Returns: list of upcoming gameIds, success/failure message
 
 Status: Working
 
-
 JSON Result Format:
+
 ```json
 {
-  gameIds: [123, 456],
-  message: "Success!"
+  "gameIds": [123, 456],
+  "message": "Success!"
 }
 ```
+
 ### /api/epl/getGamesByTeamFromDb/:teamId
 
 GET
@@ -808,32 +973,33 @@ gets list of upcoming EPL gameIds by teamId
 
 Requirements: specified teamId
 
-Returns: list of upcoming gameIds, success/failure message  
+Returns: list of upcoming gameIds, success/failure message
 
 Status: Working
 
-
 JSON Result Format:
+
 ```json
 {
-  gameIds: [123, 456],
-  message: "Success!"
+  "gameIds": [123, 456],
+  "message": "Success!"
 }
 ```
 
 ### /api/epl/getGameFromDb/:gameId
+
 GET
 
 gets game info for a specified gameId
 
 Requirements: specified gameId
 
-Returns: all game info, votedteam, success/failure message  
+Returns: all game info, votedteam, success/failure message
 
 Status: Working
 
-
 JSON Result Format:
+
 ```json
 {
 game: {
@@ -912,40 +1078,41 @@ game: {
 ```
 
 ### /api/epl/getTeamStats/:teamId
+
 GET
 
 gets team info for a specified team
 
 Requirements: specified gameId
 
-Returns: all team info, success/failure message  
+Returns: all team info, success/failure message
 
 Status: Working
 
-
 JSON Result Format:
+
 ```json
 {
-    "team": {
-        "elo": 1500,
-        "position": 0,
-        "_id": "6080a71422b6482a6f236739",
-        "teamId": 49,
-        "__v": 0,
-        "biggestWinAway": "1-4",
-        "biggestWinHome": "4-0",
-        "draws": 10,
-        "goalsAgainst": 31,
-        "goalsAverageAway": "1.4",
-        "goalsAverageHome": "1.7",
-        "goalsFor": 50,
-        "lastGameID": 592798,
-        "losses": 7,
-        "teamImage": "https://media.api-sports.io/football/teams/49.png",
-        "teamName": "Chelsea",
-        "wins": 15
-    },
-    "message": "Success!"
+  "team": {
+    "elo": 1500,
+    "position": 0,
+    "_id": "6080a71422b6482a6f236739",
+    "teamId": 49,
+    "__v": 0,
+    "biggestWinAway": "1-4",
+    "biggestWinHome": "4-0",
+    "draws": 10,
+    "goalsAgainst": 31,
+    "goalsAverageAway": "1.4",
+    "goalsAverageHome": "1.7",
+    "goalsFor": 50,
+    "lastGameID": 592798,
+    "losses": 7,
+    "teamImage": "https://media.api-sports.io/football/teams/49.png",
+    "teamName": "Chelsea",
+    "wins": 15
+  },
+  "message": "Success!"
 }
 ```
 
