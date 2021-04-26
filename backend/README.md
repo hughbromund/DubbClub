@@ -949,7 +949,7 @@ JSON Result Format:
 }
 ```
 
-### /api/nba/getDashboard
+### /api/epl/getDashboard
 
 GET  
 gets all game IDs for dashboard  
@@ -959,4 +959,37 @@ Status: Working
 Issues:  
 
 JSON Format:  
-{"regFinished":[8946,8947,8352,8948],"regLive":[],"regUpcoming":[8949,8950,8951,8952,8953,8954,8955,8956,8957,8958,8360,8959,8960,8961,8962,8963,8964,8965,8966,8967,8968,8969,8970,8971,8972,8973,8974,8975],"favFinished":[],"favLive":[],"favUpcoming":[8951,8958,8962,8966,8970,8971]}
+```json
+{
+  "regFinished":[8946,8947,8352,8948],
+  "regLive":[],
+  "regUpcoming":[8949,8950,8951,8952,8953,8954,8955,8956,8957,8958,8360,8959,8960,8961,8962,8963,8964,8965,8966,8967,8968,8969,8970,8971,8972,8973,8974,8975],
+  "favFinished":[],
+  "favLive":[],
+  "favUpcoming":[8951,8958,8962,8966,8970,8971]
+}
+  ```
+
+  ### /api/epl/vote
+
+POST  
+user vote functionality for who they believe will win the EPL game
+Requirements: gameId, home or away team, JWT auth token
+Returns: JSON body message of success or failure  
+Status: Working  
+Issues: None?
+
+JSON Request Format:
+```json
+{
+  "gameId": 8701,
+  "homeAway": "home"
+}
+```
+
+JSON return Format:  
+```json
+{
+  "message": "Successful!"
+}
+```
