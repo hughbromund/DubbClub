@@ -1227,3 +1227,48 @@ JSON return Format:
   "wins": 9
 }
 ```
+
+### /api/mlb/getGameFromDb/:gameId
+
+GET
+
+gets game info for requested gameId  
+Requirements: gameId  
+Returns: all game info, success/failure message  
+Status: Stub  
+
+JSON return Format:  
+```json
+{
+  id: 632222,
+  date: "2021-04-26T17:10:00Z",
+  arena: "Comerica Park",
+  home: {"look at /getTeamFromDb"},
+  away: {"look at /getTeamFromDb"},
+  predictedWinner: 110,
+  confidence: 0.704,
+  homeVoters: ["60669a0f34b642000bb87244"],
+  awayVoters: ["6064e5572c5e0e000bd5c275"],
+  status: "Finished",
+  lineScore: [
+    {
+        "inning": 1,
+        "homeScore": 1,
+        "awayScore": 0
+    }
+  ],
+  playedGameStats: {},
+  livePredictions: [
+    {  
+        "homeConfidence" : 0.5,
+        "awayConfidence" : 0.5,
+        "inning" : 1,
+        "half" : "top"
+    }
+  ],
+  homeScore: 5,
+  awayScore: 7,
+  inning: 10,
+  half: "bottom"
+}
+```
