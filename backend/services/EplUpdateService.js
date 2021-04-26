@@ -60,6 +60,7 @@ exports.refresh = async function refresh() {
          //let game = updateDbWithPlayedGameStats(gameId) // no longer required?
          await updateDbWithLiveStats(upcoming[i])
          await updateDbWithTeamStats(upcoming[i])
+         eplUserService.notifications(gameInDb)
       }
       else if (gameInDb.status === "In Play") {
          await updateDbWithLiveStats(upcoming[i])

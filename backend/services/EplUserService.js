@@ -61,7 +61,7 @@ exports.notifications = (game) => {
     " to the see the latest predictions and information.";
 
   let winner = game.home[0].teamName;
-  let confidence = homeWinProb;
+  let confidence = game.homeWinProb;
 
   if (game.homeWinProb < game.awayWinProb) {
     winner = game.away[0].teamName;
