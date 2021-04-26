@@ -348,3 +348,10 @@ exports.getDashboard = async function(userId) {
      "favFinished": favFinished, "favLive": favLive, "favUpcoming": favUpcoming}
   
   }
+
+  exports.getAllTeamStats = async function() {
+    let results = await EPLteam.find({})
+    results = {teams: results, message: "Success!"}
+
+    return results;
+}

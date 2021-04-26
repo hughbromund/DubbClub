@@ -993,3 +993,27 @@ JSON return Format:
   "message": "Successful!"
 }
 ```
+
+
+  ### /api/epl/getAllTeamStats
+
+GET
+
+gets team info for all teams
+
+Requirements: none
+
+Returns: all teams info, success/failure message  
+
+Status: Working
+
+
+
+
+JSON return Format:  
+```json
+{
+  "teams": [{"look at /getTeamStats"}],
+  "message": "Successful!",
+}
+```

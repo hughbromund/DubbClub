@@ -145,6 +145,7 @@ router.get("/api/epl/getTeamStats/:teamId", eplController.getTeamStats)
 router.get("/api/epl/updateDbWithGamesAndPredictions", alderaanController.updateDbWithGamesAndPredictions)
 router.get("/api/epl/refresh", eplController.refresh);
 router.get("/api/epl/getDashboard", authJWT.verifyTokenOptional, eplController.getDashboard);
-router.post("/api/epl/vote", authJWT.verifyToken, eplController.userVote)
+router.post("/api/epl/vote", authJWT.verifyToken, eplController.userVote);
+router.get("/api/epl/getAllTeamStats", eplController.getAllTeamStats);
 
 module.exports = router;

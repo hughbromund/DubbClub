@@ -83,3 +83,12 @@ exports.userVote = async function (req, res, next) {
       return res.status(400).json({ status: 400, message: e.message });
   }
 };
+
+exports.getAllTeamStats = async function (req, res, next) {
+  //try {
+    let result = await eplService.getAllTeamStats();
+    res.status(200).json(result);
+  //} catch (e) {
+  //  return res.status(400).json({ status: 400, message: e.message });
+  //}
+};
