@@ -172,6 +172,7 @@ async function createPlayerInfo(playerId) {
 
 async function createMostRecentGame(player) {
     return {
+        "gameId": player.gameId,
         "points": player.points,
         "min": player.min,
         "fgm": player.fgm,
