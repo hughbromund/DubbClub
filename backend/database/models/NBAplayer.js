@@ -90,7 +90,7 @@ const NBAplayerSchema = new Schema({
         tpp: {type: Number, unique: false, required: false},
         offReb: {type: Number, unique: false, required: false},
         defReb: {type: Number, unique: false, required: false},
-        totReb: {type: Number, unique: false, required: false},
+        reb: {type: Number, unique: false, required: false},
         assists: {type: Number, unique: false, required: false},
         pFouls: {type: Number, unique: false, required: false},
         steals: {type: Number, unique: false, required: false},

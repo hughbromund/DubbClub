@@ -3,6 +3,8 @@ const axios = require("axios");
 const config = require(path.resolve(__dirname, "../config.json"));
 const NBAteam = require(path.resolve(__dirname, "../database/models/NBAteam"));
 const NBAplayer = require(path.resolve(__dirname, "../database/models/NBAplayer"));
+const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
+
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -53,7 +55,6 @@ updatePlayerById = async function updatePlayerByID(playerId) {
         let careerAvgs = await createCareerAvg(seasonAvgs)
         let mostRecentGame = await createMostRecentGame(playerStats[playerStats.length - 1])
         nbaPlayer = {"playerInfo": playerInfo, "mostRecentGame": mostRecentGame, "seasons": seasonAvgs, "career": careerAvgs}
-        //console.log(nbaPlayer)
         let res = await NBAplayer.updateOne({"playerInfo.playerId" : playerId}, {$set: nbaPlayer}, {upsert : true}).exec()
         console.log("added player with ID " + playerId)
         return res
@@ -97,11 +98,10 @@ exports.updatePlayersByGame = async function populateDb(gameId) {
             nbaPlayer = {"playerInfo": playerInfo, "mostRecentGame": mostRecentGame, "seasons": seasonAvgs, "career": careerAvgs}
             await NBAplayer.updateOne({"playerInfo.playerId" : playersInGame[i].playerId}, {$set: nbaPlayer}, {upsert : true}).exec()
             console.log("added player with ID " + playerInfo.playerId)
-            await sleep(15000)
-        } else {
+        } else if (player != null) {
             let mostRecentGame = await createMostRecentGame(playersInGame[i])
             await NBAplayer.updateOne({"playerInfo.playerId": playersInGame[i].playerId}, {"mostRecentGame": mostRecentGame}).exec()
-            console.log("updated player with ID " + player.playerInfo.playerId)
+            console.log("updated player with ID " + playersInGame[i].playerId)
         }
     }
 
@@ -176,13 +176,13 @@ async function createMostRecentGame(player) {
         "min": player.min,
         "fgm": player.fgm,
         "fga": player.fga,
-        "fgp": player.fgp,
+        "fgp": player.fgp / 100,
         "ftm": player.ftm,
         "fta": player.fta,
-        "ftp": player.ftp,
+        "ftp": player.ftp / 100,
         "tpm": player.tpm,
         "tpa": player.tpa,
-        "tpp": player.tpp,
+        "tpp": player.tpp / 100,
         "offReb": player.offReb,
         "defReb": player.defReb,
         "reb": player.totReb,
