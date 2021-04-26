@@ -48,6 +48,11 @@ const alderaanController = require(path.resolve(
   "../controllers/AlderaanController"
 ));
 
+const mlbController = require(path.resolve(
+  __dirname,
+  "../controllers/MlbController"
+));
+
 //User routes
 //NOTE: for any request requiring user auth, must call authJWT.verifyToken first
 router.post("/api/auth/login", userController.login)
@@ -138,6 +143,10 @@ router.get("/api/autoCompleteStub", searchController.autoCompleteStub)
 
 //TESTING PURPOSES ONLY - post gameId to send all users notifications
 //router.post("/api/nba/notificationsTest", nbaUserController.notificationsTest)
+
+//MLB
+router.get("/api/mlb/getTeamFromDb/:teamId", mlbController.getTeamFromDb)
+router.get("/api/mlb/getTeamsFromDb", mlbController.getTeamsFromDb)
 
 //EPL
 router.get("/api/epl/getUpcomingGamesFromDb", eplController.getUpcomingGameIds)

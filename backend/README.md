@@ -1184,3 +1184,46 @@ JSON return Format:
   "message": "Successful!",
 }
 ```
+
+### /api/mlb/getTeamsFromDb
+
+GET
+
+gets team info for all teams
+Requirements: none
+Returns: all teams info, success/failure message  
+Status: Working
+
+JSON return Format:  
+```json
+[{"look at /getTeamFromDb"}],
+```
+
+
+### /api/mlb/getTeamFromDb/:teamId
+
+GET
+
+gets team info for all teams  
+Requirements: none  
+Returns: all teams info, success/failure message  
+Status: Working  
+
+JSON return Format:  
+```json
+{
+  "_id": "6086668522b6482a6f3e672a",
+  "teamId": 108,
+  "__v": 0,
+  "division": "American League West",
+  "elo": 1500,
+  "gamesBehind": 0.5,
+  "lastGameID": 0,
+  "league": "American League",
+  "losses": 6,
+  "streak": "W1",
+  "teamImage": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Los_Angeles_Angels_of_Anaheim.svg",
+  "teamName": "Los Angeles Angels",
+  "wins": 9
+}
+```
