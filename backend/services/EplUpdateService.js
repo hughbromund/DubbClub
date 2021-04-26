@@ -3,6 +3,7 @@ const axios = require("axios");
 const config = require(path.resolve(__dirname, "../config.json"));
 
 var alderaanService = require(path.resolve(__dirname, "../services/AlderaanService"));
+var eplUserService = require(path.resolve(__dirname, "../services/EplUserService"));
 const EPLgame = require("../database/models/EPLgame");
 const EPLteam = require("../database/models/EPLteam");
 
@@ -49,6 +50,7 @@ exports.refresh = async function refresh() {
 
          await updateDbWithLiveStats(upcoming[i])
          await alderaanService.updateDbWithLivePredictions(upcoming[i])
+         eplUserService.notifications(gameInDb)
       }
  
       //transition to finished game

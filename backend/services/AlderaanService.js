@@ -288,7 +288,7 @@ exports.getUpcomingGamesAPI = async function() {
     var end = new Date();
     // console.log(start)
     start.setDate(start.getDate() - 1)
-    end.setDate(end.getDate() + 2)
+    end.setDate(end.getDate() + 4)
   
     var options = {
         method: 'GET',

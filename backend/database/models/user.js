@@ -14,7 +14,8 @@ const userSchema = new Schema({
     favoriteTeams: {
         NBA: {type: Array, unique: false, required: true, default: []},
         NFL: {type: Array, unique: false, required: true, default: []},
-        MLB: {type: Array, unique: false, required: true, default: []}
+        MLB: {type: Array, unique: false, required: true, default: []},
+        EPL: {type: Array, unique: false, required: true, default: []},
     },
     notifications: {
         email: { type: Boolean, unique: false, required: true, default: false},
