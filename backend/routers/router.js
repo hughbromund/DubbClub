@@ -147,6 +147,7 @@ router.get("/api/autoCompleteStub", searchController.autoCompleteStub)
 //MLB
 router.get("/api/mlb/getTeamFromDb/:teamId", mlbController.getTeamFromDb)
 router.get("/api/mlb/getTeamsFromDb", mlbController.getTeamsFromDb)
+router.get("/api/mlb/getGameFromDb/:gameId", mlbController.getGameFromDb)
 
 //EPL
 router.get("/api/epl/getUpcomingGamesFromDb", eplController.getUpcomingGameIds)
