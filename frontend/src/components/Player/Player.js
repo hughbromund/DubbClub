@@ -7,6 +7,7 @@ import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Card from "../Card/Card";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
 import Tooltip from "../Tooltip/Tooltip";
+import { toast } from "react-toastify";
 
 import { GET_PLAYER_INFO } from "../../constants/Constants";
 import { getTeamByID } from "../../constants/NBAConstants";
@@ -40,13 +41,18 @@ export default class Player extends Component {
     };
 
     this.generateRecentGameStats = this.generateRecentGameStats.bind(this);
-    this.generateCareerStats = this.generateCareerStats.bind(this);
     this.calculateAge = this.calculateAge.bind(this);
     this.createSeasonRow = this.createSeasonRow.bind(this);
   }
 
   async componentDidMount() {
-    var res = await fetch(GET_PLAYER_INFO);
+    console.log(this.props);
+    var res = await fetch(GET_PLAYER_INFO + "/" + this.props.match.params.id);
+
+    if (res.status !== 200) {
+      toast.error("There was an Error Loading this player. Please Try again!");
+      return;
+    }
 
     var body = await res.json();
 
@@ -71,30 +77,8 @@ export default class Player extends Component {
         continue;
       }
       output.push(
-        <Col>
+        <Col key={propt}>
           <b>{propt.toUpperCase()}</b>: {this.state.mostRecentGame[propt]}
-        </Col>
-      );
-    }
-
-    return output;
-  }
-
-  generateCareerStats() {
-    var output = [];
-
-    for (var propt in this.state.career) {
-      if (
-        propt === "gameId" ||
-        propt === "teamId" ||
-        propt === "season" ||
-        propt === "playerId"
-      ) {
-        continue;
-      }
-      output.push(
-        <Col>
-          <b>{propt.toUpperCase()}</b>: {this.state.career[propt]}
         </Col>
       );
     }
@@ -110,11 +94,14 @@ export default class Player extends Component {
   }
 
   createSeasonRow(element, index) {
-    console.log(element);
+    // console.log(element);
 
     var season = element.season;
     if (season === "historical") {
       season = "Career";
+    }
+    if (season === undefined) {
+      season = "Most Recent Game";
     }
     var team = getTeamByID(element.teamId);
     if (team === 0) {
@@ -122,23 +109,35 @@ export default class Player extends Component {
     }
 
     return (
-      <tr>
+      <tr key={season}>
         <td>{season}</td>
         <td>
-          <img className={classes.RowImage} src={element.teamImage} /> {team}
+          <img
+            hidden={element.teamImage === undefined}
+            className={classes.RowImage}
+            src={element.teamImage}
+          />
         </td>
-        <td>{element.assists}</td>
-        <td>{element.blocks}</td>
-        <td>{element.fgm}</td>
-        <td>{element.fga}</td>
-        <td>{element.fgp}%</td>
-        <td>{element.ftm}</td>
-        <td>{element.fta}</td>
-        <td>{element.ftp}%</td>
-        <td>{element.tpm}</td>
-        <td>{element.tpa}</td>
-        <td>{element.tpp}%</td>
+        <td>{team}</td>
+        <td>{element.assists.toFixed(2)}</td>
+        <td>{element.blocks.toFixed(2)}</td>
+        <td>{element.defReb.toFixed(2)}</td>
+        <td>{element.fgm.toFixed(2)}</td>
+        <td>{element.fga.toFixed(2)}</td>
+        <td>{(element.fgp * 100).toFixed(2)}%</td>
+        <td>{element.ftm.toFixed(2)}</td>
+        <td>{element.fta.toFixed(2)}</td>
+        <td>{(element.ftp * 100).toFixed(2)}%</td>
+        <td>{element.tpm.toFixed(2)}</td>
+        <td>{element.tpa.toFixed(2)}</td>
+        <td>{(element.tpp * 100).toFixed(2)}%</td>
         <td>{element.min}</td>
+        <td>{element.offReb.toFixed(2)}</td>
+        <td>{element.pFouls.toFixed(2)}</td>
+        <td>{element.points.toFixed(2)}</td>
+        <td>{(element.reb ?? element.defReb).toFixed(2)}</td>
+        <td>{element.steals.toFixed(2)}</td>
+        <td>{element.turnovers.toFixed(2)}</td>
       </tr>
     );
   }
@@ -161,6 +160,7 @@ export default class Player extends Component {
             <Row xs={1} sm={2} md={3}>
               <Col md="auto">
                 <img
+                  alt="Players Current Team Logo"
                   style={{ height: "8rem" }}
                   src={this.state.playerInfo.teamImage}
                 />
@@ -176,12 +176,12 @@ export default class Player extends Component {
                 </Row>
                 <Row>
                   <h3>
-                    #{this.state.playerInfo.leagues.standard.jersey} -{" "}
+                    #{this.state.playerInfo.jersey} -{" "}
                     {getTeamByID(this.state.playerInfo.teamId)}
                   </h3>
                 </Row>
               </Col>
-              <Col>
+              <Col md="auto">
                 <Row>
                   <h5>
                     <b>Height: </b>
@@ -203,7 +203,7 @@ export default class Player extends Component {
                     <b>DOB: </b>
                     {months[this.state.playerInfo.dob.getMonth()]}{" "}
                     {this.state.playerInfo.dob.getDate()},{" "}
-                    {this.state.playerInfo.dob.getFullYear()} (
+                    {this.state.playerInfo.dob.getFullYear()} (Age:{" "}
                     {this.calculateAge(this.state.playerInfo.dob)})
                   </h5>
                 </Row>
@@ -228,6 +228,7 @@ export default class Player extends Component {
                 <thead>
                   <tr>
                     <th>Season</th>
+                    <th></th>
                     <th>Team</th>
                     <th>
                       <Tooltip text="Assists" placement="top">
@@ -237,6 +238,11 @@ export default class Player extends Component {
                     <th>
                       <Tooltip text="Blocks" placement="top">
                         BLK
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Defensive Rebounds" placement="top">
+                        DRB
                       </Tooltip>
                     </th>
                     <th>
@@ -289,9 +295,40 @@ export default class Player extends Component {
                         MINS
                       </Tooltip>
                     </th>
+                    <th>
+                      <Tooltip text="Offensive Rebounds" placement="top">
+                        ORB
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Personal Fouls" placement="top">
+                        PF
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Points Scored" placement="top">
+                        PTS
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Rebounds" placement="top">
+                        REB
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Steals" placement="top">
+                        STL
+                      </Tooltip>
+                    </th>
+                    <th>
+                      <Tooltip text="Turnovers" placement="top">
+                        TOV
+                      </Tooltip>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>{this.state.seasons.map(this.createSeasonRow)}</tbody>
+                <tbody>{this.createSeasonRow(this.state.mostRecentGame)}</tbody>
                 <tbody>{this.createSeasonRow(this.state.career)}</tbody>
               </Table>
             </Card>
@@ -300,20 +337,6 @@ export default class Player extends Component {
             <Col>
               <h2 className={classes.headerPadding}>Most Recent Game</h2>
               <GameInfoCard gameID={this.state.mostRecentGame.gameId} />
-            </Col>
-            <Col>
-              <Row noGutters>
-                <Card className={classes.MostRecentGameStats}>
-                  <h3>Most Recent Game Stats</h3>
-                  <Row md={3}>{this.generateRecentGameStats()}</Row>
-                </Card>
-              </Row>
-              <Row noGutters>
-                <Card className={classes.MostRecentGameStats}>
-                  <h3>Career Stats</h3>
-                  <Row md={3}>{this.generateCareerStats()}</Row>
-                </Card>
-              </Row>
             </Col>
           </Row>
         </Container>

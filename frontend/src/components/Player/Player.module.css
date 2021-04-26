@@ -17,5 +17,6 @@
   min-width: 100%;
 }
 .RowImage {
-  height: 2rem;
+  /* height: 2rem; */
+  max-width: 2rem;
 }
