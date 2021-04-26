@@ -3,6 +3,7 @@ const axios = require("axios");
 const config = require(path.resolve(__dirname, "../config.json"));
 
 var alderaanService = require(path.resolve(__dirname, "../services/AlderaanService"));
+var eplUserService = require(path.resolve(__dirname, "../services/EplUserService"));
 const EPLgame = require("../database/models/EPLgame");
 const EPLteam = require("../database/models/EPLteam");
 
@@ -11,7 +12,7 @@ exports.refresh = async function refresh() {
    var start = new Date();
    var end = new Date();
    // console.log(start)
-   start.setDate(start.getDate() - 1)
+   start.setDate(start.getDate() - 3)
 
    var options = {
       method: 'GET',
@@ -49,6 +50,7 @@ exports.refresh = async function refresh() {
 
          await updateDbWithLiveStats(upcoming[i])
          await alderaanService.updateDbWithLivePredictions(upcoming[i])
+         eplUserService.notifications(gameInDb)
       }
  
       //transition to finished game
@@ -58,6 +60,7 @@ exports.refresh = async function refresh() {
          //let game = updateDbWithPlayedGameStats(gameId) // no longer required?
          await updateDbWithLiveStats(upcoming[i])
          await updateDbWithTeamStats(upcoming[i])
+         eplUserService.notifications(gameInDb)
       }
       else if (gameInDb.status === "In Play") {
          await updateDbWithLiveStats(upcoming[i])
@@ -217,6 +220,23 @@ updateDbWithTeamStats = async function (game) {
    let request = await axios.request(options) 
    request = request.data.response
 
+   var standings = {
+      method: 'GET',
+      url: "https://api-football-v1.p.rapidapi.com/v3/standings",
+         headers: {
+            'x-rapidapi-key': config.nbaApiKey,
+            'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
+         },
+      params: {
+         league: "39",
+         season: "2020",
+         team: game.teams.home.id
+      }
+   };
+
+   let requestStandings = await axios.request(standings)
+   requestStandings = requestStandings.data.response[0].league.standings[0][0].rank 
+
    await EPLteam.updateOne({teamId: request.team.id}, {
       teamId: request.team.id,
       teamName: request.team.name,
@@ -231,12 +251,17 @@ updateDbWithTeamStats = async function (game) {
       biggestWinHome: request.biggest.wins.home,
       goalsAverageAway: request.goals.for.average.away,
       goalsAverageHome: request.goals.for.average.home,
+      position: requestStandings,
    }, {upsert : true}).exec()
 
    options.params.team = game.teams.away.id
    request = await axios.request(options) 
    request = request.data.response
 
+   standings.params.team = game.teams.away.id
+   requestStandings = await axios.request(standings)
+   requestStandings = requestStandings.data.response[0].league.standings[0][0].rank 
+
    await EPLteam.updateOne({teamId: request.team.id}, {
       teamId: request.team.id,
       teamName: request.team.name,
@@ -251,5 +276,6 @@ updateDbWithTeamStats = async function (game) {
       biggestWinHome: request.biggest.wins.home,
       goalsAverageAway: request.goals.for.average.away,
       goalsAverageHome: request.goals.for.average.home,
+      position: requestStandings,
    }, {upsert : true}).exec()
 }
