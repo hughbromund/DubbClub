@@ -949,3 +949,14 @@ JSON Result Format:
 }
 ```
 
+### /api/nba/getDashboard
+
+GET  
+gets all game IDs for dashboard  
+Requirements: OPTIONAL auth JWT token for favorite games  
+Returns: JSON list of lists of gameIds  
+Status: Working  
+Issues:  
+
+JSON Format:  
+{"regFinished":[8946,8947,8352,8948],"regLive":[],"regUpcoming":[8949,8950,8951,8952,8953,8954,8955,8956,8957,8958,8360,8959,8960,8961,8962,8963,8964,8965,8966,8967,8968,8969,8970,8971,8972,8973,8974,8975],"favFinished":[],"favLive":[],"favUpcoming":[8951,8958,8962,8966,8970,8971]}
