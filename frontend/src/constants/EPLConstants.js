@@ -90,12 +90,16 @@ const normalizeTeam = (str) => {
 };
 
 const getSomethingByTeam = (str, desiredValue) => {
-  str = normalizeTeam(str);
-  for (const team in EPL_TEAM_INFO) {
-    if (str === team.toUpperCase()) {
-      return EPL_TEAM_INFO[team][desiredValue];
-    }
+  // str = normalizeTeam(str);
+  console.log(str);
+  if (EPL_TEAM_INFO[str] !== undefined) {
+    return EPL_TEAM_INFO[str][desiredValue];
   }
+  // for (const team in EPL_TEAM_INFO) {
+  //   if (str === team.toUpperCase()) {
+
+  //   }
+  // }
 };
 
 export const getEPLIdByTeam = (str) => {
