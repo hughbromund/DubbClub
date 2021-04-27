@@ -20,6 +20,7 @@ import {
   MLB_GET_GAME_BY_ID,
 } from "../../constants/Constants";
 import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
+import { getMLBColorByTeam } from "../../constants/MLBConstants";
 import { getEPLColorByTeam } from "../../constants/EPLConstants";
 import {
   FacebookShareButton,
@@ -375,8 +376,8 @@ export default class GameInfoCard extends Component {
         predictionConfidence: Number((body.game.confidence * 100).toFixed(2)),
         homeTeam: body.game.home.teamName,
         awayTeam: body.game.away.teamName,
-        homeHex: getEPLColorByTeam(body.game.home.teamName),
-        awayHex: getEPLColorByTeam(body.game.away.teamName),
+        homeHex: getMLBColorByTeam(body.game.home.teamName),
+        awayHex: getMLBColorByTeam(body.game.away.teamName),
         homeLogo: body.game.home.teamImage,
         awayLogo: body.game.away.teamImage,
         gameDate: date,
