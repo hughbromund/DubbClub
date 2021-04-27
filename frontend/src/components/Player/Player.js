@@ -9,7 +9,7 @@ import GameInfoCard from "../GameInfoCard/GameInfoCard";
 import Tooltip from "../Tooltip/Tooltip";
 import { toast } from "react-toastify";
 
-import { GET_PLAYER_INFO } from "../../constants/Constants";
+import { GET_PLAYER_INFO, NBA } from "../../constants/Constants";
 import { getTeamByID } from "../../constants/NBAConstants";
 
 import classes from "./Player.module.css";
@@ -336,7 +336,10 @@ export default class Player extends Component {
           <Row noGutters>
             <Col>
               <h2 className={classes.headerPadding}>Most Recent Game</h2>
-              <GameInfoCard gameID={this.state.mostRecentGame.gameId} />
+              <GameInfoCard
+                league={NBA}
+                gameID={this.state.mostRecentGame.gameId}
+              />
             </Col>
           </Row>
         </Container>

@@ -16,6 +16,7 @@ import {
   FINISHED,
   EPL_GET_GAME_BY_ID,
   EPL,
+  MLB,
 } from "../../constants/Constants";
 import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
 import {
@@ -416,7 +417,7 @@ export default class GameInfoCard extends Component {
     }
   }
 
-  async favoriteTeam(teamId) {
+  async favoriteTeam(teamId, league) {
     var res = await fetch(FAVORITE_TEAM, {
       method: "POST",
       mode: "cors",
@@ -425,7 +426,7 @@ export default class GameInfoCard extends Component {
         "x-access-token": this.context.token,
       },
       body: JSON.stringify({
-        league: "NBA",
+        league: league,
         teamId: teamId,
       }),
     });
@@ -438,7 +439,7 @@ export default class GameInfoCard extends Component {
     return true;
   }
 
-  async unFavoriteTeam(teamId) {
+  async unFavoriteTeam(teamId, league) {
     var res = await fetch(UNFAVORITE_TEAM, {
       method: "POST",
       mode: "cors",
@@ -447,7 +448,7 @@ export default class GameInfoCard extends Component {
         "x-access-token": this.context.token,
       },
       body: JSON.stringify({
-        league: "NBA",
+        league: league,
         teamId: teamId,
       }),
     });
@@ -504,19 +505,22 @@ export default class GameInfoCard extends Component {
                     >
                       <div
                         hidden={this.context.isFollowedTeam(
-                          "NBA",
+                          this.props.league,
                           this.state.awayId
                         )}
                       >
                         <SmartButton
                           successMessage={
-                            "Added the " +
+                            "Added " +
                             this.state.awayTeam +
                             " to your favorites!"
                           }
                           errorMessage="Error Favoriting"
                           runOnClick={() => {
-                            return this.favoriteTeam(this.state.awayId);
+                            return this.favoriteTeam(
+                              this.state.awayId,
+                              this.props.league
+                            );
                           }}
                         >
                           Favorite
@@ -524,18 +528,24 @@ export default class GameInfoCard extends Component {
                       </div>
                       <div
                         hidden={
-                          !this.context.isFollowedTeam("NBA", this.state.awayId)
+                          !this.context.isFollowedTeam(
+                            this.props.league,
+                            this.state.awayId
+                          )
                         }
                       >
                         <SmartButton
                           successMessage={
-                            "Removed the " +
+                            "Removed " +
                             this.state.awayTeam +
                             " from your favorites!"
                           }
                           errorMessage="Error Removing Favorite"
                           runOnClick={() => {
-                            return this.unFavoriteTeam(this.state.awayId);
+                            return this.unFavoriteTeam(
+                              this.state.awayId,
+                              this.props.league
+                            );
                           }}
                         >
                           Remove Favorite
@@ -568,19 +578,22 @@ export default class GameInfoCard extends Component {
                     >
                       <div
                         hidden={this.context.isFollowedTeam(
-                          "NBA",
+                          this.props.league,
                           this.state.homeId
                         )}
                       >
                         <SmartButton
                           successMessage={
-                            "Added the " +
+                            "Added " +
                             this.state.homeTeam +
                             " to your favorites!"
                           }
                           errorMessage="Error Favoriting"
                           runOnClick={() => {
-                            return this.favoriteTeam(this.state.homeId);
+                            return this.favoriteTeam(
+                              this.state.homeId,
+                              this.props.league
+                            );
                           }}
                         >
                           Favorite
@@ -588,18 +601,24 @@ export default class GameInfoCard extends Component {
                       </div>
                       <div
                         hidden={
-                          !this.context.isFollowedTeam("NBA", this.state.homeId)
+                          !this.context.isFollowedTeam(
+                            this.props.league,
+                            this.state.homeId
+                          )
                         }
                       >
                         <SmartButton
                           successMessage={
-                            "Removed the " +
+                            "Removed " +
                             this.state.homeTeam +
                             " from your favorites!"
                           }
                           errorMessage="Error Removing Favorite"
                           runOnClick={() => {
-                            return this.unFavoriteTeam(this.state.homeId);
+                            return this.unFavoriteTeam(
+                              this.state.homeId,
+                              this.props.league
+                            );
                           }}
                         >
                           Remove Favorite
