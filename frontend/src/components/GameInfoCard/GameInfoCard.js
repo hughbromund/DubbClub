@@ -17,6 +17,7 @@ import {
   EPL_GET_GAME_BY_ID,
   EPL,
   MLB,
+  MLB_GET_GAME_BY_ID,
 } from "../../constants/Constants";
 import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
 import { getEPLColorByTeam } from "../../constants/EPLConstants";
@@ -87,6 +88,7 @@ export default class GameInfoCard extends Component {
     this.fetchEPLGameData = this.fetchEPLGameData.bind(this);
     this.renderPredictionSubtext = this.renderPredictionSubtext.bind(this);
     this.renderScore = this.renderScore.bind(this);
+    this.fetchMLBGameData = this.fetchMLBGameData.bind(this);
   }
 
   renderGraph(homeAwayWinner) {
@@ -146,6 +148,7 @@ export default class GameInfoCard extends Component {
   renderScore() {
     if (
       this.state.playedGameStats !== undefined &&
+      this.state.playedGameStats.away !== undefined &&
       this.state.playedGameStats.away.lineScore.length !== 0
     ) {
       return (
@@ -284,6 +287,8 @@ export default class GameInfoCard extends Component {
   async fetchGameData(gameID) {
     if (this.props.league === EPL) {
       await this.fetchEPLGameData(gameID);
+    } else if (this.props.league === MLB) {
+      await this.fetchMLBGameData(gameID);
     } else {
       await this.fetchNBAGameData(gameID);
     }
@@ -322,6 +327,62 @@ export default class GameInfoCard extends Component {
         gameTime: time,
         homeId: body.game.home[0].teamId,
         awayId: body.game.away[0].teamId,
+        playedGameStats: body.game.playedGameStats,
+        status: body.game.status,
+      });
+      if (body.game.status === LIVE) {
+        this.setState({
+          homeLiveScore: body.game.homeScore,
+          awayLiveScore: body.game.awayScore,
+          liveTimeRem: body.game.clock,
+          livePeriod: body.game.period,
+        });
+      }
+
+      // var tID = null;
+      // if (body.game.status === LIVE) {
+      //   tID = setTimeout(async () => {
+      //     await this.fetchGameData(this.props.gameID);
+      //   }, REFRESH_RATE);
+      //   this.setState({ timeoutID: tID });
+      // }
+    }
+  }
+
+  async fetchMLBGameData(gameID) {
+    var res = await fetch(MLB_GET_GAME_BY_ID + `/${gameID}`, {});
+    var body = await res.json();
+    console.log(body);
+    if (res.status === 200) {
+      var predictedWinner = body.game.home.teamName;
+      if (body.game.away.teamId === body.game.predictedWinner) {
+        predictedWinner = body.game.away.teamName;
+      }
+
+      var date = new Date(body.game.date).toLocaleDateString(
+        "en-US",
+        DATE_OPTIONS
+      );
+
+      var time = new Date(body.game.date).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      this.setState({
+        arena: body.game.arena,
+        predictedWinner: predictedWinner,
+        predictionConfidence: Number((body.game.confidence * 100).toFixed(2)),
+        homeTeam: body.game.home.teamName,
+        awayTeam: body.game.away.teamName,
+        homeHex: getEPLColorByTeam(body.game.home.teamName),
+        awayHex: getEPLColorByTeam(body.game.away.teamName),
+        homeLogo: body.game.home.teamImage,
+        awayLogo: body.game.away.teamImage,
+        gameDate: date,
+        gameTime: time,
+        homeId: body.game.home.teamId,
+        awayId: body.game.away.teamId,
         playedGameStats: body.game.playedGameStats,
         status: body.game.status,
       });
@@ -673,7 +734,13 @@ export default class GameInfoCard extends Component {
 
               <LinkButton
                 variant="success"
-                to={GAME_INFO_ROUTE + "/" + this.props.gameID}
+                to={
+                  GAME_INFO_ROUTE +
+                  "/" +
+                  this.props.league +
+                  "/" +
+                  this.props.gameID
+                }
               >
                 More Info
               </LinkButton>

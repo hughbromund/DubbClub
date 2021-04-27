@@ -10,6 +10,7 @@ import {
   EPL_GET_UPCOMING_GAMES,
   EPL,
   NBA,
+  MLB,
 } from "../../constants/Constants";
 import GameInfoCard from "../GameInfoCard/GameInfoCard";
 import Masthead from "../Masthead/Masthead";
@@ -149,6 +150,13 @@ export default class Home extends Component {
           <hr />
           <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
             {EPLCards.slice(0, 9)}
+          </Row>
+          <h3>Upcoming MLB Games with Dubb Club Predictions</h3>
+          <hr />
+          <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+            <Col>
+              <GameInfoCard league={MLB} gameID={"000000"} />
+            </Col>
           </Row>
         </Container>
       </div>
