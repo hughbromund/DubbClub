@@ -5,3 +5,5 @@ dispatch:
     service: mustafar
   - url: "alderaan.dubb.club/*"
     service: alderaan
+  - url: "hoth.dubb.club/*"
+    service: hoth
