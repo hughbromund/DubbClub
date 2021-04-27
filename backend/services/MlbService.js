@@ -197,6 +197,22 @@ exports.getTeamsFromDb = async function getTeamsFromDb() {
     return res
 }
 
+exports.getUpcomingGameIdsPlusCurr = async function() {
+    let upcomingGames = []
+    let start = new Date()
+    let month = start.getMonth()
+    let day = start.getDay()
+    let year = start.getFullYear()
+    for (let i = 0; i < 4; i++) {
+        let games = await axios.get("http://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&date="
+         + month + "/" + day + "/" + year)
+        for (let j = 0; j < (games.data.dates[0]).games.length; j++) {
+            upcomingGames.push((games.data.dates[0]).games[j].gamePk)
+        }
+    }
+    return upcomingGames
+}
+
 exports.updateTeamsInDb = async function updateTeamsInDb() {
     //const result = await mlbStats.getGame({ params: { gamePk: 12345 }});
     //const result = await mlbStats.getGameWinProbability({ pathParams: { gamePk: 12345 }})
@@ -235,13 +251,10 @@ exports.updateTeamsInDb = async function updateTeamsInDb() {
             }
         }
     }
-    //console.log(mlbStandings)
 
     for (let i = 0; i < mlbTeams.length; i++) {
         for (let j = 0; j < mlbStandings.length; j++) {
             if (mlbTeams[i].id === mlbStandings[j].team.id) {
-                //let mlbTeam = createTeamObj(mlbTeams[i], mlbStandings[j])
-                console.log(mlbStandings[j].divisionGamesBack)
                 let gamesBack = (mlbStandings[j].divisionGamesBack === '-') ? 0 : mlbStandings[j].divisionGamesBack
                 let res = await MLBteam.updateOne({"teamId" : mlbTeams[i].id}, {
                     teamId: mlbTeams[i].id,
