@@ -41,7 +41,7 @@ const mlbStats = new MLBStatsAPI();
 */
 
 
-exports.getGameFromDb = async function getGameFromDb(gameId) {
+getGameFromDb = async function (gameId) {
     //let res = await axios.get("https://statsapi.mlb.com/api/v1/game/632222/winProbability")
     return {
         id: 632222,
@@ -134,7 +134,7 @@ exports.getGameFromDb = async function getGameFromDb(gameId) {
                 "awayScore": 2
             }
         ],
-        playedGameStats: {type: Object, unique: false, required: false, default: {}},
+        playedGameStats: {},
         livePredictions: [
             {  
                 "homeConfidence" : 0.5,
@@ -184,7 +184,15 @@ exports.getGameFromDb = async function getGameFromDb(gameId) {
         inning: 10,
         half: "bottom"
     }
-    
+}
+exports.getGameFromDb = getGameFromDb
+
+exports.getLiveGamePreds = async function getLiveGamePreds(gameId) {
+    console.log(gameId)
+    let game = await getGameFromDb(gameId)
+    console.log(game)
+    let header = {1: game.livePredictions.length}
+    return { periodLengths: header, predictions: game.livePredictions }
 }
 
 exports.getTeamFromDb = async function getTeamFromDb(teamId) {

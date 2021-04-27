@@ -1272,3 +1272,28 @@ JSON return Format:
   half: "bottom"
 }
 ```
+
+### /api/mlb/getLiveGamePreds/:gameId
+
+GET
+
+gets live game array with header for specific game  
+Requirements: gameId  
+Returns: header and live game predicitions array  
+Status: working  
+
+JSON return Format:  
+```json
+{
+  "periodLengths": {
+    "1": length of predictions array
+  },
+  "predictions": [
+    {
+      "homeConfidence": 0.5,
+      "awayConfidence": 0.5,
+      "inning": 1,
+      "half": "top"
+    }
+  ]
+}
