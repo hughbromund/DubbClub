@@ -11,6 +11,7 @@ import {
   GET_NBA_STANDINGS,
   GAME_INFO_ROUTE,
   GET_GAMES_BY_TEAM_DB,
+  NBA,
 } from "../../constants/Constants";
 import {
   getColorByTeam,
@@ -197,11 +198,7 @@ export default class Team extends Component {
       let temp = (
         <Col>
           <GameInfoCard
-            onClickHandler={() => {
-              this.props.history.push(
-                GAME_INFO_ROUTE + `/${this.state.games[i].gameId}`
-              );
-            }}
+            league={NBA}
             gameID={this.state.games[i]}
             history={this.props.history}
             key={i}

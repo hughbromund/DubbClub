@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import Card from "../Card/Card";
 import {
   GAME_INFO_ROUTE,
   GET_DASHBOARD,
@@ -128,12 +129,17 @@ export default class Home extends Component {
       <div>
         <Container fluid>
           <Masthead history={this.props.history} />
-
-          <h3>Live Games</h3>
-          <hr />
-          <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
-            {liveCards.length !== 0 ? liveCards : "No currently running games."}
-          </Row>
+          <div hidden={liveCards.length === 0}>
+            <h3>Live Games</h3>
+            <hr />
+            <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
+              {liveCards.length !== 0 ? (
+                liveCards
+              ) : (
+                <Card>No currently running games.</Card>
+              )}
+            </Row>
+          </div>
           <h3>Upcoming NBA Games with Dubb Club Predictions</h3>
           <hr />
           <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
