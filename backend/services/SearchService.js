@@ -3,6 +3,7 @@ const axios = require("axios");
 const config = require(path.resolve(__dirname, "../config.json"));
 const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
 const NBAteam = require(path.resolve(__dirname, "../database/models/NBAteam"));
+const EPLteam = require("../database/models/EPLteam");
 
 exports.autocompleteStub = async function () {
   var player1 = {
@@ -50,3 +51,18 @@ exports.autocompleteStub = async function () {
 
   return { players: players, teams: teams };
 };
+
+exports.autoCompleteEPL = async function (searchTerm) {
+  searchTerm = searchTerm.toLowerCase();
+  let results = await EPLteam.find({}, {teamId: 1, teamName: 1, teamImage: 1})
+
+  results = results.filter( (a) => {
+    return a.teamName.toLowerCase().includes(searchTerm)
+  })
+  for (var i = 0; i < results.length; i++) {
+    results[i] = results[i].toObject()
+    results[i].league = "EPL"
+  }
+
+  return results
+}
