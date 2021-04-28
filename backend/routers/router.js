@@ -158,6 +158,8 @@ router.get("/api/mlb/getGameFromDb/:gameId", mlbController.getGameFromDb)
 router.get("/api/mlb/getUpcomingGameIdsPlusCurr", mlbController.getUpcomingGameIdsPlusCurr)
 router.get("/api/mlb/getLiveGamePreds/:gameId", mlbController.getLiveGamePreds)
 router.get("/api/mlb/updateDbWithGamesAndPredictions", hothController.updateDbWithGamesAndPredictions)
+router.get("/api/mlb/refresh", mlbController.refresh)
+
 
 
 
