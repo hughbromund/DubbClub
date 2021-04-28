@@ -3,66 +3,98 @@ const axios = require("axios");
 const config = require(path.resolve(__dirname, "../config.json"));
 const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
 const NBAteam = require(path.resolve(__dirname, "../database/models/NBAteam"));
+const NBAplayer = require(path.resolve(
+  __dirname,
+  "../database/models/NBAplayer"
+));
 const EPLteam = require("../database/models/EPLteam");
+const MLBteam = require("../database/models/MLBteam");
 
-exports.autocompleteStub = async function () {
-  var player1 = {
-    id: 70,
-    name: "Corey Brewer",
-    teamImage:
-      "https://upload.wikimedia.org/wikipedia/fr/thumb/9/95/Kings_de_Sacramento_logo.svg/1200px-Kings_de_Sacramento_logo.svg.png",
-  };
-  var player2 = {
-    id: 92,
-    name: "Clint Capela",
-    teamImage: "https://upload.wikimedia.org/wikipedia/fr/e/ee/Hawks_2016.png",
-  };
+exports.autocomplete = async function (query) {
+  var input = query;
 
-  var team1 = {
-    id: 1,
-    name: "Atlanta Hawks",
-    teamImage: "https://upload.wikimedia.org/wikipedia/fr/e/ee/Hawks_2016.png",
-  };
+  let playerQuery = NBAplayer.aggregate([
+    {
+      $project: {
+        _id: 0,
+        id: "$playerInfo.playerId",
+        teamImage: "$playerInfo.teamImage",
+        name: {
+          $concat: ["$playerInfo.firstName", " ", "$playerInfo.lastName"],
+        },
+      },
+    },
+    { $match: { name: { $regex: ".*" + input + ".*" } } },
+  ]);
 
-  var team2 = {
-    id: 2,
-    name: "Boston Celtics",
-    teamImage:
-      "https://upload.wikimedia.org/wikipedia/fr/thumb/6/65/Celtics_de_Boston_logo.svg/1024px-Celtics_de_Boston_logo.svg.png",
-  };
+  let nbaQuery = NBAteam.aggregate([
+    { $match: { teamName: { $regex: ".*" + input + ".*" } } },
+    {
+      $project: {
+        _id: 0,
+        teamName: 1,
+        teamImage: 1,
+        teamId: 1,
+        league: { $literal: "NBA" },
+      },
+    },
+  ]).exec();
 
-  var players = [];
-  for (var i = 0; i < Math.random() * 10 + 3; i++) {
-    if (Math.random() < 0.5) {
-      players.push(player1);
-    } else {
-      players.push(player2);
-    }
-  }
+  let mlbQuery = MLBteam.aggregate([
+    { $match: { teamName: { $regex: ".*" + input + ".*" } } },
+    {
+      $project: {
+        _id: 0,
+        teamName: 1,
+        teamImage: 1,
+        teamId: 1,
+        league: { $literal: "MLB" },
+      },
+    },
+  ]).exec();
 
-  var teams = [];
-  for (var i = 0; i < Math.random() * 10 + 3; i++) {
-    if (Math.random() < 0.5) {
-      teams.push(team1);
-    } else {
-      teams.push(team2);
-    }
-  }
+  let eplQuery = EPLteam.aggregate([
+    { $match: { teamName: { $regex: ".*" + input + ".*" } } },
+    {
+      $project: {
+        _id: 0,
+        teamName: 1,
+        teamImage: 1,
+        teamId: 1,
+        league: { $literal: "EPL" },
+      },
+    },
+  ]).exec();
 
-  return { players: players, teams: teams };
+  let results = await Promise.all([nbaQuery, mlbQuery, eplQuery, playerQuery]);
+
+  let nbaResults = results[0];
+  let mlbResults = results[1];
+  let eplResults = results[2];
+
+  let teamResults = nbaResults.concat(mlbResults).concat(eplResults);
+
+  let playerResults = results[3];
+
+  console.log(playerResults);
+
+  return { players: playerResults, teams: teamResults };
 };
 
 exports.autoCompleteEPL = async function (searchTerm) {
   searchTerm = searchTerm.toLowerCase();
-  let results = await EPLteam.find({}, {teamId: 1, teamName: 1, teamImage: 1})
+  let results = await EPLteam.find(
+    {},
+    { teamId: 1, teamName: 1, teamImage: 1 }
+  );
 
-  results = results.filter( (a) => {
-    return a.teamName.toLowerCase().includes(searchTerm)
-  })
+  results = results.filter((a) => {
+    return a.teamName.toLowerCase().includes(searchTerm);
+  });
   for (var i = 0; i < results.length; i++) {
-    results[i] = results[i].toObject()
-    results[i].league = "EPL"
+    results[i] = results[i].toObject();
+    results[i].league = "EPL";
   }
 
-  return results
-}
+  return results;
+};
