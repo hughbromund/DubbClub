@@ -24,11 +24,11 @@ exports.autocomplete = async function (query) {
         },
       },
     },
-    { $match: { name: { $regex: ".*" + input + ".*" } } },
+    { $match: { name: { $regex: ".*" + input + ".*", $options: "i" } } },
   ]);
 
   let nbaQuery = NBAteam.aggregate([
-    { $match: { teamName: { $regex: ".*" + input + ".*" } } },
+    { $match: { teamName: { $regex: ".*" + input + ".*", $options: "i" } } },
     {
       $project: {
         _id: 0,
@@ -41,7 +41,7 @@ exports.autocomplete = async function (query) {
   ]).exec();
 
   let mlbQuery = MLBteam.aggregate([
-    { $match: { teamName: { $regex: ".*" + input + ".*" } } },
+    { $match: { teamName: { $regex: ".*" + input + ".*", $options: "i" } } },
     {
       $project: {
         _id: 0,
@@ -54,7 +54,7 @@ exports.autocomplete = async function (query) {
   ]).exec();
 
   let eplQuery = EPLteam.aggregate([
-    { $match: { teamName: { $regex: ".*" + input + ".*" } } },
+    { $match: { teamName: { $regex: ".*" + input + ".*", $options: "i" } } },
     {
       $project: {
         _id: 0,
@@ -76,7 +76,7 @@ exports.autocomplete = async function (query) {
 
   let playerResults = results[3];
 
-  console.log(playerResults);
+  // console.log(playerResults);
 
   return { players: playerResults, teams: teamResults };
 };
