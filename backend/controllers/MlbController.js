@@ -22,10 +22,10 @@ exports.getTeamsFromDb = async function (req, res, next) {
 
 exports.getGameFromDb = async function (req, res, next) {
   try {
-      let result = await mlbService.getGameFromDb(req.params.gameId);
+      let result = await mlbService.getGameFromDb(req.params.gameId, req.userId);
       return res.status(200).json(result);
     } catch (e) {
-      return res.status(400).json({ status: 400, message: e.message });
+      return res.status(404).json({ status: 404, message: e.message });
   }
 };
 

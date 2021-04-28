@@ -47,7 +47,9 @@ async function updateDbWithLivePredictions(gameId, gameInDb) {
         "awayConfidence": game.awayTeamWinProbability,
         "homeConfidence": game.homeTeamWinProbability,
         "period": 1,
-        "timeElapsed": gameInDb.livePredictions.length + 1
+        "timeElapsed": gameInDb.livePredictions.length + 1,
+        "inning": game.about.inning,
+        "half": game.about.halfInning
     }
 
     let lineScore = []
