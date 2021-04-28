@@ -78,7 +78,7 @@ exports.notifications = (game) => {
     "To see more about the " +
     game.away.teamName +
     ", go to https://dubb.club/search/" +
-    encodeURI(game.home.teamName)
+    encodeURI(game.away.teamName)
 
   let emailBody =
     '<div style="background-color: #181818; padding: 15px; margin: 15px; border-radius: 5px;"><div style="text-align: left;"><img  width="300px" src="https://storage.googleapis.com/dubb-club-logo-bucket/LogoWordmarkWhite.png"/></div><div style="background-color: #202020; padding: 15px; margin: 15px; border-radius: 5px;"><h1 style="color: #ffffff;">Dubb Club Live Game Alert!</h1><h3 style="color: #ffffff;">' +
