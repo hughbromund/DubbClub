@@ -1316,7 +1316,7 @@ JSON return Format:
 ```json
 {
   "periodLengths": {
-    "1": length of predictions array
+    "1": "length of predictions array"
   },
   "predictions": [
     {
@@ -1329,6 +1329,7 @@ JSON return Format:
     }
   ]
 }
+```
 
 ### /api/mlb/updateDbWithGamesAndPredictions
 
