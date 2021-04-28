@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { ResponsiveLine } from "@nivo/line";
 
-import { GET_LIVE_GAME_PREDS } from "../../constants/Constants";
+import {
+  GET_LIVE_GAME_PREDS,
+  MLB_GET_LIVE_GAME_PREDS,
+  NBA,
+  MLB,
+} from "../../constants/Constants";
 
 import classes from "./PredictionGraph.module.css";
 
@@ -50,10 +55,16 @@ export default class PredictionGraph extends Component {
       clearTimeout(this.state.timeoutID);
     }
   }
-  async fetchData() {
-    var res = await fetch(GET_LIVE_GAME_PREDS + "/" + this.state.gameID);
+  async fetchData(league) {
+    var endpoint = GET_LIVE_GAME_PREDS;
+    if (league === MLB) {
+      endpoint = MLB_GET_LIVE_GAME_PREDS;
+    }
+
+    var res = await fetch(endpoint + "/" + this.state.gameID);
 
     var body = await res.json();
+    console.log(body);
 
     var periodLengths = body.data.periodLengths;
     periodLengths[0] = 0;
@@ -73,17 +84,33 @@ export default class PredictionGraph extends Component {
       for (var i = 0; i < prediction.period; i++) {
         runningTime = periodLengths[i] + runningTime;
       }
-
-      homeData.push({
-        x: prediction.timeElapsed + runningTime,
-        y: prediction.homeConfidence * 100,
-        period: prediction.period,
-      });
-      awayData.push({
-        x: prediction.timeElapsed + runningTime,
-        y: prediction.awayConfidence * 100,
-        period: prediction.period,
-      });
+      if (league === MLB) {
+        homeData.push({
+          x: prediction.timeElapsed + runningTime,
+          y: prediction.homeConfidence * 100,
+          period: prediction.period,
+          inning: prediction.inning,
+          half: prediction.half,
+        });
+        awayData.push({
+          x: prediction.timeElapsed + runningTime,
+          y: prediction.awayConfidence * 100,
+          period: prediction.period,
+          inning: prediction.inning,
+          half: prediction.half,
+        });
+      } else {
+        homeData.push({
+          x: prediction.timeElapsed + runningTime,
+          y: prediction.homeConfidence * 100,
+          period: prediction.period,
+        });
+        awayData.push({
+          x: prediction.timeElapsed + runningTime,
+          y: prediction.awayConfidence * 100,
+          period: prediction.period,
+        });
+      }
     });
 
     tempData.push({
@@ -128,7 +155,7 @@ export default class PredictionGraph extends Component {
   }
 
   async componentDidMount() {
-    this.fetchData();
+    this.fetchData(this.props.league ?? NBA);
   }
 
   getColor(object) {
@@ -159,14 +186,19 @@ export default class PredictionGraph extends Component {
           gridXValues={this.state.periods}
           theme={theme}
           axisBottom={{
-            legend: "Game Time",
+            legend: this.props.league === MLB ? "Predictions" : "Game Time",
             legendOffset: 36,
             legendPosition: "middle",
-            format: function (value) {
-              var minutes = Math.floor(value / 60);
-              var seconds = value - minutes * 60;
-              return minutes + ":" + seconds;
-            },
+            format:
+              this.props.league === MLB
+                ? function (value) {
+                    return null;
+                  }
+                : function (value) {
+                    var minutes = Math.floor(value / 60);
+                    var seconds = value - minutes * 60;
+                    return minutes + ":" + seconds;
+                  },
           }}
           axisLeft={{
             legend: "Win Percentage",
@@ -179,24 +211,40 @@ export default class PredictionGraph extends Component {
           gridYValues={[0, 50, 100]}
           margin={{ top: 10, right: 10, bottom: 50, left: 70 }}
           tooltip={(point) => {
+            console.log(point);
             var team = this.state.homeTeamName;
             if (point.point.serieId === AWAY_VALUE) {
               team = this.state.awayTeamName;
             }
-
-            return (
-              <div
-                key={point.point.id}
-                className={classes.tooltip}
-                style={{ boxShadow: "-10px 0px " + point.point.serieColor }}
-              >
-                <strong>{team}</strong>
-                <br />
-                {point.point.data.yFormatted}% Win Confidence
-                <br />
-                Quarter {point.point.data.period}
-              </div>
-            );
+            if (this.props.league === MLB) {
+              return (
+                <div
+                  key={point.point.id}
+                  className={classes.tooltip}
+                  style={{ boxShadow: "-10px 0px " + point.point.serieColor }}
+                >
+                  <strong>{team}</strong>
+                  <br />
+                  {point.point.data.yFormatted}% Win Confidence
+                  <br />
+                  {point.point.data.half} of Inning {point.point.data.inning}
+                </div>
+              );
+            } else {
+              return (
+                <div
+                  key={point.point.id}
+                  className={classes.tooltip}
+                  style={{ boxShadow: "-10px 0px " + point.point.serieColor }}
+                >
+                  <strong>{team}</strong>
+                  <br />
+                  {point.point.data.yFormatted}% Win Confidence
+                  <br />
+                  Quarter {point.point.data.period}
+                </div>
+              );
+            }
           }}
         />
       </div>
