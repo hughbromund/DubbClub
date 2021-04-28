@@ -56,7 +56,7 @@ exports.notifications = (game) => {
     game.home.teamName +
     " vs. " +
     game.away.teamName +
-    " is starting! Go to https://dubb.club/game/" +
+    " is starting! Go to https://dubb.club/game/MLB/" +
     game.id +
     " to the see the latest predictions and information.";
 
@@ -72,13 +72,13 @@ exports.notifications = (game) => {
     "To see more about the " +
     game.home.teamName +
     ", go to https://dubb.club/search/" +
-    game.home.teamId;
+    encodeURI(game.home.teamName)
 
   let awayInfo =
     "To see more about the " +
     game.away.teamName +
     ", go to https://dubb.club/search/" +
-    game.away.teamId;
+    encodeURI(game.home.teamName)
 
   let emailBody =
     '<div style="background-color: #181818; padding: 15px; margin: 15px; border-radius: 5px;"><div style="text-align: left;"><img  width="300px" src="https://storage.googleapis.com/dubb-club-logo-bucket/LogoWordmarkWhite.png"/></div><div style="background-color: #202020; padding: 15px; margin: 15px; border-radius: 5px;"><h1 style="color: #ffffff;">Dubb Club Live Game Alert!</h1><h3 style="color: #ffffff;">' +
