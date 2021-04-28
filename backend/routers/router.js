@@ -53,6 +53,11 @@ const mlbController = require(path.resolve(
   "../controllers/MlbController"
 ));
 
+const hothController = require(path.resolve(
+  __dirname,
+  "../controllers/HothController"
+));
+
 //User routes
 //NOTE: for any request requiring user auth, must call authJWT.verifyToken first
 router.post("/api/auth/login", userController.login)
@@ -150,6 +155,8 @@ router.get("/api/mlb/getTeamsFromDb", mlbController.getTeamsFromDb)
 router.get("/api/mlb/getGameFromDb/:gameId", mlbController.getGameFromDb)
 router.get("/api/mlb/getUpcomingGameIdsPlusCurr", mlbController.getUpcomingGameIdsPlusCurr)
 router.get("/api/mlb/getLiveGamePreds/:gameId", mlbController.getLiveGamePreds)
+router.get("/api/mlb/updateDbWithGamesAndPredictions", hothController.updateDbWithGamesAndPredictions)
+
 
 
 //EPL
