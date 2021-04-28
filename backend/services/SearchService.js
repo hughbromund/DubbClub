@@ -59,6 +59,10 @@ exports.autoCompleteEPL = async function (searchTerm) {
   results = results.filter( (a) => {
     return a.teamName.toLowerCase().includes(searchTerm)
   })
+  for (var i = 0; i < results.length; i++) {
+    results[i] = results[i].toObject()
+    results[i].league = "EPL"
+  }
 
   return results
 }
