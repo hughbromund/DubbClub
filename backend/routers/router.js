@@ -141,6 +141,8 @@ router.get("/api/nba/updatePlayersByGame/:gameId", nbaController.updatePlayersBy
 //get list of all gameIds from given team from db
 router.get("/api/autoCompleteStub", searchController.autoCompleteStub)
 
+router.get("/api/autoCompleteEPL/:search", searchController.autoCompleteEPL)
+
 //TESTING PURPOSES ONLY - post gameId to send all users notifications
 //router.post("/api/nba/notificationsTest", nbaUserController.notificationsTest)
 
