@@ -24,3 +24,8 @@ cron:
     target: backend
     schedule: every 1 minutes from 11:00 to 01:00
     timezone: America/New_York
+  - description: "Refresh MLB Game Status"
+    url: /api/mlb/refresh
+    target: backend
+    schedule: every 1 minutes from 11:00 to 01:00
+    timezone: America/New_York
