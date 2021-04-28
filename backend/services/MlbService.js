@@ -392,3 +392,4 @@ exports.updateTeamsInDb = async function updateTeamsInDb() {
     }
   }
 };
+}

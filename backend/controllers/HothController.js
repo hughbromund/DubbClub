@@ -1,6 +1,6 @@
 const path = require("path");
 var mlbService = require(path.resolve(__dirname, "../services/MlbService"));
-var mlbUpdateService = require(path.resolve(__dirname, "../services/MlbUpdateService"));
+// var mlbUpdateService = require(path.resolve(__dirname, "../services/MlbUpdateService"));
 var hothService = require(path.resolve(__dirname, "../services/HothService"));
 
 exports.updateDbWithGamesAndPredictions = async function (req, res, next) {
