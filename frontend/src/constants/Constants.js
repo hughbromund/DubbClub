@@ -68,6 +68,10 @@ export const EPL_GET_GAMES_BY_TEAM = BASE + "/api/epl/getGamesByTeamFromDb";
 export const EPL_GET_GAME_BY_ID = BASE + "/api/epl/getGameFromDb";
 export const EPL_GET_TEAM_STATS = BASE + "/api/epl/getTeamStats";
 
+/* MLB constants */
+export const MLB_GET_GAME_BY_ID = BASE + "/api/mlb/getGameFromDb";
+export const MLB_GET_LIVE_GAME_PREDS = BASE + "/api/mlb/getLiveGamePreds";
+
 /* Date options to convert to UTC for Game Cards */
 export const DATE_OPTIONS = {
   weekday: "long",

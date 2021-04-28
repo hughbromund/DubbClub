@@ -16,8 +16,12 @@ import {
   FINISHED,
   EPL_GET_GAME_BY_ID,
   EPL,
+  MLB,
+  MLB_GET_GAME_BY_ID,
 } from "../../constants/Constants";
 import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
+import { getMLBColorByTeam } from "../../constants/MLBConstants";
+import { getEPLColorByTeam } from "../../constants/EPLConstants";
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -85,6 +89,7 @@ export default class GameInfoCard extends Component {
     this.fetchEPLGameData = this.fetchEPLGameData.bind(this);
     this.renderPredictionSubtext = this.renderPredictionSubtext.bind(this);
     this.renderScore = this.renderScore.bind(this);
+    this.fetchMLBGameData = this.fetchMLBGameData.bind(this);
   }
 
   renderGraph(homeAwayWinner) {
@@ -144,6 +149,7 @@ export default class GameInfoCard extends Component {
   renderScore() {
     if (
       this.state.playedGameStats !== undefined &&
+      this.state.playedGameStats.away !== undefined &&
       this.state.playedGameStats.away.lineScore.length !== 0
     ) {
       return (
@@ -282,6 +288,8 @@ export default class GameInfoCard extends Component {
   async fetchGameData(gameID) {
     if (this.props.league === EPL) {
       await this.fetchEPLGameData(gameID);
+    } else if (this.props.league === MLB) {
+      await this.fetchMLBGameData(gameID);
     } else {
       await this.fetchNBAGameData(gameID);
     }
@@ -312,14 +320,70 @@ export default class GameInfoCard extends Component {
         predictionConfidence: Number((body.game.confidence * 100).toFixed(2)),
         homeTeam: body.game.home[0].teamName,
         awayTeam: body.game.away[0].teamName,
-        homeHex: getColorByTeam(body.game.home[0].teamName),
-        awayHex: getColorByTeam(body.game.away[0].teamName),
+        homeHex: getEPLColorByTeam(body.game.home[0].teamName),
+        awayHex: getEPLColorByTeam(body.game.away[0].teamName),
         homeLogo: body.game.home[0].teamImage,
         awayLogo: body.game.away[0].teamImage,
         gameDate: date,
         gameTime: time,
         homeId: body.game.home[0].teamId,
         awayId: body.game.away[0].teamId,
+        playedGameStats: body.game.playedGameStats,
+        status: body.game.status,
+      });
+      if (body.game.status === LIVE) {
+        this.setState({
+          homeLiveScore: body.game.homeScore,
+          awayLiveScore: body.game.awayScore,
+          liveTimeRem: body.game.clock,
+          livePeriod: body.game.period,
+        });
+      }
+
+      // var tID = null;
+      // if (body.game.status === LIVE) {
+      //   tID = setTimeout(async () => {
+      //     await this.fetchGameData(this.props.gameID);
+      //   }, REFRESH_RATE);
+      //   this.setState({ timeoutID: tID });
+      // }
+    }
+  }
+
+  async fetchMLBGameData(gameID) {
+    var res = await fetch(MLB_GET_GAME_BY_ID + `/${gameID}`, {});
+    var body = await res.json();
+    console.log(body);
+    if (res.status === 200) {
+      var predictedWinner = body.game.home.teamName;
+      if (body.game.away.teamId === body.game.predictedWinner) {
+        predictedWinner = body.game.away.teamName;
+      }
+
+      var date = new Date(body.game.date).toLocaleDateString(
+        "en-US",
+        DATE_OPTIONS
+      );
+
+      var time = new Date(body.game.date).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      this.setState({
+        arena: body.game.arena,
+        predictedWinner: predictedWinner,
+        predictionConfidence: Number((body.game.confidence * 100).toFixed(2)),
+        homeTeam: body.game.home.teamName,
+        awayTeam: body.game.away.teamName,
+        homeHex: getMLBColorByTeam(body.game.home.teamName),
+        awayHex: getMLBColorByTeam(body.game.away.teamName),
+        homeLogo: body.game.home.teamImage,
+        awayLogo: body.game.away.teamImage,
+        gameDate: date,
+        gameTime: time,
+        homeId: body.game.home.teamId,
+        awayId: body.game.away.teamId,
         playedGameStats: body.game.playedGameStats,
         status: body.game.status,
       });
@@ -416,7 +480,7 @@ export default class GameInfoCard extends Component {
     }
   }
 
-  async favoriteTeam(teamId) {
+  async favoriteTeam(teamId, league) {
     var res = await fetch(FAVORITE_TEAM, {
       method: "POST",
       mode: "cors",
@@ -425,7 +489,7 @@ export default class GameInfoCard extends Component {
         "x-access-token": this.context.token,
       },
       body: JSON.stringify({
-        league: "NBA",
+        league: league,
         teamId: teamId,
       }),
     });
@@ -438,7 +502,7 @@ export default class GameInfoCard extends Component {
     return true;
   }
 
-  async unFavoriteTeam(teamId) {
+  async unFavoriteTeam(teamId, league) {
     var res = await fetch(UNFAVORITE_TEAM, {
       method: "POST",
       mode: "cors",
@@ -447,7 +511,7 @@ export default class GameInfoCard extends Component {
         "x-access-token": this.context.token,
       },
       body: JSON.stringify({
-        league: "NBA",
+        league: league,
         teamId: teamId,
       }),
     });
@@ -504,19 +568,22 @@ export default class GameInfoCard extends Component {
                     >
                       <div
                         hidden={this.context.isFollowedTeam(
-                          "NBA",
+                          this.props.league,
                           this.state.awayId
                         )}
                       >
                         <SmartButton
                           successMessage={
-                            "Added the " +
+                            "Added " +
                             this.state.awayTeam +
                             " to your favorites!"
                           }
                           errorMessage="Error Favoriting"
                           runOnClick={() => {
-                            return this.favoriteTeam(this.state.awayId);
+                            return this.favoriteTeam(
+                              this.state.awayId,
+                              this.props.league
+                            );
                           }}
                         >
                           Favorite
@@ -524,18 +591,24 @@ export default class GameInfoCard extends Component {
                       </div>
                       <div
                         hidden={
-                          !this.context.isFollowedTeam("NBA", this.state.awayId)
+                          !this.context.isFollowedTeam(
+                            this.props.league,
+                            this.state.awayId
+                          )
                         }
                       >
                         <SmartButton
                           successMessage={
-                            "Removed the " +
+                            "Removed " +
                             this.state.awayTeam +
                             " from your favorites!"
                           }
                           errorMessage="Error Removing Favorite"
                           runOnClick={() => {
-                            return this.unFavoriteTeam(this.state.awayId);
+                            return this.unFavoriteTeam(
+                              this.state.awayId,
+                              this.props.league
+                            );
                           }}
                         >
                           Remove Favorite
@@ -568,19 +641,22 @@ export default class GameInfoCard extends Component {
                     >
                       <div
                         hidden={this.context.isFollowedTeam(
-                          "NBA",
+                          this.props.league,
                           this.state.homeId
                         )}
                       >
                         <SmartButton
                           successMessage={
-                            "Added the " +
+                            "Added " +
                             this.state.homeTeam +
                             " to your favorites!"
                           }
                           errorMessage="Error Favoriting"
                           runOnClick={() => {
-                            return this.favoriteTeam(this.state.homeId);
+                            return this.favoriteTeam(
+                              this.state.homeId,
+                              this.props.league
+                            );
                           }}
                         >
                           Favorite
@@ -588,18 +664,24 @@ export default class GameInfoCard extends Component {
                       </div>
                       <div
                         hidden={
-                          !this.context.isFollowedTeam("NBA", this.state.homeId)
+                          !this.context.isFollowedTeam(
+                            this.props.league,
+                            this.state.homeId
+                          )
                         }
                       >
                         <SmartButton
                           successMessage={
-                            "Removed the " +
+                            "Removed " +
                             this.state.homeTeam +
                             " from your favorites!"
                           }
                           errorMessage="Error Removing Favorite"
                           runOnClick={() => {
-                            return this.unFavoriteTeam(this.state.homeId);
+                            return this.unFavoriteTeam(
+                              this.state.homeId,
+                              this.props.league
+                            );
                           }}
                         >
                           Remove Favorite
@@ -653,7 +735,13 @@ export default class GameInfoCard extends Component {
 
               <LinkButton
                 variant="success"
-                to={GAME_INFO_ROUTE + "/" + this.props.gameID}
+                to={
+                  GAME_INFO_ROUTE +
+                  "/" +
+                  this.props.league +
+                  "/" +
+                  this.props.gameID
+                }
               >
                 More Info
               </LinkButton>

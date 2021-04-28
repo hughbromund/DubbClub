@@ -91,12 +91,12 @@ class App extends Component {
               />
               <Route
                 exact
-                path={GAME_INFO_ROUTE + "/:id"}
+                path={GAME_INFO_ROUTE + "/:league/:id"}
                 component={ExpandedGameInfo}
               />
               <Route
                 exact
-                path={TEAM_INFO_ROUTE + "/:league?" + "/:id?"}
+                path={TEAM_INFO_ROUTE + "/:league?/:id?"}
                 component={Team}
               />
               <Route

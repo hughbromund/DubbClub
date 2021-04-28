@@ -7,7 +7,7 @@ cron:
   - description: "Refresh NBA Game Status"
     url: /api/nba/refresh
     target: backend
-    schedule: every 30 minutes from 11:00 to 01:00
+    schedule: every 1 minutes from 11:00 to 01:00
     timezone: America/New_York
   - description: "Update Team Standings and Conferences"
     url: /api/nba/updateTeamStandings
@@ -22,5 +22,5 @@ cron:
   - description: "Refresh EPL Game Status"
     url: /api/epl/refresh
     target: backend
-    schedule: every 30 minutes from 11:00 to 01:00
+    schedule: every 1 minutes from 11:00 to 01:00
     timezone: America/New_York
