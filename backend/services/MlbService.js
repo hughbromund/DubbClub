@@ -68,11 +68,11 @@ exports.getGameFromDb = getGameFromDb;
 
 exports.getLiveGamePreds = async function getLiveGamePreds(gameId) {
   let game = await getGameFromDb(gameId);
-  let header = { 1: game.livePredictions.length };
+  let header = { 1: game.game.livePredictions.length };
   return {
     data: {
       periodLengths: header,
-      predictions: game.livePredictions,
+      predictions: game.game.livePredictions,
     },
     message: "Successful!",
   };
