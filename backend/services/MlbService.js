@@ -231,6 +231,89 @@ exports.getTeamsFromDb = async function getTeamsFromDb() {
   return res;
 };
 
+exports.getUpcomingGameIdsPlusCurr = async function() {
+    let upcomingGames = []
+    let start = new Date()
+    start.setDate(start.getDate() - 1)
+    for (let i = 0; i < 4; i++) {
+        let games = await axios.get("http://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&date="
+         + start.toISOString().slice(0,10))
+        for (let j = 0; j < (games.data.dates[0]).games.length; j++) {
+            upcomingGames.push((games.data.dates[0]).games[j].gamePk)
+        }
+        start.setDate(start.getDate() + 1);
+    }
+    return upcomingGames
+}
+
+exports.getUpcomingGameIds = async function() {
+    let upcomingGames = []
+    let start = new Date()
+    let currDate = new Date()
+    for (let i = 0; i < 4; i++) {
+        let games = await axios.get("http://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&date="
+         + start.toISOString().slice(0,10))
+        for (let j = 0; j < (games.data.dates[0]).games.length; j++) {
+            let gameDate = new Date(games.data.dates[0].games[j].gameDate)
+            if (gameDate > currDate) {
+                upcomingGames.push((games.data.dates[0]).games[j].gamePk)
+            }
+        }
+        start.setDate(start.getDate() + 1);
+    }
+    return upcomingGames
+}
+
+exports.getUpcomingGameInfo = async function() {
+    let upcomingGames = []
+    let start = new Date()
+    let currDate = new Date()
+    for (let i = 0; i < 4; i++) {
+        let games = await axios.get("http://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&date="
+         + start.toISOString().slice(0,10))
+        for (let j = 0; j < (games.data.dates[0]).games.length; j++) {
+            let gameDate = new Date(games.data.dates[0].games[j].gameDate)
+            if (gameDate > currDate) {
+                upcomingGames.push((games.data.dates[0]).games[j])
+            }
+        }
+        start.setDate(start.getDate() + 1);
+    }
+    return upcomingGames
+}
+
+exports.getUpcomingGameInfoPlusCurr = async function() {
+    let upcomingGames = []
+    let start = new Date()
+    start.setDate(start.getDate() - 1)
+    for (let i = 0; i < 4; i++) {
+        let games = await axios.get("http://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&date="
+         + start.toISOString().slice(0,10))
+        for (let j = 0; j < (games.data.dates[0]).games.length; j++) {
+            upcomingGames.push((games.data.dates[0]).games[j])
+        }
+        start.setDate(start.getDate() + 1);
+    }
+    return upcomingGames
+}
+
+exports.getProbablePitchersForGame = async function(gameId) {
+    let game = await axios.get("http://statsapi.mlb.com/api/v1.1/game/" + gameId + "/feed/live")
+    let homePitcher = game.data.gameData.probablePitchers.home
+    let awayPitcher = game.data.gameData.probablePitchers.away
+    if (homePitcher === undefined) {
+        homePitcher = ""
+    } else {
+        homePitcher = homePitcher.id
+    }
+    if (awayPitcher === undefined) {
+        awayPitcher = ""
+    } else {
+        awayPitcher = awayPitcher.id
+    }
+    return {"gameId" : gameId, "homePitcher" : homePitcher, "awayPitcher": awayPitcher}
+}
+
 exports.updateTeamsInDb = async function updateTeamsInDb() {
   //const result = await mlbStats.getGame({ params: { gamePk: 12345 }});
   //const result = await mlbStats.getGameWinProbability({ pathParams: { gamePk: 12345 }})
@@ -275,8 +358,7 @@ exports.updateTeamsInDb = async function updateTeamsInDb() {
         mlbStandings.push(standings[i].teamRecords[j]);
       }
     }
-  }
-  //console.log(mlbStandings)
+
 
   for (let i = 0; i < mlbTeams.length; i++) {
     for (let j = 0; j < mlbStandings.length; j++) {

@@ -1297,3 +1297,15 @@ JSON return Format:
     }
   ]
 }
+
+### /api/mlb/updateDbWithGamesAndPredictions
+
+GET  
+Gets upcoming games and predictions for those games then  
+uploads them to Mongo  
+Requirements: none  
+Returns: status code and message  
+Status: Needs Predictions  
+Issues: None  
+
+Schema Format: Status Code/Message  

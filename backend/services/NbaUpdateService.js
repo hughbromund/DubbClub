@@ -1,6 +1,5 @@
 const path = require("path");
 const axios = require("axios");
-const { getUpcomingGameIds } = require("./NbaService");
 const config = require(path.resolve(__dirname, "../config.json"));
 const NBAgame = require(path.resolve(__dirname, "../database/models/NBAgame"));
 
