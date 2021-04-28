@@ -144,7 +144,7 @@ router.get("/api/nba/getPlayer/:playerId", nbaController.getPlayer)
 router.get("/api/nba/updatePlayersByGame/:gameId", nbaController.updatePlayersByGame)
 
 //get list of all gameIds from given team from db
-router.get("/api/autoCompleteStub", searchController.autoCompleteStub)
+router.get("/api/autoComplete/:search", searchController.autoComplete)
 
 router.get("/api/autoCompleteEPL/:search", searchController.autoCompleteEPL)
 

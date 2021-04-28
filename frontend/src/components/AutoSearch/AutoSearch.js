@@ -39,7 +39,7 @@ export default class AutoSearch extends Component {
   }
 
   async getSearchResults(query) {
-    var res = await fetch(AUTOCOMPLETE_SEARCH);
+    var res = await fetch(AUTOCOMPLETE_SEARCH + "/" + encodeURI(query));
 
     var body = await res.json();
 
@@ -78,7 +78,9 @@ export default class AutoSearch extends Component {
                     // teamResults: [],
                     // playerResults: [],
                   });
-                  await this.getSearchResults(e.target.value);
+                  if (e.target.value !== "") {
+                    await this.getSearchResults(e.target.value);
+                  }
                   this.updateURL(e.target.value);
                   this.setState({ loading: false });
                 }, 1000),
@@ -92,8 +94,10 @@ export default class AutoSearch extends Component {
           {this.state.teamResults.map((element, index) => {
             return (
               <AutoSearchCard
-                destination={TEAM_INFO_ROUTE + "/NBA/" + element.id}
-                name={element.name}
+                destination={
+                  TEAM_INFO_ROUTE + "/" + element.league + "/" + element.teamId
+                }
+                name={element.teamName}
                 logo={element.teamImage}
                 search={this.state.search}
               />

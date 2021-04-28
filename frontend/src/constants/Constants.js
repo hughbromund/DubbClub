@@ -58,7 +58,7 @@ export const GET_LIVE_GAME_PREDS = BASE + "/api/nba/getLiveGamePreds";
 export const GET_DASHBOARD = BASE + "/api/nba/getDashboard";
 export const SEND_VERIFY_EMAIL = BASE + "/api/user/sendVerifyEmail";
 export const VERIFY_EMAIL = BASE + "/api/user/verifyEmail";
-export const AUTOCOMPLETE_SEARCH = BASE + "/api/autoCompleteStub";
+export const AUTOCOMPLETE_SEARCH = BASE + "/api/autoComplete";
 export const GET_PLAYER_INFO = BASE + "/api/nba/getPlayer";
 
 /* EPL constants */
