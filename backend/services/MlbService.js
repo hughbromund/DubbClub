@@ -40,177 +40,34 @@ const mlbStats = new MLBStatsAPI();
 158 MIL Brewers
 */
 
-getGameFromDb = async function (gameId) {
-  //let res = await axios.get("https://statsapi.mlb.com/api/v1/game/632222/winProbability")
+getGameFromDb = async function (gameId, userId) {
+  let game = await MLBgame.findOne({ id : gameId }).exec()
+
+  if (game === null) {
+    throw new Error("Game not found!")
+  }
+
+  var votedTeamVal = "none"
+
+  if (userId) {
+    if (game.homeVoters.includes(userId)) {
+      votedTeamVal = "home"
+    }
+    else if (game.awayVoters.includes(userId)) {
+      votedTeamVal = "away"
+    }
+  }
+
   return {
-    game: {
-      id: 632222,
-      date: "2021-04-26T17:10:00Z",
-      arena: "Comerica Park",
-      home: {
-        _id: "6086668522b6482a6f3e672a",
-        teamId: 108,
-        __v: 0,
-        division: "American League West",
-        elo: 1500,
-        gamesBehind: 0.5,
-        lastGameID: 0,
-        league: "American League",
-        losses: 6,
-        streak: "W1",
-        teamImage:
-          "https://upload.wikimedia.org/wikipedia/commons/8/8b/Los_Angeles_Angels_of_Anaheim.svg",
-        teamName: "Los Angeles Angels",
-        wins: 9,
-      },
-      away: {
-        _id: "6086668522b6482a6f3e67a1",
-        teamId: 110,
-        __v: 0,
-        division: "American League East",
-        elo: 1500,
-        gamesBehind: 3.5,
-        lastGameID: 0,
-        league: "American League",
-        losses: 9,
-        streak: "W1",
-        teamImage:
-          "https://upload.wikimedia.org/wikipedia/commons/e/e9/Baltimore_Orioles_Script.svg",
-        teamName: "Baltimore Orioles",
-        wins: 8,
-      },
-      predictedWinner: 110,
-      confidence: 0.704,
-      homeVoters: ["60669a0f34b642000bb87244"],
-      awayVoters: ["6064e5572c5e0e000bd5c275"],
-      status: "Finished",
-      lineScore: [
-        {
-          inning: 1,
-          homeScore: 1,
-          awayScore: 0,
-        },
-        {
-          inning: 2,
-          homeScore: 0,
-          awayScore: 1,
-        },
-        {
-          inning: 3,
-          homeScore: 0,
-          awayScore: 0,
-        },
-        {
-          inning: 4,
-          homeScore: 0,
-          awayScore: 0,
-        },
-        {
-          inning: 5,
-          homeScore: 3,
-          awayScore: 0,
-        },
-        {
-          inning: 6,
-          homeScore: 0,
-          awayScore: 0,
-        },
-        {
-          inning: 7,
-          homeScore: 1,
-          awayScore: 0,
-        },
-        {
-          inning: 8,
-          homeScore: 0,
-          awayScore: 0,
-        },
-        {
-          inning: 9,
-          homeScore: 0,
-          awayScore: 4,
-        },
-        {
-          inning: 10,
-          homeScore: 0,
-          awayScore: 2,
-        },
-      ],
-      playedGameStats: {},
-      livePredictions: [
-        {
-          homeConfidence: 0.5,
-          awayConfidence: 0.5,
-          inning: 1,
-          half: "top",
-          period: 1,
-          timeElapsed: 1,
-        },
-        {
-          homeConfidence: 0.62,
-          awayConfidence: 0.38,
-          inning: 2,
-          half: "bottom",
-          period: 1,
-          timeElapsed: 2,
-        },
-        {
-          homeConfidence: 0.73,
-          awayConfidence: 0.27,
-          inning: 4,
-          half: "bottom",
-          period: 1,
-          timeElapsed: 3,
-        },
-        {
-          homeConfidence: 0.67,
-          awayConfidence: 0.33,
-          inning: 6,
-          half: "top",
-          period: 1,
-          timeElapsed: 3,
-        },
-        {
-          homeConfidence: 0.56,
-          awayConfidence: 0.44,
-          inning: 8,
-          half: "bottom",
-          period: 1,
-          timeElapsed: 4,
-        },
-        {
-          homeConfidence: 0.16,
-          awayConfidence: 0.84,
-          inning: 10,
-          half: "top",
-          period: 1,
-          timeElapsed: 5,
-        },
-        {
-          homeConfidence: 0,
-          awayConfidence: 1.0,
-          inning: 10,
-          half: "bottom",
-          period: 1,
-          timeElapsed: 6,
-        },
-      ],
-      homeScore: 5,
-      awayScore: 7,
-      inning: 10,
-      half: "bottom",
-    },
-    votedTeam: "none",
-    message: "Success",
-  };
-};
+    votedTeam: votedTeamVal,
+    game: game,
+    message: "Successful!"
+  }
+}
 exports.getGameFromDb = getGameFromDb;
 
 exports.getLiveGamePreds = async function getLiveGamePreds(gameId) {
-  console.log(gameId);
   let game = await getGameFromDb(gameId);
-  console.log(game);
-  console.log(game.game.livePredictions);
   let header = { 1: game.game.livePredictions.length };
   return {
     data: {

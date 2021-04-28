@@ -1240,36 +1240,66 @@ Status: Stub
 JSON return Format:  
 ```json
 {
-  id: 632222,
-  date: "2021-04-26T17:10:00Z",
-  arena: "Comerica Park",
-  home: {"look at /getTeamFromDb"},
-  away: {"look at /getTeamFromDb"},
-  predictedWinner: 110,
-  confidence: 0.704,
-  homeVoters: ["60669a0f34b642000bb87244"],
-  awayVoters: ["6064e5572c5e0e000bd5c275"],
-  status: "Finished",
-  lineScore: [
-    {
+  "votedTeam": "none",
+  "game": {
+    "arena": "Progressive Field",
+    "homeVoters": [],
+    "awayVoters": [],
+    "livePredictions": [
+      {
+        "awayConfidence": 95.3,
+        "homeConfidence": 4.7,
+        "period": 1,
+        "timeElapsed": 1,
+        "inning": 3,
+        "half": "bottom"
+      },
+      {
+        "awayConfidence": 95.1,
+        "homeConfidence": 4.9,
+        "period": 1,
+        "timeElapsed": 2,
+        "inning": 4,
+        "half": "top"
+      }
+    ],
+    "lineScore": [
+      {
         "inning": 1,
+        "homeScore": 0,
+        "awayScore": 4
+      },
+      {
+        "inning": 2,
         "homeScore": 1,
+        "awayScore": 2
+      },
+      {
+        "inning": 3,
+        "homeScore": 0,
+        "awayScore": 1
+      },
+      {
+        "inning": 4,
+        "homeScore": 0,
         "awayScore": 0
-    }
-  ],
-  playedGameStats: {},
-  livePredictions: [
-    {  
-        "homeConfidence" : 0.5,
-        "awayConfidence" : 0.5,
-        "inning" : 1,
-        "half" : "top"
-    }
-  ],
-  homeScore: 5,
-  awayScore: 7,
-  inning: 10,
-  half: "bottom"
+      }
+    ],
+    "_id": "6088d46debfde4462c9f5f79",
+    "id": 634371,
+    "__v": 0,
+    "away": "Look at /getTeamFromDb",
+    "confidence": 0.5125875473022461,
+    "date": "2021-04-28T17:10:00.000Z",
+    "home": "Look at /getTeamFromDb",
+    "predictedWinner": 142,
+    "status": "In Play",
+    "awayScore": 7,
+    "half": "top",
+    "homeScore": 1,
+    "inning": 4
+  },
+  "message": "Successful!"
 }
 ```
 
@@ -1286,17 +1316,20 @@ JSON return Format:
 ```json
 {
   "periodLengths": {
-    "1": length of predictions array
+    "1": "length of predictions array"
   },
   "predictions": [
     {
       "homeConfidence": 0.5,
       "awayConfidence": 0.5,
+      "period": 1,
+      "timeElapsed": 1,
       "inning": 1,
       "half": "top"
     }
   ]
 }
+```
 
 ### /api/mlb/updateDbWithGamesAndPredictions
 

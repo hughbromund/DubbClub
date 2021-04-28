@@ -142,7 +142,7 @@ export default class PredictionGraph extends Component {
     var timeoutID = null;
     if (this.props.liveRefresh) {
       timeoutID = setTimeout(async () => {
-        await this.fetchData();
+        await this.fetchData(this.props.league ?? NBA);
       }, this.props.refreshRate);
     }
 
@@ -211,7 +211,7 @@ export default class PredictionGraph extends Component {
           gridYValues={[0, 50, 100]}
           margin={{ top: 10, right: 10, bottom: 50, left: 70 }}
           tooltip={(point) => {
-            console.log(point);
+            // console.log(point);
             var team = this.state.homeTeamName;
             if (point.point.serieId === AWAY_VALUE) {
               team = this.state.awayTeamName;
