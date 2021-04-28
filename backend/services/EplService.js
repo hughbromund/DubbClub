@@ -255,6 +255,20 @@ exports.getGameDetails = async function (gameId, userId) {
     if (!result) {
         return { message: "Game Not found." }
     }
+    result = result.toObject();
+
+    result.confidence = result.homeWinProb;
+    result.predictedWinner = result.home[0].teamId;
+
+    if (result.awayWinProb > result.homeWinProb) {
+        result.confidence = result.awayWinProb;
+        result.predictedWinner = result.away[0].teamId;
+    }
+
+    if (result.drawProb > result.awayWinProb) {
+        result.confidence = result.drawProb;
+        result.predictedWinner = -1;
+    }
 
     var votedTeamVal = "none"
   
