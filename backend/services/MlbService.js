@@ -143,42 +143,56 @@ getGameFromDb = async function (gameId) {
           awayConfidence: 0.5,
           inning: 1,
           half: "top",
+          period: 1,
+          timeElapsed: 1,
         },
         {
           homeConfidence: 0.62,
           awayConfidence: 0.38,
           inning: 2,
           half: "bottom",
+          period: 1,
+          timeElapsed: 2,
         },
         {
           homeConfidence: 0.73,
           awayConfidence: 0.27,
           inning: 4,
           half: "bottom",
+          period: 1,
+          timeElapsed: 3,
         },
         {
           homeConfidence: 0.67,
           awayConfidence: 0.33,
           inning: 6,
           half: "top",
+          period: 1,
+          timeElapsed: 3,
         },
         {
           homeConfidence: 0.56,
           awayConfidence: 0.44,
           inning: 8,
           half: "bottom",
+          period: 1,
+          timeElapsed: 4,
         },
         {
           homeConfidence: 0.16,
           awayConfidence: 0.84,
           inning: 10,
           half: "top",
+          period: 1,
+          timeElapsed: 5,
         },
         {
           homeConfidence: 0,
           awayConfidence: 1.0,
           inning: 10,
           half: "bottom",
+          period: 1,
+          timeElapsed: 6,
         },
       ],
       homeScore: 5,
@@ -196,8 +210,15 @@ exports.getLiveGamePreds = async function getLiveGamePreds(gameId) {
   console.log(gameId);
   let game = await getGameFromDb(gameId);
   console.log(game);
-  let header = { 1: game.livePredictions.length };
-  return { periodLengths: header, predictions: game.livePredictions };
+  console.log(game.game.livePredictions);
+  let header = { 1: game.game.livePredictions.length };
+  return {
+    data: {
+      periodLengths: header,
+      predictions: game.game.livePredictions,
+    },
+    message: "Successful!",
+  };
 };
 
 exports.getTeamFromDb = async function getTeamFromDb(teamId) {

@@ -8,4 +8,5 @@
   padding: var(--default-padding);
   border-radius: var(--border-radius);
   transition: var(--default-transition);
+  text-transform: capitalize;
 }
