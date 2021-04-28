@@ -21,6 +21,7 @@ import PredictionGraph from "./components/PredictionGraph/PredictionGraph";
 import VerifyEmail from "./components/VerifyEmail/VerifyEmail";
 import Team from "./components/Team/Team";
 import Player from "./components/Player/Player";
+import Standings from "./components/Standings/Standings";
 
 import "./constants/Constants";
 
@@ -41,7 +42,7 @@ import {
   DASHBOARD_ROUTE,
   RESET_PASSWORD_ROUTE,
   VOTING_ROUTE,
-  NBA_STANDINGS_ROUTE,
+  STANDINGS_ROUTE,
   GRAPH_TEST,
   VERIFY_EMAIL_ROUTE,
   TEAM_INFO_ROUTE,
@@ -84,7 +85,10 @@ class App extends Component {
               <Route path={REGISTER_ROUTE} component={Register} />
               <Route path={SEARCH_ROUTE + "/:query?"} component={AutoSearch} />
               <Route path={VOTING_ROUTE} component={Voting} />
-              <Route path={NBA_STANDINGS_ROUTE} component={NBAStandings} />
+              <Route
+                path={STANDINGS_ROUTE + "/:league?"}
+                component={Standings}
+              />
               <Route
                 path={RESET_PASSWORD_ROUTE + "/:resetHash?"}
                 component={ResetPassword}
