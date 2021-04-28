@@ -1309,3 +1309,19 @@ Status: Needs Predictions
 Issues: None  
 
 Schema Format: Status Code/Message  
+
+
+### /api/mlb/refresh
+
+GET  
+handles transition between status, handles calling live game functions  
+Requirements: nothing  
+Returns: status and message  
+Status: Working  
+Issues: None  
+
+JSON return Format:
+
+```json
+{ "message": "Successful Refresh."}
+```
