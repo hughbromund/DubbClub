@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import {
   MLB_GET_ALL_TEAM_STATS,
   TEAM_INFO_ROUTE,
-  EPL,
+  MLB,
 } from "../../constants/Constants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Container from "react-bootstrap/Container";
@@ -27,27 +27,28 @@ export default class MLBStandings extends Component {
   }
 
   async componentDidMount() {
-    console.log("Test");
     this.fetchStandings();
   }
   async fetchStandings() {
-    var res = await fetch(EPL_GET_ALL_TEAM_STATS, {});
+    var res = await fetch(MLB_GET_ALL_TEAM_STATS, {});
     var body = await res.json();
 
+    console.log(body);
+
     if (res.status === 200) {
-      var temp = body.teams;
-      temp.sort((first, second) => {
-        var ptDiff =
-          3 * second.wins + second.draws - (3 * first.wins + first.draws);
-        if (ptDiff > 0) return 1;
-        else if (ptDiff < 0) return -1;
-        else
-          return (
-            second.goalsFor -
-            second.goalsAgainst -
-            (first.goalsFor - first.goalsAgainst)
-          );
-      });
+      var temp = body;
+      // temp.sort((first, second) => {
+      //   var ptDiff =
+      //     3 * second.wins + second.draws - (3 * first.wins + first.draws);
+      //   if (ptDiff > 0) return 1;
+      //   else if (ptDiff < 0) return -1;
+      //   else
+      //     return (
+      //       second.goalsFor -
+      //       second.goalsAgainst -
+      //       (first.goalsFor - first.goalsAgainst)
+      //     );
+      // });
 
       this.setState({
         teams: temp,
@@ -69,47 +70,22 @@ export default class MLBStandings extends Component {
       var temp = (
         <tr>
           <td>
-            <FavoriteStar id={this.state.teams[i].teamId} league={EPL} />{" "}
+            <FavoriteStar id={this.state.teams[i].teamId} league={MLB} />{" "}
             <img width="25" src={this.state.teams[i].teamImage} />{" "}
             <Link
               className={classes.table}
-              to={TEAM_INFO_ROUTE + "/EPL" + `/${this.state.teams[i].teamId}`}
+              to={TEAM_INFO_ROUTE + "/MLB" + `/${this.state.teams[i].teamId}`}
             >
               {this.state.teams[i].teamName}
             </Link>{" "}
-            {i <= 3 ? (
-              <FontAwesomeIcon
-                icon={["fa", "circle"]}
-                className={classes.ucl}
-              />
-            ) : null}
-            {i === 4 ? (
-              <FontAwesomeIcon
-                icon={["fa", "circle"]}
-                className={classes.uel}
-              />
-            ) : null}
-            {i >= 17 ? (
-              <FontAwesomeIcon
-                icon={["fa", "circle"]}
-                className={classes.rel}
-              />
-            ) : null}
           </td>
-          <td>
-            {this.state.teams[i].wins +
-              this.state.teams[i].draws +
-              this.state.teams[i].losses}
-          </td>
+          <td>{this.state.teams[i].division}</td>
+
           <td>{this.state.teams[i].wins}</td>
-          <td>{this.state.teams[i].draws}</td>
+
           <td>{this.state.teams[i].losses}</td>
-          <td>{this.state.teams[i].goalsFor}</td>
-          <td>{this.state.teams[i].goalsAgainst}</td>
-          <td>
-            {this.state.teams[i].goalsFor - this.state.teams[i].goalsAgainst}
-          </td>
-          <td>{3 * this.state.teams[i].wins + this.state.teams[i].draws}</td>
+          <td>{this.state.teams[i].gamesBehind}</td>
+          <td>{this.state.teams[i].streak}</td>
         </tr>
       );
       renderedTeams.push(temp);
@@ -117,42 +93,22 @@ export default class MLBStandings extends Component {
     return (
       <div>
         <Container fluid>
-          <h1>EPL Standings</h1>
+          <h1>MLB Standings</h1>
           <Row>
             <Col>
               <Table className={classes.table}>
                 <thead>
                   <tr>
                     <th>Team</th>
-                    <th>MP</th>
+                    <th>Division</th>
                     <th>W</th>
-                    <th>D</th>
                     <th>L</th>
-                    <th>GF</th>
-                    <th>GA</th>
-                    <th>GD</th>
-                    <th>Pts</th>
+                    <th>GB</th>
+                    <th>Streak</th>
                   </tr>
                 </thead>
                 <tbody>{renderedTeams}</tbody>
               </Table>
-              Legend:
-              <br />
-              <FontAwesomeIcon
-                icon={["fa", "circle"]}
-                className={classes.ucl}
-              />{" "}
-              : Champions League <br />
-              <FontAwesomeIcon
-                icon={["fa", "circle"]}
-                className={classes.uel}
-              />{" "}
-              : Europa League <br />
-              <FontAwesomeIcon
-                icon={["fa", "circle"]}
-                className={classes.rel}
-              />{" "}
-              : Relegation
             </Col>
           </Row>
         </Container>

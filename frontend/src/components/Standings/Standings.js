@@ -71,7 +71,6 @@ export default class Standings extends Component {
           <NBAStandings />
         </div>
         <div hidden={this.state.league !== MLB}>
-          Hello
           <MLBStandings />
         </div>
         <div hidden={this.state.league !== EPL}>
