@@ -3,9 +3,7 @@ const axios = require("axios");
 const config = require(path.resolve(__dirname, "../config.json"));
 const MLBgame = require(path.resolve(__dirname, "../database/models/MLBgame"));
 const MLBteam = require(path.resolve(__dirname, "../database/models/MLBteam"));
-
-const MLBStatsAPI = require("mlb-stats-api");
-const mlbStats = new MLBStatsAPI();
+const User = require("../database/models/user");
 
 /*
 108 LAA Angels
@@ -249,4 +247,54 @@ exports.updateTeamsInDb = async function updateTeamsInDb() {
     }
   }
 };
+}
+
+exports.getDashboard = async function(userId) {
+  let start = new Date()
+  let end = new Date()
+  start.setDate(start.getDate() - 3)
+  end.setDate(end.getDate() + 4)
+  
+
+  favTeams = {}
+  if (userId != undefined) {
+    favTeams = await User.findOne({_id: userId}).exec()
+    favTeams = favTeams.toObject().favoriteTeams.MLB
+  }
+
+  console.log(favTeams)
+
+  let results = await MLBgame.find({date: {$gt: start, $lt:end}})
+  let favUpcoming = []
+  let regUpcoming = []
+  let favLive = []
+  let regLive = []
+  let favFinished = []
+  let regFinished = []
+
+  for (let i = 0; i < results.length; i++) {
+    if (userId != undefined) {
+      console.log(results[i].home.teamId + " " + results[i].away.teamId)
+      if (favTeams.includes(parseInt(results[i].home.teamId, 10)) || favTeams.includes(parseInt(results[i].away.teamId, 10))) {
+          if (results[i].status === "Scheduled") {
+              favUpcoming.push(results[i].id)
+            } else if (results[i].status === "In Play") {
+              favLive.push(results[i].id)
+            } else if (results[i].status === "Finished") {
+              favFinished.push(results[i].id)
+            }
+      }
+    }
+    if (results[i].status === "Scheduled") {
+      regUpcoming.push(results[i].id)
+    } else if (results[i].status === "In Play") {
+      regLive.push(results[i].id)
+    } else if (results[i].status === "Finished") {
+      regFinished.push(results[i].id)
+    }
+  }
+
+  return {"regFinished": regFinished, "regLive": regLive, "regUpcoming": regUpcoming,
+   "favFinished": favFinished, "favLive": favLive, "favUpcoming": favUpcoming}
+
 }
