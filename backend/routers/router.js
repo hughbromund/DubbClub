@@ -159,8 +159,7 @@ router.get("/api/mlb/getUpcomingGameIdsPlusCurr", mlbController.getUpcomingGameI
 router.get("/api/mlb/getLiveGamePreds/:gameId", mlbController.getLiveGamePreds)
 router.get("/api/mlb/updateDbWithGamesAndPredictions", hothController.updateDbWithGamesAndPredictions)
 router.get("/api/mlb/refresh", mlbController.refresh)
-
-
+router.get("/api/mlb/getDashboard", authJWT.verifyTokenOptional, mlbController.getDashboard);
 
 
 //EPL

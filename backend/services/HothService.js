@@ -4,10 +4,6 @@ const config = require(path.resolve(__dirname, "../config.json"));
 const MLBgame = require(path.resolve(__dirname, "../database/models/MLBgame"));
 const MLBteam = require(path.resolve(__dirname, "../database/models/MLBteam"));
 
-const MLBStatsAPI = require('mlb-stats-api');
-const mlbStats = new MLBStatsAPI();
-
-
 // TO BE IMPLEMENTED BY ADITYA
 exports.getHothPredictions = async function(games) {
 
