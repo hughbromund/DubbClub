@@ -1,12 +1,46 @@
 const path = require("path");
 const axios = require("axios");
 const MLBgame = require(path.resolve(__dirname, "../database/models/MLBgame"));
+const MLBteam = require(path.resolve(__dirname, "../database/models/MLBteam"));
 
 const mlbService = require(path.resolve(__dirname, "../services/MlbService.js"));
 const mlbUserService = require(path.resolve(__dirname, "../services/MlbUserService"));
 const hothService = require(path.resolve(__dirname, "../services/HothService.js"));
 
+function getUpdatedElos(hElo, aElo, runDiff) {
 
+    hElo = 1601.24
+    aElo = 1556.87
+    
+    Oh = 0
+    Oa = 0
+    if (runDiff < 0) {
+        Oh = 0
+        Oa = 1
+    } else if (runDiff == 0) {
+        Oh = 0.5
+        Oa = 0.5
+    } else {
+        Oh = 1
+        Oa = 0
+    }
+    
+    K = 20
+    homeAd = 24
+    dr = hElo - aElo + homeAd
+    Eh = 1.0 / (1 + Math.pow(10, (-dr / 400.0)))
+    Ea = 1 - Eh
+    
+    G = 1
+    if (Math.abs(runDiff) > 1) {
+        G = Math.log2(1.0 * Math.abs(runDiff)) * 0.7 / (2 + 0.001 * dr)
+    }
+    
+    hEloPost = hElo + K * G * (Oh - Eh)
+    aEloPost = aElo + K * G * (Oa - Ea)
+
+    return [hEloPost, aEloPost]
+}
 
 exports.refresh = async function refresh() {
    let upcoming = await mlbService.getUpcomingGameInfoPlusCurr()
@@ -14,7 +48,7 @@ exports.refresh = async function refresh() {
    for (let i = 0; i < upcoming.length; i++) {
       gameId = upcoming[i].gamePk
       gameInDb = await MLBgame.findOne({ id : gameId }).exec()
-
+      
       if (gameInDb != null) {
         //transition to live game
         if (gameInDb.status === "Scheduled" && upcoming[i].status.statusCode === "I") {
@@ -27,7 +61,20 @@ exports.refresh = async function refresh() {
         if (gameInDb.status === "In Play" && upcoming[i].status.statusCode === "F") {
             await MLBgame.findOneAndUpdate({id : gameId}, {status: "Finished"}).exec()
             console.log("Updated game " + gameId + " to Finished.")
-            // ADITYA ADD ELO CHANGES HERE
+
+            // Recalculate ELO for teams
+            let homeTeam = await MLBteam.findOne({ teamId : gameInDb.home.teamId }).exec()
+            let awayTeam = await MLBteam.findOne({ teamId : gameInDb.away.teamId }).exec()
+            let homeElo = homeTeam.elo
+            let awayElo = awayTeam.elo
+            let runDiff = gameInDb.homeScore - gameInDb.awayScore
+
+            let newElos = getUpdatedElos(homeElo, awayElo, runDiff)
+
+            await MLBteam.findOneAndUpdate({teamId : gameInDb.home.teamId }, {elo: newElos[0]}).exec()
+            await MLBteam.findOneAndUpdate({teamId : gameInDb.away.teamId }, {elo: newElos[1]}).exec()
+            // End ELO calc
+            
         }
 
         if (upcoming[i].status.statusCode === "I") {
