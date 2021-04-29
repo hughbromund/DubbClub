@@ -74,7 +74,7 @@ export default class FavoriteStar extends Component {
   }
 
   componentDidMount() {
-    console.log(this.context.getFavoriteTeamsList());
+    // console.log(this.context.getFavoriteTeamsList());
     if (this.context.isFollowedTeam(this.props.league ?? NBA, this.props.id)) {
       this.setState({ type: "fas" });
     }
