@@ -166,7 +166,7 @@ router.get("/api/mlb/getDashboard", authJWT.verifyTokenOptional, mlbController.g
 router.get("/api/epl/getUpcomingGamesFromDb", eplController.getUpcomingGameIds)
 router.get("/api/epl/getGamesByDate/:date", eplController.getGameIdsByDate)
 router.get("/api/epl/getGamesByTeamFromDb/:teamId", eplController.getGameIdsByTeam)
-router.get("/api/epl/getGameFromDb/:gameId", eplController.getGameDetailsByGameId)
+router.get("/api/epl/getGameFromDb/:gameId", authJWT.verifyTokenOptional, eplController.getGameDetailsByGameId)
 router.get("/api/epl/getTeamStats/:teamId", eplController.getTeamStats)
 router.get("/api/epl/updateDbWithGamesAndPredictions", alderaanController.updateDbWithGamesAndPredictions)
 router.get("/api/epl/refresh", eplController.refresh);
