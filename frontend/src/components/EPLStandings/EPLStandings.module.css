@@ -1,0 +1,13 @@
+.table {
+  color: var(--text-primary);
+}
+
+.ucl {
+  color: var(--success-color);
+}
+.uel {
+  color: var(--warning-color);
+}
+.rel {
+  color: var(--error-color);
+}

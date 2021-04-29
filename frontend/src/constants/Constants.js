@@ -67,6 +67,7 @@ export const EPL_GET_GAMES_BY_DATE = BASE + "/api/epl/getGamesByDate";
 export const EPL_GET_GAMES_BY_TEAM = BASE + "/api/epl/getGamesByTeamFromDb";
 export const EPL_GET_GAME_BY_ID = BASE + "/api/epl/getGameFromDb";
 export const EPL_GET_TEAM_STATS = BASE + "/api/epl/getTeamStats";
+export const EPL_GET_ALL_TEAM_STATS = BASE + "/api/epl/getAllTeamStats";
 
 /* MLB constants */
 export const MLB_GET_GAME_BY_ID = BASE + "/api/mlb/getGameFromDb";

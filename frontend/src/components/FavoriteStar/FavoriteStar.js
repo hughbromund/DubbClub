@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AuthContext from "../../contexts/AuthContext.js";
 import Spinner from "react-bootstrap/Spinner";
 
-import { FAVORITE_TEAM, UNFAVORITE_TEAM } from "../../constants/Constants";
+import { FAVORITE_TEAM, UNFAVORITE_TEAM, NBA } from "../../constants/Constants";
 
 export default class FavoriteStar extends Component {
   constructor(props) {
@@ -15,8 +15,11 @@ export default class FavoriteStar extends Component {
     };
   }
 
-  async favoriteTeam(teamId) {
+  async favoriteTeam(teamId, league) {
     this.setState({ loading: true });
+    if (league === undefined) {
+      league = NBA;
+    }
     var res = await fetch(FAVORITE_TEAM, {
       method: "POST",
       mode: "cors",
@@ -25,7 +28,7 @@ export default class FavoriteStar extends Component {
         "x-access-token": this.context.token,
       },
       body: JSON.stringify({
-        league: "NBA",
+        league: league,
         teamId: teamId,
       }),
     });
@@ -41,8 +44,11 @@ export default class FavoriteStar extends Component {
     return true;
   }
 
-  async unFavoriteTeam(teamId) {
+  async unFavoriteTeam(teamId, league) {
     this.setState({ loading: true });
+    if (league === undefined) {
+      league = NBA;
+    }
 
     var res = await fetch(UNFAVORITE_TEAM, {
       method: "POST",
@@ -52,7 +58,7 @@ export default class FavoriteStar extends Component {
         "x-access-token": this.context.token,
       },
       body: JSON.stringify({
-        league: "NBA",
+        league: league,
         teamId: teamId,
       }),
     });
@@ -68,7 +74,8 @@ export default class FavoriteStar extends Component {
   }
 
   componentDidMount() {
-    if (this.context.isFollowedTeam("NBA", this.props.id)) {
+    console.log(this.context.getFavoriteTeamsList());
+    if (this.context.isFollowedTeam(this.props.league ?? NBA, this.props.id)) {
       this.setState({ type: "fas" });
     }
   }
@@ -78,13 +85,15 @@ export default class FavoriteStar extends Component {
       return <div />;
     } else if (this.state.loading) {
       return <Spinner animation="grow" size="sm" />;
-    } else if (this.context.isFollowedTeam("NBA", this.props.id)) {
+    } else if (
+      this.context.isFollowedTeam(this.props.league ?? NBA, this.props.id)
+    ) {
       return (
         <FontAwesomeIcon
           icon={[this.state.type, "star"]}
           onMouseEnter={() => this.setState({ type: "far" })}
           onMouseLeave={() => this.setState({ type: "fas" })}
-          onClick={() => this.unFavoriteTeam(this.props.id)}
+          onClick={() => this.unFavoriteTeam(this.props.id, this.props.league)}
         />
       );
     } else {
@@ -94,7 +103,7 @@ export default class FavoriteStar extends Component {
           icon={[this.state.type, "star"]}
           onMouseEnter={() => this.setState({ type: "fas" })}
           onMouseLeave={() => this.setState({ type: "far" })}
-          onClick={() => this.favoriteTeam(this.props.id)}
+          onClick={() => this.favoriteTeam(this.props.id, this.props.league)}
         />
       );
     }
