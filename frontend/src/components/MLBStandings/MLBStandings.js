@@ -12,6 +12,7 @@ import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import FavoriteStar from "../FavoriteStar/FavoriteStar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Card from "../Card/Card";
 
 import classes from "./MLBStandings.module.css";
 
@@ -37,18 +38,9 @@ export default class MLBStandings extends Component {
 
     if (res.status === 200) {
       var temp = body;
-      // temp.sort((first, second) => {
-      //   var ptDiff =
-      //     3 * second.wins + second.draws - (3 * first.wins + first.draws);
-      //   if (ptDiff > 0) return 1;
-      //   else if (ptDiff < 0) return -1;
-      //   else
-      //     return (
-      //       second.goalsFor -
-      //       second.goalsAgainst -
-      //       (first.goalsFor - first.goalsAgainst)
-      //     );
-      // });
+      temp.sort((first, second) => {
+        return second.wins - first.wins;
+      });
 
       this.setState({
         teams: temp,
@@ -96,19 +88,21 @@ export default class MLBStandings extends Component {
           <h1>MLB Standings</h1>
           <Row>
             <Col>
-              <Table className={classes.table}>
-                <thead>
-                  <tr>
-                    <th>Team</th>
-                    <th>Division</th>
-                    <th>W</th>
-                    <th>L</th>
-                    <th>GB</th>
-                    <th>Streak</th>
-                  </tr>
-                </thead>
-                <tbody>{renderedTeams}</tbody>
-              </Table>
+              <Card>
+                <Table className={classes.table}>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+                      <th>Division</th>
+                      <th>W</th>
+                      <th>L</th>
+                      <th>GB</th>
+                      <th>Streak</th>
+                    </tr>
+                  </thead>
+                  <tbody>{renderedTeams}</tbody>
+                </Table>
+              </Card>
             </Col>
           </Row>
         </Container>

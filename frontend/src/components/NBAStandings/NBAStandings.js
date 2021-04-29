@@ -12,6 +12,7 @@ import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import FavoriteStar from "../FavoriteStar/FavoriteStar";
+import Card from "../Card/Card";
 
 import classes from "./NBAStandings.module.css";
 
@@ -120,34 +121,40 @@ export default class NBAStandings extends Component {
           <h1>NBA Standings</h1>
           <Row>
             <Col>
-              <h2>East</h2>
-              <Table className={classes.table}>
-                <thead>
-                  <tr>
-                    <th>Team</th>
-                    <th>W</th>
-                    <th>L</th>
-                    <th>GB</th>
-                    <th>L10</th>
-                  </tr>
-                </thead>
-                <tbody>{renderedEast}</tbody>
-              </Table>
+              <Card>
+                <h2>East</h2>
+
+                <Table className={classes.table}>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+                      <th>W</th>
+                      <th>L</th>
+                      <th>GB</th>
+                      <th>L10</th>
+                    </tr>
+                  </thead>
+                  <tbody>{renderedEast}</tbody>
+                </Table>
+              </Card>
             </Col>
             <Col>
-              <h2>West</h2>
-              <Table className={classes.table}>
-                <thead>
-                  <tr>
-                    <th>Team</th>
-                    <th>W</th>
-                    <th>L</th>
-                    <th>GB</th>
-                    <th>L10</th>
-                  </tr>
-                </thead>
-                <tbody>{renderedWest}</tbody>
-              </Table>
+              <Card>
+                <h2>West</h2>
+
+                <Table className={classes.table}>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+                      <th>W</th>
+                      <th>L</th>
+                      <th>GB</th>
+                      <th>L10</th>
+                    </tr>
+                  </thead>
+                  <tbody>{renderedWest}</tbody>
+                </Table>
+              </Card>
             </Col>
           </Row>
         </Container>

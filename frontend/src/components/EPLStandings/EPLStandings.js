@@ -12,6 +12,7 @@ import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import FavoriteStar from "../FavoriteStar/FavoriteStar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Card from "../Card/Card";
 
 import classes from "./EPLStandings.module.css";
 
@@ -119,39 +120,43 @@ export default class EPLStandings extends Component {
           <h1>EPL Standings</h1>
           <Row>
             <Col>
-              <Table className={classes.table}>
-                <thead>
-                  <tr>
-                    <th>Team</th>
-                    <th>MP</th>
-                    <th>W</th>
-                    <th>D</th>
-                    <th>L</th>
-                    <th>GF</th>
-                    <th>GA</th>
-                    <th>GD</th>
-                    <th>Pts</th>
-                  </tr>
-                </thead>
-                <tbody>{renderedTeams}</tbody>
-              </Table>
-              Legend:
-              <br />
-              <FontAwesomeIcon
-                icon={["fa", "circle"]}
-                className={classes.ucl}
-              />{" "}
-              : Champions League <br />
-              <FontAwesomeIcon
-                icon={["fa", "circle"]}
-                className={classes.uel}
-              />{" "}
-              : Europa League <br />
-              <FontAwesomeIcon
-                icon={["fa", "circle"]}
-                className={classes.rel}
-              />{" "}
-              : Relegation
+              <Card>
+                <Table className={classes.table}>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+                      <th>MP</th>
+                      <th>W</th>
+                      <th>D</th>
+                      <th>L</th>
+                      <th>GF</th>
+                      <th>GA</th>
+                      <th>GD</th>
+                      <th>Pts</th>
+                    </tr>
+                  </thead>
+                  <tbody>{renderedTeams}</tbody>
+                </Table>
+              </Card>
+              <Card>
+                Legend:
+                <br />
+                <FontAwesomeIcon
+                  icon={["fa", "circle"]}
+                  className={classes.ucl}
+                />{" "}
+                : Champions League <br />
+                <FontAwesomeIcon
+                  icon={["fa", "circle"]}
+                  className={classes.uel}
+                />{" "}
+                : Europa League <br />
+                <FontAwesomeIcon
+                  icon={["fa", "circle"]}
+                  className={classes.rel}
+                />{" "}
+                : Relegation
+              </Card>
             </Col>
           </Row>
         </Container>
