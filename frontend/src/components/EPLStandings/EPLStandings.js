@@ -135,6 +135,23 @@ export default class EPLStandings extends Component {
                 </thead>
                 <tbody>{renderedTeams}</tbody>
               </Table>
+              Legend:
+              <br />
+              <FontAwesomeIcon
+                icon={["fa", "circle"]}
+                className={classes.ucl}
+              />{" "}
+              : Champions League <br />
+              <FontAwesomeIcon
+                icon={["fa", "circle"]}
+                className={classes.uel}
+              />{" "}
+              : Europa League <br />
+              <FontAwesomeIcon
+                icon={["fa", "circle"]}
+                className={classes.rel}
+              />{" "}
+              : Relegation
             </Col>
           </Row>
         </Container>
