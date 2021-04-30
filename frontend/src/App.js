@@ -22,6 +22,7 @@ import VerifyEmail from "./components/VerifyEmail/VerifyEmail";
 import Team from "./components/Team/Team";
 import Player from "./components/Player/Player";
 import Standings from "./components/Standings/Standings";
+import Footer from "./components/Footer/Footer";
 
 import "./constants/Constants";
 
@@ -124,6 +125,7 @@ class App extends Component {
               <Route path="*" component={Login} />
             </Switch>
           </div>
+          <Footer />
         </Router>
       </div>
     );
