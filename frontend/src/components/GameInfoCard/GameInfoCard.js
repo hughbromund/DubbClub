@@ -97,7 +97,7 @@ export default class GameInfoCard extends Component {
   }
 
   renderGraph(homeAwayWinner) {
-    if (this.state.status === LIVE) {
+    if (this.state.status === LIVE && this.props.league !== EPL) {
       // console.log(this.state);
       // console.log(this.props.gameID);
       return (
