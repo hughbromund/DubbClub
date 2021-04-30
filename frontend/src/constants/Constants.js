@@ -75,6 +75,7 @@ export const MLB_GET_GAME_BY_ID = BASE + "/api/mlb/getGameFromDb";
 export const MLB_GET_LIVE_GAME_PREDS = BASE + "/api/mlb/getLiveGamePreds";
 export const MLB_GET_ALL_TEAM_STATS = BASE + "/api/mlb/getTeamsFromDb";
 export const MLB_GET_TEAM_STATS = BASE + "/api/mlb/getTeamFromDb";
+export const MLB_VOTE = BASE + "/api/mlb/vote";
 
 /* Date options to convert to UTC for Game Cards */
 export const DATE_OPTIONS = {
