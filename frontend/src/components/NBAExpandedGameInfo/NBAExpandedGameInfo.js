@@ -80,7 +80,7 @@ export default class NBAExpandedGameInfo extends Component {
     }
 
     var body = await res.json();
-    // console.log(body);
+    console.log(body);
     var game = body.game;
     // console.log({ game });
 
