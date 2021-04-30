@@ -1,3 +1,4 @@
+const { request } = require("http");
 const path = require("path");
 
 var eplService = require(path.resolve(__dirname, "../services/EplService"));
@@ -5,9 +6,16 @@ var mlbService = require(path.resolve(__dirname, "../services/MlbService"));
 var nbaService = require(path.resolve(__dirname, "../services/NbaService"));
 
 exports.finalDashboard = async function(userId) {
-    let eplDash = await eplService.getDashboard(userId)
-    let mlbDash = await mlbService.getDashboard(userId)
-    let nbaDash = await nbaService.getDashboard(userId)
+    let requests = []
+    requests.push(eplService.getDashboard(userId))
+    requests.push(mlbService.getDashboard(userId))
+    requests.push(nbaService.getDashboard(userId))
+
+    let finishedRequests = await Promise.all(requests)
+
+    let eplDash = finishedRequests[0]
+    let mlbDash = finishedRequests[1]
+    let nbaDash = finishedRequests[2]
 
     let favUpcoming = []
     let regUpcoming = []
@@ -16,7 +24,6 @@ exports.finalDashboard = async function(userId) {
     let favFinished = []
     let regFinished = []
 
-    console.log(eplDash)
     //EPL
 
     for (var i = 0; i < eplDash.regFinished.length; i++) {

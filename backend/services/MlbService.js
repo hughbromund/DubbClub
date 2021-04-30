@@ -262,8 +262,6 @@ exports.getDashboard = async function(userId) {
     favTeams = favTeams.toObject().favoriteTeams.MLB
   }
 
-  console.log(favTeams)
-
   let results = await MLBgame.find({date: {$gt: start, $lt:end}})
   let favUpcoming = []
   let regUpcoming = []
@@ -274,7 +272,6 @@ exports.getDashboard = async function(userId) {
 
   for (let i = 0; i < results.length; i++) {
     if (userId != undefined) {
-      console.log(results[i].home.teamId + " " + results[i].away.teamId)
       if (favTeams.includes(parseInt(results[i].home.teamId, 10)) || favTeams.includes(parseInt(results[i].away.teamId, 10))) {
           if (results[i].status === "Scheduled") {
               favUpcoming.push(results[i].id)

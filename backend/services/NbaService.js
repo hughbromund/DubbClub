@@ -136,7 +136,6 @@ exports.getDashboard = async function(userId) {
 
   for (let i = 0; i < results.length; i++) {
     if (userId != undefined) {
-      console.log(favTeams)
       for (let j = 0; j < favTeams.length; j++) {
         if (parseInt(favTeams[j], 10) === parseInt(results[i].home[0].teamId, 10) || parseInt(favTeams[j], 10) === parseInt(results[i].away[0].teamId, 10)) {
           if (results[i].status === "Scheduled") {
