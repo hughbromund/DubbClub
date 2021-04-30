@@ -260,15 +260,17 @@ exports.getGameDetails = async function (gameId, userId) {
     result.confidence = result.homeWinProb;
     result.predictedWinner = result.home[0].teamId;
 
-    if (result.awayWinProb > result.homeWinProb) {
+    if (result.awayWinProb > result.confidence) {
         result.confidence = result.awayWinProb;
         result.predictedWinner = result.away[0].teamId;
     }
 
-    if (result.drawProb > result.awayWinProb) {
+    if (result.drawProb > result.confidence) {
         result.confidence = result.drawProb;
         result.predictedWinner = -1;
     }
+
+
 
     var votedTeamVal = "none"
   
