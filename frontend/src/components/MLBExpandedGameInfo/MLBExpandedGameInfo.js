@@ -37,6 +37,7 @@ export default class MLBExpandedGameInfo extends Component {
       gameID: this.props.gameID,
       homeLineScore: [],
       awayLineScore: [],
+      lineScore: [],
       homeLeaders: [],
       awayLeaders: [],
       predictions: {},
@@ -80,7 +81,7 @@ export default class MLBExpandedGameInfo extends Component {
     }
 
     var body = await res.json();
-    console.log(body);
+    // console.log(body);
     var game = body.game;
     // console.log({ game });
 
@@ -111,24 +112,12 @@ export default class MLBExpandedGameInfo extends Component {
       var awayLineScore = [];
       var awayLeaders = [];
       var homeLeaders = [];
-      if (
-        game.status === FINISHED &&
-        game.playedGameStats !== undefined &&
-        game.playedGameStats.home !== undefined
-      ) {
-        homeLineScore = game.playedGameStats.home.lineScore;
-        awayLineScore = game.playedGameStats.away.lineScore;
-        homeScore = game.playedGameStats.home.points;
-        awayScore = game.playedGameStats.away.points;
-        awayLeaders = game.playedGameStats.away.leaders;
-        homeLeaders = game.playedGameStats.home.leaders;
-      }
-
-      var period = game.period;
-      if (period > 4) {
-        period = "OT";
-      } else {
-        period = "Q" + period;
+      if (game.status === LIVE) {
+        var period =
+          game.half.charAt(0).toUpperCase() +
+          game.half.slice(1) +
+          " of Inning " +
+          game.inning;
       }
 
       this.setState({
@@ -142,7 +131,6 @@ export default class MLBExpandedGameInfo extends Component {
         homeLogo: game.home.teamImage,
         date: date,
         time: time,
-
         homeId: game.home.teamId,
         awayId: game.away.teamId,
         votedTeam: body.votedTeam,
@@ -152,11 +140,12 @@ export default class MLBExpandedGameInfo extends Component {
         timeoutID: timeoutID,
         homeScore: homeScore,
         awayScore: awayScore,
+        lineScore: body.game.lineScore,
         homeLineScore: homeLineScore,
         awayLineScore: awayLineScore,
         homeLeaders: homeLeaders,
         awayLeaders: awayLeaders,
-        clock: body.game.clock,
+
         period: period,
       });
     }
@@ -237,7 +226,7 @@ export default class MLBExpandedGameInfo extends Component {
     if (this.state.status === LIVE) {
       return (
         <div>
-          <b>Live Game</b> - {this.state.period} - {this.state.clock}
+          <b>Live Game</b> - {this.state.period}
         </div>
       );
     } else {
@@ -344,9 +333,9 @@ export default class MLBExpandedGameInfo extends Component {
                       <Table size="sm" className={[classes.card].join(" ")}>
                         <thead>
                           <tr>
-                            <th></th>
-                            {this.state.awayLineScore.map((element, index) => (
-                              <th id={index}>Q{index + 1}</th>
+                            <th>Inning</th>
+                            {this.state.lineScore.map((element, index) => (
+                              <th id={index}>{index + 1}</th>
                             ))}
                             <th>Total</th>
                           </tr>
@@ -354,15 +343,15 @@ export default class MLBExpandedGameInfo extends Component {
                         <tbody>
                           <tr>
                             <td>{this.state.awayTeam}</td>
-                            {this.state.awayLineScore.map((element, index) => (
-                              <td id={index}>{element}</td>
+                            {this.state.lineScore.map((element, index) => (
+                              <td id={index}>{element.awayScore}</td>
                             ))}
                             <td>{this.state.awayScore}</td>
                           </tr>
                           <tr>
                             <td>{this.state.homeTeam}</td>
-                            {this.state.homeLineScore.map((element, index) => (
-                              <td id={index}>{element}</td>
+                            {this.state.lineScore.map((element, index) => (
+                              <td id={index}>{element.homeScore}</td>
                             ))}
                             <td>{this.state.homeScore}</td>
                           </tr>
@@ -508,75 +497,38 @@ export default class MLBExpandedGameInfo extends Component {
                   </h5>
                 </Card>
               </Row>
-              <Row>
-                <Card className={classes.predictionGraphCard}>
-                  <h2 className={classes.headerPadding}>
-                    Live Game Predictions
-                  </h2>
-                  <h5 className={classes.headerPadding}>
-                    Dubb Club generates new predictions while games are in
-                    progress. Those predictions are shown here.
-                  </h5>
-
-                  <div className={classes.predictionGraph}>
-                    <PredictionGraph
-                      homeTeam={this.state.homeTeam}
-                      awayTeam={this.state.awayTeam}
-                      homeHex={this.state.homeHex}
-                      awayHex={this.state.awayHex}
-                      liveRefresh={this.state.status === LIVE}
-                      refreshRate={REFRESH_RATE}
-                      gameID={this.state.gameID}
-                      league={MLB}
-                    />
-                  </div>
-                </Card>
-              </Row>
             </Col>
 
-            <Col>
-              <Expand open={this.state.status !== FINISHED}>
-                <h2 className={classes.headerPadding}>Post-Game Summary</h2>
-                <Card className={classes.playerCard}>
-                  When the game is over, Dubb Club will display individual
-                  player statistics and box score information.
-                </Card>
-              </Expand>
+            <Col xs={12} md={6}>
               <Expand open={this.state.status === LIVE}>
                 <Card className={classes.playerCard}>
-                  This game is Live! No need to refresh, Dubb Club will load our
-                  latest predictions every {REFRESH_RATE / 1000} seconds.
+                  This game is <b>Live</b>! No need to refresh, Dubb Club will
+                  load our latest predictions every {REFRESH_RATE / 1000}{" "}
+                  seconds.
                 </Card>
               </Expand>
-              <Expand open={this.state.status === FINISHED}>
-                <h2 className={classes.headerPadding}>{this.state.homeTeam}</h2>
-                <Card className={classes.playerCard}>
-                  <Table className={[classes.card].join(" ")}>
-                    <thead>
-                      <tr>
-                        <th>Players</th>
-                        <th>Stat</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.state.homeLeaders.map(this.createPlayerStatRow)}
-                    </tbody>
-                  </Table>
-                </Card>
-                <h2 className={classes.headerPadding}>{this.state.awayTeam}</h2>
-                <Card className={classes.playerCard}>
-                  <Table className={[classes.card].join(" ")}>
-                    <thead>
-                      <tr>
-                        <th>Players</th>
-                        <th>Stat</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.state.awayLeaders.map(this.createPlayerStatRow)}
-                    </tbody>
-                  </Table>
-                </Card>
+              <Expand
+                open={
+                  this.state.status === FINISHED || this.state.status === LIVE
+                }
+              >
+                <div>
+                  <h2 className={classes.headerPadding}>Live Predictions</h2>
+                  <Card className={classes.playerCard}>
+                    <div className={classes.predictionGraph}>
+                      <PredictionGraph
+                        homeTeam={this.state.homeTeam}
+                        awayTeam={this.state.awayTeam}
+                        homeHex={this.state.homeHex}
+                        awayHex={this.state.awayHex}
+                        liveRefresh={this.state.status === LIVE}
+                        refreshRate={REFRESH_RATE}
+                        gameID={this.state.gameID}
+                        league={MLB}
+                      />
+                    </div>
+                  </Card>
+                </div>
               </Expand>
             </Col>
           </Row>

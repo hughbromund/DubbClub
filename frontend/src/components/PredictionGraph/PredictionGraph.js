@@ -63,8 +63,12 @@ export default class PredictionGraph extends Component {
 
     var res = await fetch(endpoint + "/" + this.state.gameID);
 
+    if (res.status !== 200) {
+      return;
+    }
+
     var body = await res.json();
-    console.log(body);
+    // console.log(body);
 
     var periodLengths = body.data.periodLengths;
     periodLengths[0] = 0;
