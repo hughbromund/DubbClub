@@ -1,0 +1,15 @@
+.Footer {
+  min-width: 100%;
+  background: var(--gradient);
+  text-align: center;
+  border-radius: var(--border-radius);
+  min-height: 20vh;
+  padding: var(--default-padding);
+  padding-top: 5vh;
+}
+.inner {
+  margin: 0 auto;
+}
+a:hover {
+  color: var(--background-color);
+}

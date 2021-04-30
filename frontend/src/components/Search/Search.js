@@ -271,7 +271,7 @@ export default class Search extends Component {
               <div className={classes.center}>
                 <Row xs={1} sm={1} md={2}>
                   <Col md={10}>
-                    <InputGroup>
+                    {/* <InputGroup>
                       <FormControl
                         placeholder={this.state.searchType}
                         hidden={this.state.searchType !== "Team"}
@@ -312,7 +312,8 @@ export default class Search extends Component {
                           Date
                         </Dropdown.Item>
                       </DropdownButton>
-                    </InputGroup>
+                    </InputGroup> */}
+                    <input placeholder="Search for Teams or Players from Any Sport..."></input>
                     <br />
                   </Col>
 

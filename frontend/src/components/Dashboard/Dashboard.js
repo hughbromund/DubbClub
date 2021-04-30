@@ -8,6 +8,7 @@ import {
   GAME_INFO_ROUTE,
   UPCOMING_GAMES_INFO,
   GET_DASHBOARD,
+  NBA,
 } from "../../constants/Constants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Card from "../Card/Card";
@@ -84,7 +85,8 @@ export default class Dashboard extends Component {
                 return (
                   <Col key={element}>
                     <GameInfoCard
-                      gameID={element}
+                      gameID={element.gameId}
+                      league={element.league}
                       history={this.props.history}
                       key={element}
                     />
@@ -101,7 +103,8 @@ export default class Dashboard extends Component {
                 return (
                   <Col key={element}>
                     <GameInfoCard
-                      gameID={element}
+                      gameID={element.gameId}
+                      league={element.league}
                       history={this.props.history}
                       key={element}
                     />
@@ -118,7 +121,8 @@ export default class Dashboard extends Component {
                 return (
                   <Col key={element}>
                     <GameInfoCard
-                      gameID={element}
+                      gameID={element.gameId}
+                      league={element.league}
                       history={this.props.history}
                       key={element}
                     />
@@ -135,7 +139,8 @@ export default class Dashboard extends Component {
                 return (
                   <Col key={element}>
                     <GameInfoCard
-                      gameID={element}
+                      gameID={element.gameId}
+                      league={element.league}
                       history={this.props.history}
                       key={element}
                     />
@@ -152,7 +157,8 @@ export default class Dashboard extends Component {
                 return (
                   <Col key={element}>
                     <GameInfoCard
-                      gameID={element}
+                      gameID={element.gameId}
+                      league={element.league}
                       history={this.props.history}
                       key={element}
                     />
@@ -169,7 +175,8 @@ export default class Dashboard extends Component {
                 return (
                   <Col key={element}>
                     <GameInfoCard
-                      gameID={element}
+                      gameID={element.gameId}
+                      league={element.league}
                       history={this.props.history}
                       key={element}
                     />

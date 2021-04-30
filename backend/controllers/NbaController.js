@@ -2,6 +2,7 @@ const path = require("path");
 
 var nbaService = require(path.resolve(__dirname, "../services/NbaService"));
 var nbaUpdateService = require(path.resolve(__dirname, "../services/NbaUpdateService"));
+var nbaPlayerService = require(path.resolve(__dirname, "../services/NbaPlayerService"));
 
 exports.getStub = async function (req, res, next) {
     res.sendStatus(200);
@@ -146,6 +147,33 @@ exports.getGamesByDateFromDb = async function (req, res, next) {
 exports.getGamesByTeamFromDb = async function (req, res, next) {
     try {
         let result = await nbaService.getGamesByTeamFromDb(req.params.teamId);
+        return res.status(200).json(result)
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+exports.getPlayer = async function (req, res, next) {
+    try {
+        let result = await nbaPlayerService.getPlayer(req.params.playerId);
+        return res.status(200).json(result)
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+exports.updatePlayer = async function (req, res, next) {
+    try {
+        let result = await nbaPlayerService.updatePlayerById(req.params.playerId);
+        return res.status(200).json(result)
+    } catch(e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+exports.updatePlayersByGame = async function (req, res, next) {
+    try {
+        let result = await nbaPlayerService.updatePlayersByGame(req.params.gameId);
         return res.status(200).json(result)
     } catch(e) {
         return res.status(400).json({ status: 400, message: e.message });

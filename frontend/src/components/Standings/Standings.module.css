@@ -1,0 +1,6 @@
+.Buttons {
+  max-width: var(--default-column-width);
+}
+.ButtonCol {
+  margin-bottom: var(--default-margin);
+}

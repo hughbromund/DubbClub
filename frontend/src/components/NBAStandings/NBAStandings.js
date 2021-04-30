@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { GET_NBA_STANDINGS, SEARCH_ROUTE } from "../../constants/Constants";
+import {
+  GET_NBA_STANDINGS,
+  SEARCH_ROUTE,
+  TEAM_INFO_ROUTE,
+} from "../../constants/Constants";
 import { getTeamByID } from "../../constants/NBAConstants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import Container from "react-bootstrap/Container";
@@ -8,6 +12,7 @@ import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import FavoriteStar from "../FavoriteStar/FavoriteStar";
+import Card from "../Card/Card";
 
 import classes from "./NBAStandings.module.css";
 
@@ -75,7 +80,7 @@ export default class NBAStandings extends Component {
             <img width="25" src={this.state.east[i].teamImage} />{" "}
             <Link
               className={classes.table}
-              to={SEARCH_ROUTE + `/${this.state.east[i].teamId}`}
+              to={TEAM_INFO_ROUTE + "/NBA" + `/${this.state.east[i].teamId}`}
             >
               {this.state.east[i].teamName}
             </Link>
@@ -97,7 +102,7 @@ export default class NBAStandings extends Component {
             <img width="25" src={this.state.west[i].teamImage} />{" "}
             <Link
               className={classes.table}
-              to={SEARCH_ROUTE + `/${this.state.west[i].teamId}`}
+              to={TEAM_INFO_ROUTE + "/NBA" + `/${this.state.west[i].teamId}`}
             >
               {this.state.west[i].teamName}
             </Link>
@@ -116,34 +121,40 @@ export default class NBAStandings extends Component {
           <h1>NBA Standings</h1>
           <Row>
             <Col>
-              <h2>East</h2>
-              <Table className={classes.table}>
-                <thead>
-                  <tr>
-                    <th>Team</th>
-                    <th>W</th>
-                    <th>L</th>
-                    <th>GB</th>
-                    <th>L10</th>
-                  </tr>
-                </thead>
-                <tbody>{renderedEast}</tbody>
-              </Table>
+              <Card>
+                <h2>East</h2>
+
+                <Table className={classes.table}>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+                      <th>W</th>
+                      <th>L</th>
+                      <th>GB</th>
+                      <th>L10</th>
+                    </tr>
+                  </thead>
+                  <tbody>{renderedEast}</tbody>
+                </Table>
+              </Card>
             </Col>
             <Col>
-              <h2>West</h2>
-              <Table className={classes.table}>
-                <thead>
-                  <tr>
-                    <th>Team</th>
-                    <th>W</th>
-                    <th>L</th>
-                    <th>GB</th>
-                    <th>L10</th>
-                  </tr>
-                </thead>
-                <tbody>{renderedWest}</tbody>
-              </Table>
+              <Card>
+                <h2>West</h2>
+
+                <Table className={classes.table}>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+                      <th>W</th>
+                      <th>L</th>
+                      <th>GB</th>
+                      <th>L10</th>
+                    </tr>
+                  </thead>
+                  <tbody>{renderedWest}</tbody>
+                </Table>
+              </Card>
             </Col>
           </Row>
         </Container>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactSpeedometer from "react-d3-speedometer";
 import classes from "./Speedometer.module.css";
+import { NBA, EPL } from "../../constants/Constants";
 
 const rgbHex = require("rgb-hex");
 const hexRgb = require("hex-rgb");
@@ -19,6 +20,7 @@ export default class Speedometer extends Component {
     super(props);
 
     this.state = {
+      league: this.props.league ?? NBA,
       forceRender: false,
       predictionConfidence: props.predictionConfidence,
     };
@@ -69,17 +71,18 @@ export default class Speedometer extends Component {
   }
 
   render() {
-    // console.log(this.props);
     return (
       <div className={classes.speedometer}>
         <ReactSpeedometer
           forceRender={this.state.forceRender}
           value={
-            this.props.predictedWinner === "away"
+            this.props.league === EPL
+              ? this.state.predictionConfidence
+              : this.props.predictedWinner === "away"
               ? this.state.predictionConfidence.map(50, 100, 0, 100) * -1
               : this.state.predictionConfidence.map(50, 100, 0, 100)
           }
-          minValue={-100}
+          minValue={this.props.league === EPL ? 0 : -100}
           maxValue={100}
           segments={7}
           needleColor={"white"}
@@ -103,36 +106,40 @@ export default class Speedometer extends Component {
             this.hexAlphaConverter(this.props.homeHex, 0.6),
             this.hexAlphaConverter(this.props.homeHex, 1),
           ]}
-          customSegmentLabels={[
-            {
-              text: "100%",
-              position: "OUTSIDE",
-            },
-            {
-              text: "",
-              position: "OUTSIDE",
-            },
-            {
-              text: "",
-              position: "OUTSIDE",
-            },
-            {
-              text: "50%",
-              position: "OUTSIDE",
-            },
-            {
-              text: "",
-              position: "OUTSIDE",
-            },
-            {
-              text: "",
-              position: "OUTSIDE",
-            },
-            {
-              text: "100%",
-              position: "OUTSIDE",
-            },
-          ]}
+          customSegmentLabels={
+            this.props.league !== EPL
+              ? [
+                  {
+                    text: "100%",
+                    position: "OUTSIDE",
+                  },
+                  {
+                    text: "",
+                    position: "OUTSIDE",
+                  },
+                  {
+                    text: "",
+                    position: "OUTSIDE",
+                  },
+                  {
+                    text: "50%",
+                    position: "OUTSIDE",
+                  },
+                  {
+                    text: "",
+                    position: "OUTSIDE",
+                  },
+                  {
+                    text: "",
+                    position: "OUTSIDE",
+                  },
+                  {
+                    text: "100%",
+                    position: "OUTSIDE",
+                  },
+                ]
+              : undefined
+          }
         />
       </div>
     );

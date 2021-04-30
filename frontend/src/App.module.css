@@ -1,5 +1,6 @@
 .App {
   margin: var(--default-margin);
+  min-height: 100vh;
 }
 @media (max-width: 768px) {
   .App {

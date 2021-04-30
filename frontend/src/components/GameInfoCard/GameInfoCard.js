@@ -12,9 +12,16 @@ import {
   REFRESH_RATE,
   LIVE,
   SCHEDULED,
+  NBA,
   FINISHED,
+  EPL_GET_GAME_BY_ID,
+  EPL,
+  MLB,
+  MLB_GET_GAME_BY_ID,
 } from "../../constants/Constants";
 import { getColorByTeam, getTeamByID } from "../../constants/NBAConstants";
+import { getMLBColorByTeam } from "../../constants/MLBConstants";
+import { getEPLColorByTeam } from "../../constants/EPLConstants";
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -25,6 +32,7 @@ import {
 } from "react-share";
 import AuthContext from "../../contexts/AuthContext.js";
 import Button from "../Button/Button";
+import LinkButton from "../LinkButton/LinkButton";
 import Spoiler from "../Spoiler/Spoiler";
 import Card from "../Card/Card";
 import SmartButton from "../SmartButton/SmartButton";
@@ -36,6 +44,8 @@ import PredictionGraph from "../PredictionGraph/PredictionGraph";
 const rgbHex = require("rgb-hex");
 const hexRgb = require("hex-rgb");
 var classNames = require("classnames");
+
+const DRAW = "draw";
 
 /**
  * This maps the value of a number from one range to a new one.
@@ -64,6 +74,8 @@ const INITIAL_STATE = {
   livePeriod: undefined,
   status: "Scheduled",
   timeoutID: null,
+  inning: undefined,
+  half: "top",
 };
 
 export default class GameInfoCard extends Component {
@@ -77,12 +89,15 @@ export default class GameInfoCard extends Component {
     this.hexAlphaConverter = this.hexAlphaConverter.bind(this);
     this.hexMedianValue = this.hexMedianValue.bind(this);
     this.fetchGameData = this.fetchGameData.bind(this);
+    this.fetchNBAGameData = this.fetchNBAGameData.bind(this);
+    this.fetchEPLGameData = this.fetchEPLGameData.bind(this);
     this.renderPredictionSubtext = this.renderPredictionSubtext.bind(this);
     this.renderScore = this.renderScore.bind(this);
+    this.fetchMLBGameData = this.fetchMLBGameData.bind(this);
   }
 
   renderGraph(homeAwayWinner) {
-    if (this.state.status === LIVE) {
+    if (this.state.status === LIVE && this.props.league !== EPL) {
       // console.log(this.state);
       // console.log(this.props.gameID);
       return (
@@ -97,6 +112,7 @@ export default class GameInfoCard extends Component {
                 liveRefresh={this.state.status === LIVE}
                 refreshRate={REFRESH_RATE}
                 gameID={this.props.gameID}
+                league={this.props.league}
               />
             </div>
           </div>
@@ -107,6 +123,7 @@ export default class GameInfoCard extends Component {
       <Row>
         <div className={classes.speedometer}>
           <Speedometer
+            league={this.props.league}
             predictedWinner={homeAwayWinner}
             awayHex={this.state.awayHex}
             homeHex={this.state.homeHex}
@@ -114,29 +131,53 @@ export default class GameInfoCard extends Component {
           />
         </div>
         <div className={classes.predictionLine}>
-          <h5>
-            {this.state.predictionConfidence > 51 ? (
-              <div>
-                <b>{this.state.predictionConfidence}%</b> confidence that the{" "}
-                <b>{this.state.predictedWinner}</b> win
-              </div>
-            ) : this.state.predictedWinner === "" ? (
-              <div>
-                <b>No Prediction Available</b>
-              </div>
-            ) : (
-              <div>
-                <b>Toss Up Game</b>
-              </div>
-            )}
-          </h5>
+          <h5>{this.renderPredictionLine()}</h5>
         </div>
       </Row>
     );
   }
 
+  renderPredictionLine() {
+    if (this.props.league === EPL) {
+      // console.log(this.state.predictionConfidence);
+      return this.state.predictedWinner === DRAW ? (
+        <div>
+          <b>{this.state.predictionConfidence}%</b> confidence for a <b>draw</b>
+        </div>
+      ) : this.state.predictedWinner === "" ||
+        Number.isNaN(this.state.predictionConfidence) ? (
+        <div>
+          <b>No Prediction Available</b>
+        </div>
+      ) : (
+        <div>
+          <b>{this.state.predictionConfidence}%</b> confidence that{" "}
+          <b>{this.state.predictedWinner}</b> wins
+        </div>
+      );
+    }
+    return this.state.predictionConfidence > 51 ? (
+      <div>
+        <b>{this.state.predictionConfidence}%</b> confidence that the{" "}
+        <b>{this.state.predictedWinner}</b> win
+      </div>
+    ) : this.state.predictedWinner === "" ? (
+      <div>
+        <b>No Prediction Available</b>
+      </div>
+    ) : (
+      <div>
+        <b>Toss Up Game</b>
+      </div>
+    );
+  }
+
   renderScore() {
-    if (this.state.playedGameStats !== undefined) {
+    if (
+      this.state.playedGameStats !== undefined &&
+      this.state.playedGameStats.away !== undefined &&
+      this.state.playedGameStats.away.lineScore.length !== 0
+    ) {
       return (
         <div>
           <br />
@@ -195,7 +236,16 @@ export default class GameInfoCard extends Component {
           </Row>
           <Row>
             <div className={classes.center}>
-              Q{this.state.livePeriod}-{this.state.liveTimeRem}
+              {this.props.league === NBA ? (
+                <div>
+                  Q{this.state.livePeriod}-{this.state.liveTimeRem}
+                </div>
+              ) : (
+                <div>
+                  {this.state.half.charAt(0).toUpperCase()}
+                  {this.state.half.slice(1)} of Inning {this.state.inning}
+                </div>
+              )}
             </div>
           </Row>
         </div>
@@ -213,8 +263,14 @@ export default class GameInfoCard extends Component {
       0
     ) {
       winner = this.state.awayTeam;
-    } else {
+    } else if (
+      this.state.playedGameStats.away.points -
+        this.state.playedGameStats.home.points <
+      0
+    ) {
       winner = this.state.homeTeam;
+    } else {
+      winner = DRAW;
     }
 
     if (winner.toUpperCase() === this.state.predictedWinner.toUpperCase()) {
@@ -271,8 +327,134 @@ export default class GameInfoCard extends Component {
   }
 
   async fetchGameData(gameID) {
+    if (this.props.league === EPL) {
+      await this.fetchEPLGameData(gameID);
+    } else if (this.props.league === MLB) {
+      await this.fetchMLBGameData(gameID);
+    } else {
+      await this.fetchNBAGameData(gameID);
+    }
+  }
+
+  async fetchEPLGameData(gameID) {
+    var res = await fetch(EPL_GET_GAME_BY_ID + `/${gameID}`, {});
+    var body = await res.json();
+    if (res.status === 200) {
+      var predictedWinner = DRAW;
+      if (body.game.away[0].teamId === body.game.predictedWinner) {
+        predictedWinner = body.game.away[0].teamName;
+      } else if (body.game.home[0].teamId === body.game.predictedWinner) {
+        predictedWinner = body.game.home[0].teamName;
+      }
+
+      var date = new Date(body.game.date).toLocaleDateString(
+        "en-US",
+        DATE_OPTIONS
+      );
+
+      var time = new Date(body.game.date).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      this.setState({
+        arena: body.game.arena,
+        predictedWinner: predictedWinner,
+        predictionConfidence: Number((body.game.confidence * 100).toFixed(2)),
+        homeTeam: body.game.home[0].teamName,
+        awayTeam: body.game.away[0].teamName,
+        homeHex: getEPLColorByTeam(body.game.home[0].teamName),
+        awayHex: getEPLColorByTeam(body.game.away[0].teamName),
+        homeLogo: body.game.home[0].teamImage,
+        awayLogo: body.game.away[0].teamImage,
+        gameDate: date,
+        gameTime: time,
+        homeId: body.game.home[0].teamId,
+        awayId: body.game.away[0].teamId,
+        playedGameStats: body.game.playedGameStats,
+        status: body.game.status,
+      });
+      if (body.game.status === LIVE) {
+        this.setState({
+          homeLiveScore: body.game.homeScore,
+          awayLiveScore: body.game.awayScore,
+          liveTimeRem: body.game.clock,
+          livePeriod: body.game.period,
+        });
+      }
+
+      // var tID = null;
+      // if (body.game.status === LIVE) {
+      //   tID = setTimeout(async () => {
+      //     await this.fetchGameData(this.props.gameID);
+      //   }, REFRESH_RATE);
+      //   this.setState({ timeoutID: tID });
+      // }
+    }
+  }
+
+  async fetchMLBGameData(gameID) {
+    var res = await fetch(MLB_GET_GAME_BY_ID + `/${gameID}`, {});
+    var body = await res.json();
+    // console.log(body);
+    if (res.status === 200) {
+      var predictedWinner = body.game.home.teamName;
+      if (body.game.away.teamId === body.game.predictedWinner) {
+        predictedWinner = body.game.away.teamName;
+      }
+
+      var date = new Date(body.game.date).toLocaleDateString(
+        "en-US",
+        DATE_OPTIONS
+      );
+
+      var time = new Date(body.game.date).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      this.setState({
+        arena: body.game.arena,
+        predictedWinner: predictedWinner,
+        predictionConfidence: Number((body.game.confidence * 100).toFixed(2)),
+        homeTeam: body.game.home.teamName,
+        awayTeam: body.game.away.teamName,
+        homeHex: getMLBColorByTeam(body.game.home.teamName),
+        awayHex: getMLBColorByTeam(body.game.away.teamName),
+        homeLogo: body.game.home.teamImage,
+        awayLogo: body.game.away.teamImage,
+        gameDate: date,
+        gameTime: time,
+        homeId: body.game.home.teamId,
+        awayId: body.game.away.teamId,
+        playedGameStats: body.game.playedGameStats,
+        status: body.game.status,
+      });
+      if (body.game.status === LIVE) {
+        this.setState({
+          homeLiveScore: body.game.homeScore,
+          awayLiveScore: body.game.awayScore,
+          liveTimeRem: body.game.clock,
+          livePeriod: body.game.period,
+          inning: body.game.inning,
+          half: body.game.half,
+        });
+      }
+
+      // var tID = null;
+      // if (body.game.status === LIVE) {
+      //   tID = setTimeout(async () => {
+      //     await this.fetchGameData(this.props.gameID);
+      //   }, REFRESH_RATE);
+      //   this.setState({ timeoutID: tID });
+      // }
+    }
+  }
+
+  async fetchNBAGameData(gameID) {
     var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
     var body = await res.json();
+    // console.log(body);
     if (res.status === 200) {
       var predictedWinner = body.game.home[0].teamName;
       if (body.game.away[0].teamId === body.game.predictedWinner) {
@@ -344,7 +526,7 @@ export default class GameInfoCard extends Component {
     }
   }
 
-  async favoriteTeam(teamId) {
+  async favoriteTeam(teamId, league) {
     var res = await fetch(FAVORITE_TEAM, {
       method: "POST",
       mode: "cors",
@@ -353,7 +535,7 @@ export default class GameInfoCard extends Component {
         "x-access-token": this.context.token,
       },
       body: JSON.stringify({
-        league: "NBA",
+        league: league,
         teamId: teamId,
       }),
     });
@@ -366,7 +548,7 @@ export default class GameInfoCard extends Component {
     return true;
   }
 
-  async unFavoriteTeam(teamId) {
+  async unFavoriteTeam(teamId, league) {
     var res = await fetch(UNFAVORITE_TEAM, {
       method: "POST",
       mode: "cors",
@@ -375,7 +557,7 @@ export default class GameInfoCard extends Component {
         "x-access-token": this.context.token,
       },
       body: JSON.stringify({
-        league: "NBA",
+        league: league,
         teamId: teamId,
       }),
     });
@@ -395,6 +577,11 @@ export default class GameInfoCard extends Component {
 
     if (this.state.predictedWinner === this.state.awayTeam) {
       homeAwayWinner = "away";
+    }
+
+    // TODO Remove this
+    if (this.props.league === EPL && this.state.status === LIVE) {
+      return <div />;
     }
 
     return (
@@ -427,13 +614,22 @@ export default class GameInfoCard extends Component {
                     >
                       <div
                         hidden={this.context.isFollowedTeam(
-                          "NBA",
+                          this.props.league,
                           this.state.awayId
                         )}
                       >
                         <SmartButton
+                          successMessage={
+                            "Added " +
+                            this.state.awayTeam +
+                            " to your favorites!"
+                          }
+                          errorMessage="Error Favoriting"
                           runOnClick={() => {
-                            return this.favoriteTeam(this.state.awayId);
+                            return this.favoriteTeam(
+                              this.state.awayId,
+                              this.props.league
+                            );
                           }}
                         >
                           Favorite
@@ -441,12 +637,24 @@ export default class GameInfoCard extends Component {
                       </div>
                       <div
                         hidden={
-                          !this.context.isFollowedTeam("NBA", this.state.awayId)
+                          !this.context.isFollowedTeam(
+                            this.props.league,
+                            this.state.awayId
+                          )
                         }
                       >
                         <SmartButton
+                          successMessage={
+                            "Removed " +
+                            this.state.awayTeam +
+                            " from your favorites!"
+                          }
+                          errorMessage="Error Removing Favorite"
                           runOnClick={() => {
-                            return this.unFavoriteTeam(this.state.awayId);
+                            return this.unFavoriteTeam(
+                              this.state.awayId,
+                              this.props.league
+                            );
                           }}
                         >
                           Remove Favorite
@@ -479,13 +687,22 @@ export default class GameInfoCard extends Component {
                     >
                       <div
                         hidden={this.context.isFollowedTeam(
-                          "NBA",
+                          this.props.league,
                           this.state.homeId
                         )}
                       >
                         <SmartButton
+                          successMessage={
+                            "Added " +
+                            this.state.homeTeam +
+                            " to your favorites!"
+                          }
+                          errorMessage="Error Favoriting"
                           runOnClick={() => {
-                            return this.favoriteTeam(this.state.homeId);
+                            return this.favoriteTeam(
+                              this.state.homeId,
+                              this.props.league
+                            );
                           }}
                         >
                           Favorite
@@ -493,12 +710,24 @@ export default class GameInfoCard extends Component {
                       </div>
                       <div
                         hidden={
-                          !this.context.isFollowedTeam("NBA", this.state.homeId)
+                          !this.context.isFollowedTeam(
+                            this.props.league,
+                            this.state.homeId
+                          )
                         }
                       >
                         <SmartButton
+                          successMessage={
+                            "Removed " +
+                            this.state.homeTeam +
+                            " from your favorites!"
+                          }
+                          errorMessage="Error Removing Favorite"
                           runOnClick={() => {
-                            return this.unFavoriteTeam(this.state.homeId);
+                            return this.unFavoriteTeam(
+                              this.state.homeId,
+                              this.props.league
+                            );
                           }}
                         >
                           Remove Favorite
@@ -542,25 +771,27 @@ export default class GameInfoCard extends Component {
             <b>{this.state.gameDate}</b> <b>{this.state.gameTime}</b>
             <span className={classes.rightAlignSpan}>
               {/* <FontAwesomeIcon size="2x" icon={["fas", "basketball-ball"]} /> */}
-              <b>NBA</b>
+              <b>{this.props.league || NBA}</b>
             </span>
             <div>
               <b>Location:</b> {this.state.arena}
             </div>
             <Expand open={this.state.expandInfo}>
               <br />
-              <Button
+
+              <LinkButton
                 variant="success"
-                onClick={() => {
-                  if (this.props.gameID !== undefined) {
-                    this.props.history.push(
-                      GAME_INFO_ROUTE + "/" + this.props.gameID
-                    );
-                  }
-                }}
+                to={
+                  GAME_INFO_ROUTE +
+                  "/" +
+                  this.props.league +
+                  "/" +
+                  this.props.gameID
+                }
               >
                 More Info
-              </Button>
+              </LinkButton>
+
               <br />
               <br />
               <FacebookShareButton

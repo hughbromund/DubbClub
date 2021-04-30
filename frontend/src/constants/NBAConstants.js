@@ -152,7 +152,7 @@ export const getColorByTeam = (str) => {
 
 export const getTeamByID = (id) => {
   for (const team in NBA_TEAM_INFO) {
-    if (id === NBA_TEAM_INFO[team]["teamID"]) {
+    if (Number(id) === NBA_TEAM_INFO[team]["teamID"]) {
       return team;
     }
   }

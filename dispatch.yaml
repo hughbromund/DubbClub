@@ -3,3 +3,7 @@ dispatch:
     service: backend
   - url: "mustafar.dubb.club/*"
     service: mustafar
+  - url: "alderaan.dubb.club/*"
+    service: alderaan
+  - url: "hoth.dubb.club/*"
+    service: hoth
