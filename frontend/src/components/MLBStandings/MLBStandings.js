@@ -58,9 +58,17 @@ export default class MLBStandings extends Component {
       );
     }
     let renderedTeams = [];
+
+    var nationalWest = [];
+    var nationalEast = [];
+    var nationalCentral = [];
+    var americaWest = [];
+    var americaCentral = [];
+    var americaEast = [];
+
     for (let i = 0; i < this.state.teams.length; i++) {
       var temp = (
-        <tr>
+        <tr key={this.state.teams[i].teamId}>
           <td>
             <FavoriteStar id={this.state.teams[i].teamId} league={MLB} />{" "}
             <img width="25" src={this.state.teams[i].teamImage} />{" "}
@@ -71,7 +79,6 @@ export default class MLBStandings extends Component {
               {this.state.teams[i].teamName}
             </Link>{" "}
           </td>
-          <td>{this.state.teams[i].division}</td>
 
           <td>{this.state.teams[i].wins}</td>
 
@@ -80,6 +87,28 @@ export default class MLBStandings extends Component {
           <td>{this.state.teams[i].streak}</td>
         </tr>
       );
+
+      // console.log(this.state.teams[i].division);
+
+      if (this.state.teams[i].division === "National League West") {
+        nationalWest.push(temp);
+      }
+      if (this.state.teams[i].division === "National League East") {
+        nationalEast.push(temp);
+      }
+      if (this.state.teams[i].division === "National League Central") {
+        nationalCentral.push(temp);
+      }
+      if (this.state.teams[i].division === "American League West") {
+        americaWest.push(temp);
+      }
+      if (this.state.teams[i].division === "American League East") {
+        americaEast.push(temp);
+      }
+      if (this.state.teams[i].division === "American League Central") {
+        americaCentral.push(temp);
+      }
+
       renderedTeams.push(temp);
     }
     return (
@@ -89,18 +118,111 @@ export default class MLBStandings extends Component {
           <Row>
             <Col>
               <Card>
+                <h2>National League West</h2>
                 <Table className={classes.table}>
                   <thead>
                     <tr>
                       <th>Team</th>
-                      <th>Division</th>
+
                       <th>W</th>
                       <th>L</th>
                       <th>GB</th>
                       <th>Streak</th>
                     </tr>
                   </thead>
-                  <tbody>{renderedTeams}</tbody>
+                  <tbody>{nationalWest}</tbody>
+                </Table>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <h2>National League Central</h2>
+                <Table className={classes.table}>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+
+                      <th>W</th>
+                      <th>L</th>
+                      <th>GB</th>
+                      <th>Streak</th>
+                    </tr>
+                  </thead>
+                  <tbody>{nationalCentral}</tbody>
+                </Table>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <h2>National League East</h2>
+                <Table className={classes.table}>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+
+                      <th>W</th>
+                      <th>L</th>
+                      <th>GB</th>
+                      <th>Streak</th>
+                    </tr>
+                  </thead>
+                  <tbody>{nationalEast}</tbody>
+                </Table>
+              </Card>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Card>
+                <h2>American League West</h2>
+                <Table className={classes.table}>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+
+                      <th>W</th>
+                      <th>L</th>
+                      <th>GB</th>
+                      <th>Streak</th>
+                    </tr>
+                  </thead>
+                  <tbody>{americaWest}</tbody>
+                </Table>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <h2>American League Central</h2>
+                <Table className={classes.table}>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+
+                      <th>W</th>
+                      <th>L</th>
+                      <th>GB</th>
+                      <th>Streak</th>
+                    </tr>
+                  </thead>
+                  <tbody>{americaCentral}</tbody>
+                </Table>
+              </Card>
+            </Col>
+            <Col>
+              <Card>
+                <h2>American League East</h2>
+                <Table className={classes.table}>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+
+                      <th>W</th>
+                      <th>L</th>
+                      <th>GB</th>
+                      <th>Streak</th>
+                    </tr>
+                  </thead>
+                  <tbody>{americaEast}</tbody>
                 </Table>
               </Card>
             </Col>
