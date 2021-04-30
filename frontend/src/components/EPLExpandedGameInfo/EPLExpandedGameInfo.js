@@ -54,6 +54,7 @@ export default class EPLExpandedGameInfo extends Component {
       loading: true,
       status: "Scheduled",
       timeoutID: null,
+      playedGameStats: {},
     };
     this.fetchPrediction = this.fetchPrediction.bind(this);
     this.voteForTeam = this.voteForTeam.bind(this);
@@ -163,6 +164,7 @@ export default class EPLExpandedGameInfo extends Component {
         awayLeaders: awayLeaders,
         clock: body.game.clock,
         period: period,
+        playedGameStats: body.game.playedGameStats,
       });
     }
   }
@@ -515,10 +517,137 @@ export default class EPLExpandedGameInfo extends Component {
             </Col>
 
             <Col>
+              <Expand open={this.state.status !== FINISHED}>
+                <h2 className={classes.headerPadding}>Post-Game Summary</h2>
+                <Card className={classes.playerCard}>
+                  When the game is over, Dubb Club will display box score
+                  information.
+                </Card>
+              </Expand>
               <Expand open={this.state.status === LIVE}>
                 <Card className={classes.playerCard}>
                   This game is Live! No need to refresh, Dubb Club will load our
                   latest updates every {REFRESH_RATE / 1000} seconds.
+                </Card>
+              </Expand>
+              <Expand open={this.state.status === FINISHED}>
+                <Card className={classes.playerCard}>
+                  <Table className={[classes.card].join(" ")}>
+                    <thead>
+                      <tr>
+                        <th>Stat</th>
+                        <th>{this.state.homeTeam}</th>
+                        <th>{this.state.awayTeam}</th>
+                      </tr>
+                      <tr>
+                        <td>Shots</td>
+                        <td>{this.state.playedGameStats.home.totalShots}</td>
+                        <td>{this.state.playedGameStats.away.totalShots}</td>
+                      </tr>
+                      <tr>
+                        <td>Shots on Goal</td>
+                        <td>{this.state.playedGameStats.home.shotsOnGoal}</td>
+                        <td>{this.state.playedGameStats.away.shotsOnGoal}</td>
+                      </tr>
+                      <tr>
+                        <td>Blocked Shots</td>
+                        <td>{this.state.playedGameStats.home.blockedShot}</td>
+                        <td>{this.state.playedGameStats.away.blockedShot}</td>
+                      </tr>
+                      <tr>
+                        <td>Shots Inside Box</td>
+                        <td>
+                          {this.state.playedGameStats.home.shotsInsidebox}
+                        </td>
+                        <td>
+                          {this.state.playedGameStats.away.shotsInsidebox}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Shots Outside Box</td>
+                        <td>
+                          {this.state.playedGameStats.home.shotsOutsidebox}
+                        </td>
+                        <td>
+                          {this.state.playedGameStats.away.shotsOutsidebox}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Fouls</td>
+                        <td>{this.state.playedGameStats.home.fouls}</td>
+                        <td>{this.state.playedGameStats.away.fouls}</td>
+                      </tr>
+                      <tr>
+                        <td>Corner Kicks</td>
+                        <td>{this.state.playedGameStats.home.cornerKicks}</td>
+                        <td>{this.state.playedGameStats.away.cornerKicks}</td>
+                      </tr>
+                      <tr>
+                        <td>Offsides</td>
+                        <td>{this.state.playedGameStats.home.offsides}</td>
+                        <td>{this.state.playedGameStats.away.offsides}</td>
+                      </tr>
+                      <tr>
+                        <td>Possession</td>
+                        <td>
+                          {
+                            this.state.playedGameStats.home
+                              .ballPossessionPercentage
+                          }
+                          %
+                        </td>
+                        <td>
+                          {
+                            this.state.playedGameStats.away
+                              .ballPossessionPercentage
+                          }
+                          %
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Yellow Cards</td>
+                        <td>{this.state.playedGameStats.home.yellowCards}</td>
+                        <td>{this.state.playedGameStats.away.yellowCards}</td>
+                      </tr>
+                      <tr>
+                        <td>Red Cards</td>
+                        <td>{this.state.playedGameStats.home.redCards}</td>
+                        <td>{this.state.playedGameStats.away.redCards}</td>
+                      </tr>
+                      <tr>
+                        <td>Saves</td>
+                        <td>
+                          {this.state.playedGameStats.home.goalkeeperSaves}
+                        </td>
+                        <td>
+                          {this.state.playedGameStats.away.goalkeeperSaves}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Total Passes</td>
+                        <td>{this.state.playedGameStats.home.totalPasses}</td>
+                        <td>{this.state.playedGameStats.away.totalPasses}</td>
+                      </tr>
+                      <tr>
+                        <td>Completed Passes</td>
+                        <td>
+                          {this.state.playedGameStats.home.passesAccurate}
+                        </td>
+                        <td>
+                          {this.state.playedGameStats.away.passesAccurate}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Passing Percentage</td>
+                        <td>
+                          {this.state.playedGameStats.home.passesPercentage}%
+                        </td>
+                        <td>
+                          {this.state.playedGameStats.away.passesPercentage}%
+                        </td>
+                      </tr>
+                    </thead>
+                  </Table>
                 </Card>
               </Expand>
             </Col>
