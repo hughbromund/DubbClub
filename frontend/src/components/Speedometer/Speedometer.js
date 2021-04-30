@@ -71,7 +71,6 @@ export default class Speedometer extends Component {
   }
 
   render() {
-    console.log(this.state.league);
     return (
       <div className={classes.speedometer}>
         <ReactSpeedometer
