@@ -45,6 +45,8 @@ const rgbHex = require("rgb-hex");
 const hexRgb = require("hex-rgb");
 var classNames = require("classnames");
 
+const DRAW = "draw";
+
 /**
  * This maps the value of a number from one range to a new one.
  *
@@ -118,6 +120,7 @@ export default class GameInfoCard extends Component {
       <Row>
         <div className={classes.speedometer}>
           <Speedometer
+            league={this.props.league}
             predictedWinner={homeAwayWinner}
             awayHex={this.state.awayHex}
             homeHex={this.state.homeHex}
@@ -125,24 +128,38 @@ export default class GameInfoCard extends Component {
           />
         </div>
         <div className={classes.predictionLine}>
-          <h5>
-            {this.state.predictionConfidence > 51 ? (
-              <div>
-                <b>{this.state.predictionConfidence}%</b> confidence that the{" "}
-                <b>{this.state.predictedWinner}</b> win
-              </div>
-            ) : this.state.predictedWinner === "" ? (
-              <div>
-                <b>No Prediction Available</b>
-              </div>
-            ) : (
-              <div>
-                <b>Toss Up Game</b>
-              </div>
-            )}
-          </h5>
+          <h5>{this.renderPredictionLine()}</h5>
         </div>
       </Row>
+    );
+  }
+
+  renderPredictionLine() {
+    if (this.props.league === EPL) {
+      return this.state.predictedWinner === DRAW ? (
+        <div>
+          <b>{this.state.predictionConfidence}%</b> confidence for a <b>draw</b>
+        </div>
+      ) : (
+        <div>
+          <b>{this.state.predictionConfidence}%</b> confidence that{" "}
+          <b>{this.state.predictedWinner}</b> wins
+        </div>
+      );
+    }
+    return this.state.predictionConfidence > 51 ? (
+      <div>
+        <b>{this.state.predictionConfidence}%</b> confidence that the{" "}
+        <b>{this.state.predictedWinner}</b> win
+      </div>
+    ) : this.state.predictedWinner === "" ? (
+      <div>
+        <b>No Prediction Available</b>
+      </div>
+    ) : (
+      <div>
+        <b>Toss Up Game</b>
+      </div>
     );
   }
 
@@ -299,10 +316,12 @@ export default class GameInfoCard extends Component {
     var res = await fetch(EPL_GET_GAME_BY_ID + `/${gameID}`, {});
     var body = await res.json();
     if (res.status === 200) {
-      var predictedWinner = body.game.home[0].teamName;
-      // if (body.game.away.teamId === body.game.predictedWinner) {
-      //   predictedWinner = body.game.away[0].teamName;
-      // }
+      var predictedWinner = DRAW;
+      if (body.game.away.teamId === body.game.predictedWinner) {
+        predictedWinner = body.game.away[0].teamName;
+      } else if (body.game.home.teamId === body.game.predictedWinner) {
+        predictedWinner = body.game.home[0].teamName;
+      }
 
       var date = new Date(body.game.date).toLocaleDateString(
         "en-US",

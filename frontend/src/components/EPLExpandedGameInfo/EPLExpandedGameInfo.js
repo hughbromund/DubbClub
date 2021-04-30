@@ -13,6 +13,7 @@ import {
   SCHEDULED,
   FINISHED,
   EPL_GET_GAME_BY_ID,
+  EPL,
 } from "../../constants/Constants";
 import { getEPLColorByTeam } from "../../constants/EPLConstants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
@@ -27,6 +28,7 @@ import Expand from "react-expand-animated";
 
 const USER_PREDICT = "user";
 const ML_PREDICT = "ml";
+const DRAW = "draw";
 
 export default class EPLExpandedGameInfo extends Component {
   constructor(props) {
@@ -86,9 +88,12 @@ export default class EPLExpandedGameInfo extends Component {
     // console.log({ game });
 
     if (body.game !== undefined) {
-      var predictedWinner = game.home[0].teamName;
+      var predictedWinner = DRAW;
+
       if (game.away[0].teamId === game.predictedWinner) {
         predictedWinner = game.away[0].teamName;
+      } else if (game.home[0].teamId === game.predictedWinner) {
+        predictedWinner = game.home[0].teamName;
       }
 
       var date = new Date(game.date).toLocaleDateString("en-US", DATE_OPTIONS);
@@ -346,7 +351,7 @@ export default class EPLExpandedGameInfo extends Component {
                           <tr>
                             <th></th>
                             {this.state.awayLineScore.map((element, index) => (
-                              <th id={index}>Q{index + 1}</th>
+                              <th id={index}>H{index + 1}</th>
                             ))}
                             <th>Total</th>
                           </tr>
@@ -465,6 +470,7 @@ export default class EPLExpandedGameInfo extends Component {
                           awayHex={this.state.awayHex}
                           homeHex={this.state.homeHex}
                           fluidWidth={false}
+                          league={EPL}
                         />
                       ) : (
                         <Speedometer
@@ -480,19 +486,16 @@ export default class EPLExpandedGameInfo extends Component {
                 <Card className={classes.speedometerCard}>
                   <h5>
                     {this.state.predictionType === ML_PREDICT ? (
-                      this.state.predictionConfidence > 51 ? (
+                      this.state.predictedWinner === DRAW ? (
                         <div>
                           Dubb Club is <b>{this.state.predictionConfidence}%</b>{" "}
-                          confident that the <b>{this.state.predictedWinner}</b>{" "}
-                          win
-                        </div>
-                      ) : this.state.predictedWinner === "" ? (
-                        <div>
-                          <b>No Prediction Available</b>
+                          confidence for a <b>draw</b>
                         </div>
                       ) : (
                         <div>
-                          <b>Toss Up Game</b>
+                          Dubb Club is <b>{this.state.predictionConfidence}%</b>{" "}
+                          confident that <b>{this.state.predictedWinner}</b>{" "}
+                          wins
                         </div>
                       )
                     ) : this.getUserConfidence() > 51 ? (
@@ -511,47 +514,10 @@ export default class EPLExpandedGameInfo extends Component {
             </Col>
 
             <Col>
-              <Expand open={this.state.status !== FINISHED}>
-                <h2 className={classes.headerPadding}>Post-Game Summary</h2>
-                <Card className={classes.playerCard}>
-                  When the game is over, Dubb Club will display individual
-                  player statistics and box score information.
-                </Card>
-              </Expand>
               <Expand open={this.state.status === LIVE}>
                 <Card className={classes.playerCard}>
                   This game is Live! No need to refresh, Dubb Club will load our
-                  latest predictions every {REFRESH_RATE / 1000} seconds.
-                </Card>
-              </Expand>
-              <Expand open={this.state.status === FINISHED}>
-                <h2 className={classes.headerPadding}>{this.state.homeTeam}</h2>
-                <Card className={classes.playerCard}>
-                  <Table className={[classes.card].join(" ")}>
-                    <thead>
-                      <tr>
-                        <th>Players</th>
-                        <th>Stat</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.state.homeLeaders.map(this.createPlayerStatRow)}
-                    </tbody>
-                  </Table>
-                </Card>
-                <h2 className={classes.headerPadding}>{this.state.awayTeam}</h2>
-                <Card className={classes.playerCard}>
-                  <Table className={[classes.card].join(" ")}>
-                    <thead>
-                      <tr>
-                        <th>Players</th>
-                        <th>Stat</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.state.awayLeaders.map(this.createPlayerStatRow)}
-                    </tbody>
-                  </Table>
+                  latest updates every {REFRESH_RATE / 1000} seconds.
                 </Card>
               </Expand>
             </Col>
