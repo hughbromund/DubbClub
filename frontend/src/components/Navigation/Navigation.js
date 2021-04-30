@@ -93,12 +93,6 @@ export default class Navigation extends Component {
               >
                 Voting
               </Nav.Link>
-              <Nav.Link>
-                Version:{" "}
-                {process.env.REACT_APP_VERSION
-                  ? process.env.REACT_APP_VERSION
-                  : "Local"}
-              </Nav.Link>
             </Nav>
             <Nav>
               {this.context.isLoggedIn === true ? (
