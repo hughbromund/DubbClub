@@ -358,26 +358,39 @@ export default class EPLExpandedGameInfo extends Component {
                             <th>Total</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr>
-                            <td>{this.state.awayTeam}</td>
-                            <td>{this.state.awayLineScore[0]}</td>
-                            <td>
-                              {this.state.awayScore -
-                                this.state.awayLineScore[0]}
-                            </td>
-                            <td>{this.state.awayScore}</td>
-                          </tr>
-                          <tr>
-                            <td>{this.state.homeTeam}</td>
-                            <td>{this.state.homeLineScore[0]}</td>
-                            <td>
-                              {this.state.homeScore -
-                                this.state.homeLineScore[0]}
-                            </td>
-                            <td>{this.state.homeScore}</td>
-                          </tr>
-                        </tbody>
+                        {this.state.status !== SCHEDULED ? (
+                          <tbody>
+                            <tr>
+                              <td>{this.state.awayTeam}</td>
+                              <td>{this.state.awayLineScore[0]}</td>
+                              <td>
+                                {this.state.awayScore -
+                                  this.state.awayLineScore[0]}
+                              </td>
+                              <td>{this.state.awayScore}</td>
+                            </tr>
+                            <tr>
+                              <td>{this.state.homeTeam}</td>
+                              <td>{this.state.homeLineScore[0]}</td>
+                              <td>
+                                {this.state.homeScore -
+                                  this.state.homeLineScore[0]}
+                              </td>
+                              <td>{this.state.homeScore}</td>
+                            </tr>
+                          </tbody>
+                        ) : (
+                          <tbody>
+                            <tr>
+                              <td>{this.state.awayTeam}</td>
+                              <td>{this.state.awayScore}</td>
+                            </tr>
+                            <tr>
+                              <td>{this.state.homeTeam}</td>
+                              <td>{this.state.homeScore}</td>
+                            </tr>
+                          </tbody>
+                        )}
                       </Table>
                     </Card>
                   </Col>
