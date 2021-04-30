@@ -38,6 +38,7 @@ export default class Home extends Component {
   async fetchGameData() {
     var res = await fetch(GET_DASHBOARD, {});
     var body = await res.json();
+    console.log(body);
     this.setState({
       games: body,
       currentDate: new Date().setHours(0, 0, 0, 0),
@@ -53,7 +54,6 @@ export default class Home extends Component {
 
   async componentDidMount() {
     this.fetchGameData();
-    this.fetchEPLGameData();
   }
 
   render() {
@@ -73,15 +73,10 @@ export default class Home extends Component {
       let temp = (
         <Col key={"col-" + i}>
           <GameInfoCard
-            onClickHandler={() => {
-              this.props.history.push(
-                GAME_INFO_ROUTE + `/${this.state.games.regUpcoming[i]}`
-              );
-            }}
-            gameID={this.state.games.regUpcoming[i]}
+            gameID={this.state.games.regUpcoming[i].gameId}
             history={this.props.history}
             key={i}
-            league={NBA}
+            league={this.state.games.regUpcoming[i].league}
           />
         </Col>
       );
@@ -93,40 +88,16 @@ export default class Home extends Component {
       let temp = (
         <Col key={"col-" + i}>
           <GameInfoCard
-            onClickHandler={() => {
-              this.props.history.push(
-                GAME_INFO_ROUTE + `/${this.state.games.regLive[i]}`
-              );
-            }}
-            gameID={this.state.games.regLive[i]}
+            gameID={this.state.games.regLive[i].gameId}
             history={this.props.history}
             key={i}
-            league={NBA}
+            league={this.state.games.regLive[i].league}
           />
         </Col>
       );
       liveCards.push(temp);
     }
-    let EPLCards = [];
-    for (let i = 0; i < this.state.EPLGames.length; i++) {
-      let temp = (
-        <Col key={"col-" + i}>
-          <GameInfoCard
-            onClickHandler={() => {
-              this.props.history.push(
-                GAME_INFO_ROUTE +
-                  `/${this.props.league}/${this.state.games.regLive[i]}`
-              );
-            }}
-            gameID={this.state.EPLGames[i]}
-            history={this.props.history}
-            key={i}
-            league={EPL}
-          />
-        </Col>
-      );
-      EPLCards.push(temp);
-    }
+
     return (
       <div>
         <Container fluid>
@@ -142,22 +113,10 @@ export default class Home extends Component {
               )}
             </Row>
           </div>
-          <h3>Upcoming NBA Games with Dubb Club Predictions</h3>
+          <h3>Upcoming Games with Dubb Club Predictions</h3>
           <hr />
           <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
-            {cards.slice(0, 9)}
-          </Row>
-          <h3>Upcoming EPL Games with Dubb Club Predictions</h3>
-          <hr />
-          <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
-            {EPLCards.slice(0, 9)}
-          </Row>
-          <h3>Upcoming MLB Games with Dubb Club Predictions</h3>
-          <hr />
-          <Row noGutters={true} xs={1} sm={1} md={2} lg={3}>
-            <Col>
-              <GameInfoCard league={MLB} gameID={"000000"} />
-            </Col>
+            {cards}
           </Row>
         </Container>
       </div>
