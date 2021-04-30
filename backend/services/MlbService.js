@@ -298,3 +298,12 @@ exports.getDashboard = async function(userId) {
    "favFinished": favFinished, "favLive": favLive, "favUpcoming": favUpcoming}
 
 }
+
+exports.getGameIdsByTeam = async function getGameIdsByTeam(teamId) {
+  let results = await MLBgame.find({"$or": [{"home.teamId": teamId}, {"away.teamId": teamId}]})
+  let ids = []
+  for (let i = 0; i < results.length; i++) {
+    ids.push(results[i].id)
+  }
+  return ids
+}

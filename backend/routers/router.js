@@ -168,7 +168,7 @@ router.get("/api/mlb/updateDbWithGamesAndPredictions", hothController.updateDbWi
 router.get("/api/mlb/refresh", mlbController.refresh)
 router.get("/api/mlb/getDashboard", authJWT.verifyTokenOptional, mlbController.getDashboard)
 router.post("/api/mlb/vote", authJWT.verifyToken, mlbController.userVote)
-
+router.get("/api/mlb/getGamesByTeamFromDb/:teamId", mlbController.getGameIdsByTeam)
 
 
 //EPL
