@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 import {
-  NBA_VOTE,
+  MLB_VOTE,
   DATE_OPTIONS,
   REFRESH_RATE,
   LIVE,
@@ -239,7 +239,7 @@ export default class MLBExpandedGameInfo extends Component {
   }
 
   async voteForTeam(homeAway) {
-    var res = await fetch(NBA_VOTE, {
+    var res = await fetch(MLB_VOTE, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -299,6 +299,9 @@ export default class MLBExpandedGameInfo extends Component {
                       </div>
                       {this.context.isLoggedIn ? (
                         <SmartButton
+                          successMessage={
+                            "Voted for " + this.state.awayTeam + "!"
+                          }
                           variant={
                             this.state.votedTeam === "away" ? "success" : ""
                           }
@@ -385,6 +388,9 @@ export default class MLBExpandedGameInfo extends Component {
                       </div>
                       {this.context.isLoggedIn ? (
                         <SmartButton
+                          successMessage={
+                            "Voted for " + this.state.homeTeam + "!"
+                          }
                           variant={
                             this.state.votedTeam === "home" ? "success" : ""
                           }
