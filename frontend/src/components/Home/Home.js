@@ -112,11 +112,12 @@ export default class Home extends Component {
       let temp = (
         <Col key={"col-" + i}>
           <GameInfoCard
-            // onClickHandler={() => {
-            //   this.props.history.push(
-            //     GAME_INFO_ROUTE + `/${this.state.games.regLive[i]}`
-            //   );
-            // }}
+            onClickHandler={() => {
+              this.props.history.push(
+                GAME_INFO_ROUTE +
+                  `/${this.props.league}/${this.state.games.regLive[i]}`
+              );
+            }}
             gameID={this.state.EPLGames[i]}
             history={this.props.history}
             key={i}
