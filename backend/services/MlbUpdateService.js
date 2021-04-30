@@ -60,6 +60,7 @@ exports.refresh = async function refresh() {
         //transition to finished game
         if (gameInDb.status === "In Play" && upcoming[i].status.statusCode === "F") {
             await MLBgame.findOneAndUpdate({id : gameId}, {status: "Finished"}).exec()
+            updateDbWithScores(gameId)
             console.log("Updated game " + gameId + " to Finished.")
 
             // Recalculate ELO for teams
@@ -121,4 +122,28 @@ async function updateDbWithLivePredictions(gameId, gameInDb) {
         "inning": game.about.inning, "half": game.about.halfInning, "lineScore": lineScore, "$push": {livePredictions: liveObj }}
      ).exec()
 
+}
+
+async function updateDbWithScores(gameId) {
+    let gameData = await axios.get("http://statsapi.mlb.com/api/v1.1/game/" + gameId + "/feed/live")
+
+    let lineScore = []
+    let inningData = gameData.data.liveData.linescore.innings
+    for (let i = 0; i < inningData.length; i++) {
+        let homeRuns = 0
+        let awayRuns = 0
+        if (inningData[i].home.runs != null) {
+            homeRuns = inningData[i].home.runs
+        }
+        if (inningData[i].away.runs != null) {
+            awayRuns = inningData[i].away.runs
+        }
+        lineScore.push({"inning" : inningData[i].num, "homeScore": homeRuns, "awayScore": awayRuns})
+    }
+
+    gameData = gameData.data.liveData.boxscore.teams
+    MLBgame.updateOne(
+        { id: gameId }, {"homeScore": gameData.home.teamStats.batting.runs, "awayScore": gameData.away.teamStats.batting.runs, 
+        "lineScore": lineScore}
+     ).exec()
 }
