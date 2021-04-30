@@ -165,7 +165,7 @@ const normalizeTeam = (str) => {
 
 const getSomethingByTeam = (str, desiredValue) => {
   // str = normalizeTeam(str);
-  console.log(str);
+  // console.log(str);
   if (MLB_TEAM_INFO[str] !== undefined) {
     return MLB_TEAM_INFO[str][desiredValue];
   }
