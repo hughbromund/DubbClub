@@ -57,7 +57,7 @@ export const EPL_TEAM_INFO = {
   },
   Newcastle: {
     teamID: 34,
-    hexColor: "#241F20",
+    hexColor: "#41B6E6",
   },
   "Sheffield Utd": {
     teamID: 62,
