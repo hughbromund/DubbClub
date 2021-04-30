@@ -1358,3 +1358,27 @@ JSON return Format:
 ```json
 { "message": "Successful Refresh."}
 ```
+
+### /api/epl/vote
+
+POST  
+user vote functionality for who they believe will win the MLB game
+Requirements: gameId, home or away team, JWT auth token
+Returns: JSON body message of success or failure  
+Status: Working  
+Issues: None?
+
+JSON Request Format:
+```json
+{
+  "gameId": 637437,
+  "homeAway": "home"
+}
+```
+
+JSON return Format:  
+```json
+{
+  "message": "Successful!"
+}
+```
