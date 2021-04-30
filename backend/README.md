@@ -1382,3 +1382,21 @@ JSON return Format:
   "message": "Successful!"
 }
 ```
+
+### /api/mlb/getGamesByTeamFromDb/:teamId
+
+GET
+
+gets list of upcoming MLB gameIds by teamId
+
+Requirements: specified teamId
+
+Returns: list of upcoming gameIds
+
+Status: Working
+
+JSON Result Format:
+
+```json
+[123, 456]
+```
