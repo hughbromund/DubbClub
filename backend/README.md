@@ -1359,7 +1359,7 @@ JSON return Format:
 { "message": "Successful Refresh."}
 ```
 
-### /api/epl/vote
+### /api/mlb/vote
 
 POST  
 user vote functionality for who they believe will win the MLB game
