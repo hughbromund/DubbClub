@@ -58,6 +58,11 @@ const hothController = require(path.resolve(
   "../controllers/HothController"
 ));
 
+const dashboardController = require(path.resolve(
+  __dirname,
+  "../controllers/DashboardController"
+));
+
 //User routes
 //NOTE: for any request requiring user auth, must call authJWT.verifyToken first
 router.post("/api/auth/login", userController.login)
@@ -148,6 +153,8 @@ router.get("/api/autoComplete/:search", searchController.autoComplete)
 
 router.get("/api/autoCompleteEPL/:search", searchController.autoCompleteEPL)
 
+
+
 //TESTING PURPOSES ONLY - post gameId to send all users notifications
 //router.post("/api/nba/notificationsTest", nbaUserController.notificationsTest)
 
@@ -166,12 +173,16 @@ router.get("/api/mlb/getDashboard", authJWT.verifyTokenOptional, mlbController.g
 router.get("/api/epl/getUpcomingGamesFromDb", eplController.getUpcomingGameIds)
 router.get("/api/epl/getGamesByDate/:date", eplController.getGameIdsByDate)
 router.get("/api/epl/getGamesByTeamFromDb/:teamId", eplController.getGameIdsByTeam)
-router.get("/api/epl/getGameFromDb/:gameId", eplController.getGameDetailsByGameId)
+router.get("/api/epl/getGameFromDb/:gameId", authJWT.verifyTokenOptional, eplController.getGameDetailsByGameId)
 router.get("/api/epl/getTeamStats/:teamId", eplController.getTeamStats)
 router.get("/api/epl/updateDbWithGamesAndPredictions", alderaanController.updateDbWithGamesAndPredictions)
 router.get("/api/epl/refresh", eplController.refresh);
 router.get("/api/epl/getDashboard", authJWT.verifyTokenOptional, eplController.getDashboard);
 router.post("/api/epl/vote", authJWT.verifyToken, eplController.userVote);
 router.get("/api/epl/getAllTeamStats", eplController.getAllTeamStats);
+
+//Dashboard
+
+router.get("/api/user/getDashboard", authJWT.verifyTokenOptional, dashboardController.getDashboard)
 
 module.exports = router;
