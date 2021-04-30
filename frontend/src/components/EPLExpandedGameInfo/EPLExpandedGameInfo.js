@@ -14,6 +14,7 @@ import {
   FINISHED,
   EPL_GET_GAME_BY_ID,
   EPL,
+  NBA,
 } from "../../constants/Constants";
 import { getEPLColorByTeam } from "../../constants/EPLConstants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
@@ -289,7 +290,6 @@ export default class EPLExpandedGameInfo extends Component {
         </div>
       );
     }
-    console.log(this.state.votedTeam);
     return (
       <div>
         <Container fluid>
@@ -478,6 +478,7 @@ export default class EPLExpandedGameInfo extends Component {
                           predictionConfidence={this.getUserConfidence()}
                           awayHex={this.state.awayHex}
                           homeHex={this.state.homeHex}
+                          league={NBA}
                         />
                       )}
                     </div>

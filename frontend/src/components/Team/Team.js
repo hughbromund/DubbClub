@@ -8,11 +8,26 @@ import MLBTeam from "../MLBTeam/MLBTeam";
 export default class ExpandedGameInfo extends Component {
   render() {
     if (this.props.match.params.league.toUpperCase() === NBA) {
-      return <NBATeam />;
+      return (
+        <NBATeam
+          league={this.props.match.params.league}
+          id={this.props.match.params.id}
+        />
+      );
     } else if (this.props.match.params.league.toUpperCase() === EPL) {
-      return <EPLTeam />;
+      return (
+        <EPLTeam
+          league={this.props.match.params.league}
+          id={this.props.match.params.id}
+        />
+      );
     } else if (this.props.match.params.league.toUpperCase() === MLB) {
-      return <MLBTeam />;
+      return (
+        <MLBTeam
+          league={this.props.match.params.league}
+          id={this.props.match.params.id}
+        />
+      );
     }
 
     return <div>Expanded Game Info</div>;

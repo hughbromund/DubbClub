@@ -27,8 +27,8 @@ export default class Team extends Component {
     // console.log(props);
 
     this.state = {
-      league: props.match.params.league,
-      id: Number(props.match.params.id),
+      league: props.league,
+      id: Number(props.id),
       games: [],
       isButtonDisabled: false,
       teamHex: "#000000",
