@@ -74,6 +74,8 @@ const INITIAL_STATE = {
   livePeriod: undefined,
   status: "Scheduled",
   timeoutID: null,
+  inning: undefined,
+  half: "top",
 };
 
 export default class GameInfoCard extends Component {
@@ -110,6 +112,7 @@ export default class GameInfoCard extends Component {
                 liveRefresh={this.state.status === LIVE}
                 refreshRate={REFRESH_RATE}
                 gameID={this.props.gameID}
+                league={this.props.league}
               />
             </div>
           </div>
@@ -227,7 +230,16 @@ export default class GameInfoCard extends Component {
           </Row>
           <Row>
             <div className={classes.center}>
-              Q{this.state.livePeriod}-{this.state.liveTimeRem}
+              {this.props.league === NBA ? (
+                <div>
+                  Q{this.state.livePeriod}-{this.state.liveTimeRem}
+                </div>
+              ) : (
+                <div>
+                  {this.state.half.charAt(0).toUpperCase()}
+                  {this.state.half.slice(1)} of Inning {this.state.inning}
+                </div>
+              )}
             </div>
           </Row>
         </div>
@@ -412,6 +424,8 @@ export default class GameInfoCard extends Component {
           awayLiveScore: body.game.awayScore,
           liveTimeRem: body.game.clock,
           livePeriod: body.game.period,
+          inning: body.game.inning,
+          half: body.game.half,
         });
       }
 
