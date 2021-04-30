@@ -139,9 +139,15 @@ export default class GameInfoCard extends Component {
 
   renderPredictionLine() {
     if (this.props.league === EPL) {
+      console.log(this.state.predictionConfidence);
       return this.state.predictedWinner === DRAW ? (
         <div>
           <b>{this.state.predictionConfidence}%</b> confidence for a <b>draw</b>
+        </div>
+      ) : this.state.predictedWinner === "" ||
+        Number.isNaN(this.state.predictionConfidence) ? (
+        <div>
+          <b>No Prediction Available</b>
         </div>
       ) : (
         <div>
@@ -257,8 +263,14 @@ export default class GameInfoCard extends Component {
       0
     ) {
       winner = this.state.awayTeam;
-    } else {
+    } else if (
+      this.state.playedGameStats.away.points -
+        this.state.playedGameStats.home.points <
+      0
+    ) {
       winner = this.state.homeTeam;
+    } else {
+      winner = DRAW;
     }
 
     if (winner.toUpperCase() === this.state.predictedWinner.toUpperCase()) {
@@ -329,9 +341,9 @@ export default class GameInfoCard extends Component {
     var body = await res.json();
     if (res.status === 200) {
       var predictedWinner = DRAW;
-      if (body.game.away.teamId === body.game.predictedWinner) {
+      if (body.game.away[0].teamId === body.game.predictedWinner) {
         predictedWinner = body.game.away[0].teamName;
-      } else if (body.game.home.teamId === body.game.predictedWinner) {
+      } else if (body.game.home[0].teamId === body.game.predictedWinner) {
         predictedWinner = body.game.home[0].teamName;
       }
 
