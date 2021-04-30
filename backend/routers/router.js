@@ -58,6 +58,11 @@ const hothController = require(path.resolve(
   "../controllers/HothController"
 ));
 
+const dashboardController = require(path.resolve(
+  __dirname,
+  "../controllers/DashboardController"
+));
+
 //User routes
 //NOTE: for any request requiring user auth, must call authJWT.verifyToken first
 router.post("/api/auth/login", userController.login)
@@ -148,6 +153,8 @@ router.get("/api/autoComplete/:search", searchController.autoComplete)
 
 router.get("/api/autoCompleteEPL/:search", searchController.autoCompleteEPL)
 
+
+
 //TESTING PURPOSES ONLY - post gameId to send all users notifications
 //router.post("/api/nba/notificationsTest", nbaUserController.notificationsTest)
 
@@ -173,5 +180,9 @@ router.get("/api/epl/refresh", eplController.refresh);
 router.get("/api/epl/getDashboard", authJWT.verifyTokenOptional, eplController.getDashboard);
 router.post("/api/epl/vote", authJWT.verifyToken, eplController.userVote);
 router.get("/api/epl/getAllTeamStats", eplController.getAllTeamStats);
+
+//Dashboard
+
+router.get("/api/user/getDashboard", authJWT.verifyTokenOptional, dashboardController.getDashboard)
 
 module.exports = router;
