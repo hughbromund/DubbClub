@@ -71,7 +71,6 @@ export default class Speedometer extends Component {
   }
 
   render() {
-    // console.log(this.props);
     return (
       <div className={classes.speedometer}>
         <ReactSpeedometer
@@ -108,7 +107,7 @@ export default class Speedometer extends Component {
             this.hexAlphaConverter(this.props.homeHex, 1),
           ]}
           customSegmentLabels={
-            this.state.league !== EPL
+            this.props.league !== EPL
               ? [
                   {
                     text: "100%",
