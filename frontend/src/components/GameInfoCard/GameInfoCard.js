@@ -139,7 +139,7 @@ export default class GameInfoCard extends Component {
 
   renderPredictionLine() {
     if (this.props.league === EPL) {
-      console.log(this.state.predictionConfidence);
+      // console.log(this.state.predictionConfidence);
       return this.state.predictedWinner === DRAW ? (
         <div>
           <b>{this.state.predictionConfidence}%</b> confidence for a <b>draw</b>
@@ -396,7 +396,7 @@ export default class GameInfoCard extends Component {
   async fetchMLBGameData(gameID) {
     var res = await fetch(MLB_GET_GAME_BY_ID + `/${gameID}`, {});
     var body = await res.json();
-    console.log(body);
+    // console.log(body);
     if (res.status === 200) {
       var predictedWinner = body.game.home.teamName;
       if (body.game.away.teamId === body.game.predictedWinner) {
@@ -454,6 +454,7 @@ export default class GameInfoCard extends Component {
   async fetchNBAGameData(gameID) {
     var res = await fetch(GET_GAME_BY_ID_FROM_DB + `/${gameID}`, {});
     var body = await res.json();
+    // console.log(body);
     if (res.status === 200) {
       var predictedWinner = body.game.home[0].teamName;
       if (body.game.away[0].teamId === body.game.predictedWinner) {
