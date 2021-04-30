@@ -361,16 +361,20 @@ export default class EPLExpandedGameInfo extends Component {
                         <tbody>
                           <tr>
                             <td>{this.state.awayTeam}</td>
-                            {this.state.awayLineScore.map((element, index) => (
-                              <td id={index}>{element}</td>
-                            ))}
+                            <td>{this.state.awayLineScore[0]}</td>
+                            <td>
+                              {this.state.awayScore -
+                                this.state.awayLineScore[0]}
+                            </td>
                             <td>{this.state.awayScore}</td>
                           </tr>
                           <tr>
                             <td>{this.state.homeTeam}</td>
-                            {this.state.homeLineScore.map((element, index) => (
-                              <td id={index}>{element}</td>
-                            ))}
+                            <td>{this.state.homeLineScore[0]}</td>
+                            <td>
+                              {this.state.homeScore -
+                                this.state.homeLineScore[0]}
+                            </td>
                             <td>{this.state.homeScore}</td>
                           </tr>
                         </tbody>
