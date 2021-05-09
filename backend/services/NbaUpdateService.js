@@ -56,7 +56,6 @@ exports.refresh = async function refresh() {
       if (gameInDb.status === "In Play" && upcoming[i].statusGame === "Finished") {
          await NBAgame.findOneAndUpdate({id : gameId}, {status: "Finished"}).exec()
          console.log("Updated game " + gameId + " to Finished.")
-         await updateDbWithGameStats()
          await updateDbWithPlayedGameStats(gameId)
          try {
             await nbaPlayerService.updatePlayersByGame(gameId)
@@ -73,26 +72,10 @@ exports.refresh = async function refresh() {
    return updatedIds
 }
 
-updateDbWithGameStats = async function(gameId, liveGames) {
-   liveGame = {}
-
-   gamesList = liveGames.api.games
-
-   for (let i = 0; i < gamesList.length; i++) {
-      if (parseInt(gamesList[i].gameId, 10) === parseInt(upcoming.gameId, 10)) {
-         liveGame = gamesList[i]
-         break
-      }
-   }
-   
-   await NBAgame.updateOne(
-      { id: parseInt(gameId, 10) }, {"homeScore": liveGame.hTeam.score.points, "awayScore": liveGame.vTeam.score.points, 
-      "clock": liveGame.clock}
-   ).exec()
-}
-
 updateDbWithPlayedGameStats = async function(gameId) {
    let stats = await nbaService.getPlayedGameStats(gameId)
-   let game = await NBAgame.updateOne({ id : gameId }, {playedGameStats : stats}).exec()
+   let game = await NBAgame.updateOne({ id : gameId }, {playedGameStats : stats,
+      "homeScore": stats.home.points, "awayScore": stats.away.points, 
+      "clock": "0:00"}).exec()
    return game
 }
