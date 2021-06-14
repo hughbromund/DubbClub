@@ -10,6 +10,6 @@
 .inner {
   margin: 0 auto;
 }
-a:hover {
+.link:hover {
   color: var(--background-color);
 }
