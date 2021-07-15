@@ -19,23 +19,43 @@ export default class Footer extends Component {
           </div>
           <div>
             Nathan Ashta{" "}
-            <a target="_blank" href="https://github.com/nathanashta">
+            <a
+              className={classes.link}
+              target="_blank"
+              href="https://github.com/nathanashta"
+            >
               <FontAwesomeIcon icon={["fab", "github"]} />
             </a>
             , Hugh Bromund{" "}
-            <a target="_blank" href="https://github.com/hughbromund">
+            <a
+              className={classes.link}
+              target="_blank"
+              href="https://github.com/hughbromund"
+            >
               <FontAwesomeIcon icon={["fab", "github"]} />
             </a>
             , Daniel Joseph{" "}
-            <a target="_blank" href="https://github.com/dadeej">
+            <a
+              className={classes.link}
+              target="_blank"
+              href="https://github.com/dadeej"
+            >
               <FontAwesomeIcon icon={["fab", "github"]} />
             </a>
             , Aditya Naik{" "}
-            <a target="_blank" href="https://github.com/adityan9900">
+            <a
+              className={classes.link}
+              target="_blank"
+              href="https://github.com/adityan9900"
+            >
               <FontAwesomeIcon icon={["fab", "github"]} />
             </a>
             , and Peyton Williams{" "}
-            <a target="_blank" href="https://github.com/peytondwilliams">
+            <a
+              className={classes.link}
+              target="_blank"
+              href="https://github.com/peytondwilliams"
+            >
               <FontAwesomeIcon icon={["fab", "github"]} />
             </a>
           </div>

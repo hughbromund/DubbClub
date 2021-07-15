@@ -176,7 +176,8 @@ export default class GameInfoCard extends Component {
     if (
       this.state.playedGameStats !== undefined &&
       this.state.playedGameStats.away !== undefined &&
-      this.state.playedGameStats.away.lineScore.length !== 0
+      this.state.playedGameStats.away.lineScore.length !== 0 &&
+      this.state.status !== LIVE
     ) {
       return (
         <div>
@@ -240,11 +241,13 @@ export default class GameInfoCard extends Component {
                 <div>
                   Q{this.state.livePeriod}-{this.state.liveTimeRem}
                 </div>
-              ) : (
+              ) : this.props.league === MLB ? (
                 <div>
                   {this.state.half.charAt(0).toUpperCase()}
                   {this.state.half.slice(1)} of Inning {this.state.inning}
                 </div>
+              ) : (
+                <div>{this.state.liveTimeRem}'</div>
               )}
             </div>
           </Row>
@@ -580,9 +583,9 @@ export default class GameInfoCard extends Component {
     }
 
     // TODO Remove this
-    if (this.props.league === EPL && this.state.status === LIVE) {
-      return <div />;
-    }
+    // if (this.props.league === EPL && this.state.status === LIVE) {
+    //   return <div />;
+    // }
 
     return (
       <div>

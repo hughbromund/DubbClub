@@ -56,9 +56,9 @@ exports.refresh = async function refresh() {
       if (gameInDb.status === "In Play" && upcoming[i].statusGame === "Finished") {
          await NBAgame.findOneAndUpdate({id : gameId}, {status: "Finished"}).exec()
          console.log("Updated game " + gameId + " to Finished.")
-         let game = updateDbWithPlayedGameStats(gameId)
+         updateDbWithPlayedGameStats(gameId)
          try {
-            let updated = await nbaPlayerService.updatePlayersByGame(gameId)
+            nbaPlayerService.updatePlayersByGame(gameId)
          } catch (e) {
             console.log("update players didn't work " + e.message)
          }
@@ -74,6 +74,8 @@ exports.refresh = async function refresh() {
 
 updateDbWithPlayedGameStats = async function(gameId) {
    let stats = await nbaService.getPlayedGameStats(gameId)
-   let game = await NBAgame.updateOne({ id : gameId }, {playedGameStats : stats}).exec()
+   let game = await NBAgame.updateOne({ id : gameId }, {playedGameStats : stats,
+      "homeScore": stats.home.points, "awayScore": stats.away.points, 
+      "clock": "0:00"}).exec()
    return game
 }
