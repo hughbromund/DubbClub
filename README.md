@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./DubbClubWordmark.png" alt="Dubb Club Logo" width="70%" />
+<img src="./LogoPill.png" alt="Dubb Club Logo" width="70%" />
 </p>
 
 # [Dubb.club](https://dubb.club) | [iOS Companion App Repository](https://github.com/Dubb-Club-iOS/Dubb-Club-iOS-App)
