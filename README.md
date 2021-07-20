@@ -2,11 +2,7 @@
 <img src="./DubbClubWordmark.png" alt="Dubb Club Logo" width="70%" />
 </p>
 
-# DubbClub
-
-# [Hosted Website](https://dubb.club)
-
-# [iOS Companion Repository](https://github.com/Dubb-Club-iOS/Dubb-Club-iOS-App)
+# [Dubb.club](https://dubb.club) | [iOS Companion App Repository](https://github.com/Dubb-Club-iOS/Dubb-Club-iOS-App)
 
 # Problem Statement
 
@@ -38,17 +34,17 @@ For avid sports fans, it can be difficult to find information about statistics a
 
 ## Frontend
 
-- Hugh
-- Nate
+- [Hugh](https://github.com/hughbromund)
+- [Nate](https://github.com/nathanashta)
 
 ## Backend
 
-- Peyton
-- Daniel
+- [Peyton](https://github.com/peytondwilliams)
+- [Daniel](https://github.com/dadeej)
 
 ## Machine Learning
 
-- Aditya
+- [Aditya](https://github.com/adityan9900)
 
 # How to Run
 
