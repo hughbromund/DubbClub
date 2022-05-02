@@ -1,0 +1,13 @@
+dispatch:
+  - url: "api.dubb.club/*"
+    service: backend
+  - url: "mustafar.dubb.club/*"
+    service: mustafar
+  - url: "alderaan.dubb.club/*"
+    service: alderaan
+  - url: "hoth.dubb.club/*"
+    service: hoth
+  - url: "api.dubbclub.shmem.io/*"
+    service: backend
+  - url: "dubbclub.shmem.io/*"
+    service: default
