@@ -7,3 +7,5 @@ dispatch:
     service: alderaan
   - url: "hoth.dubb.club/*"
     service: hoth
+  - url: "api.dubbclub.shmem.io/*"
+    service: backend

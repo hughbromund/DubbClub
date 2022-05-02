@@ -27,6 +27,10 @@ if (process.env.REACT_APP_RUNTIME !== "production") {
     "https://dubb.club/",
     "https://www.dubb.club",
     "https://www.dubb.club/",
+    "https://shmem.io",
+    "https://www.shmem.io",
+    "https://shmem.io/",
+    "https://www.shmem.io/",
   ];
   app.use(
     cors({
