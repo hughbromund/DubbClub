@@ -9,3 +9,5 @@ dispatch:
     service: hoth
   - url: "api.dubbclub.shmem.io/*"
     service: backend
+  - url: "dubbclub.shmem.io/*"
+    service: default

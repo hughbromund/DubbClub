@@ -19,7 +19,7 @@ export const TEAM_INFO_ROUTE = "/team";
 export const PLAYER_INFO_ROUTE = "/player";
 
 /* Base URL for Backend */
-export var BASE = "https://api.dubb.club";
+export var BASE = "https://api.dubbclub.shmem.io";
 // console.log("NODE_ENV: " + process.env.NODE_ENV);
 if (process.env.NODE_ENV === "development") {
   BASE = "http://localhost:5000";
